@@ -13,4 +13,19 @@ set(bfdev_SRCS
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
-add_library(bfdev SHARED ${bfdev_SRCS})
+add_library(bfdev_shared SHARED ${bfdev_SRCS})
+
+add_library(bfdev_static STATIC ${bfdev_SRCS})
+
+SET_TARGET_PROPERTIES(bfdev_shared
+PROPERTIES VERSION 1.0 SOVERSION 1
+OUTPUT_NAME bfdev
+MACOSX_RPATH ON
+LINKER_LANGUAGE C
+)
+
+SET_TARGET_PROPERTIES(bfdev_static
+PROPERTIES 
+OUTPUT_NAME bfdev
+LINKER_LANGUAGE C
+)
