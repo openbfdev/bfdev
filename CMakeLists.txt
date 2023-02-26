@@ -29,3 +29,6 @@ PROPERTIES
 OUTPUT_NAME bfdev
 LINKER_LANGUAGE C
 )
+
+add_library(bfdev ALIAS bfdev_shared)
+add_subdirectory(examples)
