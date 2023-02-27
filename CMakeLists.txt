@@ -2,6 +2,7 @@ cmake_minimum_required (VERSION 3.25.2)
 project (bfdev C)
 
 set(bfdev_HEADERS
+    include/bfdev/bitrev.h
     include/bfdev/bsearch.h
     include/bfdev/compiler.h
     include/bfdev/const.h
@@ -12,6 +13,7 @@ set(bfdev_HEADERS
 
 set(bfdev_SRCS
     ${bfdev_HEADERS}
+    src/bitrev.c
     src/bsearch.c
     src/list-check.c
     src/list-sort.c
