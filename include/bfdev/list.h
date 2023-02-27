@@ -3,11 +3,13 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
-#ifndef _LIST_H_
-#define _LIST_H_
+#ifndef _BFDEV_LIST_H_
+#define _BFDEV_LIST_H_
 
 #include <stddef.h>
 #include <stdbool.h>
+#include <bfdev/compiler.h>
+#include <bfdev/poison.h>
 
 struct list_head {
     struct list_head *prev;
@@ -22,18 +24,6 @@ struct list_head {
 
 #define LIST_HEAD(name) \
     struct list_head name = LIST_HEAD_INIT(name)
-
-#ifndef likely
-# define likely(x) __builtin_expect(!!(x), 1)
-# define unlikely(x) __builtin_expect(!!(x), 0)
-#endif
-
-#ifndef POISON_OFFSET
-# define POISON_OFFSET 0
-#endif
-
-#define POISON_LIST1 ((void *) POISON_OFFSET + 0x10)
-#define POISON_LIST2 ((void *) POISON_OFFSET + 0x20)
 
 typedef long (*list_cmp_t)(struct list_head *, struct list_head *, void *);
 extern void list_qsort(struct list_head *head, list_cmp_t cmp, void *data);
@@ -757,4 +747,4 @@ static inline void list_splice_tail_init(struct list_head *head, struct list_hea
          !list_entry_check_head(pos, head, member); \
          (pos) = (tmp), (tmp) = list_prev_entry(tmp, member))
 
-#endif /* _LIST_H_ */
+#endif /* _BFDEV_LIST_H_ */

@@ -3,7 +3,7 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
-#include "list.h"
+#include <bfdev/list.h>
 
 static inline struct list_head *
 list_merge(list_cmp_t cmp, void *data, struct list_head *a, struct list_head *b)

@@ -2,13 +2,16 @@ cmake_minimum_required (VERSION 3.25.2)
 project (bfdev C)
 
 set(bfdev_HEADERS
-    include/list.h
+    include/bfdev/compiler.h
+    include/bfdev/const.h
+    include/bfdev/list.h
+    include/bfdev/poison.h
 )
 
 set(bfdev_SRCS
     ${bfdev_HEADERS}
     src/list-check.c
-    src/list-sort.c 
+    src/list-sort.c
 )
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
@@ -25,7 +28,7 @@ LINKER_LANGUAGE C
 )
 
 SET_TARGET_PROPERTIES(bfdev_static
-PROPERTIES 
+PROPERTIES
 OUTPUT_NAME bfdev
 LINKER_LANGUAGE C
 )

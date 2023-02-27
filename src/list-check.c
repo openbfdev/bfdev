@@ -3,7 +3,7 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
-#include "list.h"
+#include <bfdev/list.h>
 #include <stdio.h>
 
 bool list_debug_add_check(struct list_head *prev, struct list_head *next, struct list_head *new)

@@ -3,7 +3,7 @@
  * Copyright(c) 2021 Sanpe <sanpeqf@gmail.com>
  */
 
-#include "list.h"
+#include <bfdev/list.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
