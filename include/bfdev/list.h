@@ -10,6 +10,7 @@
 #include <stdbool.h>
 #include <bfdev/compiler.h>
 #include <bfdev/poison.h>
+#include <bfdev/container.h>
 
 struct list_head {
     struct list_head *prev;
@@ -301,10 +302,8 @@ static inline void list_splice_tail_init(struct list_head *head, struct list_hea
  * @type: the type of the struct this is embedded in.
  * @member: the name of the list_head within the struct.
  */
-#define list_entry(ptr, type, member) ({ \
-    const typeof(((type *)0)->member) *__mptr = (ptr); \
-    (type *)((char *)__mptr - offsetof(type,member)); \
-})
+#define list_entry(ptr, type, member) \
+    container_of(ptr, type, member)
 
 /**
  * list_entry_check_head - test if the entry points to the head of the list.
