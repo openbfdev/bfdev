@@ -6,7 +6,7 @@
 #ifndef _BFDEV_POISON_H_
 #define _BFDEV_POISON_H_
 
-#include <bfdev/const.h>
+#include "const.h"
 
 #ifdef POISON_ILLEGAL_ADDRESS
 # define POISON_OFFSET  _AC(POISON_ILLEGAL_ADDRESS, UL)

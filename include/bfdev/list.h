@@ -8,9 +8,10 @@
 
 #include <stddef.h>
 #include <stdbool.h>
-#include <bfdev/compiler.h>
-#include <bfdev/poison.h>
-#include <bfdev/container.h>
+
+#include "compiler.h"
+#include "poison.h"
+#include "container.h"
 
 struct list_head {
     struct list_head *prev;
