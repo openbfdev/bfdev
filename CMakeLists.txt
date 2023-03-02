@@ -5,6 +5,7 @@
 
 cmake_minimum_required (VERSION 3.25.2)
 project (bfdev C)
+include (GNUInstallDirs)
 
 set(bfdev_HEADERS
     include/bfdev/bitrev.h
@@ -40,6 +41,13 @@ PROPERTIES
 OUTPUT_NAME bfdev
 LINKER_LANGUAGE C
 )
+
+install(FILES ${bfdev_HEADERS} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/bfdev")
+
+install(TARGETS bfdev_static bfdev_shared
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
 
 add_library(bfdev ALIAS bfdev_shared)
 add_subdirectory(examples)
