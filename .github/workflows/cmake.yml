@@ -2,9 +2,9 @@ name: CMake
 
 on:
   push:
-    branches: [ "dev" ]
+    branches: [ "master", "devel" ]
   pull_request:
-    branches: [ "dev" ]
+    branches: [ "master", "devel" ]
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
@@ -34,4 +34,3 @@ jobs:
       # Execute tests defined by the CMake configuration.
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: ctest -C ${{env.BUILD_TYPE}}
-
