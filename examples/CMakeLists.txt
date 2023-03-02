@@ -14,3 +14,8 @@ set_source_files_properties(list-selftest
 PROPERTIES COMPILE_FLAGS
 "-Wall -Wno-unused-parameter")
 target_link_libraries(list-selftest bfdev)
+
+install(FILES list-benchmark.c list-selftest.c
+        DESTINATION ${CMAKE_INSTALL_DOCDIR}/examples)
+
+install(TARGETS list-benchmark list-selftest DESTINATION ${CMAKE_INSTALL_BINDIR})
