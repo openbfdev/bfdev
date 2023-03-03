@@ -16,6 +16,7 @@ set(bfdev_HEADERS
     include/bfdev/container.h
     include/bfdev/list.h
     include/bfdev/poison.h
+    include/bfdev/rbtree.h
     include/bfdev/scnprintf.h
 )
 
@@ -25,6 +26,8 @@ set(bfdev_SRCS
     src/bsearch.c
     src/list-check.c
     src/list-sort.c
+    src/rbtree.c
+    src/rbtree-debug.c
     src/scnprintf.c
 )
 
