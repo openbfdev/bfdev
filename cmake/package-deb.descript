@@ -20,9 +20,9 @@
 # 打包类型，暂支持 deb, 未来支持 tgz(tar.gz)
 Type: deb
 # 软件包名称(自动, 使用 PROJECT_NAME 变量值)
-Package: auto
+Package: libbfdev
 # 软件包版本(自动, 使用 PROJECT_VERSION 变量值)
-Version: auto
+Version: 1.0.0
 # 日历化尾部版本
 CalVer: false
 # 软件包架构(自动)
@@ -34,12 +34,13 @@ Priority: optional
 # 软件包依赖
 Depends: 
 # 软件包维护者(组织或个人)
-Maintainer: Individual developer <packages@email.com>
+Maintainer: zinface <zinface@163.com>
 # 软件包主页
-Homepage: 
+Homepage: https://github.com/openbfdev/bfdev.git
 # 软件包建议
 Recommends: 
 # 软件包描述信息
-Descrition: 简介部分
- 详细描述部分
+Descrition: High-performance portable c lang library
+ bfdev stand for brief dev or base fast dev.
+ this is a c lang base algo lib.
 

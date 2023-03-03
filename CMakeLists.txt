@@ -54,3 +54,11 @@ install(TARGETS bfdev_static bfdev_shared
 
 add_library(bfdev ALIAS bfdev_shared)
 add_subdirectory(examples)
+
+
+option(PACKAGE_DEB "use package-deb modules to build deb package." OFF)
+if(PACKAGE_DEB)
+    # use package-deb modules to build deb package.
+    find_package(DebPackage PATHS ${CMAKE_SOURCE_DIR})
+    add_package_descript(cmake/package-deb.descript)
+endif(PACKAGE_DEB)
