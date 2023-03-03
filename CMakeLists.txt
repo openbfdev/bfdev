@@ -16,6 +16,7 @@ set(bfdev_HEADERS
     include/bfdev/container.h
     include/bfdev/list.h
     include/bfdev/poison.h
+    include/bfdev/scnprintf.h
 )
 
 set(bfdev_SRCS
@@ -24,6 +25,7 @@ set(bfdev_SRCS
     src/bsearch.c
     src/list-check.c
     src/list-sort.c
+    src/scnprintf.c
 )
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
