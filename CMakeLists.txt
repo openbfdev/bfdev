@@ -8,6 +8,7 @@ project (bfdev C)
 include (GNUInstallDirs)
 
 set(bfdev_HEADERS
+    include/bfdev/attributes.h
     include/bfdev/bitrev.h
     include/bfdev/bsearch.h
     include/bfdev/compiler.h
