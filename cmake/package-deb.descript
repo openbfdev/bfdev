@@ -1,0 +1,14 @@
+Type: deb
+Package: libbfdev
+Version: 1.0.0
+CalVer: false
+Architecture: auto
+Section: devel
+Priority: optional
+Depends: 
+Maintainer: zinface <zinface@163.com>
+Homepage: https://github.com/openbfdev/bfdev.git
+Recommends: 
+Descrition: High-performance portable c lang library
+ bfdev stand for brief dev or base fast dev.
+ this is a c lang base algo lib.
