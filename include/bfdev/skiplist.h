@@ -32,4 +32,106 @@ extern void skiplist_reset(struct skip_head *head, skiplist_release_t relse);
 extern void skiplist_destroy(struct skip_head *head, skiplist_release_t relse);
 extern struct skip_head *skiplist_create(unsigned int levels);
 
+/**
+ * skip_for_each - iterate over list of given type.
+ * @pos: the type * to use as a loop cursor.
+ * @head: the head for your list.
+ */
+#define skip_for_each(pos, head, level) \
+    list_for_each_entry(pos, &(head)->nodes[level], list[level])
+
+/**
+ * skip_for_each_reverse - iterate backwards over list of given type.
+ * @pos: the type * to use as a loop cursor.
+ * @head: the head for your list.
+ */
+#define skip_for_each_reverse(pos, head, level) \
+    list_for_each_entry_reverse(pos, &(head)->nodes[level], list[level])
+
+/**
+ * skip_for_each_from - iterate over list of given type from the current point.
+ * @pos: the type * to use as a loop cursor.
+ * @head: the head for your list.
+ */
+#define skip_for_each_from(pos, head, level) \
+    list_for_each_entry_from(pos, &(head)->nodes[level], list[level])
+
+/**
+ * skip_for_each_reverse_from - iterate backwards over list of given type from the current point.
+ * @pos: the type * to use as a loop cursor.
+ * @head: the head for your list.
+ */
+#define skip_for_each_reverse_from(pos, head, level) \
+    list_for_each_entry_reverse_from(pos, &(head)->nodes[level], list[level])
+
+/**
+ * skip_for_each_continue - continue iteration over list of given type.
+ * @pos: the type * to use as a loop cursor.
+ * @head: the head for your list.
+ */
+#define skip_for_each_continue(pos, head, level) \
+    list_for_each_entry_continue(pos, &(head)->nodes[level], list[level])
+
+/**
+ * skip_for_each_reverse_continue - iterate backwards from the given point.
+ * @pos: the type * to use as a loop cursor.
+ * @head: the head for your list.
+ */
+#define skip_for_each_reverse_continue(pos, head, level) \
+    list_for_each_entry_reverse_continue(pos, &(head)->nodes[level], list[level])
+
+/**
+ * skip_for_each_safe - iterate over list of given type safe against removal of list entry.
+ * @pos: the type * to use as a loop cursor.
+ * @tmp: another type * to use as temporary storage.
+ * @head: the head for your list.
+ */
+#define skip_for_each_safe(pos, tmp, head, level) \
+    list_for_each_entry_safe(pos, tmp, &(head)->nodes[level], list[level])
+
+/**
+ * skip_for_each_reverse_safe - iterate backwards over list safe against removal.
+ * @pos: the type * to use as a loop cursor.
+ * @tmp: another type * to use as temporary storage.
+ * @head: the head for your list.
+ */
+#define skip_for_each_reverse_safe(pos, tmp, head, level) \
+    list_for_each_entry_reverse_safe(pos, tmp, &(head)->nodes[level], list[level])
+
+/**
+ * skip_for_each_from_safe - iterate over list from current point safe against removal.
+ * @pos: the type * to use as a loop cursor.
+ * @tmp: another type * to use as temporary storage.
+ * @head: the head for your list.
+ */
+#define skip_for_each_from_safe(pos, tmp, head, level) \
+    list_for_each_entry_from_safe(pos, tmp, &(head)->nodes[level], list[level])
+
+/**
+ * skip_for_each_reverse_from_safe - iterate backwards over list from current point safe against removal.
+ * @pos: the type * to use as a loop cursor.
+ * @tmp: another type * to use as temporary storage.
+ * @head: the head for your list.
+ */
+#define skip_for_each_reverse_from_safe(pos, tmp, head, level) \
+    list_for_each_entry_reverse_from_safe(pos, tmp, &(head)->nodes[level], list[level])
+
+/**
+ * skip_for_each_continue_safe - continue list iteration safe against removal.
+ * @pos: the type * to use as a loop cursor.
+ * @tmp: another type * to use as temporary storage.
+ * @head: the head for your list.
+ */
+#define skip_for_each_continue_safe(pos, tmp, head, level) \
+    list_for_each_entry_continue_safe(pos, tmp, &(head)->nodes[level], list[level])
+
+/**
+ * skip_for_each_reverse_continue_safe - continue backwards over list iteration safe against removal.
+ * @pos: the type * to use as a loop cursor.
+ * @tmp: another type * to use as temporary storage.
+ * @head: the head for your list.
+ */
+#define skip_for_each_reverse_continue_safe(pos, tmp, head, level) \
+    list_for_each_entry_reverse_continue_safe(pos, tmp, &(head)->nodes[level], list[level])
+
 #endif /* _BFDEV_SKIPLIST_H_ */
