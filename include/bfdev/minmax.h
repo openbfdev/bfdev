@@ -40,4 +40,32 @@
     min(max(val, lo), hi) \
 )
 
+/**
+ * min_adj - Adjust the minimum value of @val.
+ * @val: value to adjust.
+ * @lo: lowest allowable value.
+ */
+#define min_adj(val, lo) ({ \
+    (val) = min(val, lo); \
+})
+
+/**
+ * max_adj - Adjust the maximum value of @val.
+ * @val: value to adjust.
+ * @hi: highest allowable value.
+ */
+#define max_adj(val, hi) ({ \
+    (val) = max(val, hi); \
+})
+
+/**
+ * clamp_adj - Adjust the clamped value of @val.
+ * @val: value to adjust.
+ * @lo: lowest allowable value.
+ * @hi: highest allowable value.
+ */
+#define clamp_adj(val, lo, hi) ({ \
+    (val) = clamp(val, lo, hi); \
+})
+
 #endif /* _BFDEV_MINMAX_H_ */
