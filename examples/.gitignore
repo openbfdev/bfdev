@@ -4,3 +4,5 @@ list-selftest
 rbtree-benchmark
 rbtree-selftest
 rbtree-simple
+skiplist-benchmark
+skiplist-selftest

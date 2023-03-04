@@ -18,6 +18,7 @@ set(bfdev_HEADERS
     include/bfdev/poison.h
     include/bfdev/rbtree.h
     include/bfdev/scnprintf.h
+    include/bfdev/skiplist.h
 )
 
 set(bfdev_SRCS
@@ -29,6 +30,7 @@ set(bfdev_SRCS
     src/rbtree.c
     src/rbtree-debug.c
     src/scnprintf.c
+    src/skiplist.c
 )
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
