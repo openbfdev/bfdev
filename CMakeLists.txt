@@ -18,6 +18,7 @@ set(bfdev_HEADERS
     include/bfdev/poison.h
     include/bfdev/rbtree.h
     include/bfdev/scnprintf.h
+    include/bfdev/stringify.h
 )
 
 set(bfdev_SRCS
