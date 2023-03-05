@@ -151,6 +151,9 @@ struct skip_head *skiplist_create(unsigned int levels)
     struct skip_head *head;
     unsigned int count;
 
+    if (unlikely(!levels))
+        return NULL;
+
     head = malloc(sizeof(*head) + sizeof(*head->nodes) * levels);
     if (unlikely(!head))
         return NULL;
