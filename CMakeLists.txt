@@ -9,6 +9,7 @@ include (GNUInstallDirs)
 
 set(bfdev_HEADERS
     include/bfdev/attributes.h
+    include/bfdev/bcd.h
     include/bfdev/bitrev.h
     include/bfdev/bsearch.h
     include/bfdev/compiler.h
@@ -22,6 +23,7 @@ set(bfdev_HEADERS
 
 set(bfdev_SRCS
     ${bfdev_HEADERS}
+    src/bcd.c
     src/bitrev.c
     src/bsearch.c
     src/list-check.c
