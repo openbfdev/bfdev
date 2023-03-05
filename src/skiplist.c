@@ -1,9 +1,10 @@
 /* SPDX-License-Identifier: GPL-2.0-or-later */
 /*
- * Copyright(c) 2022 Sanpe <sanpeqf@gmail.com>
+ * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
 #include <stdlib.h>
+#include <bfdev/minmax.h>
 #include <bfdev/skiplist.h>
 
 static unsigned int random_level(struct skip_head *head)
@@ -65,7 +66,7 @@ int skiplist_insert(struct skip_head *head, void *data,
     long retval;
 
     level = random_level(head);
-    head->curr = head->curr > level ? head->curr : level;
+    max_adj(head->curr, level);
 
     node = malloc(sizeof(*node) + sizeof(*node->list) * level);
     if (unlikely(!node))
