@@ -26,16 +26,14 @@ set(BFDEV_HEADERS
 )
 
 set(BFDEV_SRCS
-    ${BFDEV_HEADERS}
     src/bcd.c
     src/bitrev.c
     src/bsearch.c
-    src/list-check.c
     src/list-sort.c
     src/popcount.c
     src/rbtree.c
-    src/rbtree-debug.c
     src/scnprintf.c
+    ${BFDEV_HEADERS}
 )
 
 option(ENABLE_ASAN "Enable Address Sanitizer" OFF)
@@ -47,6 +45,28 @@ if(ENABLE_ASAN)
          -fno-omit-frame-pointer -fno-stack-protector"
     )
 endif(ENABLE_ASAN)
+
+option(ENABLE_DBGLIST "Dynamic debug list" OFF)
+if(ENABLE_DBGLIST)
+    set(CMAKE_C_FLAGS
+        "${CMAKE_C_FLAGS} -D DEBUG_LIST"
+    )
+    set(BFDEV_SRCS
+        src/list-debug.c
+        ${BFDEV_SRCS}
+    )
+endif(ENABLE_DBGLIST)
+
+option(ENABLE_DBGRBTREE "Dynamic debug rbtree" OFF)
+if(ENABLE_DBGRBTREE)
+    set(CMAKE_C_FLAGS
+        "${CMAKE_C_FLAGS} -D DEBUG_RBTREE"
+    )
+    set(BFDEV_SRCS
+        src/rbtree-debug.c
+        ${BFDEV_SRCS}
+    )
+endif(ENABLE_DBGRBTREE)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 add_library(bfdev_shared SHARED ${BFDEV_SRCS})
