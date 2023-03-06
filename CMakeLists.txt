@@ -36,6 +36,23 @@ set(BFDEV_SRCS
     ${BFDEV_HEADERS}
 )
 
+add_definitions(
+    "-std=gnu17 "
+    "-Wall "
+    "-Wextra "
+    "-Wno-override-init "
+    "-Wno-unused-parameter "
+    "-Wno-sign-compare "
+    "-Wno-pointer-sign "
+)
+
+option(ENABLE_STRICT "Enable strict compilation" ON)
+if(ENABLE_STRICT)
+    add_definitions(
+        "-Werror "
+    )
+endif(ENABLE_STRICT)
+
 option(ENABLE_ASAN "Enable Address Sanitizer" OFF)
 if(ENABLE_ASAN)
     set(CMAKE_C_FLAGS
