@@ -15,6 +15,7 @@ set(bfdev_HEADERS
     include/bfdev/const.h
     include/bfdev/container.h
     include/bfdev/list.h
+    include/bfdev/overflow.h
     include/bfdev/poison.h
     include/bfdev/rbtree.h
     include/bfdev/scnprintf.h
