@@ -38,6 +38,16 @@ set(BFDEV_SRCS
     src/scnprintf.c
 )
 
+option(ENABLE_ASAN "Enable Address Sanitizer" OFF)
+if(ENABLE_ASAN)
+    set(CMAKE_C_FLAGS
+        "${CMAKE_C_FLAGS} \
+         -fsanitize=address -fsanitize=undefined \
+         -fsanitize=leak -fsanitize-recover=all \
+         -fno-omit-frame-pointer -fno-stack-protector"
+    )
+endif(ENABLE_ASAN)
+
 include_directories(${PROJECT_SOURCE_DIR}/include)
 add_library(bfdev_shared SHARED ${BFDEV_SRCS})
 add_library(bfdev_static STATIC ${BFDEV_SRCS})
