@@ -4,34 +4,39 @@
 #
 
 add_executable(list-benchmark list-benchmark.c)
-set_source_files_properties(list-benchmark
-PROPERTIES COMPILE_FLAGS
-"-Wall -Wno-unused-parameter")
 target_link_libraries(list-benchmark bfdev)
+set_source_files_properties(list-benchmark
+    PROPERTIES COMPILE_FLAGS
+    "-Wall -Wno-unused-parameter"
+)
 
 add_executable(list-selftest list-selftest.c)
-set_source_files_properties(list-selftest
-PROPERTIES COMPILE_FLAGS
-"-Wall -Wno-unused-parameter")
 target_link_libraries(list-selftest bfdev)
+set_source_files_properties(list-selftest
+    PROPERTIES COMPILE_FLAGS
+    "-Wall -Wno-unused-parameter"
+)
 
 add_executable(rbtree-benchmark rbtree-benchmark.c)
-set_source_files_properties(rbtree-benchmark
-PROPERTIES COMPILE_FLAGS
-"-Wall -Wno-unused-parameter")
 target_link_libraries(rbtree-benchmark bfdev)
+set_source_files_properties(rbtree-benchmark
+    PROPERTIES COMPILE_FLAGS
+    "-Wall -Wno-unused-parameter"
+)
 
 add_executable(rbtree-selftest rbtree-selftest.c)
-set_source_files_properties(rbtree-selftest
-PROPERTIES COMPILE_FLAGS
-"-Wall -Wno-unused-parameter")
 target_link_libraries(rbtree-selftest bfdev)
+set_source_files_properties(rbtree-selftest
+    PROPERTIES COMPILE_FLAGS
+    "-Wall -Wno-unused-parameter"
+)
 
 add_executable(rbtree-simple rbtree-simple.c)
-set_source_files_properties(rbtree-simple
-PROPERTIES COMPILE_FLAGS
-"-Wall -Wno-unused-parameter")
 target_link_libraries(rbtree-simple bfdev)
+set_source_files_properties(rbtree-simple
+    PROPERTIES COMPILE_FLAGS
+    "-Wall -Wno-unused-parameter"
+)
 
 add_executable(skiplist-benchmark skiplist-benchmark.c)
 set_source_files_properties(skiplist-benchmark
