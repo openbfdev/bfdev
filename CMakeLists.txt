@@ -23,6 +23,7 @@ set(BFDEV_HEADERS
     include/bfdev/rbtree.h
     include/bfdev/scnprintf.h
     include/bfdev/stringify.h
+    include/bfdev/typecheck.h
 )
 
 set(BFDEV_SRCS
