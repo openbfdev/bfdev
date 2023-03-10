@@ -1,8 +1,0 @@
-# SPDX-License-Identifier: GPL-2.0-or-later
-list-benchmark
-list-selftest
-rbtree-benchmark
-rbtree-selftest
-rbtree-simple
-skiplist-benchmark
-skiplist-selftest
