@@ -6,3 +6,4 @@
 add_subdirectory(list)
 add_subdirectory(rbtree)
 add_subdirectory(skiplist)
+add_subdirectory(slist)
