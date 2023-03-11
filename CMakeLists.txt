@@ -23,6 +23,7 @@ set(BFDEV_HEADERS
     include/bfdev/rbtree.h
     include/bfdev/scnprintf.h
     include/bfdev/skiplist.h
+    include/bfdev/slist.h
     include/bfdev/stringify.h
     include/bfdev/typecheck.h
 )
@@ -76,6 +77,17 @@ if(ENABLE_DBGLIST)
         ${BFDEV_SRCS}
     )
 endif(ENABLE_DBGLIST)
+
+option(ENABLE_DBGSLIST "Dynamic debug slist" OFF)
+if(ENABLE_DBGSLIST)
+    set(CMAKE_C_FLAGS
+        "${CMAKE_C_FLAGS} -D DEBUG_SLIST"
+    )
+    set(BFDEV_SRCS
+        src/slist-debug.c
+        ${BFDEV_SRCS}
+    )
+endif(ENABLE_DBGSLIST)
 
 option(ENABLE_DBGRBTREE "Dynamic debug rbtree" OFF)
 if(ENABLE_DBGRBTREE)
