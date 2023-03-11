@@ -47,6 +47,7 @@ add_definitions(
     "-Wno-unused-parameter "
     "-Wno-sign-compare "
     "-Wno-pointer-sign "
+    "-Wno-null-pointer-arithmetic "
 )
 
 option(ENABLE_STRICT "Enable strict compilation" ON)
