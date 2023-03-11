@@ -11,6 +11,7 @@
 #include <stdbool.h>
 
 #include "compiler.h"
+#include "attributes.h"
 #include "poison.h"
 #include "container.h"
 
