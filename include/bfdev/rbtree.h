@@ -6,10 +6,9 @@
 #ifndef _RBTREE_H_
 #define _RBTREE_H_
 
-#include <stddef.h>
-#include <limits.h>
-#include <stdbool.h>
-
+#include "stddef.h"
+#include "limits.h"
+#include "stdbool.h"
 #include "compiler.h"
 #include "attributes.h"
 #include "poison.h"

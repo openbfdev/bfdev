@@ -6,7 +6,7 @@
 #ifndef _BFDEV_OVERFLOW_H_
 #define _BFDEV_OVERFLOW_H_
 
-#include <stdint.h>
+#include "stdint.h"
 
 #define overflow_check_add(a, b, d) ({          \
     typeof(a) ___a = (a);                       \

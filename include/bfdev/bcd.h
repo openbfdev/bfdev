@@ -6,8 +6,8 @@
 #ifndef _BFDEV_BCD_H_
 #define _BFDEV_BCD_H_
 
-#include <stdint.h>
-#include <limits.h>
+#include "stdint.h"
+#include "limits.h"
 #include "attributes.h"
 
 #define bcd2bin_constant(bcd) ( \
