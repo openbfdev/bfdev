@@ -11,6 +11,7 @@
 #include "compiler.h"
 #include "const.h"
 #include "container.h"
+#include "errno.h"
 #include "macro.h"
 #include "minmax.h"
 #include "stringify.h"

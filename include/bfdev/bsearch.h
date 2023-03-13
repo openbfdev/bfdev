@@ -6,8 +6,8 @@
 #ifndef _BFDEV_BSEARCH_H_
 #define _BFDEV_BSEARCH_H_
 
-#include <stdint.h>
-#include <stddef.h>
+#include "stdint.h"
+#include "stddef.h"
 
 typedef long (*bsearch_cmp_t)(const void *key, void *pdata);
 

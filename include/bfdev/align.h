@@ -6,8 +6,8 @@
 #ifndef _BFDEV_ALIGN_H_
 #define _BFDEV_ALIGN_H_
 
-#include <stdlib.h>
-#include <stddef.h>
+#include "stdlib.h"
+#include "stddef.h"
 
 /**
  * align_low/high - aligned value.

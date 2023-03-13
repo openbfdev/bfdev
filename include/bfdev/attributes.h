@@ -65,9 +65,8 @@
  *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-always_005finline-function-attribute
  * clang: mentioned
  */
-#ifndef __always_inline
-# define __always_inline inline __attribute__((__always_inline__))
-#endif
+#undef __always_inline
+#define __always_inline inline __attribute__((__always_inline__))
 
 /*
  * The second argument is optional (default 0), so we use a variadic macro

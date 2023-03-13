@@ -3,10 +3,10 @@
  * Copyright(c) 2021-2022 John Sanpe <sanpeqf@gmail.com>
  */
 
+#include <bfdev/bfdev.h>
 #include <bfdev/rbtree.h>
+#include <bfdev/stdlib.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
 
 #define TEST_LEN 10
 static RB_ROOT(simple_root);
@@ -35,7 +35,7 @@ int main(void)
         node = malloc(sizeof(*node));
         if (!node) {
             printf("Abort.\n");
-            return -ENOMEM;
+            return -BFDEV_ENOMEM;
         }
 
         node->data = ((unsigned long)rand() << 32) | rand();

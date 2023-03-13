@@ -3,9 +3,10 @@
  * Copyright(c) 2021 Sanpe <sanpeqf@gmail.com>
  */
 
+#include <bfdev/bfdev.h>
 #include <bfdev/list.h>
+#include <bfdev/stdlib.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
 #include <sys/times.h>
 

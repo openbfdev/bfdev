@@ -3,10 +3,10 @@
  * Copyright(c) 2022 John Sanpe <sanpeqf@gmail.com>
  */
 
+#include <bfdev/bfdev.h>
 #include <bfdev/rbtree.h>
+#include <bfdev/stdlib.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
 
 #define TEST_LOOP 100
 
@@ -53,14 +53,14 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     for (count = 0; count < TEST_LOOP; ++count) {
         rbnode = rb_find(&test_root.root, (void *)sdata->nodes[count].data, rbtest_rb_find);
         if (!(node = rbnode_to_test_safe(rbnode)))
-            return -EFAULT;
+            return -BFDEV_EFAULT;
         printf("rbtree 'rb_cached' test: %lu\n", node->data);
     }
 
     for (count = 0; count < TEST_LOOP; ++count) {
         rbnode = rb_cached_find(&test_root, (void *)sdata->nodes[count].data, rbtest_rb_find);
         if (!(node = rbnode_to_test_safe(rbnode)))
-            return -EFAULT;
+            return -BFDEV_EFAULT;
         printf("rbtree 'rb_cached_find' test: %lu\n", node->data);
     }
 
@@ -87,7 +87,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     }
 
     if (count != TEST_LOOP + (TEST_LOOP / 2))
-        return -ENODATA;
+        return -BFDEV_ENODATA;
 
     count = 0;
     rb_for_each_reverse(rbnode, &test_root.root) {
@@ -112,7 +112,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     }
 
     if (count != TEST_LOOP + (TEST_LOOP / 2))
-        return -ENODATA;
+        return -BFDEV_ENODATA;
 
     count = 0;
     rb_post_for_each(rbnode, &test_root.root) {
@@ -137,7 +137,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     }
 
     if (count != TEST_LOOP + (TEST_LOOP / 2))
-        return -ENODATA;
+        return -BFDEV_ENODATA;
 
     count = 0;
     rb_post_for_each_safe(rbnode, nrbnode, &test_root.root) {
@@ -162,7 +162,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     }
 
     if (count != TEST_LOOP + (TEST_LOOP / 2))
-        return -ENODATA;
+        return -BFDEV_ENODATA;
 
     count = 0;
     rb_for_each_entry(node, &test_root.root, node) {
@@ -184,7 +184,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     }
 
     if (count != TEST_LOOP + (TEST_LOOP / 2))
-        return -ENODATA;
+        return -BFDEV_ENODATA;
 
     count = 0;
     rb_for_each_entry_reverse(node, &test_root.root, node) {
@@ -206,7 +206,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     }
 
     if (count != TEST_LOOP + (TEST_LOOP / 2))
-        return -ENODATA;
+        return -BFDEV_ENODATA;
 
     count = 0;
     rb_post_for_each_entry(node, &test_root.root, node) {
@@ -228,7 +228,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     }
 
     if (count != TEST_LOOP + (TEST_LOOP / 2))
-        return -ENODATA;
+        return -BFDEV_ENODATA;
 
     count = 0;
     rb_pre_for_each(rbnode, &test_root.root) {
@@ -253,7 +253,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     }
 
     if (count != TEST_LOOP + (TEST_LOOP / 2))
-        return -ENODATA;
+        return -BFDEV_ENODATA;
 
     count = 0;
     rb_pre_for_each_entry(node, &test_root.root, node) {
@@ -275,7 +275,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     }
 
     if (count != TEST_LOOP + (TEST_LOOP / 2))
-        return -ENODATA;
+        return -BFDEV_ENODATA;
 
     count = 0;
     rb_post_for_each(rbnode, &test_root.root) {
@@ -298,7 +298,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     }
 
     if (count != TEST_LOOP + (TEST_LOOP / 2))
-        return -ENODATA;
+        return -BFDEV_ENODATA;
 
     count = 0;
     rb_post_for_each_entry_safe(node, nnode, &test_root.root, node) {
@@ -320,7 +320,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     }
 
     if (count != TEST_LOOP + (TEST_LOOP / 2))
-        return -ENODATA;
+        return -BFDEV_ENODATA;
 
     count = 0;
     rb_cached_for_each(rbnode, &test_root) {
@@ -330,7 +330,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     }
 
     if (count != TEST_LOOP)
-        return -ENODATA;
+        return -BFDEV_ENODATA;
 
     count = 0;
     rb_cached_for_each_reverse(rbnode, &test_root) {
@@ -340,7 +340,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     }
 
     if (count != TEST_LOOP)
-        return -ENODATA;
+        return -BFDEV_ENODATA;
 
     count = 0;
     rb_cached_for_each_entry(node, &test_root, node) {
@@ -349,7 +349,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     }
 
     if (count != TEST_LOOP)
-        return -ENODATA;
+        return -BFDEV_ENODATA;
 
     count = 0;
     rb_cached_for_each_entry_reverse(node, &test_root, node) {
@@ -358,7 +358,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     }
 
     if (count != TEST_LOOP)
-        return -ENODATA;
+        return -BFDEV_ENODATA;
 
     count = 0;
     rb_cached_pre_for_each(rbnode, &test_root) {
@@ -368,7 +368,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     }
 
     if (count != TEST_LOOP)
-        return -ENODATA;
+        return -BFDEV_ENODATA;
 
     count = 0;
     rb_cached_pre_for_each_entry(node, &test_root, node) {
@@ -377,7 +377,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     }
 
     if (count != TEST_LOOP)
-        return -ENODATA;
+        return -BFDEV_ENODATA;
 
     count = 0;
     rb_cached_post_for_each(rbnode, &test_root) {
@@ -387,7 +387,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     }
 
     if (count != TEST_LOOP)
-        return -ENODATA;
+        return -BFDEV_ENODATA;
 
     count = 0;
     rb_cached_post_for_each_safe(rbnode, nrbnode, &test_root) {
@@ -397,7 +397,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     }
 
     if (count != TEST_LOOP)
-        return -ENODATA;
+        return -BFDEV_ENODATA;
 
     count = 0;
     rb_cached_post_for_each_entry(node, &test_root, node) {
@@ -406,7 +406,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     }
 
     if (count != TEST_LOOP)
-        return -ENODATA;
+        return -BFDEV_ENODATA;
 
     count = 0;
     rb_cached_post_for_each_entry_safe(node, nnode, &test_root, node) {
@@ -415,7 +415,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     }
 
     if (count != TEST_LOOP)
-        return -ENODATA;
+        return -BFDEV_ENODATA;
 
     return 0;
 }

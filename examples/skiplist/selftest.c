@@ -3,10 +3,11 @@
  * Copyright(c) 2022 Sanpe <sanpeqf@gmail.com>
  */
 
+#include <bfdev/bfdev.h>
 #include <bfdev/skiplist.h>
+#include <bfdev/stdint.h>
+#include <bfdev/stdlib.h>
 #include <stdio.h>
-#include <stdint.h>
-#include <stdlib.h>
 
 #define TEST_LOOP 100
 #define TEST_LEVEL 32
@@ -49,7 +50,7 @@ static int skiplist_test_testing(struct skiplist_test *test)
         printf("skiplist find test%02d: %#010lx ret %#010lx\n",
                count, test->values[count], value);
         if (!value)
-            return -ENOENT;
+            return -BFDEV_ENOENT;
     }
 
     for (count = 0; count < TEST_LOOP; ++count) {
@@ -68,12 +69,12 @@ int main(void)
 
     test = malloc(sizeof(struct skiplist_test));
     if (unlikely(!test))
-        return -ENOMEM;
+        return -BFDEV_ENOMEM;
 
     test->head = skiplist_create(TEST_LEVEL);
     if (unlikely(!test->head)) {
         free(test);
-        return -ENOMEM;
+        return -BFDEV_ENOMEM;
     }
 
     retval = skiplist_test_testing(test);
