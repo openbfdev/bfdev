@@ -3,9 +3,8 @@
  * Copyright(c) 2021 Sanpe <sanpeqf@gmail.com>
  */
 
+#include <bfdev/bfdev.h>
 #include <bfdev/list.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 /**
  * ARRAY_SIZE - get the number of elements in array.

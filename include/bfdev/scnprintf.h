@@ -6,8 +6,8 @@
 #ifndef _BFDEV_SCNPRINTF_H_
 #define _BFDEV_SCNPRINTF_H_
 
-#include <stdarg.h>
-#include <stddef.h>
+#include "stdarg.h"
+#include "stddef.h"
 #include "attributes.h"
 
 extern __printf(3, 0) int vscnprintf(char *buf, size_t size, const char *fmt, va_list args);

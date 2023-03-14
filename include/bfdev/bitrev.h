@@ -6,7 +6,7 @@
 #ifndef _BFDEV_BITREV_H_
 #define _BFDEV_BITREV_H_
 
-#include <stdint.h>
+#include "stdint.h"
 
 #define bitrev8_constant(value) (                   \
     (((uint8_t)(value) & (uint8_t)0x01UL) << 7) |   \

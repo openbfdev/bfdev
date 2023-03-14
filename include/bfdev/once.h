@@ -6,7 +6,7 @@
 #ifndef _BFDEV_ONCE_H_
 #define _BFDEV_ONCE_H_
 
-#include <stdbool.h>
+#include "stdbool.h"
 #include "compiler.h"
 
 #define DO_ONCE_DONE(condition) ({                  \

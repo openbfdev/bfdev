@@ -3,11 +3,9 @@
  * Copyright(c) 2021-2022 John Sanpe <sanpeqf@gmail.com>
  */
 
+#include <bfdev/bfdev.h>
 #include <bfdev/rbtree.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <errno.h>
-#include <string.h>
 #include <unistd.h>
 #include <sys/times.h>
 

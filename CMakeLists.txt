@@ -15,6 +15,7 @@ set(BFDEV_HEADERS
     include/bfdev/compiler.h
     include/bfdev/const.h
     include/bfdev/container.h
+    include/bfdev/limits.h
     include/bfdev/list.h
     include/bfdev/once.h
     include/bfdev/overflow.h
@@ -23,6 +24,12 @@ set(BFDEV_HEADERS
     include/bfdev/rbtree.h
     include/bfdev/scnprintf.h
     include/bfdev/skiplist.h
+    include/bfdev/stdbool.h
+    include/bfdev/stddef.h
+    include/bfdev/stdint.h
+    include/bfdev/stdio.h
+    include/bfdev/stdlib.h
+    include/bfdev/string.h
     include/bfdev/stringify.h
     include/bfdev/typecheck.h
 )

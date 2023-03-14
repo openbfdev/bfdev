@@ -3,11 +3,8 @@
  * Copyright(c) 2022 Sanpe <sanpeqf@gmail.com>
  */
 
+#include <bfdev/bfdev.h>
 #include <bfdev/skiplist.h>
-#include <stdio.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
 #include <sys/times.h>
 

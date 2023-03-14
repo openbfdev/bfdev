@@ -6,8 +6,8 @@
 #ifndef _BFDEV_POPCOUNT_H_
 #define _BFDEV_POPCOUNT_H_
 
-#include <stdint.h>
-#include <stdbool.h>
+#include "stdint.h"
+#include "stdbool.h"
 #include "attributes.h"
 
 extern const uint8_t popcount_table[256];

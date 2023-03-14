@@ -6,12 +6,11 @@
 #ifndef _BFDEV_LIST_H_
 #define _BFDEV_LIST_H_
 
-#include <stddef.h>
-#include <stdbool.h>
-
+#include "stddef.h"
+#include "stdbool.h"
 #include "compiler.h"
-#include "poison.h"
 #include "container.h"
+#include "poison.h"
 
 struct list_head {
     struct list_head *prev;
