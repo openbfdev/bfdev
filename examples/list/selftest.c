@@ -6,14 +6,6 @@
 #include <bfdev/bfdev.h>
 #include <bfdev/list.h>
 
-/**
- * ARRAY_SIZE - get the number of elements in array.
- * @arr: array to be sized.
- */
-#define ARRAY_SIZE(arr) ( \
-    sizeof(arr) / sizeof((arr)[0]) \
-)
-
 #define TEST_LOOP 10
 
 struct list_test_node {
