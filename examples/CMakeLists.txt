@@ -5,4 +5,5 @@
 
 add_subdirectory(list)
 add_subdirectory(rbtree)
+add_subdirectory(segtree)
 add_subdirectory(skiplist)

@@ -23,6 +23,7 @@ set(BFDEV_HEADERS
     include/bfdev/popcount.h
     include/bfdev/rbtree.h
     include/bfdev/scnprintf.h
+    include/bfdev/segtree.h
     include/bfdev/skiplist.h
     include/bfdev/stdbool.h
     include/bfdev/stddef.h
@@ -42,6 +43,7 @@ set(BFDEV_SRCS
     src/popcount.c
     src/rbtree.c
     src/scnprintf.c
+    src/segtree.c
     src/skiplist.c
     ${BFDEV_HEADERS}
 )
