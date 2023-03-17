@@ -31,6 +31,7 @@ set(BFDEV_HEADERS
     include/bfdev/stdlib.h
     include/bfdev/string.h
     include/bfdev/stringify.h
+    include/bfdev/swab.h
     include/bfdev/typecheck.h
 )
 
