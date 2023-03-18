@@ -15,6 +15,7 @@ set(BFDEV_HEADERS
     include/bfdev/compiler.h
     include/bfdev/const.h
     include/bfdev/container.h
+    include/bfdev/errno.h
     include/bfdev/limits.h
     include/bfdev/list.h
     include/bfdev/once.h
