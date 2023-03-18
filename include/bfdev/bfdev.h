@@ -6,6 +6,7 @@
 #ifndef _BFDEV_BFDEV_H_
 #define _BFDEV_BFDEV_H_
 
+#include "errno.h"
 #include "limits.h"
 #include "stdbool.h"
 #include "stddef.h"
