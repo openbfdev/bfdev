@@ -16,6 +16,7 @@ set(BFDEV_HEADERS
     include/bfdev/const.h
     include/bfdev/container.h
     include/bfdev/errno.h
+    include/bfdev/error.h
     include/bfdev/limits.h
     include/bfdev/list.h
     include/bfdev/once.h
@@ -42,6 +43,7 @@ set(BFDEV_SRCS
     src/bcd.c
     src/bitrev.c
     src/bsearch.c
+    src/errname.c
     src/list-sort.c
     src/popcount.c
     src/rbtree.c
