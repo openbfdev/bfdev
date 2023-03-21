@@ -8,16 +8,22 @@ project(bfdev LANGUAGES C)
 include(GNUInstallDirs)
 
 set(BFDEV_HEADERS
+    include/bfdev/align.h
+    include/bfdev/allocator.h
     include/bfdev/attributes.h
     include/bfdev/bcd.h
+    include/bfdev/bfdev.h
     include/bfdev/bitrev.h
     include/bfdev/bsearch.h
     include/bfdev/compiler.h
     include/bfdev/const.h
     include/bfdev/container.h
     include/bfdev/errno.h
+    include/bfdev/errno.h
+    include/bfdev/galloctor.h
     include/bfdev/limits.h
     include/bfdev/list.h
+    include/bfdev/macro.h
     include/bfdev/once.h
     include/bfdev/overflow.h
     include/bfdev/poison.h
