@@ -85,6 +85,21 @@ if(ENABLE_ASAN)
     )
 endif(ENABLE_ASAN)
 
+option(ENABLE_UBSAN "Enable Undefined Behaviour Sanitizer" OFF)
+if(ENABLE_UBSAN)
+    set(CMAKE_C_FLAGS
+        "${CMAKE_C_FLAGS} \
+         -fsanitize=alignment \
+         -fsanitize=bounds \
+         -fsanitize=shift \
+         -fsanitize=integer-divide-by-zero \
+         -fsanitize=unreachable \
+         -fsanitize=bool \
+         -fsanitize=enum \
+         -fsanitize-undefined-trap-on-error"
+    )
+endif(ENABLE_UBSAN)
+
 option(ENABLE_DBGLIST "Dynamic debug list" OFF)
 if(ENABLE_DBGLIST)
     set(CMAKE_C_FLAGS
