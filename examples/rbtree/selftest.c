@@ -35,7 +35,7 @@ static long rbtest_rb_find(const struct rb_node *rb, const void *key)
 {
     struct rbtree_test_node *node = rbnode_to_test(rb);
     if (node->data == (unsigned long)key) return 0;
-    return (unsigned long)key < node->data ? -1 : 1;
+    return node->data < (unsigned long)key ? -1 : 1;
 }
 
 static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
