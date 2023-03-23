@@ -20,6 +20,7 @@ set(BFDEV_HEADERS
     include/bfdev/container.h
     include/bfdev/errno.h
     include/bfdev/galloctor.h
+    include/bfdev/hlist.h
     include/bfdev/limits.h
     include/bfdev/list.h
     include/bfdev/macro.h
@@ -122,6 +123,17 @@ if(ENABLE_DBGSLIST)
         ${BFDEV_SRCS}
     )
 endif(ENABLE_DBGSLIST)
+
+option(ENABLE_DBGHLIST "Dynamic debug hlist" OFF)
+if(ENABLE_DBGHLIST)
+    set(CMAKE_C_FLAGS
+        "${CMAKE_C_FLAGS} -D DEBUG_HLIST"
+    )
+    set(BFDEV_SRCS
+        src/hlist-debug.c
+        ${BFDEV_SRCS}
+    )
+endif(ENABLE_DBGHLIST)
 
 option(ENABLE_DBGRBTREE "Dynamic debug rbtree" OFF)
 if(ENABLE_DBGRBTREE)
