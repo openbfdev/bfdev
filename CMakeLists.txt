@@ -19,12 +19,12 @@ set(BFDEV_HEADERS
     include/bfdev/const.h
     include/bfdev/container.h
     include/bfdev/errno.h
-    include/bfdev/errno.h
     include/bfdev/galloctor.h
     include/bfdev/limits.h
     include/bfdev/list.h
     include/bfdev/macro.h
     include/bfdev/mhelper.h
+    include/bfdev/minmax.h
     include/bfdev/once.h
     include/bfdev/overflow.h
     include/bfdev/poison.h
