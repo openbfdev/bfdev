@@ -24,6 +24,7 @@ set(BFDEV_HEADERS
     include/bfdev/limits.h
     include/bfdev/list.h
     include/bfdev/macro.h
+    include/bfdev/mhelper.h
     include/bfdev/once.h
     include/bfdev/overflow.h
     include/bfdev/poison.h
