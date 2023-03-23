@@ -350,6 +350,13 @@
 #endif
 
 /*
+ *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-visibility-function-attribute
+ */
+#ifndef __visibility
+# define __visibility(mode) __attribute__((visibility(mode)))
+#endif
+
+/*
  *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-constructor-function-attribute
  */
 #ifndef __ctor
