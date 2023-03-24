@@ -35,6 +35,7 @@ set(BFDEV_HEADERS
     include/bfdev/segtree.h
     include/bfdev/skiplist.h
     include/bfdev/slist.h
+    include/bfdev/stdarg.h
     include/bfdev/stdbool.h
     include/bfdev/stddef.h
     include/bfdev/stdint.h
