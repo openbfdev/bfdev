@@ -22,6 +22,7 @@ set(BFDEV_HEADERS
     include/bfdev/container.h
     include/bfdev/errno.h
     include/bfdev/galloctor.h
+    include/bfdev/hash.h
     include/bfdev/hlist.h
     include/bfdev/limits.h
     include/bfdev/list.h
