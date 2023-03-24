@@ -11,6 +11,7 @@ set(BFDEV_HEADERS
     include/bfdev/align.h
     include/bfdev/allocator.h
     include/bfdev/attributes.h
+    include/bfdev/array.h
     include/bfdev/bcd.h
     include/bfdev/bfdev.h
     include/bfdev/bitrev.h
@@ -51,9 +52,11 @@ set(BFDEV_HEADERS
 )
 
 set(BFDEV_SRCS
+    src/array.c
     src/bcd.c
     src/bitrev.c
     src/bsearch.c
+    src/gallocator.c
     src/list-sort.c
     src/popcount.c
     src/rbtree.c
