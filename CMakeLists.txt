@@ -54,6 +54,7 @@ set(BFDEV_SRCS
     src/bcd.c
     src/bitrev.c
     src/bsearch.c
+    src/gallocator.c
     src/list-sort.c
     src/popcount.c
     src/rbtree.c
