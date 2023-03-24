@@ -14,6 +14,7 @@ set(BFDEV_HEADERS
     include/bfdev/bcd.h
     include/bfdev/bfdev.h
     include/bfdev/bitrev.h
+    include/bfdev/bits.h
     include/bfdev/bitsperlong.h
     include/bfdev/bsearch.h
     include/bfdev/compiler.h
