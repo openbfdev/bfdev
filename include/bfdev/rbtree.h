@@ -14,6 +14,10 @@
 #include "poison.h"
 #include "container.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define RB_RED      (0)
 #define RB_BLACK    (1)
 #define RB_NSET     (2)
@@ -969,5 +973,9 @@ static inline bool RBNAME##_compute_max(RBSTRUCT *node, bool exit)              
     return false;                                                                                       \
 }                                                                                                       \
 RB_DECLARE_CALLBACKS(RBSTATIC, RBNAME, RBSTRUCT, RBFIELD, RBAUGMENTED, RBNAME##_compute_max)
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _RBTREE_H_ */

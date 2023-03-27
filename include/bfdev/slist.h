@@ -13,6 +13,10 @@
 #include "poison.h"
 #include "container.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct slist_head {
     struct slist_head *next;
 };
@@ -267,5 +271,9 @@ static inline bool slist_check_another(const struct slist_head *head, const stru
     for ((pos) = slist_next_entry(pos, member), \
          (tmp) = slist_next_entry(pos, member); (pos); (pos) = (tmp), \
          ((tmp) && ((tmp) = slist_next_entry(pos, member))))
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif  /* _BFDEV_SLIST_H_ */

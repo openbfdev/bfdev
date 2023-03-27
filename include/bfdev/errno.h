@@ -6,6 +6,10 @@
 #ifndef _BFDEV_ERRNO_H_
 #define _BFDEV_ERRNO_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define BFDEV_ENOERR                0       /* No error */
 #define BFDEV_EPERM                 1       /* Operation not permitted */
 #define BFDEV_ENOENT                2       /* No such file or directory */
@@ -117,5 +121,9 @@
 #define BFDEV_EKEYREVOKED           128     /* Key has been revoked */
 #define BFDEV_EKEYREJECTED          129     /* Key was rejected by service */
 #define BFDEV_ERRNO_MAX             4096
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _BFDEV_ERRNO_H_ */

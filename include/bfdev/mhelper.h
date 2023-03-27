@@ -6,6 +6,10 @@
 #ifndef _BFDEV_MHELPER_H_
 #define _BFDEV_MHELPER_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define BFDEV_MMAP_ARG0(fn, ...)
 #define BFDEV_MMAP_ARG1(fn, type, arg, ...) fn(type, arg)
 #define BFDEV_MMAP_ARG2(fn, type, arg, ...) fn(type, arg), BFDEV_MMAP_ARG1(fn, ##__VA_ARGS__)
@@ -28,5 +32,9 @@
 #define BFDEV_MARGFN_LONG(type, arg) long arg
 #define BFDEV_MARGFN_ARGS(type, arg) arg
 #define BFDEV_MARGFN_CAST(type, arg) (type) arg
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif  /* _BFDEV_MHELPER_H_ */

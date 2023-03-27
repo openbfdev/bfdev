@@ -10,6 +10,10 @@
 #include "stdbool.h"
 #include "attributes.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern const uint8_t popcount_table[256];
 extern const uint8_t popparity_table[256];
 
@@ -208,5 +212,9 @@ bool popparity64_dynamic(uint64_t value)
     ? popparity64_const(__value)    \
     : popparity64_dynamic(__value); \
 })
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _BFDEV_POPCOUNT_H_ */

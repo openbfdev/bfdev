@@ -12,4 +12,12 @@
 # include <stddef.h>
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* _BFDEV_STDDEF_H_ */

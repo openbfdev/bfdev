@@ -2,6 +2,10 @@
 #ifndef _BFDEV_ATTRIBUTES_H_
 #define _BFDEV_ATTRIBUTES_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  * The attributes in this file are unconditionally defined and they directly
  * map to compiler attribute(s), unless one of the compilers does not support
@@ -368,6 +372,10 @@
  */
 #ifndef __dtor
 # define __dtor __attribute__((destructor))
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif /* _BFDEV_ATTRIBUTES_H_ */

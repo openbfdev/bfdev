@@ -6,6 +6,10 @@
 #ifndef _BFDEV_CONTAINER_H_
 #define _BFDEV_CONTAINER_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * container_of - cast a member of a structure out to the containing structure.
  * @ptr: the pointer to the member.
@@ -21,5 +25,9 @@
     typeof(ptr) _ptr = (ptr); \
     _ptr ? container_of(_ptr, type, member) : NULL; \
 })
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _BFDEV_CONTAINER_H_ */

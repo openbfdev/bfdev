@@ -9,6 +9,10 @@
 #include "stdbool.h"
 #include "compiler.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define DO_ONCE_DONE(condition) ({                  \
     static bool __already;                          \
     bool __cond = !!(condition);                    \
@@ -31,5 +35,9 @@
 
 #define DO_ONCE(func, ...) \
     DO_ONCE_ON(true, func, ##__VA_ARGS__)
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _BFDEV_ONCE_H_ */

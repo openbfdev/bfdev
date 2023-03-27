@@ -13,6 +13,9 @@
 #include "allocator.h"
 #include "galloctor.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct bfdev_array_s bfdev_array_t;
 
@@ -34,5 +37,9 @@ bfdev_array_reset(bfdev_array_t *a)
 {
     a->nelts = 0;
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /*_BFDEV_ARRAY_H_*/

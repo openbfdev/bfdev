@@ -8,6 +8,10 @@
 
 #include "stdint.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define bitrev8_constant(value) (                   \
     (((uint8_t)(value) & (uint8_t)0x01UL) << 7) |   \
     (((uint8_t)(value) & (uint8_t)0x02UL) << 5) |   \
@@ -185,5 +189,9 @@ static inline uint64_t bitrev64_dynamic(uint64_t value)
     ? bitrev64_constant(__value)            \
     : bitrev64_dynamic(__value);            \
 })
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _BFDEV_BITREV_H_ */

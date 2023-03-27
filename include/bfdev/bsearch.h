@@ -9,6 +9,10 @@
 #include "stdint.h"
 #include "stddef.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef long (*bsearch_cmp_t)(const void *key, void *pdata);
 
 static inline void *
@@ -38,5 +42,9 @@ bsearch_inline(const void *base, size_t num, size_t esize,
 
 extern void *bsearch(const void *base, size_t num, size_t esize,
                      bsearch_cmp_t cmp, void *pdata);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _BFDEV_BSEARCH_H_ */

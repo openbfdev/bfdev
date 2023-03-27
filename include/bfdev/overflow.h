@@ -8,6 +8,10 @@
 
 #include "stdint.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define overflow_check_add(a, b, d) ({          \
     typeof(a) ___a = (a);                       \
     typeof(b) ___b = (b);                       \
@@ -86,5 +90,9 @@ GENERIC_OVERFLOW_OPS(u8, uint8_t)
 GENERIC_OVERFLOW_OPS(u16, uint16_t)
 GENERIC_OVERFLOW_OPS(u32, uint32_t)
 GENERIC_OVERFLOW_OPS(u64, uint64_t)
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _BFDEV_OVERFLOW_H_ */

@@ -12,6 +12,10 @@
 #include "container.h"
 #include "poison.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct list_head {
     struct list_head *prev;
     struct list_head *next;
@@ -747,5 +751,9 @@ static inline void list_splice_tail_init(struct list_head *head, struct list_hea
          (tmp) = list_prev_entry(pos, member))); \
          !list_entry_check_head(pos, head, member); \
          (pos) = (tmp), (tmp) = list_prev_entry(tmp, member))
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _BFDEV_LIST_H_ */
