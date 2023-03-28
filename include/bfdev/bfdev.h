@@ -6,6 +6,9 @@
 #ifndef _BFDEV_BFDEV_H_
 #define _BFDEV_BFDEV_H_
 
+/* auto generate header */
+#include "config.h"
+
 #include "errno.h"
 #include "limits.h"
 #include "stdarg.h"
