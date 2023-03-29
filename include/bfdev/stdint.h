@@ -12,6 +12,10 @@
 # include <stdint.h>
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define BFDEV_BYTES_PER_CHAR        sizeof(char)
 #define BFDEV_BYTES_PER_SHORT       sizeof(short)
 #define BFDEV_BYTES_PER_INT         sizeof(int)
@@ -24,5 +28,9 @@
 #define BFDEV_BYTES_PER_U64         sizeof(uint64_t)
 #define BFDEV_BYTES_PER_UINTMAX     sizeof(uintmax_t)
 #define BFDEV_BYTES_PER_UINTPTR     sizeof(uintptr_t)
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _BFDEV_STDINT_H_ */

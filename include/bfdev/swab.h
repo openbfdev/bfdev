@@ -9,6 +9,10 @@
 #include "stdint.h"
 #include "attributes.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  * casts are necessary for constants, because we never know how for sure
  * how U/UL/ULL map to uint16_t, uint32_t, uint64_t. At least not in a portable way.
@@ -439,5 +443,9 @@ static inline void swahl64s(uint64_t *p)
     *p = swahl64p(p);
 #endif
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _BFDEV_SWAB_H_ */

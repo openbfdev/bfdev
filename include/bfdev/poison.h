@@ -8,6 +8,10 @@
 
 #include "const.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifdef POISON_ILLEGAL_ADDRESS
 # define POISON_OFFSET  _AC(POISON_ILLEGAL_ADDRESS, UL)
 #else
@@ -27,5 +31,9 @@
 #define POISON_HPNODE1  ((void *) POISON_OFFSET + 0x500)
 #define POISON_HPNODE2  ((void *) POISON_OFFSET + 0x510)
 #define POISON_HPNODE3  ((void *) POISON_OFFSET + 0x520)
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _BFDEV_POISON_H_ */

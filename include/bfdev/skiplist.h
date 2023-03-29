@@ -9,6 +9,10 @@
 #include <errno.h>
 #include "list.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef long (*skiplist_find_t)(const void *data, const void *key);
 typedef long (*skiplist_cmp_t)(const void *dataa, const void *datab);
 typedef void (*skiplist_release_t)(void *data);
@@ -133,5 +137,9 @@ extern struct skip_head *skiplist_create(unsigned int levels);
  */
 #define skip_for_each_reverse_continue_safe(pos, tmp, head, level) \
     list_for_each_entry_reverse_continue_safe(pos, tmp, &(head)->nodes[level], list[level])
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _BFDEV_SKIPLIST_H_ */

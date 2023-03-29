@@ -6,6 +6,10 @@
 #ifndef _BFDEV_MINMAX_H_
 #define _BFDEV_MINMAX_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * min - return minimum of two values of the same or compatible types.
  * @a: first value.
@@ -67,5 +71,9 @@
 #define clamp_adj(val, lo, hi) ({ \
     (val) = clamp(val, lo, hi); \
 })
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _BFDEV_MINMAX_H_ */

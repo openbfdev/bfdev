@@ -10,6 +10,10 @@
 #include "limits.h"
 #include "attributes.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define bcd2bin_constant(bcd) ( \
     ((bcd) & 0x0f) + ((bcd) >> 4) * 10 \
 )
@@ -54,5 +58,9 @@ uint8_t bin2bcd_dynamic(uint8_t bin)
     ? bin2bcd_constant(__bin)           \
     : bin2bcd_dynamic(__bin);           \
 })
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _BFDEV_BCD_H_ */

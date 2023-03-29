@@ -7,6 +7,14 @@
 
 #include "allocator.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 allocator_t *gallocator_create();
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif  /* _BFDEV_GALLOCATOR_H_ */

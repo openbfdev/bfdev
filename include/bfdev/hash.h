@@ -9,6 +9,10 @@
 #include "bits.h"
 #include "attributes.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define BFDEV_GOLDEN_RATIO_32 0x61c88647UL
 #define BFDEV_GOLDEN_RATIO_64 0x61c8864680b583ebULL
 
@@ -68,5 +72,9 @@ uint64_t bfdev_hash64(uint64_t value, unsigned int bits)
 # define bfdev_hashvl(value) bfdev_hashv64(value)
 # define bfdev_hashl(value, bits) bfdev_hash64(value, bits)
 #endif /* BFDEV_BITS_PER_LONG == 64 */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _BFDEV_HASH_H_ */

@@ -9,6 +9,10 @@
 #include "stdlib.h"
 #include "stddef.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * align_low/high - aligned value.
  * @size: value to aligned.
@@ -38,5 +42,9 @@
 #define align_ptr_check(ptr, align) ( \
     align_check((size_t)(ptr), align) \
 )
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _BFDEV_ALIGN_H_ */

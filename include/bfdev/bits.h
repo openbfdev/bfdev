@@ -10,6 +10,10 @@
 #include "limits.h"
 #include "bitsperlong.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define BFDEV_BITS_PER_BYTE         __CHAR_BIT__
 #define BFDEV_BITS_PER_TYPE(type)   (sizeof(type) * BFDEV_BITS_PER_BYTE)
 #define BFDEV_BITS_WORD(bit)        ((bit) / BFDEV_BITS_PER_LONG)
@@ -44,5 +48,9 @@
     ULONG_MAX << \
     ((nbits) & (BFDEV_BITS_PER_LONG - 1)) \
 )
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _BFDEV_BITS_H_ */

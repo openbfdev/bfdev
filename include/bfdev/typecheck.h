@@ -6,6 +6,10 @@
 #ifndef _BFDEV_TYPECHECK_H_
 #define _BFDEV_TYPECHECK_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define typecheck(type, object) ({          \
     type __dummy1;                          \
     typeof(object) __dummy2;                \
@@ -24,5 +28,9 @@
     (void)sizeof(*__dummy);                 \
     1;                                      \
 })
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _BFDEV_TYPECHECK_H_ */

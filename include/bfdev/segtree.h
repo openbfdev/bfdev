@@ -8,6 +8,10 @@
 
 #include "rbtree.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct segtree_node {
     struct rb_node node;
     unsigned long start, end;
@@ -222,5 +226,9 @@ STSTATIC STSTRUCT *STNAME##_next(STSTRUCT *node, STTYPE start, STTYPE end)      
             return node;                                                                        \
     }                                                                                           \
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _BFDEV_SEGTREE_ */

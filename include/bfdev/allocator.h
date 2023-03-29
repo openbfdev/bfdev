@@ -9,11 +9,19 @@
 #include "stddef.h"
 #include "stdlib.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct allocator {
     void *(*malloc)(size_t size, void *pdata);
     void *(*realloc)(void *p, unsigned long size, void *pdata);
     void (*free)(void *p, void *pdata);
     void *pdata;
 } allocator_t;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif  /* _BFDEV_ALLOCATOR_H_ */

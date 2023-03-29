@@ -10,6 +10,10 @@
 #include "stdbool.h"
 #include "poison.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct hlist_node {
     struct hlist_node *next;
     struct hlist_node **pprev;
@@ -358,5 +362,9 @@ static inline void hlist_move_list(struct hlist_head *old, struct hlist_head *ne
     for ((void)((pos) && ((pos) = hlist_next_entry(pos, member))); \
          (pos) && ({(tmp) = hlist_next_entry(pos, member); 1;}); \
          (pos) = (tmp), ((tmp) && ((tmp) = hlist_next_entry(pos, member))))
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _BFDEV_HLIST_H_ */

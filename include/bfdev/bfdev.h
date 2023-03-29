@@ -25,4 +25,12 @@
 #include "minmax.h"
 #include "stringify.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* _BFDEV_BFDEV_H_ */
