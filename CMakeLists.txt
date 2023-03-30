@@ -159,10 +159,10 @@ if(ENABLE_DBGRBTREE)
     )
 endif(ENABLE_DBGRBTREE)
 
-configure_file(${CMAKE_MODULE_PATH}/config.h.in ${PROJECT_BINARY_DIR}/config.h)
+configure_file(${CMAKE_MODULE_PATH}/config.h.in ${PROJECT_BINARY_DIR}/generate/config.h)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
-include_directories(${PROJECT_BINARY_DIR})
+include_directories(${PROJECT_BINARY_DIR}/generate/)
 
 add_library(bfdev_shared SHARED ${BFDEV_SRCS})
 add_library(bfdev_static STATIC ${BFDEV_SRCS})
@@ -182,6 +182,12 @@ SET_TARGET_PROPERTIES(bfdev_static
 
 install(FILES
     ${BFDEV_HEADERS}
+    DESTINATION
+    "${CMAKE_INSTALL_INCLUDEDIR}/bfdev"
+)
+
+install(FILES
+    ${PROJECT_BINARY_DIR}/generate/config.h
     DESTINATION
     "${CMAKE_INSTALL_INCLUDEDIR}/bfdev"
 )
