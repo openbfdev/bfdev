@@ -11,7 +11,9 @@ include(CheckIncludeFiles)
 include(CheckCXXSymbolExists)
 include(CheckFunctionExists)
 
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+set(CMAKE_MODULE_PATH
+    ${PROJECT_SOURCE_DIR}/cmake
+)
 
 set(BFDEV_HEADERS
     include/bfdev/align.h
@@ -159,10 +161,10 @@ if(ENABLE_DBGRBTREE)
     )
 endif(ENABLE_DBGRBTREE)
 
-configure_file(${CMAKE_MODULE_PATH}/config.h.in ${PROJECT_BINARY_DIR}/generate/config.h)
+configure_file(${CMAKE_MODULE_PATH}/config.h.in ${PROJECT_BINARY_DIR}/generated/config.h)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
-include_directories(${PROJECT_BINARY_DIR}/generate/)
+include_directories(${PROJECT_BINARY_DIR}/generated)
 
 add_library(bfdev_shared SHARED ${BFDEV_SRCS})
 add_library(bfdev_static STATIC ${BFDEV_SRCS})
