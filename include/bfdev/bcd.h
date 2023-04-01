@@ -6,9 +6,9 @@
 #ifndef _BFDEV_BCD_H_
 #define _BFDEV_BCD_H_
 
-#include "stdint.h"
-#include "limits.h"
-#include "attributes.h"
+#include <bfdev/stdint.h>
+#include <bfdev/limits.h>
+#include <bfdev/attributes.h>
 
 #ifdef __cplusplus
 extern "C" {

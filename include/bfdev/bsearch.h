@@ -6,8 +6,8 @@
 #ifndef _BFDEV_BSEARCH_H_
 #define _BFDEV_BSEARCH_H_
 
-#include "stdint.h"
-#include "stddef.h"
+#include <bfdev/stdint.h>
+#include <bfdev/stddef.h>
 
 #ifdef __cplusplus
 extern "C" {

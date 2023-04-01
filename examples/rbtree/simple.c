@@ -3,7 +3,7 @@
  * Copyright(c) 2021-2022 John Sanpe <sanpeqf@gmail.com>
  */
 
-#include <bfdev/bfdev.h>
+#include <bfdev.h>
 #include <bfdev/rbtree.h>
 #include <errno.h>
 

@@ -6,9 +6,9 @@
 #ifndef _BFDEV_BITS_H_
 #define _BFDEV_BITS_H_
 
-#include "stdint.h"
-#include "limits.h"
-#include "bitsperlong.h"
+#include <bfdev/stdint.h>
+#include <bfdev/limits.h>
+#include <bfdev/bitsperlong.h>
 
 #ifdef __cplusplus
 extern "C" {
