@@ -91,7 +91,7 @@ int main(void)
     node = malloc(sizeof(*node) * TEST_LEN);
     if (!node) {
         printf("Insufficient Memory!\n");
-        return -ENOMEM;
+        return -BFDEV_ENOMEM;
     }
 
     printf("Generate %u Node:\n", TEST_LEN);

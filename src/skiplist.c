@@ -3,8 +3,7 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
-#include <stdlib.h>
-#include <bfdev/minmax.h>
+#include <bfdev/bfdev.h>
 #include <bfdev/skiplist.h>
 
 static unsigned int random_level(struct skip_head *head)
@@ -70,7 +69,7 @@ int skiplist_insert(struct skip_head *head, void *data,
 
     node = malloc(sizeof(*node) + sizeof(*node->list) * level);
     if (unlikely(!node))
-        return -ENOMEM;
+        return -BFDEV_ENOMEM;
 
     node->pdata = data;
     list = &head->nodes[head->curr - 1];
