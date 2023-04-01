@@ -118,9 +118,7 @@ endif(ENABLE_UBSAN)
 
 option(ENABLE_DBGLIST "Dynamic debug list" OFF)
 if(ENABLE_DBGLIST)
-    set(CMAKE_C_FLAGS
-        "${CMAKE_C_FLAGS} -D DEBUG_LIST"
-    )
+    set(BFDEV_DEBUG_LIST ON)
     set(BFDEV_SRCS
         src/list-debug.c
         ${BFDEV_SRCS}
@@ -129,9 +127,7 @@ endif(ENABLE_DBGLIST)
 
 option(ENABLE_DBGSLIST "Dynamic debug slist" OFF)
 if(ENABLE_DBGSLIST)
-    set(CMAKE_C_FLAGS
-        "${CMAKE_C_FLAGS} -D DEBUG_SLIST"
-    )
+    set(BFDEV_DEBUG_SLIST ON)
     set(BFDEV_SRCS
         src/slist-debug.c
         ${BFDEV_SRCS}
@@ -140,9 +136,7 @@ endif(ENABLE_DBGSLIST)
 
 option(ENABLE_DBGHLIST "Dynamic debug hlist" OFF)
 if(ENABLE_DBGHLIST)
-    set(CMAKE_C_FLAGS
-        "${CMAKE_C_FLAGS} -D DEBUG_HLIST"
-    )
+    set(BFDEV_DEBUG_HLIST ON)
     set(BFDEV_SRCS
         src/hlist-debug.c
         ${BFDEV_SRCS}
@@ -151,16 +145,17 @@ endif(ENABLE_DBGHLIST)
 
 option(ENABLE_DBGRBTREE "Dynamic debug rbtree" OFF)
 if(ENABLE_DBGRBTREE)
-    set(CMAKE_C_FLAGS
-        "${CMAKE_C_FLAGS} -D DEBUG_RBTREE"
-    )
+    set(BFDEV_DEBUG_RBTREE ON)
     set(BFDEV_SRCS
         src/rbtree-debug.c
         ${BFDEV_SRCS}
     )
 endif(ENABLE_DBGRBTREE)
 
-configure_file(${CMAKE_MODULE_PATH}/config.h.in ${PROJECT_BINARY_DIR}/generated/config.h)
+configure_file(
+    ${CMAKE_MODULE_PATH}/config.h.in
+    ${PROJECT_BINARY_DIR}/generated/bfdev/config.h
+)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${PROJECT_BINARY_DIR}/generated)
@@ -188,7 +183,7 @@ install(FILES
 )
 
 install(FILES
-    ${PROJECT_BINARY_DIR}/generate/config.h
+    ${PROJECT_BINARY_DIR}/generated/bfdev/config.h
     DESTINATION
     "${CMAKE_INSTALL_INCLUDEDIR}/bfdev"
 )
