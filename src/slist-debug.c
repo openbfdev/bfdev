@@ -3,7 +3,7 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
-#include <bfdev/bfdev.h>
+#include <bfdev.h>
 #include <bfdev/slist.h>
 
 bool slist_debug_add_check(struct slist_head *node, struct slist_head *new)

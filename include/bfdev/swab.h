@@ -6,8 +6,8 @@
 #ifndef _BFDEV_SWAB_H_
 #define _BFDEV_SWAB_H_
 
-#include "stdint.h"
-#include "attributes.h"
+#include <bfdev/stdint.h>
+#include <bfdev/attributes.h>
 
 #ifdef __cplusplus
 extern "C" {

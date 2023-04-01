@@ -6,8 +6,8 @@
 #ifndef _BFDEV_HASH_H_
 #define _BFDEV_HASH_H_
 
-#include "bits.h"
-#include "attributes.h"
+#include <bfdev/bits.h>
+#include <bfdev/attributes.h>
 
 #ifdef __cplusplus
 extern "C" {

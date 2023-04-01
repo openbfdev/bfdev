@@ -6,9 +6,9 @@
 #ifndef _BFDEV_SCNPRINTF_H_
 #define _BFDEV_SCNPRINTF_H_
 
-#include "stdarg.h"
-#include "stddef.h"
-#include "attributes.h"
+#include <bfdev/stdarg.h>
+#include <bfdev/stddef.h>
+#include <bfdev/attributes.h>
 
 #ifdef __cplusplus
 extern "C" {

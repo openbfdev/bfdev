@@ -3,7 +3,7 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
-#include <bfdev/bfdev.h>
+#include <bfdev.h>
 #include <bfdev/skiplist.h>
 
 static unsigned int random_level(struct skip_head *head)

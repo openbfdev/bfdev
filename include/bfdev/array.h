@@ -6,12 +6,11 @@
 #ifndef _BFDEV_ARRAY_H_
 #define _BFDEV_ARRAY_H_
 
-#include "bfdev.h"
-#include "stddef.h"
-#include "errno.h"
-#include "string.h"
-#include "allocator.h"
-#include "galloctor.h"
+#include <bfdev/stddef.h>
+#include <bfdev/errno.h>
+#include <bfdev/string.h>
+#include <bfdev/allocator.h>
+#include <bfdev/galloctor.h>
 
 #ifdef __cplusplus
 extern "C" {

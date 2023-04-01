@@ -21,7 +21,6 @@ set(BFDEV_HEADERS
     include/bfdev/attributes.h
     include/bfdev/array.h
     include/bfdev/bcd.h
-    include/bfdev/bfdev.h
     include/bfdev/bitrev.h
     include/bfdev/bits.h
     include/bfdev/bitsperlong.h

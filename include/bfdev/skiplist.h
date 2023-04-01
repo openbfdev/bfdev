@@ -6,8 +6,8 @@
 #ifndef _BFDEV_SKIPLIST_H_
 #define _BFDEV_SKIPLIST_H_
 
-#include <errno.h>
-#include "list.h"
+#include <bfdev/errno.h>
+#include <bfdev/list.h>
 
 #ifdef __cplusplus
 extern "C" {

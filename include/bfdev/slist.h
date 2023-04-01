@@ -9,9 +9,9 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-#include "compiler.h"
-#include "poison.h"
-#include "container.h"
+#include <bfdev/compiler.h>
+#include <bfdev/poison.h>
+#include <bfdev/container.h>
 
 #ifdef __cplusplus
 extern "C" {

@@ -6,11 +6,11 @@
 #ifndef _BFDEV_LIST_H_
 #define _BFDEV_LIST_H_
 
-#include "stddef.h"
-#include "stdbool.h"
-#include "compiler.h"
-#include "container.h"
-#include "poison.h"
+#include <bfdev/stddef.h>
+#include <bfdev/stdbool.h>
+#include <bfdev/compiler.h>
+#include <bfdev/container.h>
+#include <bfdev/poison.h>
 
 #ifdef __cplusplus
 extern "C" {

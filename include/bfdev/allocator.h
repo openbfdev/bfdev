@@ -6,8 +6,8 @@
 #ifndef _BFDEV_ALLOCATOR_H_
 #define _BFDEV_ALLOCATOR_H_
 
-#include "stddef.h"
-#include "stdlib.h"
+#include <bfdev/stddef.h>
+#include <bfdev/stdlib.h>
 
 #ifdef __cplusplus
 extern "C" {

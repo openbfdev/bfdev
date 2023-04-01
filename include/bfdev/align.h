@@ -6,8 +6,8 @@
 #ifndef _BFDEV_ALIGN_H_
 #define _BFDEV_ALIGN_H_
 
-#include "stdlib.h"
-#include "stddef.h"
+#include <bfdev/stdlib.h>
+#include <bfdev/stddef.h>
 
 #ifdef __cplusplus
 extern "C" {

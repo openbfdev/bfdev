@@ -6,9 +6,9 @@
 #ifndef _BFDEV_HLIST_H_
 #define _BFDEV_HLIST_H_
 
-#include "stddef.h"
-#include "stdbool.h"
-#include "poison.h"
+#include <bfdev/stddef.h>
+#include <bfdev/stdbool.h>
+#include <bfdev/poison.h>
 
 #ifdef __cplusplus
 extern "C" {

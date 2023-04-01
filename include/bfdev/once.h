@@ -6,8 +6,8 @@
 #ifndef _BFDEV_ONCE_H_
 #define _BFDEV_ONCE_H_
 
-#include "stdbool.h"
-#include "compiler.h"
+#include <bfdev/stdbool.h>
+#include <bfdev/compiler.h>
 
 #ifdef __cplusplus
 extern "C" {

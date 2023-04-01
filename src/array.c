@@ -1,4 +1,4 @@
-#include <bfdev/bfdev.h>
+#include <bfdev.h>
 #include <bfdev/array.h>
 
 /* TODO: let lib user can call this function*/

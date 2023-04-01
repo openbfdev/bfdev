@@ -6,9 +6,9 @@
 #ifndef _BFDEV_POPCOUNT_H_
 #define _BFDEV_POPCOUNT_H_
 
-#include "stdint.h"
-#include "stdbool.h"
-#include "attributes.h"
+#include <bfdev/stdint.h>
+#include <bfdev/stdbool.h>
+#include <bfdev/attributes.h>
 
 #ifdef __cplusplus
 extern "C" {

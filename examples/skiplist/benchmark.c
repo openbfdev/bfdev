@@ -3,7 +3,7 @@
  * Copyright(c) 2022 Sanpe <sanpeqf@gmail.com>
  */
 
-#include <bfdev/bfdev.h>
+#include <bfdev.h>
 #include <bfdev/skiplist.h>
 #include <unistd.h>
 #include <sys/times.h>
