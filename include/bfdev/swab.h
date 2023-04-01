@@ -6,6 +6,7 @@
 #ifndef _BFDEV_SWAB_H_
 #define _BFDEV_SWAB_H_
 
+#include <bfdev/config.h>
 #include <bfdev/stdint.h>
 #include <bfdev/attributes.h>
 

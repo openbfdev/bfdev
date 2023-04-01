@@ -6,6 +6,7 @@
 #ifndef _BFDEV_ONCE_H_
 #define _BFDEV_ONCE_H_
 
+#include <bfdev/config.h>
 #include <bfdev/stdbool.h>
 #include <bfdev/compiler.h>
 

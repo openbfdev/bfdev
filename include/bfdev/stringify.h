@@ -6,6 +6,8 @@
 #ifndef _BFDEV_STRINGIFY_H_
 #define _BFDEV_STRINGIFY_H_
 
+#include <bfdev/config.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

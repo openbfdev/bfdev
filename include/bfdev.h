@@ -6,6 +6,7 @@
 #ifndef _BFDEV_H_
 #define _BFDEV_H_
 
+#include <bfdev/config.h>
 #include <bfdev/errno.h>
 #include <bfdev/limits.h>
 #include <bfdev/stdarg.h>

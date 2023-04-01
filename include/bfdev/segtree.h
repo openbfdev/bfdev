@@ -6,6 +6,7 @@
 #ifndef _BFDEV_SEGTREE_
 #define _BFDEV_SEGTREE_
 
+#include <bfdev/config.h>
 #include <bfdev/rbtree.h>
 
 #ifdef __cplusplus
