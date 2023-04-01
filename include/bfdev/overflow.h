@@ -6,6 +6,7 @@
 #ifndef _BFDEV_OVERFLOW_H_
 #define _BFDEV_OVERFLOW_H_
 
+#include <bfdev/config.h>
 #include <bfdev/stdint.h>
 
 #ifdef __cplusplus

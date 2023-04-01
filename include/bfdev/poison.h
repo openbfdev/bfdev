@@ -6,6 +6,7 @@
 #ifndef _BFDEV_POISON_H_
 #define _BFDEV_POISON_H_
 
+#include <bfdev/config.h>
 #include <bfdev/const.h>
 
 #ifdef __cplusplus

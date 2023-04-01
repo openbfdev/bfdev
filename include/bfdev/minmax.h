@@ -6,6 +6,8 @@
 #ifndef _BFDEV_MINMAX_H_
 #define _BFDEV_MINMAX_H_
 
+#include <bfdev/config.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -6,6 +6,7 @@
 #ifndef _BFDEV_HLIST_H_
 #define _BFDEV_HLIST_H_
 
+#include <bfdev/config.h>
 #include <bfdev/stddef.h>
 #include <bfdev/stdbool.h>
 #include <bfdev/poison.h>

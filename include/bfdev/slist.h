@@ -6,9 +6,9 @@
 #ifndef _BFDEV_SLIST_H_
 #define _BFDEV_SLIST_H_
 
-#include <stddef.h>
-#include <stdbool.h>
-
+#include <bfdev/config.h>
+#include <bfdev/stddef.h>
+#include <bfdev/stdbool.h>
 #include <bfdev/compiler.h>
 #include <bfdev/poison.h>
 #include <bfdev/container.h>

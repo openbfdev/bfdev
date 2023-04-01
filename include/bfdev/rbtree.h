@@ -6,6 +6,7 @@
 #ifndef _RBTREE_H_
 #define _RBTREE_H_
 
+#include <bfdev/config.h>
 #include <bfdev/stddef.h>
 #include <bfdev/limits.h>
 #include <bfdev/stdbool.h>

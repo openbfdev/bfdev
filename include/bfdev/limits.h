@@ -6,6 +6,8 @@
 #ifndef _BFDEV_LIMITS_H_
 #define _BFDEV_LIMITS_H_
 
+#include <bfdev/config.h>
+
 #if defined(__FreeBSD__) && defined(_KERNEL)
 # include <sys/stdint.h>
 # include <sys/limits.h>

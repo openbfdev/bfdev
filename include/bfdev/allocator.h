@@ -6,6 +6,7 @@
 #ifndef _BFDEV_ALLOCATOR_H_
 #define _BFDEV_ALLOCATOR_H_
 
+#include <bfdev/config.h>
 #include <bfdev/stddef.h>
 #include <bfdev/stdlib.h>
 

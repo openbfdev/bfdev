@@ -6,6 +6,7 @@
 #ifndef _BFDEV_SCNPRINTF_H_
 #define _BFDEV_SCNPRINTF_H_
 
+#include <bfdev/config.h>
 #include <bfdev/stdarg.h>
 #include <bfdev/stddef.h>
 #include <bfdev/attributes.h>

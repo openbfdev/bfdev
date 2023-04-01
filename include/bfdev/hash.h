@@ -6,6 +6,7 @@
 #ifndef _BFDEV_HASH_H_
 #define _BFDEV_HASH_H_
 
+#include <bfdev/config.h>
 #include <bfdev/bits.h>
 #include <bfdev/attributes.h>
 

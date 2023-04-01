@@ -6,6 +6,7 @@
 #ifndef _BFDEV_ARRAY_H_
 #define _BFDEV_ARRAY_H_
 
+#include <bfdev/config.h>
 #include <bfdev/stddef.h>
 #include <bfdev/errno.h>
 #include <bfdev/string.h>

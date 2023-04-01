@@ -6,6 +6,7 @@
 #ifndef _BFDEV_BITS_H_
 #define _BFDEV_BITS_H_
 
+#include <bfdev/config.h>
 #include <bfdev/stdint.h>
 #include <bfdev/limits.h>
 #include <bfdev/bitsperlong.h>

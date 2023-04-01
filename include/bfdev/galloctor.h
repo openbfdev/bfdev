@@ -5,6 +5,7 @@
 #ifndef _BFDEV_GALLOCATOR_H_
 #define _BFDEV_GALLOCATOR_H_
 
+#include <bfdev/config.h>
 #include <bfdev/allocator.h>
 
 #ifdef __cplusplus
