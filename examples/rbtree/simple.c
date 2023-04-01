@@ -34,7 +34,7 @@ int main(void)
         node = malloc(sizeof(*node));
         if (!node) {
             printf("Abort.\n");
-            return -ENOMEM;
+            return -BFDEV_ENOMEM;
         }
 
         node->data = ((unsigned long)rand() << 32) | rand();

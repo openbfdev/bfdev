@@ -70,7 +70,7 @@ int skiplist_insert(struct skip_head *head, void *data,
 
     node = malloc(sizeof(*node) + sizeof(*node->list) * level);
     if (unlikely(!node))
-        return -ENOMEM;
+        return -BFDEV_ENOMEM;
 
     node->pdata = data;
     list = &head->nodes[head->curr - 1];
