@@ -11,4 +11,5 @@
 #cmakedefine BFDEV_DEBUG_HLIST
 #cmakedefine BFDEV_DEBUG_RBTREE
 
+#cmakedefine BFDEV_HAVE_GCC_ATOMIC
 #endif /*_BFDEV_CONFIG_H_*/
