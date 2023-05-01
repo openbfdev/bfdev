@@ -12,6 +12,15 @@
 extern "C" {
 #endif
 
+#define BFDEV_MMAP_SPLIT0(fn, ...)
+#define BFDEV_MMAP_SPLIT1(fn, arg, ...) fn(arg)
+#define BFDEV_MMAP_SPLIT2(fn, arg, ...) fn(arg), BFDEV_MMAP_SPLIT1(fn, ##__VA_ARGS__)
+#define BFDEV_MMAP_SPLIT3(fn, arg, ...) fn(arg), BFDEV_MMAP_SPLIT2(fn, ##__VA_ARGS__)
+#define BFDEV_MMAP_SPLIT4(fn, arg, ...) fn(arg), BFDEV_MMAP_SPLIT3(fn, ##__VA_ARGS__)
+#define BFDEV_MMAP_SPLIT5(fn, arg, ...) fn(arg), BFDEV_MMAP_SPLIT4(fn, ##__VA_ARGS__)
+#define BFDEV_MMAP_SPLIT6(fn, arg, ...) fn(arg), BFDEV_MMAP_SPLIT5(fn, ##__VA_ARGS__)
+#define BFDEV_MMAP_SPLITN(n, fn, ...) BFDEV_MMAP_SPLIT##n(fn, ##__VA_ARGS__)
+
 #define BFDEV_MMAP_ARG0(fn, ...)
 #define BFDEV_MMAP_ARG1(fn, type, arg, ...) fn(type, arg)
 #define BFDEV_MMAP_ARG2(fn, type, arg, ...) fn(type, arg), BFDEV_MMAP_ARG1(fn, ##__VA_ARGS__)
