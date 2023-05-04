@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 #
 # Copyright(c) 2023 ffashion <helloworldffashion@gmail.com>
+# Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
 #
 
 cmake_minimum_required(VERSION 3.6)
@@ -63,6 +64,7 @@ set(BFDEV_SRCS
     src/bcd.c
     src/bitrev.c
     src/bsearch.c
+    src/errname.c
     src/gallocator.c
     src/list-sort.c
     src/popcount.c
