@@ -8,8 +8,10 @@
 
 #include <bfdev/attributes.h>
 
-#define EXPORT_SYMBOL(symbol) \
-    extern typeof(symbol) symbol \
-    __visibility("default")
+#undef hidden
+# define hidden __visibility("hidden")
+
+#undef export
+# define export __visibility("default")
 
 #endif /* _EXPORT_H_ */

@@ -3,9 +3,9 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
-#include <stdio.h>
-#include <bfdev/compiler.h>
+#include <bfdev.h>
 #include <bfdev/scnprintf.h>
+#include <export.h>
 
 /**
  * vscnprintf - format a string and place it in a buffer.
@@ -14,7 +14,8 @@
  * @fmt: The format string to use.
  * @...: Arguments for the format string.
  */
-int vscnprintf(char *buf, size_t size, const char *fmt, va_list args)
+export int
+vscnprintf(char *buf, size_t size, const char *fmt, va_list args)
 {
     int len;
 
@@ -35,7 +36,8 @@ int vscnprintf(char *buf, size_t size, const char *fmt, va_list args)
  * @fmt: The format string to use.
  * @...: Arguments for the format string.
  */
-int scnprintf(char *buf, size_t size, const char *fmt, ...)
+export int
+scnprintf(char *buf, size_t size, const char *fmt, ...)
 {
     va_list args;
     int len;

@@ -5,8 +5,9 @@
 
 #include <bfdev.h>
 #include <bfdev/hlist.h>
+#include <export.h>
 
-bool hlist_debug_head_add_check(struct hlist_head *head, struct hlist_node *new)
+export bool hlist_debug_head_add_check(struct hlist_head *head, struct hlist_node *new)
 {
     if (unlikely(head->node == new)) {
         fprintf(stderr, "hlist_head_add corruption (%p) head->node should not be new (%p)\n",
@@ -17,7 +18,7 @@ bool hlist_debug_head_add_check(struct hlist_head *head, struct hlist_node *new)
     return true;
 }
 
-bool hlist_debug_next_add_check(struct hlist_node *next, struct hlist_node *new)
+export bool hlist_debug_next_add_check(struct hlist_node *next, struct hlist_node *new)
 {
     if (unlikely(next->next == new)) {
         fprintf(stderr, "hlist_next_add corruption (%p) next->next should not be new (%p)\n",
@@ -28,7 +29,7 @@ bool hlist_debug_next_add_check(struct hlist_node *next, struct hlist_node *new)
     return true;
 }
 
-bool hlist_debug_prev_add_check(struct hlist_node *prev, struct hlist_node *new)
+export bool hlist_debug_prev_add_check(struct hlist_node *prev, struct hlist_node *new)
 {
     if (unlikely(prev->pprev == &new->next)) {
         fprintf(stderr, "hlist_prev_add corruption (%p) prev->pprev should not be new (%p)\n",
@@ -39,7 +40,7 @@ bool hlist_debug_prev_add_check(struct hlist_node *prev, struct hlist_node *new)
     return true;
 }
 
-bool hlist_debug_del_check(struct hlist_node *node)
+export bool hlist_debug_del_check(struct hlist_node *node)
 {
     if (unlikely(node->next == POISON_HLIST1)) {
         fprintf(stderr, "hlist_del corruption (%p) node->next should not be POISON_HLIST1 (%p)",

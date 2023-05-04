@@ -4,6 +4,7 @@
  */
 
 #include <bfdev/rbtree.h>
+#include <export.h>
 
 /**
  * child_change - replace old child by new one.
@@ -111,8 +112,9 @@ right_rotate(struct rb_root *root, struct rb_node *node,
  * @node: new inserted node.
  * @callbacks: augmented callback function.
  */
-void rb_fixup_augmented(struct rb_root *root, struct rb_node *node,
-                        const struct rb_callbacks *callbacks)
+export void
+rb_fixup_augmented(struct rb_root *root, struct rb_node *node,
+                   const struct rb_callbacks *callbacks)
 {
     struct rb_node *parent, *gparent, *tmp;
 
@@ -226,8 +228,9 @@ void rb_fixup_augmented(struct rb_root *root, struct rb_node *node,
  * @parent: parent of removed node.
  * @callbacks: augmented callback function.
  */
-void rb_erase_augmented(struct rb_root *root, struct rb_node *parent,
-                        const struct rb_callbacks *callbacks)
+export void
+rb_erase_augmented(struct rb_root *root, struct rb_node *parent,
+                   const struct rb_callbacks *callbacks)
 {
     struct rb_node *tmp1, *tmp2, *sibling, *node = NULL;
 
@@ -380,8 +383,9 @@ void rb_erase_augmented(struct rb_root *root, struct rb_node *parent,
  * @node: node to remove.
  * @callbacks: augmented callback function.
  */
-struct rb_node *rb_remove_augmented(struct rb_root *root, struct rb_node *node,
-                                    const struct rb_callbacks *callbacks)
+export struct rb_node *
+rb_remove_augmented(struct rb_root *root, struct rb_node *node,
+                    const struct rb_callbacks *callbacks)
 {
     struct rb_node *parent = node->parent, *rebalance = NULL;
     struct rb_node *child1 = node->left;
@@ -515,7 +519,8 @@ static const struct rb_callbacks dummy_callbacks = {
  * @root: rbtree root of node.
  * @node: new inserted node.
  */
-void rb_fixup(struct rb_root *root, struct rb_node *node)
+export void
+rb_fixup(struct rb_root *root, struct rb_node *node)
 {
     rb_fixup_augmented(root, node, &dummy_callbacks);
 }
@@ -525,7 +530,8 @@ void rb_fixup(struct rb_root *root, struct rb_node *node)
  * @root: rbtree root of node.
  * @parent: parent of removed node.
  */
-void rb_erase(struct rb_root *root, struct rb_node *parent)
+export void
+rb_erase(struct rb_root *root, struct rb_node *parent)
 {
     rb_erase_augmented(root, parent, &dummy_callbacks);
 }
@@ -535,7 +541,8 @@ void rb_erase(struct rb_root *root, struct rb_node *parent)
  * @root: rbtree root of node.
  * @node: node to remove.
  */
-struct rb_node *rb_remove(struct rb_root *root, struct rb_node *node)
+export struct rb_node *
+rb_remove(struct rb_root *root, struct rb_node *node)
 {
     return rb_remove_augmented(root, node, &dummy_callbacks);
 }
@@ -546,7 +553,8 @@ struct rb_node *rb_remove(struct rb_root *root, struct rb_node *node)
  * @old: node to be replaced.
  * @new: new node to insert.
  */
-void rb_replace(struct rb_root *root, struct rb_node *old, struct rb_node *new)
+export void
+rb_replace(struct rb_root *root, struct rb_node *old, struct rb_node *new)
 {
     struct rb_node *parent = old->parent;
 
@@ -566,7 +574,8 @@ void rb_replace(struct rb_root *root, struct rb_node *old, struct rb_node *new)
  * @key: key to match.
  * @cmp: operator defining the node order.
  */
-struct rb_node *rb_find(const struct rb_root *root, const void *key, rb_find_t cmp)
+export struct rb_node *
+rb_find(const struct rb_root *root, const void *key, rb_find_t cmp)
 {
     struct rb_node *node = root->node;
     long ret;
@@ -594,8 +603,9 @@ struct rb_node *rb_find(const struct rb_root *root, const void *key, rb_find_t c
  * @parentp: pointer used to modify the parent node pointer.
  * @linkp: pointer used to modify the point to pointer to child node.
  */
-struct rb_node *rb_find_last(struct rb_root *root, const void *key, rb_find_t cmp,
-                             struct rb_node **parentp, struct rb_node ***linkp)
+export struct rb_node *
+rb_find_last(struct rb_root *root, const void *key, rb_find_t cmp,
+             struct rb_node **parentp, struct rb_node ***linkp)
 {
     long ret;
 
@@ -628,8 +638,9 @@ struct rb_node *rb_find_last(struct rb_root *root, const void *key, rb_find_t cm
  * @cmp: operator defining the node order.
  * @leftmost: return whether it is the leftmost node.
  */
-struct rb_node **rb_parent(struct rb_root *root, struct rb_node **parentp,
-                           struct rb_node *node, rb_cmp_t cmp, bool *leftmost)
+export struct rb_node **
+rb_parent(struct rb_root *root, struct rb_node **parentp,
+          struct rb_node *node, rb_cmp_t cmp, bool *leftmost)
 {
     struct rb_node **link;
     bool leftmost_none;
@@ -665,8 +676,9 @@ struct rb_node **rb_parent(struct rb_root *root, struct rb_node **parentp,
  * @cmp: operator defining the node order.
  * @leftmost: return whether it is the leftmost node.
  */
-struct rb_node **rb_parent_conflict(struct rb_root *root, struct rb_node **parentp,
-                                    struct rb_node *node, rb_cmp_t cmp, bool *leftmost)
+export struct rb_node **
+rb_parent_conflict(struct rb_root *root, struct rb_node **parentp,
+                   struct rb_node *node, rb_cmp_t cmp, bool *leftmost)
 {
     struct rb_node **link;
     bool leftmost_none;
@@ -695,7 +707,8 @@ struct rb_node **rb_parent_conflict(struct rb_root *root, struct rb_node **paren
     return link;
 }
 
-struct rb_node *rb_left_far(const struct rb_node *node)
+export struct rb_node *
+rb_left_far(const struct rb_node *node)
 {
     /* Go left as we can */
     while (node->left)
@@ -704,7 +717,8 @@ struct rb_node *rb_left_far(const struct rb_node *node)
     return (struct rb_node *)node;
 }
 
-struct rb_node *rb_right_far(const struct rb_node *node)
+export struct rb_node *
+rb_right_far(const struct rb_node *node)
 {
     /* Go right as we can */
     while (node->right)
@@ -713,7 +727,8 @@ struct rb_node *rb_right_far(const struct rb_node *node)
     return (struct rb_node *)node;
 }
 
-struct rb_node *rb_left_deep(const struct rb_node *node)
+export struct rb_node *
+rb_left_deep(const struct rb_node *node)
 {
     /* Go left deep as we can */
     while (node) {
@@ -728,7 +743,8 @@ struct rb_node *rb_left_deep(const struct rb_node *node)
     return NULL;
 }
 
-struct rb_node *rb_right_deep(const struct rb_node *node)
+export struct rb_node *
+rb_right_deep(const struct rb_node *node)
 {
     /* Go right deep as we can */
     while (node) {
@@ -747,7 +763,8 @@ struct rb_node *rb_right_deep(const struct rb_node *node)
  * rb_first/last/prev/next - Middle iteration (Sequential)
  * NOTE: find logical next and previous nodes.
  */
-struct rb_node *rb_first(const struct rb_root *root)
+export struct rb_node *
+rb_first(const struct rb_root *root)
 {
     struct rb_node *node = root->node;
 
@@ -759,7 +776,8 @@ struct rb_node *rb_first(const struct rb_root *root)
     return node;
 }
 
-struct rb_node *rb_last(const struct rb_root *root)
+export struct rb_node *
+rb_last(const struct rb_root *root)
 {
     struct rb_node *node = root->node;
 
@@ -771,7 +789,8 @@ struct rb_node *rb_last(const struct rb_root *root)
     return node;
 }
 
-struct rb_node *rb_prev(const struct rb_node *node)
+export struct rb_node *
+rb_prev(const struct rb_node *node)
 {
     struct rb_node *parent;
 
@@ -797,7 +816,8 @@ struct rb_node *rb_prev(const struct rb_node *node)
     return parent;
 }
 
-struct rb_node *rb_next(const struct rb_node *node)
+export struct rb_node *
+rb_next(const struct rb_node *node)
 {
     struct rb_node *parent;
 
@@ -827,7 +847,8 @@ struct rb_node *rb_next(const struct rb_node *node)
  * rb_pre_next - Preorder iteration (Root-first)
  * NOTE: always access the left node first.
  */
-struct rb_node *rb_pre_next(const struct rb_node *node)
+export struct rb_node *
+rb_pre_next(const struct rb_node *node)
 {
     struct rb_node *parent;
 
@@ -859,7 +880,8 @@ struct rb_node *rb_pre_next(const struct rb_node *node)
  * rb_post_first/next - Postorder iteration (Depth-first)
  * NOTE: always visit the parent after its children.
  */
-struct rb_node *rb_post_first(const struct rb_root *root)
+export struct rb_node *
+rb_post_first(const struct rb_root *root)
 {
     struct rb_node *node = root->node;
 
@@ -869,7 +891,8 @@ struct rb_node *rb_post_first(const struct rb_root *root)
     return rb_left_deep(node);
 }
 
-struct rb_node *rb_post_next(const struct rb_node *node)
+export struct rb_node *
+rb_post_next(const struct rb_node *node)
 {
     const struct rb_node *parent;
 

@@ -6,12 +6,14 @@
 #include <bfdev.h>
 #include <bfdev/bsearch.h>
 #include <bfdev/errname.h>
+#include <export.h>
 
 #define ERRNAME(errnum, infos) { \
     BFDEV_##errnum, #errnum, infos \
 }
 
-const struct errname_entry bfdev_errname_table[] = {
+export const struct errname_entry
+bfdev_errname_table[] = {
     ERRNAME(ENOERR, "No error"),
     ERRNAME(EPERM, "Operation not permitted"),
     ERRNAME(ENOENT, "No such file or directory"),
@@ -127,13 +129,15 @@ const struct errname_entry bfdev_errname_table[] = {
     { }, /* NULL */
 };
 
-static long errname_search(const void *key, void *pdata)
+static long
+errname_search(const void *key, void *pdata)
 {
     const struct errname_entry *entry = key;
     return entry->errnum - (long)pdata;
 }
 
-struct errname_entry *bfdev_errname_find(int error)
+export struct errname_entry *
+bfdev_errname_find(int error)
 {
     struct errname_entry *entry;
 
@@ -148,7 +152,8 @@ struct errname_entry *bfdev_errname_find(int error)
     return entry;
 }
 
-const char *bfdev_errname(int error, const char **infop)
+export const char *
+bfdev_errname(int error, const char **infop)
 {
     struct errname_entry *entry;
 

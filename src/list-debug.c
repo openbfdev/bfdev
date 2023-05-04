@@ -3,10 +3,11 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
+#include <bfdev.h>
 #include <bfdev/list.h>
-#include <stdio.h>
+#include <export.h>
 
-bool list_debug_add_check(struct list_head *prev, struct list_head *next, struct list_head *new)
+export bool list_debug_add_check(struct list_head *prev, struct list_head *next, struct list_head *new)
 {
     if (unlikely(prev->next != next)) {
         fprintf(stderr, "list_add corruption (%p) prev->next should be next (%p), but was (%p)\n",
@@ -29,7 +30,7 @@ bool list_debug_add_check(struct list_head *prev, struct list_head *next, struct
     return true;
 }
 
-bool list_debug_del_check(struct list_head *node)
+export bool list_debug_del_check(struct list_head *node)
 {
     if (unlikely(node->next == POISON_LIST1)) {
         printf("list_del corruption (%p) node->next should not be POISON_LIST1 (%p)\n",

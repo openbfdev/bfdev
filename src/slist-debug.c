@@ -5,8 +5,10 @@
 
 #include <bfdev.h>
 #include <bfdev/slist.h>
+#include <export.h>
 
-bool slist_debug_add_check(struct slist_head *node, struct slist_head *new)
+export bool
+slist_debug_add_check(struct slist_head *node, struct slist_head *new)
 {
     if (unlikely(new->next && new->next == node->next)) {
         fprintf(stderr, "slist_add corruption (%p) new->next should not be next (%p)\n",
@@ -17,7 +19,8 @@ bool slist_debug_add_check(struct slist_head *node, struct slist_head *new)
     return true;
 }
 
-bool slist_debug_del_check(struct slist_head *node)
+export bool
+slist_debug_del_check(struct slist_head *node)
 {
     if (unlikely(node->next == POISON_SLIST)) {
         fprintf(stderr, "slist_del corruption (%p) node->next should not be POISON_SLIST (%p)\n",

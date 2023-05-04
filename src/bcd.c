@@ -4,8 +4,9 @@
  */
 
 #include <bfdev/bcd.h>
+#include <export.h>
 
-const uint8_t bcd2bin_table[256] = {
+export const uint8_t bcd2bin_table[256] = {
     [0 ... 255] = UINT8_MAX,
     [0x00] =  0, [0x01] =  1, [0x02] =  2, [0x03] =  3, [0x04] =  4,
     [0x05] =  5, [0x06] =  6, [0x07] =  7, [0x08] =  8, [0x09] =  9,
@@ -29,7 +30,7 @@ const uint8_t bcd2bin_table[256] = {
     [0x95] = 95, [0x96] = 96, [0x97] = 97, [0x98] = 98, [0x99] = 99,
 };
 
-const uint8_t bin2bcd_table[256] = {
+export const uint8_t bin2bcd_table[256] = {
     [0 ... 255] = UINT8_MAX,
     [ 0] = 0x00, [ 1] = 0x01, [ 2] = 0x02, [ 3] = 0x03, [ 4] = 0x04,
     [ 5] = 0x05, [ 6] = 0x06, [ 7] = 0x07, [ 8] = 0x08, [ 9] = 0x09,

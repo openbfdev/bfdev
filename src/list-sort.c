@@ -4,6 +4,7 @@
  */
 
 #include <bfdev/list.h>
+#include <export.h>
 
 static inline struct list_head *
 list_merge(list_cmp_t cmp, void *data, struct list_head *a, struct list_head *b)
@@ -72,7 +73,7 @@ list_finish(list_cmp_t cmp, void *data, struct list_head *head, struct list_head
     head->prev = tail;
 }
 
-void list_qsort(struct list_head *head, list_cmp_t cmp, void *data)
+export void list_qsort(struct list_head *head, list_cmp_t cmp, void *data)
 {
     struct list_head *pending = NULL, *node = head->next;
     unsigned int count = 0;
@@ -118,7 +119,7 @@ void list_qsort(struct list_head *head, list_cmp_t cmp, void *data)
     list_finish(cmp, data, head, pending, node);
 }
 
-void list_bsort(struct list_head *head, list_cmp_t cmp, void *data)
+export void list_bsort(struct list_head *head, list_cmp_t cmp, void *data)
 {
     struct list_head *walk, *prev, *tmp;
     unsigned int count, number;
