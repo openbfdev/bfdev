@@ -14,11 +14,11 @@
 extern "C" {
 #endif
 
-typedef long (*bsearch_cmp_t)(const void *key, void *pdata);
+typedef long (*bfdev_bsearch_cmp_t)(const void *key, void *pdata);
 
 static inline void *
-bsearch_inline(const void *base, size_t num, size_t esize,
-               bsearch_cmp_t cmp, void *pdata)
+bfdev_bsearch_inline(const void *base, size_t num, size_t esize,
+                     bfdev_bsearch_cmp_t cmp, void *pdata)
 {
     const void *pivot;
     long result;
@@ -41,8 +41,8 @@ bsearch_inline(const void *base, size_t num, size_t esize,
     return NULL;
 }
 
-extern void *bsearch(const void *base, size_t num, size_t esize,
-                     bsearch_cmp_t cmp, void *pdata);
+extern void *bfdev_bsearch(const void *base, size_t num, size_t esize,
+                           bfdev_bsearch_cmp_t cmp, void *pdata);
 
 #ifdef __cplusplus
 }
