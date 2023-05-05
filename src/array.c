@@ -1,5 +1,6 @@
 #include <bfdev.h>
 #include <bfdev/array.h>
+#include <export.h>
 
 /* TODO: let lib user can call this function*/
 static inline int
@@ -22,7 +23,7 @@ bfdev_array_init(bfdev_array_t *a, allocator_t *allor, unsigned n, size_t size)
     return BFDEV_ENOERR;
 }
 
-bfdev_array_t *
+export bfdev_array_t *
 bfdev_array_create(allocator_t *allor, unsigned n, size_t size)
 {
     bfdev_array_t *a;
@@ -42,7 +43,8 @@ bfdev_array_create(allocator_t *allor, unsigned n, size_t size)
     return a;
 }
 
-void bfdev_array_destroy(bfdev_array_t *a)
+export void
+bfdev_array_destroy(bfdev_array_t *a)
 {
     allocator_t *allor;
     allor = a->allocator;
@@ -51,7 +53,8 @@ void bfdev_array_destroy(bfdev_array_t *a)
     allor->free(a, allor->pdata);
 }
 
-void *bfdev_array_push(bfdev_array_t *a)
+export void *
+bfdev_array_push(bfdev_array_t *a)
 {
     void *elt, *new;
     unsigned nalloc;
@@ -77,7 +80,8 @@ void *bfdev_array_push(bfdev_array_t *a)
     return elt;
 }
 
-void *bfdev_array_push_n(bfdev_array_t *a, unsigned n)
+export void *
+bfdev_array_push_n(bfdev_array_t *a, unsigned n)
 {
     void *elt, *new;
     unsigned   nalloc;

@@ -84,6 +84,7 @@ add_definitions(
     "-Wno-sign-compare "
     "-Wno-pointer-sign "
     "-Wno-null-pointer-arithmetic "
+    "-fvisibility=hidden "
 )
 
 option(ENABLE_STRICT "Enable strict compilation" ON)

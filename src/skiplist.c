@@ -5,6 +5,7 @@
 
 #include <bfdev.h>
 #include <bfdev/skiplist.h>
+#include <export.h>
 
 static unsigned int random_level(struct skip_head *head)
 {
@@ -56,8 +57,9 @@ skipnode_find(struct skip_head *head, const void *key,
     return NULL;
 }
 
-int skiplist_insert(struct skip_head *head, void *data,
-                    skiplist_cmp_t cmp)
+export int
+skiplist_insert(struct skip_head *head, void *data,
+                skiplist_cmp_t cmp)
 {
     struct list_head *list, *end;
     struct skip_node *walk, *node;
@@ -93,7 +95,8 @@ int skiplist_insert(struct skip_head *head, void *data,
     return 0;
 }
 
-void skiplist_delete(struct skip_head *head, void *key, skiplist_find_t find)
+export void
+skiplist_delete(struct skip_head *head, void *key, skiplist_find_t find)
 {
     struct skip_node *node;
     unsigned int level;
@@ -111,7 +114,8 @@ void skiplist_delete(struct skip_head *head, void *key, skiplist_find_t find)
     free(node);
 }
 
-void *skiplist_find(struct skip_head *head, void *key, skiplist_find_t find)
+export void *
+skiplist_find(struct skip_head *head, void *key, skiplist_find_t find)
 {
     struct skip_node *node;
     node = skipnode_find(head, key, find, NULL);
@@ -128,7 +132,8 @@ static void skiplist_release(struct skip_head *head, skiplist_release_t relse)
     }
 }
 
-void skiplist_reset(struct skip_head *head, skiplist_release_t relse)
+export void
+skiplist_reset(struct skip_head *head, skiplist_release_t relse)
 {
     unsigned int count;
 
@@ -139,13 +144,15 @@ void skiplist_reset(struct skip_head *head, skiplist_release_t relse)
     head->curr = 0;
 }
 
-void skiplist_destroy(struct skip_head *head, skiplist_release_t relse)
+export void
+skiplist_destroy(struct skip_head *head, skiplist_release_t relse)
 {
     skiplist_release(head, relse);
     free(head);
 }
 
-struct skip_head *skiplist_create(unsigned int levels)
+export struct skip_head *
+skiplist_create(unsigned int levels)
 {
     struct skip_head *head;
     unsigned int count;

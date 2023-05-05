@@ -4,6 +4,7 @@
  */
 
 #include <bfdev/allocator.h>
+#include <export.h>
 
 static void *generic_malloc(size_t size, void *dummy)
 {
@@ -30,7 +31,7 @@ static allocator_t gallocator = {
     .pdata = NULL,
 };
 
-allocator_t *gallocator_create()
+export allocator_t *gallocator_create()
 {
     return &gallocator;
 }
