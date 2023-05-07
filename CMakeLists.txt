@@ -12,79 +12,84 @@ include(CheckIncludeFiles)
 include(CheckCXXSymbolExists)
 include(CheckFunctionExists)
 include(CheckCSourceCompiles)
-set(CMAKE_MODULE_PATH
-    ${PROJECT_SOURCE_DIR}/cmake
+
+set(BFDEV_ARCH dummy)
+
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+set(BFDEV_HEADER_PATH ${PROJECT_SOURCE_DIR}/include)
+set(BFDEV_GENERATED_PATH ${PROJECT_SOURCE_DIR}/generated)
+set(BFDEV_SOURCE_PATH ${PROJECT_SOURCE_DIR}/src)
+
+set(BFDEV_ARCH_PATH ${PROJECT_SOURCE_DIR}/arch/${BFDEV_ARCH})
+set(BFDEV_ARCH_HEADER_PATH ${BFDEV_ARCH_PATH}/include)
+set(BFDEV_ARCH_SOURCE_PATH ${BFDEV_ARCH_PATH}/src)
+
+macro(asmgeneric prefix generated compare source)
+    file(GLOB srclist ${source}/*)
+    file(GLOB cmplist ${compare}/*)
+
+    foreach(srcpath ${srclist})
+        string(REGEX REPLACE ".+/(.+)" "\\1" filename ${srcpath})
+        list(FIND cmplist ${compare}/${filename} retval)
+        set(genfile ${generated}/${filename})
+
+        file(REMOVE ${genfile})
+        if(${retval})
+            file(WRITE ${genfile}
+                "/*\n"
+                " * Automatically generated file; DO NOT EDIT.\n"
+                " * " ${CMAKE_PROJECT_NAME} " asm-generic\n"
+                " */\n"
+                "#include <" ${prefix} ${filename} ">\n"
+            )
+        endif(${retval})
+    endforeach(srcpath)
+
+    unset(srclist)
+    unset(cmplist)
+endmacro(asmgeneric)
+
+asmgeneric(
+    bfdev/asm-generic/
+    generated/bfdev/asm
+    ${BFDEV_ARCH_HEADER_PATH}/bfdev/asm
+    ${BFDEV_HEADER_PATH}/bfdev/asm-generic
 )
 
-set(BFDEV_HEADERS
-    include/bfdev/align.h
-    include/bfdev/allocator.h
-    include/bfdev/attributes.h
-    include/bfdev/array.h
-    include/bfdev/bcd.h
-    include/bfdev/bitrev.h
-    include/bfdev/bits.h
-    include/bfdev/bitsperlong.h
-    include/bfdev/bsearch.h
-    include/bfdev/compiler.h
-    include/bfdev/const.h
-    include/bfdev/container.h
-    include/bfdev/errno.h
-    include/bfdev/galloctor.h
-    include/bfdev/hash.h
-    include/bfdev/hlist.h
-    include/bfdev/limits.h
-    include/bfdev/list.h
-    include/bfdev/macro.h
-    include/bfdev/mhelper.h
-    include/bfdev/minmax.h
-    include/bfdev/once.h
-    include/bfdev/overflow.h
-    include/bfdev/poison.h
-    include/bfdev/popcount.h
-    include/bfdev/rbtree.h
-    include/bfdev/scnprintf.h
-    include/bfdev/segtree.h
-    include/bfdev/skiplist.h
-    include/bfdev/slist.h
-    include/bfdev/stdarg.h
-    include/bfdev/stdbool.h
-    include/bfdev/stddef.h
-    include/bfdev/stdint.h
-    include/bfdev/stdio.h
-    include/bfdev/stdlib.h
-    include/bfdev/string.h
-    include/bfdev/stringify.h
-    include/bfdev/swab.h
-    include/bfdev/typecheck.h
+file(GLOB BFDEV_HEADER
+    ${BFDEV_HEADER_PATH}/bfdev/*.h
 )
 
-set(BFDEV_SRCS
-    src/array.c
-    src/bcd.c
-    src/bitrev.c
-    src/bsearch.c
-    src/errname.c
-    src/gallocator.c
-    src/list-sort.c
-    src/popcount.c
-    src/rbtree.c
-    src/scnprintf.c
-    src/segtree.c
-    src/skiplist.c
-    ${BFDEV_HEADERS}
+file(GLOB BFDEV_ASM_HEADER
+    ${BFDEV_HEADER_PATH}/bfdev/asm-generic/*.h
+)
+
+file(GLOB BFDEV_ARCH_ASM_HEADER
+    ${BFDEV_ARCH_HEADER_PATH}/bfdev/asm/*.h
+)
+
+file(GLOB BFDEV_GENERATED_HEADER
+    ${BFDEV_GENERATED_PATH}/*.h
+)
+
+file(GLOB_RECURSE BFDEV_SOURCE
+    ${BFDEV_SOURCE_PATH}/*.c
+)
+
+file(GLOB_RECURSE BFDEV_ARCH_SOURCE
+    ${BFDEV_ARCH_SOURCE_PATH}/*.c
 )
 
 add_definitions(
-    "-std=gnu17 "
-    "-Wall "
-    "-Wextra "
-    "-Wno-override-init "
-    "-Wno-unused-parameter "
-    "-Wno-sign-compare "
-    "-Wno-pointer-sign "
-    "-Wno-null-pointer-arithmetic "
-    "-fvisibility=hidden "
+    " -std=gnu17"
+    " -Wall"
+    " -Wextra"
+    " -Wno-override-init"
+    " -Wno-unused-parameter"
+    " -Wno-sign-compare"
+    " -Wno-pointer-sign"
+    " -Wno-null-pointer-arithmetic"
+    " -fvisibility=hidden"
 )
 
 option(ENABLE_STRICT "Enable strict compilation" ON)
@@ -122,66 +127,73 @@ endif(ENABLE_UBSAN)
 option(ENABLE_DBGLIST "Dynamic debug list" OFF)
 if(ENABLE_DBGLIST)
     set(BFDEV_DEBUG_LIST ON)
-    set(BFDEV_SRCS
+    set(BFDEV_SOURCE
         src/list-debug.c
-        ${BFDEV_SRCS}
+        ${BFDEV_SOURCE}
     )
 endif(ENABLE_DBGLIST)
 
 option(ENABLE_DBGSLIST "Dynamic debug slist" OFF)
 if(ENABLE_DBGSLIST)
     set(BFDEV_DEBUG_SLIST ON)
-    set(BFDEV_SRCS
+    set(BFDEV_SOURCE
         src/slist-debug.c
-        ${BFDEV_SRCS}
+        ${BFDEV_SOURCE}
     )
 endif(ENABLE_DBGSLIST)
 
 option(ENABLE_DBGHLIST "Dynamic debug hlist" OFF)
 if(ENABLE_DBGHLIST)
     set(BFDEV_DEBUG_HLIST ON)
-    set(BFDEV_SRCS
+    set(BFDEV_SOURCE
         src/hlist-debug.c
-        ${BFDEV_SRCS}
+        ${BFDEV_SOURCE}
     )
 endif(ENABLE_DBGHLIST)
 
 option(ENABLE_DBGRBTREE "Dynamic debug rbtree" OFF)
 if(ENABLE_DBGRBTREE)
     set(BFDEV_DEBUG_RBTREE ON)
-    set(BFDEV_SRCS
+    set(BFDEV_SOURCE
         src/rbtree-debug.c
-        ${BFDEV_SRCS}
+        ${BFDEV_SOURCE}
     )
 endif(ENABLE_DBGRBTREE)
 
+set(BFDEV_LIBRARY
+    ${BFDEV_HEADER}
+    ${BFDEV_ASM_HEADER}
+    ${BFDEV_ARCH_ASM_HEADER}
+    ${BFDEV_GENERATED_HEADER}
+    ${BFDEV_INCLUDE}
+    ${BFDEV_SOURCE}
+    ${BFDEV_ARCH_SOURCE}
+)
 
 CHECK_C_SOURCE_COMPILES(
 "
-int main(void) {
-    long  n = 0;
-
-    if (!__sync_bool_compare_and_swap(&n, 0, 3))
-        return 1;
-    if (__sync_fetch_and_add(&n, 1) != 3)
-        return 1;
-    if (__sync_lock_test_and_set(&n, 5) != 4)
-        return 1;
-    if (n != 5)
-        return 1;
-    if (__sync_or_and_fetch(&n, 2) != 7)
-        return 1;
-    if (__sync_and_and_fetch(&n, 5) != 5)
-        return 1;
-    __sync_lock_release(&n);
-    if (n != 0)
-        return 1;
-    return 0;
-}
-
+    int main(void) {
+        long  n = 0;
+        if (!__sync_bool_compare_and_swap(&n, 0, 3))
+            return 1;
+        if (__sync_fetch_and_add(&n, 1) != 3)
+            return 1;
+        if (__sync_lock_test_and_set(&n, 5) != 4)
+            return 1;
+        if (n != 5)
+            return 1;
+        if (__sync_or_and_fetch(&n, 2) != 7)
+            return 1;
+        if (__sync_and_and_fetch(&n, 5) != 5)
+            return 1;
+        __sync_lock_release(&n);
+        if (n != 0)
+            return 1;
+        return 0;
+    }
 "
-BFDEV_HAVE_GCC_ATOMIC)
-
+BFDEV_HAVE_GCC_ATOMIC
+)
 
 configure_file(
     ${CMAKE_MODULE_PATH}/config.h.in
@@ -191,8 +203,8 @@ configure_file(
 include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${PROJECT_BINARY_DIR}/generated)
 
-add_library(bfdev_shared SHARED ${BFDEV_SRCS})
-add_library(bfdev_static STATIC ${BFDEV_SRCS})
+add_library(bfdev_shared SHARED ${BFDEV_LIBRARY})
+add_library(bfdev_static STATIC ${BFDEV_LIBRARY})
 
 SET_TARGET_PROPERTIES(bfdev_shared
     PROPERTIES VERSION 1.0 SOVERSION 1
@@ -207,16 +219,12 @@ SET_TARGET_PROPERTIES(bfdev_static
     LINKER_LANGUAGE C
 )
 
-install(FILES
-    ${BFDEV_HEADERS}
+install(DIRECTORY
+    ${BFDEV_HEADER_PATH}/bfdev
+    ${BFDEV_GENERATED_PATH}/bfdev
+    ${BFDEV_ARCH_HEADER_PATH}/bfdev
     DESTINATION
-    "${CMAKE_INSTALL_INCLUDEDIR}/bfdev"
-)
-
-install(FILES
-    ${PROJECT_BINARY_DIR}/generated/bfdev/config.h
-    DESTINATION
-    "${CMAKE_INSTALL_INCLUDEDIR}/bfdev"
+    "${CMAKE_INSTALL_INCLUDEDIR}"
 )
 
 install(FILES
