@@ -17,14 +17,14 @@ set(BFDEV_ARCH dummy)
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 set(BFDEV_HEADER_PATH ${PROJECT_SOURCE_DIR}/include)
-set(BFDEV_GENERATED_PATH ${PROJECT_SOURCE_DIR}/generated)
 set(BFDEV_SOURCE_PATH ${PROJECT_SOURCE_DIR}/src)
+set(BFDEV_GENERATED_PATH ${PROJECT_BINARY_DIR}/generated)
 
 set(BFDEV_ARCH_PATH ${PROJECT_SOURCE_DIR}/arch/${BFDEV_ARCH})
 set(BFDEV_ARCH_HEADER_PATH ${BFDEV_ARCH_PATH}/include)
 set(BFDEV_ARCH_SOURCE_PATH ${BFDEV_ARCH_PATH}/src)
 
-macro(asmgeneric prefix generated compare source)
+macro(asm_generic prefix generated compare source)
     file(GLOB srclist ${source}/*)
     file(GLOB cmplist ${compare}/*)
 
@@ -47,11 +47,11 @@ macro(asmgeneric prefix generated compare source)
 
     unset(srclist)
     unset(cmplist)
-endmacro(asmgeneric)
+endmacro(asm_generic)
 
-asmgeneric(
+asm_generic(
     bfdev/asm-generic/
-    generated/bfdev/asm
+    ${BFDEV_GENERATED_PATH}/bfdev/asm
     ${BFDEV_ARCH_HEADER_PATH}/bfdev/asm
     ${BFDEV_HEADER_PATH}/bfdev/asm-generic
 )
