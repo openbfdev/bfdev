@@ -18,6 +18,8 @@
 extern "C" {
 #endif
 
+typedef unsigned long bfdev_atomic_t;
+
 #define BFDEV_BYTES_PER_CHAR        sizeof(char)
 #define BFDEV_BYTES_PER_SHORT       sizeof(short)
 #define BFDEV_BYTES_PER_INT         sizeof(int)
@@ -30,10 +32,6 @@ extern "C" {
 #define BFDEV_BYTES_PER_U64         sizeof(uint64_t)
 #define BFDEV_BYTES_PER_UINTMAX     sizeof(uintmax_t)
 #define BFDEV_BYTES_PER_UINTPTR     sizeof(uintptr_t)
-
-typedef long bfdev_atomic_int_t;
-typedef unsigned long bfdev_atomic_uint_t;
-typedef bfdev_atomic_int_t bfdev_atomic_t;
 
 #ifdef __cplusplus
 }
