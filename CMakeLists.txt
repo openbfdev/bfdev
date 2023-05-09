@@ -192,7 +192,7 @@ CHECK_C_SOURCE_COMPILES(
         return 0;
     }
 "
-BFDEV_HAVE_GCC_ATOMIC
+BFDEV_HAS_GENERIC_SYNC
 )
 
 configure_file(
