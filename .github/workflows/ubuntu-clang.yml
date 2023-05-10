@@ -1,4 +1,4 @@
-name: build default on ubuntu
+name: build default on ubuntu clang
 
 on: [push, pull_request]
 
@@ -20,7 +20,8 @@ jobs:
         run: |
             cmake -B ${{github.workspace}}/build \
                   -D CMAKE_INSTALL_PREFIX=${{github.workspace}}/build/install \
-                  -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+                  -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
+                  -D CMAKE_C_COMPILER=/usr/bin/clang
       - name: make
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
       - name: install
