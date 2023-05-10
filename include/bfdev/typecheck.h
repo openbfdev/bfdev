@@ -12,20 +12,20 @@
 extern "C" {
 #endif
 
-#define typecheck(type, object) ({          \
+#define bfdev_typecheck(type, object) ({    \
     type __dummy1;                          \
     typeof(object) __dummy2;                \
     (void)(&__dummy1 == &__dummy2);         \
     1;                                      \
 })
 
-#define typecheck_func(type, func) ({       \
+#define bfdev_typecheck_func(type, func) ({ \
     typeof(type) __dummy = func;            \
     (void)__dummy;                          \
     1;                                      \
 })
 
-#define typecheck_pointer(pointer) ({       \
+#define bfdev_typecheck_pointer(pointer) ({ \
     typeof(pointer) __dummy;                \
     (void)sizeof(*__dummy);                 \
     1;                                      \
