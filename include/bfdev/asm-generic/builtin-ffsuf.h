@@ -9,10 +9,6 @@
 extern "C" {
 #endif
 
-#if !__has_builtin(__builtin_ctzl)
-# error "compiler not supported ctzl"
-#endif
-
 #define bfdev_arch_ffsuf bfdev_arch_ffsuf
 static __always_inline unsigned int bfdev_arch_ffsuf(unsigned long value)
 {
