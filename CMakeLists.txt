@@ -7,11 +7,33 @@
 cmake_minimum_required(VERSION 3.6)
 project(bfdev LANGUAGES C)
 
+include(scripts/asm-generic.cmake)
+include(scripts/commit.cmake)
+
 include(GNUInstallDirs)
 include(CheckIncludeFiles)
 include(CheckCXXSymbolExists)
 include(CheckFunctionExists)
 include(CheckCSourceCompiles)
+
+set(BFDEV_MAJORLEVEL 1)
+set(BFDEV_PATCHLEVEL 0)
+set(BFDEV_MINORLEVEL 0)
+set(BFDEV_EXTREVERSION 0)
+
+set(BFDEV_VERSION ${BFDEV_MAJORLEVEL})
+string(APPEND BFDEV_VERSION . ${BFDEV_PATCHLEVEL})
+
+if(BFDEV_MINORLEVEL)
+    string(APPEND BFDEV_VERSION . ${BFDEV_MINORLEVEL})
+endif(BFDEV_MINORLEVEL)
+
+if(BFDEV_EXTREVERSION)
+    string(APPEND BFDEV_VERSION ${BFDEV_EXTREVERSION})
+endif(BFDEV_EXTREVERSION)
+
+commit_hash(BFDEV_COMMITID)
+commit_branch(BFDEV_BRANCH)
 
 set(BFDEV_ARCH dummy)
 
@@ -23,31 +45,6 @@ set(BFDEV_GENERATED_PATH ${PROJECT_BINARY_DIR}/generated)
 set(BFDEV_ARCH_PATH ${PROJECT_SOURCE_DIR}/arch/${BFDEV_ARCH})
 set(BFDEV_ARCH_HEADER_PATH ${BFDEV_ARCH_PATH}/include)
 set(BFDEV_ARCH_SOURCE_PATH ${BFDEV_ARCH_PATH}/src)
-
-macro(asm_generic prefix generated compare source)
-    file(GLOB srclist ${source}/*)
-    file(GLOB cmplist ${compare}/*)
-
-    foreach(srcpath ${srclist})
-        string(REGEX REPLACE ".+/(.+)" "\\1" filename ${srcpath})
-        list(FIND cmplist ${compare}/${filename} retval)
-        set(genfile ${generated}/${filename})
-
-        file(REMOVE ${genfile})
-        if(${retval})
-            file(WRITE ${genfile}
-                "/*\n"
-                " * Automatically generated file; DO NOT EDIT.\n"
-                " * " ${CMAKE_PROJECT_NAME} " asm-generic\n"
-                " */\n"
-                "#include <" ${prefix} ${filename} ">\n"
-            )
-        endif(${retval})
-    endforeach(srcpath)
-
-    unset(srclist)
-    unset(cmplist)
-endmacro(asm_generic)
 
 asm_generic(
     bfdev/asm-generic/

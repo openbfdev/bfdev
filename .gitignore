@@ -1,8 +1,7 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 CMakeFiles/
-CMakeCache.txt
 generated/
+CMakeCache.txt
 Makefile
-*.cmake
 *.[oa]
 libbfdev.*
