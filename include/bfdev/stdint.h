@@ -18,6 +18,19 @@
 extern "C" {
 #endif
 
+#ifdef __CHECKER__
+# define __bitwise __attribute__((bitwise))
+#else
+# define __bitwise
+#endif
+
+typedef uint16_t __bitwise bfdev_le16;
+typedef uint32_t __bitwise bfdev_le32;
+typedef uint64_t __bitwise bfdev_le64;
+typedef uint16_t __bitwise bfdev_be16;
+typedef uint32_t __bitwise bfdev_be32;
+typedef uint64_t __bitwise bfdev_be64;
+
 typedef unsigned long bfdev_atomic_t;
 
 #define BFDEV_BYTES_PER_CHAR        sizeof(char)
