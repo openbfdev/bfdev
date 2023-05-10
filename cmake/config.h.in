@@ -1,6 +1,7 @@
 /* SPDX-License-Identifier: GPL-2.0-or-later */
 /*
  * Copyright(c) 2023 ffashion <helloworldffashion@gmail.com>
+ * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
 #ifndef _BFDEV_CONFIG_H_
@@ -10,7 +11,5 @@
 #cmakedefine BFDEV_DEBUG_SLIST
 #cmakedefine BFDEV_DEBUG_HLIST
 #cmakedefine BFDEV_DEBUG_RBTREE
-
-#cmakedefine BFDEV_HAS_GENERIC_SYNC
 
 #endif /*_BFDEV_CONFIG_H_*/

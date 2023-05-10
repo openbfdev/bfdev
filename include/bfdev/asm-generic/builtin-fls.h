@@ -9,10 +9,6 @@
 extern "C" {
 #endif
 
-#if !__has_builtin(__builtin_clzl)
-# error "compiler not supported clzl"
-#endif
-
 #define bfdev_arch_fls bfdev_arch_fls
 static __always_inline unsigned int bfdev_arch_fls(unsigned long value)
 {

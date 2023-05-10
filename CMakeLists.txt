@@ -170,31 +170,6 @@ set(BFDEV_LIBRARY
     ${BFDEV_ARCH_SOURCE}
 )
 
-CHECK_C_SOURCE_COMPILES(
-"
-    int main(void) {
-        long  n = 0;
-        if (!__sync_bool_compare_and_swap(&n, 0, 3))
-            return 1;
-        if (__sync_fetch_and_add(&n, 1) != 3)
-            return 1;
-        if (__sync_lock_test_and_set(&n, 5) != 4)
-            return 1;
-        if (n != 5)
-            return 1;
-        if (__sync_or_and_fetch(&n, 2) != 7)
-            return 1;
-        if (__sync_and_and_fetch(&n, 5) != 5)
-            return 1;
-        __sync_lock_release(&n);
-        if (n != 0)
-            return 1;
-        return 0;
-    }
-"
-BFDEV_HAS_GENERIC_SYNC
-)
-
 configure_file(
     ${CMAKE_MODULE_PATH}/config.h.in
     ${PROJECT_BINARY_DIR}/generated/bfdev/config.h

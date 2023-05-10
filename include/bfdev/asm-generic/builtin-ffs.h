@@ -9,10 +9,6 @@
 extern "C" {
 #endif
 
-#if !__has_builtin(__builtin_ffsl)
-# error "compiler not supported ffsl"
-#endif
-
 #define bfdev_arch_ffs bfdev_arch_ffs
 static __always_inline unsigned int bfdev_arch_ffs(unsigned long value)
 {

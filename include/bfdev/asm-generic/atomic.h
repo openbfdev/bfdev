@@ -14,10 +14,6 @@
 extern "C" {
 #endif
 
-#if BFDEV_HAS_GENERIC_SYNC
-# error "compiler not supported sync atomic"
-#endif
-
 #define bfdev_arch_atomic_read bfdev_arch_atomic_read
 static __always_inline bfdev_atomic_t
 bfdev_arch_atomic_read(const bfdev_atomic_t *atomic)
