@@ -6,32 +6,26 @@
 #include <bfdev/allocator.h>
 #include <export.h>
 
-static void *generic_malloc(size_t size, void *dummy)
+export void *
+bfdev_galloc_malloc(size_t size, void *pdata)
 {
-    (void)dummy;
     return malloc(size);
 }
 
-static void *generic_realloc(void *ptr, unsigned long size, void *dummy)
+export void *
+bfdev_galloc_realloc(const void *block, size_t resize, void *pdata)
 {
-    (void)dummy;
-    return realloc(ptr, size);
+    return realloc((void *)block, resize);
 }
 
-static void generic_free(void *ptr, void *dummy)
+export void
+bfdev_galloc_free(const void *block, void *pdata)
 {
-    (void)dummy;
-    free(ptr);
+    free((void *)block);
 }
 
-static allocator_t gallocator = {
-    .malloc = generic_malloc,
-    .realloc = generic_realloc,
-    .free = generic_free,
-    .pdata = NULL,
+export const struct bfdev_alloc bfdev_galloc = {
+    .malloc = bfdev_galloc_malloc,
+    .realloc = bfdev_galloc_realloc,
+    .free = bfdev_galloc_free,
 };
-
-export allocator_t *gallocator_create()
-{
-    return &gallocator;
-}

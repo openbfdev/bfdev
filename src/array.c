@@ -1,109 +1,116 @@
+/* SPDX-License-Identifier: GPL-2.0-or-later */
+/*
+ * Copyright(c) 2023 ffashion <helloworldffashion@gmail.com>
+ * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
+ */
+
 #include <bfdev.h>
 #include <bfdev/array.h>
+#include <bfdev/gallocator.h>
 #include <export.h>
 
-/* TODO: let lib user can call this function*/
-static inline int
-bfdev_array_init(bfdev_array_t *a, allocator_t *allor, unsigned n, size_t size)
+export void *
+bfdev_array_push(struct bfdev_array *array)
 {
-    if (allor == NULL) {
-        allor = gallocator_create();
+    const struct bfdev_alloc *alloc;
+    void *elt, *new;
+    unsigned nalloc;
+
+    alloc = array->alloc;
+    if (array->nelts == array->capacity) {
+        nalloc = array->capacity << 1;
+
+        new = bfdev_alloc_realloc(alloc, array->elts, nalloc * array->cells);
+        if (unlikely(!new))
+            return NULL;
+
+        array->elts = new;
+        array->capacity = nalloc;
     }
 
-    a->nelts = 0;
-    a->size = size;
-    a->nalloc = n;
-    a->allocator = allor;
+    elt = array->elts + array->cells * array->nelts;
+    array->nelts++;
 
-    a->elts = allor->malloc(size * n, allor->pdata);
-    if (unlikely(a->elts == NULL)) {
+    return elt;
+}
+
+export void *
+bfdev_array_push_num(struct bfdev_array *array, unsigned int num)
+{
+    const struct bfdev_alloc *alloc;
+    void *elt, *new;
+    size_t nalloc;
+
+    alloc = array->alloc;
+    if (array->nelts == array->capacity) {
+        nalloc = bfdev_max(num, array->capacity) << 1;
+
+        new = bfdev_alloc_realloc(alloc, array->elts, nalloc * array->cells);
+        if (unlikely(!new))
+            return NULL;
+
+        array->elts = new;
+        array->capacity = nalloc;
+    }
+
+    elt = array->elts + array->cells * array->nelts;
+    array->nelts += num;
+
+    return elt;
+}
+
+extern int
+bfdev_array_init(struct bfdev_array *array, const struct bfdev_alloc *alloc,
+                 unsigned num, size_t size)
+{
+    if (!array)
+        alloc = &bfdev_galloc;
+
+    array->elts = bfdev_alloc_malloc(alloc, size * num);
+    if (unlikely(!array->elts))
         return BFDEV_ENOMEM;
-    }
+
+    array->alloc = alloc;
+    array->capacity = num;
+    array->cells = size;
+    array->nelts = 0;
 
     return BFDEV_ENOERR;
 }
 
-export bfdev_array_t *
-bfdev_array_create(allocator_t *allor, unsigned n, size_t size)
+extern void
+bfdev_array_release(struct bfdev_array *array)
 {
-    bfdev_array_t *a;
-    if (allor == NULL) {
-        allor = gallocator_create();
-    }
+    const struct bfdev_alloc *alloc;
 
-    a = allor->malloc(sizeof(bfdev_array_t), allor->pdata);
-    if (unlikely(a == NULL)) {
+    alloc = array->alloc;
+    bfdev_alloc_free(alloc, array->elts);
+}
+
+export struct bfdev_array *
+bfdev_array_create(const struct bfdev_alloc *alloc, unsigned int num, size_t size)
+{
+    struct bfdev_array *array;
+
+    if (!alloc)
+        alloc = &bfdev_galloc;
+
+    array = bfdev_alloc_malloc(alloc, sizeof(*array));
+    if (unlikely(!array))
         return NULL;
-    }
 
-    if (bfdev_array_init(a, allor, n, size) != BFDEV_ENOERR) {
+    if (bfdev_array_init(array, alloc, num, size))
         return NULL;
-    }
 
-    return a;
+    return array;
 }
 
 export void
-bfdev_array_destroy(bfdev_array_t *a)
+bfdev_array_destroy(struct bfdev_array *array)
 {
-    allocator_t *allor;
-    allor = a->allocator;
+    const struct bfdev_alloc *alloc;
 
-    allor->free(a->elts, allor->pdata);
-    allor->free(a, allor->pdata);
-}
-
-export void *
-bfdev_array_push(bfdev_array_t *a)
-{
-    void *elt, *new;
-    unsigned nalloc;
-    allocator_t *allor;
-
-    allor = a->allocator;
-
-    if (a->nelts == a->nalloc) {
-
-        nalloc = a->nalloc * 2;
-        new = allor->realloc(a->elts, nalloc * a->size, allor->pdata);
-        if (unlikely(new == NULL)) {
-            return NULL;
-        }
-
-        a->elts = new;
-        a->nalloc = nalloc;
-    }
-
-    elt = (char *) a->elts + a->size * a->nelts;
-    a->nelts++;
-
-    return elt;
-}
-
-export void *
-bfdev_array_push_n(bfdev_array_t *a, unsigned n)
-{
-    void *elt, *new;
-    unsigned   nalloc;
-    allocator_t *allor;
-
-    allor = a->allocator;
-
-    if (a->nelts == a->nalloc) {
-
-        nalloc = 2 * ((n >= a->nalloc) ? n : a->nalloc);
-        new = allor->realloc(a->elts, nalloc * a->size, allor->pdata);
-        if (unlikely(new == NULL)) {
-            return NULL;
-        }
-
-        a->elts = new;
-        a->nalloc = nalloc;
-    }
-
-
-    elt = (char *) a->elts + a->size * a->nelts;
-    a->nelts += n;
-
-    return elt;
+    alloc = array->alloc;
+    bfdev_array_release(array);
+    bfdev_alloc_free(alloc, array);
 }
