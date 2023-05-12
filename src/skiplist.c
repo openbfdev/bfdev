@@ -67,7 +67,7 @@ skiplist_insert(struct skip_head *head, void *data,
     long retval;
 
     level = random_level(head);
-    max_adj(head->curr, level);
+    bfdev_max_adj(head->curr, level);
 
     node = malloc(sizeof(*node) + sizeof(*node->list) * level);
     if (unlikely(!node))
