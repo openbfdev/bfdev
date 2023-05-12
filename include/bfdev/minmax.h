@@ -17,7 +17,7 @@ extern "C" {
  * @a: first value.
  * @b: second value.
  */
-#define min(a, b) ({ \
+#define bfdev_min(a, b) ({ \
     typeof(a) _amin = (a); \
     typeof(a) _bmin = (b); \
     (void)(&_amin == &_bmin); \
@@ -29,7 +29,7 @@ extern "C" {
  * @a: first value.
  * @b: second value.
  */
-#define max(a, b) ({ \
+#define bfdev_max(a, b) ({ \
     typeof(a) _amax = (a); \
     typeof(a) _bmax = (b); \
     (void)(&_amax == &_bmax); \
@@ -42,8 +42,8 @@ extern "C" {
  * @lo: lowest allowable value.
  * @hi: highest allowable value.
  */
-#define clamp(val, lo, hi) ( \
-    min(max(val, lo), hi) \
+#define bfdev_clamp(val, lo, hi) ( \
+    bfdev_min(bfdev_max(val, lo), hi) \
 )
 
 /**
@@ -51,8 +51,8 @@ extern "C" {
  * @val: value to adjust.
  * @lo: lowest allowable value.
  */
-#define min_adj(val, lo) ({ \
-    (val) = min(val, lo); \
+#define bfdev_min_adj(val, lo) ({ \
+    (val) = bfdev_min(val, lo); \
 })
 
 /**
@@ -60,8 +60,8 @@ extern "C" {
  * @val: value to adjust.
  * @hi: highest allowable value.
  */
-#define max_adj(val, hi) ({ \
-    (val) = max(val, hi); \
+#define bfdev_max_adj(val, hi) ({ \
+    (val) = bfdev_max(val, hi); \
 })
 
 /**
@@ -70,8 +70,8 @@ extern "C" {
  * @lo: lowest allowable value.
  * @hi: highest allowable value.
  */
-#define clamp_adj(val, lo, hi) ({ \
-    (val) = clamp(val, lo, hi); \
+#define bfdev_clamp_adj(val, lo, hi) ({ \
+    (val) = bfdev_clamp(val, lo, hi); \
 })
 
 #ifdef __cplusplus
