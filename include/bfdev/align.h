@@ -19,29 +19,29 @@ extern "C" {
  * @size: value to aligned.
  * @align: alignment size.
  */
-#define align_low(size, align) ({ \
+#define bfdev_align_low(size, align) ({ \
     (size) & ~((align) - 1); \
 })
 
-#define align_high(size, align) ({ \
+#define bfdev_align_high(size, align) ({ \
     typeof(align) _align = (align); \
     ((size) + (_align - 1)) & ~(_align - 1); \
 })
 
-#define align_ptr_low(ptr, align) ({ \
-    (typeof(ptr))align_low((size_t)(ptr), align); \
+#define bfdev_align_ptr_low(ptr, align) ({ \
+    (typeof(ptr))bfdev_align_low((uintptr_t)(ptr), align); \
 })
 
-#define align_ptr_high(ptr, align) ({ \
-    (typeof(ptr))align_high((size_t)(ptr), align); \
+#define bfdev_align_ptr_high(ptr, align) ({ \
+    (typeof(ptr))bfdev_align_high((uintptr_t)(ptr), align); \
 })
 
-#define align_check(size, align) ( \
+#define bfdev_align_check(size, align) ( \
     !((size) & ((align) - 1)) \
 )
 
-#define align_ptr_check(ptr, align) ( \
-    align_check((size_t)(ptr), align) \
+#define bfdev_align_ptr_check(ptr, align) ( \
+    bfdev_align_check((uintptr_t)(ptr), align) \
 )
 
 #ifdef __cplusplus
