@@ -50,6 +50,60 @@ extern "C" {
     ((nbits) & (BFDEV_BITS_PER_LONG - 1)) \
 )
 
+/**
+ * BFDEV_BIT - create a bitmask (long).
+ * @nr: bit position.
+ */
+#define BFDEV_BIT(nr) ( \
+    (1UL) << ((nr) % BFDEV_BITS_PER_LONG) \
+)
+
+/**
+ * BFDEV_BIT_ULL - create a bitmask (long long).
+ * @nr: bit position.
+ */
+#define BFDEV_BIT_ULL(nr) ( \
+    (1ULL) << ((nr) % BFDEV_BITS_PER_LONG_LONG) \
+)
+
+/**
+ * BFDEV_BIT_SHIFT - create a shifted bitmask (long).
+ * @shift: bitmask position
+ * @val: bitmask value.
+ */
+#define BFDEV_BIT_SHIFT(shift, val) ( \
+    (val) << ((shift) % BFDEV_BITS_PER_LONG) \
+)
+
+/**
+ * BFDEV_BIT_SHIFT_ULL - create a shifted bitmask (long long).
+ * @shift: bitmask position.
+ * @val: bitmask value.
+ */
+#define BFDEV_BIT_SHIFT_ULL(shift, val) ( \
+    (val) << ((shift) % BFDEV_BITS_PER_LONG_LONG) \
+)
+
+/**
+ * BFDEV_BIT_RANGE - create a contiguous bitmask (long)
+ * @hi: ending position
+ * @lo: starting position
+ */
+#define BFDEV_BIT_RANGE(hi, lo) ( \
+    ((~0UL) - (1UL << (lo)) + 1) & \
+    (~0UL >> (BFDEV_BITS_PER_LONG - 1 - (hi))) \
+)
+
+/**
+ * BFDEV_BIT_RANGE_ULL - create a contiguous bitmask (long long)
+ * @hi: ending position
+ * @lo: starting position
+ */
+#define BFDEV_BIT_RANGE_ULL(hi, lo) ( \
+    ((~0ULL) - (1ULL << (lo)) + 1) & \
+    (~0ULL >> (BFDEV_BITS_PER_LONG_LONG - 1 - (hi))) \
+)
+
 #ifdef __cplusplus
 }
 #endif
