@@ -6,6 +6,7 @@
 #ifndef _BFDEV_ASM_GENERIC_ATOMIC_H_
 #define _BFDEV_ASM_GENERIC_ATOMIC_H_
 
+#include <bfdev/config.h>
 #include <bfdev/stdint.h>
 #include <bfdev/attributes.h>
 #include <bfdev/asm/rwonce.h>
@@ -22,7 +23,7 @@ bfdev_arch_atomic_read(const bfdev_atomic_t *atomic)
 }
 
 #define bfdev_arch_atomic_write bfdev_arch_atomic_write
-static __always_inline bfdev_atomic_t
+static __always_inline void
 bfdev_arch_atomic_write(bfdev_atomic_t *atomic, bfdev_atomic_t value)
 {
     BFDEV_WRITE_ONCE(*atomic, value);

@@ -2,6 +2,8 @@
 #ifndef _BFDEV_ASM_GENERIC_SWAB_H_
 #define _BFDEV_ASM_GENERIC_SWAB_H_
 
+#include <bfdev/config.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
