@@ -4,6 +4,7 @@
  */
 
 #include <bfdev/rbtree.h>
+#include <bfdev/callback.h>
 #include <export.h>
 
 /**
@@ -504,14 +505,10 @@ rb_remove_augmented(struct rb_root *root, struct rb_node *node,
     return rebalance;
 }
 
-static void dummy_rotate(struct rb_node *node, struct rb_node *successor) {}
-static void dummy_copy(struct rb_node *node, struct rb_node *successor) {}
-static void dummy_propagate(struct rb_node *node, struct rb_node *stop) {}
-
 static const struct rb_callbacks dummy_callbacks = {
-    .rotate = dummy_rotate,
-    .copy = dummy_copy,
-    .propagate = dummy_propagate,
+    .rotate = bfdev_dummy_noop,
+    .copy = bfdev_dummy_noop,
+    .propagate = bfdev_dummy_noop,
 };
 
 /**
