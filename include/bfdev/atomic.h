@@ -104,19 +104,6 @@ bfdev_atomic_xor(bfdev_atomic_t *atomic, bfdev_atomic_t value)
 #endif
 
 /**
- * bfdev_atomic_nand - atomic nand variable.
- * @atomic: pointer of type atomic_t.
- * @value: required value.
- */
-#ifndef bfdev_atomic_nand
-static __always_inline void
-bfdev_atomic_nand(bfdev_atomic_t *atomic, bfdev_atomic_t value)
-{
-    bfdev_arch_atomic_nand(atomic, value);
-}
-#endif
-
-/**
  * bfdev_atomic_fetch_add - fetch and atomic add variable.
  * @atomic: pointer of type atomic_t.
  * @value: required value.
@@ -182,19 +169,6 @@ bfdev_atomic_fetch_xor(bfdev_atomic_t *atomic, bfdev_atomic_t value)
 #endif
 
 /**
- * bfdev_atomic_fetch_nand - fetch and atomic nand variable.
- * @atomic: pointer of type atomic_t.
- * @value: required value.
- */
-#ifndef bfdev_atomic_fetch_nand
-static __always_inline bfdev_atomic_t
-bfdev_atomic_fetch_nand(bfdev_atomic_t *atomic, bfdev_atomic_t value)
-{
-    return bfdev_arch_atomic_fetch_nand(atomic, value);
-}
-#endif
-
-/**
  * bfdev_atomic_add_fetch - atomic add variable and fetch.
  * @atomic: pointer of type atomic_t.
  * @value: required value.
@@ -256,19 +230,6 @@ static __always_inline bfdev_atomic_t
 bfdev_atomic_xor_fetch(bfdev_atomic_t *atomic, bfdev_atomic_t value)
 {
     return bfdev_arch_atomic_xor_fetch(atomic, value);
-}
-#endif
-
-/**
- * bfdev_atomic_nand_fetch - atomic nand variable and fetch.
- * @atomic: pointer of type atomic_t.
- * @value: required value.
- */
-#ifndef bfdev_atomic_nand_fetch
-static __always_inline bfdev_atomic_t
-bfdev_atomic_nand_fetch(bfdev_atomic_t *atomic, bfdev_atomic_t value)
-{
-    return bfdev_arch_atomic_nand_fetch(atomic, value);
 }
 #endif
 

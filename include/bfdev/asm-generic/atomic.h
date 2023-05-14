@@ -48,42 +48,36 @@ bfdev_arch_atomic_##name(bfdev_atomic_t *atomic, bfdev_atomic_t value)  \
 #define bfdev_arch_atomic_and bfdev_arch_atomic_and
 #define bfdev_arch_atomic_or bfdev_arch_atomic_or
 #define bfdev_arch_atomic_xor bfdev_arch_atomic_xor
-#define bfdev_arch_atomic_nand bfdev_arch_atomic_nand
 
 BFDEV_GENERIC_ATOMIC(add, __sync_fetch_and_add)
 BFDEV_GENERIC_ATOMIC(sub, __sync_fetch_and_sub)
 BFDEV_GENERIC_ATOMIC(and, __sync_fetch_and_and)
 BFDEV_GENERIC_ATOMIC(or, __sync_fetch_and_or)
 BFDEV_GENERIC_ATOMIC(xor, __sync_fetch_and_xor)
-BFDEV_GENERIC_ATOMIC(nand, __sync_fetch_and_nand)
 
 #define bfdev_arch_atomic_fetch_add bfdev_arch_atomic_fetch_add
 #define bfdev_arch_atomic_fetch_sub bfdev_arch_atomic_fetch_sub
 #define bfdev_arch_atomic_fetch_and bfdev_arch_atomic_fetch_and
 #define bfdev_arch_atomic_fetch_or bfdev_arch_atomic_fetch_or
 #define bfdev_arch_atomic_fetch_xor bfdev_arch_atomic_fetch_xor
-#define bfdev_arch_atomic_fetch_nand bfdev_arch_atomic_fetch_nand
 
 BFDEV_GENERIC_ATOMIC_FETCH(fetch_add, __sync_fetch_and_add)
 BFDEV_GENERIC_ATOMIC_FETCH(fetch_sub, __sync_fetch_and_sub)
 BFDEV_GENERIC_ATOMIC_FETCH(fetch_and, __sync_fetch_and_and)
 BFDEV_GENERIC_ATOMIC_FETCH(fetch_or, __sync_fetch_and_or)
 BFDEV_GENERIC_ATOMIC_FETCH(fetch_xor, __sync_fetch_and_xor)
-BFDEV_GENERIC_ATOMIC_FETCH(fetch_nand, __sync_fetch_and_nand)
 
 #define bfdev_arch_atomic_add_fetch bfdev_arch_atomic_add_fetch
 #define bfdev_arch_atomic_sub_fetch bfdev_arch_atomic_sub_fetch
 #define bfdev_arch_atomic_and_fetch bfdev_arch_atomic_and_fetch
 #define bfdev_arch_atomic_or_fetch bfdev_arch_atomic_or_fetch
 #define bfdev_arch_atomic_xor_fetch bfdev_arch_atomic_xor_fetch
-#define bfdev_arch_atomic_nand_fetch bfdev_arch_atomic_nand_fetch
 
 BFDEV_GENERIC_ATOMIC_FETCH(add_fetch, __sync_add_and_fetch)
 BFDEV_GENERIC_ATOMIC_FETCH(sub_fetch, __sync_sub_and_fetch)
 BFDEV_GENERIC_ATOMIC_FETCH(and_fetch, __sync_and_and_fetch)
 BFDEV_GENERIC_ATOMIC_FETCH(or_fetch, __sync_or_and_fetch)
 BFDEV_GENERIC_ATOMIC_FETCH(xor_fetch, __sync_xor_and_fetch)
-BFDEV_GENERIC_ATOMIC_FETCH(nand_fetch, __sync_nand_and_fetch)
 
 #ifdef __cplusplus
 }
