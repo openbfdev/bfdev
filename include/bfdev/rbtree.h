@@ -266,13 +266,8 @@ extern struct rb_node *rb_next(const struct rb_node *node);
          pos = rb_prev_entry(pos, member))
 
 /* Preorder iteration (Root-first) - always access the left node first */
+extern struct rb_node *rb_pre_first(const struct rb_root *root);
 extern struct rb_node *rb_pre_next(const struct rb_node *node);
-
-/**
- * rb_pre_first - get the preorder first rb_node from a rbtree.
- * @root: the rbtree root to take the rb_node from.
- */
-#define rb_pre_first(root) ((root)->node)
 
 /**
  * rb_pre_first_entry - get the preorder first element from a rbtree.

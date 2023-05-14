@@ -5,6 +5,7 @@
 
 #include <bfdev/rbtree.h>
 #include <bfdev/callback.h>
+#include <bfdev/titer.h>
 #include <export.h>
 
 /**
@@ -704,202 +705,25 @@ rb_parent_conflict(struct rb_root *root, struct rb_node **parentp,
     return link;
 }
 
-export struct rb_node *
-rb_left_far(const struct rb_node *node)
-{
-    /* Go left as we can */
-    while (node->left)
-        node = node->left;
+BFDEV_TITER_BASE_DEFINE(
+    export, rb,
+    struct rb_node, left, right
+)
 
-    return (struct rb_node *)node;
-}
+BFDEV_TITER_INORDER_DEFINE(
+    export, rb, rb,
+    struct rb_root, node,
+    struct rb_node, parent, left, right
+)
 
-export struct rb_node *
-rb_right_far(const struct rb_node *node)
-{
-    /* Go right as we can */
-    while (node->right)
-        node = node->right;
+BFDEV_TITER_PREORDER_DEFINE(
+    export, rb_pre, rb,
+    struct rb_root, node,
+    struct rb_node, parent, left, right
+)
 
-    return (struct rb_node *)node;
-}
-
-export struct rb_node *
-rb_left_deep(const struct rb_node *node)
-{
-    /* Go left deep as we can */
-    while (node) {
-        if (node->left)
-            node = node->left;
-        else if (node->right)
-            node = node->right;
-        else
-            return (struct rb_node *)node;
-    }
-
-    return NULL;
-}
-
-export struct rb_node *
-rb_right_deep(const struct rb_node *node)
-{
-    /* Go right deep as we can */
-    while (node) {
-        if (node->right)
-            node = node->right;
-        else if (node->left)
-            node = node->left;
-        else
-            return (struct rb_node *)node;
-    }
-
-    return NULL;
-}
-
-/**
- * rb_first/last/prev/next - Middle iteration (Sequential)
- * NOTE: find logical next and previous nodes.
- */
-export struct rb_node *
-rb_first(const struct rb_root *root)
-{
-    struct rb_node *node = root->node;
-
-    if (!root || !node)
-        return NULL;
-
-    /* Get the leftmost node */
-    node = rb_left_far(node);
-    return node;
-}
-
-export struct rb_node *
-rb_last(const struct rb_root *root)
-{
-    struct rb_node *node = root->node;
-
-    if (!root || !node)
-        return NULL;
-
-    /* Get the rightmost node */
-    node = rb_right_far(node);
-    return node;
-}
-
-export struct rb_node *
-rb_prev(const struct rb_node *node)
-{
-    struct rb_node *parent;
-
-    if (!node)
-        return NULL;
-
-    /*
-     * If there is a left-hand node, go down
-     * and then as far right as possible.
-     */
-    if (node->left) {
-        node = node->left;
-        return rb_right_far(node);
-    }
-
-    /*
-     * No left-hand children. Go up till we find an ancestor
-     * which is a right-hand child of its parent.
-     */
-    while ((parent = node->parent) && node != parent->right)
-        node = parent;
-
-    return parent;
-}
-
-export struct rb_node *
-rb_next(const struct rb_node *node)
-{
-    struct rb_node *parent;
-
-    if (!node)
-        return NULL;
-
-    /*
-     * If there is a right-hand node, go down
-     * and then as far left as possible.
-     */
-    if (node->right) {
-        node = node->right;
-        return rb_left_far(node);
-    }
-
-    /*
-     * No right-hand children. Go up till we find an ancestor
-     * which is a left-hand child of its parent.
-     */
-    while ((parent = node->parent) && node != parent->left)
-        node = parent;
-
-    return parent;
-}
-
-/**
- * rb_pre_next - Preorder iteration (Root-first)
- * NOTE: always access the left node first.
- */
-export struct rb_node *
-rb_pre_next(const struct rb_node *node)
-{
-    struct rb_node *parent;
-
-    if (!node)
-        return NULL;
-
-    /**
-     * If there are left and right child nodes,
-     * then we iterate directly.
-     */
-    if (node->left)
-        return node->left;
-
-    if (node->right)
-        return node->right;
-
-    /**
-     * if we have no children, Go up till we find an ancestor
-     * which have a another right-hand child.
-     */
-    while ((parent = node->parent) &&
-           (!parent->right || node == parent->right))
-        node = parent;
-
-    return parent ? parent->right : NULL;
-}
-
-/**
- * rb_post_first/next - Postorder iteration (Depth-first)
- * NOTE: always visit the parent after its children.
- */
-export struct rb_node *
-rb_post_first(const struct rb_root *root)
-{
-    struct rb_node *node = root->node;
-
-    if (!root || !node)
-        return NULL;
-
-    return rb_left_deep(node);
-}
-
-export struct rb_node *
-rb_post_next(const struct rb_node *node)
-{
-    const struct rb_node *parent;
-
-    if (!node)
-        return NULL;
-
-    parent = node->parent;
-
-    if (parent && node == parent->left && parent->right)
-        return rb_left_deep(parent->right);
-    else
-        return (struct rb_node *)parent;
-}
+BFDEV_TITER_POSTORDER_DEFINE(
+    export, rb_post, rb,
+    struct rb_root, node,
+    struct rb_node, parent, left, right
+)
