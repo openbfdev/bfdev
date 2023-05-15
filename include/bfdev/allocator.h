@@ -23,26 +23,10 @@ struct bfdev_alloc {
     void *pdata;
 };
 
-static inline __malloc void *
-bfdev_alloc_malloc(const struct bfdev_alloc *alloc, size_t size)
-{
-    void *pdata = alloc->pdata;
-    return alloc->malloc(size, pdata);
-}
-
-static inline __malloc void *
-bfdev_alloc_realloc(const struct bfdev_alloc *alloc, const void *block, size_t resize)
-{
-    void *pdata = alloc->pdata;
-    return alloc->realloc(block, resize, pdata);
-}
-
-static inline void
-bfdev_alloc_free(const struct bfdev_alloc *alloc, const void *block)
-{
-    void *pdata = alloc->pdata;
-    return alloc->free(block, pdata);
-}
+extern __malloc void *bfdev_malloc(const struct bfdev_alloc *alloc, size_t size);
+extern __malloc void *bfdev_zalloc(const struct bfdev_alloc *alloc, size_t size);
+extern __malloc void *bfdev_realloc(const struct bfdev_alloc *alloc, const void *block, size_t resize);
+extern void bfdev_free(const struct bfdev_alloc *alloc, const void *block);
 
 #ifdef __cplusplus
 }
