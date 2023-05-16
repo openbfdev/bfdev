@@ -6,7 +6,6 @@
 
 #include <bfdev.h>
 #include <bfdev/array.h>
-#include <bfdev/gallocator.h>
 #include <export.h>
 
 export void *
@@ -20,7 +19,7 @@ bfdev_array_push(struct bfdev_array *array)
     if (array->nelts == array->capacity) {
         nalloc = array->capacity << 1;
 
-        new = bfdev_alloc_realloc(alloc, array->elts, nalloc * array->cells);
+        new = bfdev_realloc(alloc, array->elts, nalloc * array->cells);
         if (unlikely(!new))
             return NULL;
 
@@ -45,7 +44,7 @@ bfdev_array_push_num(struct bfdev_array *array, unsigned int num)
     if (array->nelts == array->capacity) {
         nalloc = bfdev_max(num, array->capacity) << 1;
 
-        new = bfdev_alloc_realloc(alloc, array->elts, nalloc * array->cells);
+        new = bfdev_realloc(alloc, array->elts, nalloc * array->cells);
         if (unlikely(!new))
             return NULL;
 
@@ -63,10 +62,7 @@ extern int
 bfdev_array_init(struct bfdev_array *array, const struct bfdev_alloc *alloc,
                  unsigned num, size_t size)
 {
-    if (!array)
-        alloc = &bfdev_galloc;
-
-    array->elts = bfdev_alloc_malloc(alloc, size * num);
+    array->elts = bfdev_malloc(alloc, size * num);
     if (unlikely(!array->elts))
         return BFDEV_ENOMEM;
 
@@ -84,7 +80,7 @@ bfdev_array_release(struct bfdev_array *array)
     const struct bfdev_alloc *alloc;
 
     alloc = array->alloc;
-    bfdev_alloc_free(alloc, array->elts);
+    bfdev_free(alloc, array->elts);
 }
 
 export struct bfdev_array *
@@ -92,10 +88,7 @@ bfdev_array_create(const struct bfdev_alloc *alloc, unsigned int num, size_t siz
 {
     struct bfdev_array *array;
 
-    if (!alloc)
-        alloc = &bfdev_galloc;
-
-    array = bfdev_alloc_malloc(alloc, sizeof(*array));
+    array = bfdev_malloc(alloc, sizeof(*array));
     if (unlikely(!array))
         return NULL;
 
@@ -112,5 +105,5 @@ bfdev_array_destroy(struct bfdev_array *array)
 
     alloc = array->alloc;
     bfdev_array_release(array);
-    bfdev_alloc_free(alloc, array);
+    bfdev_free(alloc, array);
 }
