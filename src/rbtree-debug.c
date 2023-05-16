@@ -7,7 +7,8 @@
 #include <bfdev/rbtree.h>
 #include <export.h>
 
-export bool rb_debug_link_check(struct rb_node *parent, struct rb_node **link, struct rb_node *node)
+export bool
+bfdev_rb_debug_link_check(struct bfdev_rb_node *parent, struct bfdev_rb_node **link, struct bfdev_rb_node *node)
 {
     if (unlikely(*link == node)) {
         fprintf(stderr, "rb_insert corruption (%p) *link should not be node (%p)\n",
@@ -18,7 +19,8 @@ export bool rb_debug_link_check(struct rb_node *parent, struct rb_node **link, s
     return true;
 }
 
-export bool rb_debug_delete_check(struct rb_node *node)
+export bool
+bfdev_rb_debug_delete_check(struct bfdev_rb_node *node)
 {
     if (unlikely(node->left == POISON_RBNODE1)) {
         fprintf(stderr, "rb_delete corruption (%p) node->left should not be POISON_RBNODE1 (%p)\n",
