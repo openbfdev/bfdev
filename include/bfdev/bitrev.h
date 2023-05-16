@@ -13,7 +13,7 @@
 extern "C" {
 #endif
 
-#define bitrev8_constant(value) (                   \
+#define bfdev_bitrev8_constant(value) (             \
     (((uint8_t)(value) & (uint8_t)0x01UL) << 7) |   \
     (((uint8_t)(value) & (uint8_t)0x02UL) << 5) |   \
     (((uint8_t)(value) & (uint8_t)0x04UL) << 3) |   \
@@ -23,7 +23,7 @@ extern "C" {
     (((uint8_t)(value) & (uint8_t)0x40UL) >> 5) |   \
     (((uint8_t)(value) & (uint8_t)0x80UL) >> 7))
 
-#define bitrev16_constant(value) (                      \
+#define bfdev_bitrev16_constant(value) (                \
     (((uint16_t)(value) & (uint16_t)0x0001UL) << 15) |  \
     (((uint16_t)(value) & (uint16_t)0x0002UL) << 13) |  \
     (((uint16_t)(value) & (uint16_t)0x0004UL) << 11) |  \
@@ -41,7 +41,7 @@ extern "C" {
     (((uint16_t)(value) & (uint16_t)0x4000UL) >> 13) |  \
     (((uint16_t)(value) & (uint16_t)0x8000UL) >> 15))
 
-#define bitrev32_constant(value) (                          \
+#define bfdev_bitrev32_constant(value) (                    \
     (((uint32_t)(value) & (uint32_t)0x00000001UL) << 31) |  \
     (((uint32_t)(value) & (uint32_t)0x00000002UL) << 29) |  \
     (((uint32_t)(value) & (uint32_t)0x00000004UL) << 27) |  \
@@ -75,7 +75,7 @@ extern "C" {
     (((uint32_t)(value) & (uint32_t)0x40000000UL) >> 29) |  \
     (((uint32_t)(value) & (uint32_t)0x80000000UL) >> 31))
 
-#define bitrev64_constant(value) (                                  \
+#define bfdev_bitrev64_constant(value) (                            \
     (((uint64_t)(value) & (uint64_t)0x0000000000000001ULL) << 63) | \
     (((uint64_t)(value) & (uint64_t)0x0000000000000002ULL) << 61) | \
     (((uint64_t)(value) & (uint64_t)0x0000000000000004ULL) << 59) | \
@@ -141,54 +141,57 @@ extern "C" {
     (((uint64_t)(value) & (uint64_t)0x4000000000000000ULL) >> 61) | \
     (((uint64_t)(value) & (uint64_t)0x8000000000000000ULL) >> 63))
 
-extern uint8_t bitrev_byte_table[256];
+extern uint8_t bfdev_bitrev_byte_table[256];
 
-static inline uint8_t bitrev8_dynamic(uint8_t value)
+static inline uint8_t bfdev_bitrev8_dynamic(uint8_t value)
 {
-    return bitrev_byte_table[value];
+    return bfdev_bitrev_byte_table[value];
 }
 
-static inline uint16_t bitrev16_dynamic(uint16_t value)
+static inline uint16_t bfdev_bitrev16_dynamic(uint16_t value)
 {
-    return ((uint16_t)bitrev8_dynamic(value & 0xff) << 8) | bitrev8_dynamic(value >> 8);
+    return ((uint16_t)bfdev_bitrev8_dynamic(value & 0xff) << 8) |
+            bfdev_bitrev8_dynamic(value >> 8);
 }
 
-static inline uint32_t bitrev32_dynamic(uint32_t value)
+static inline uint32_t bfdev_bitrev32_dynamic(uint32_t value)
 {
-    return ((uint32_t)bitrev16_dynamic(value & 0xffff) << 16) | bitrev16_dynamic(value >> 16);
+    return ((uint32_t)bfdev_bitrev16_dynamic(value & 0xffff) << 16) |
+            bfdev_bitrev16_dynamic(value >> 16);
 }
 
-static inline uint64_t bitrev64_dynamic(uint64_t value)
+static inline uint64_t bfdev_bitrev64_dynamic(uint64_t value)
 {
-    return ((uint64_t)bitrev32_dynamic(value & 0xffffffff) << 32) | bitrev32_dynamic(value >> 32);
+    return ((uint64_t)bfdev_bitrev32_dynamic(value & 0xffffffff) << 32) |
+            bfdev_bitrev32_dynamic(value >> 32);
 }
 
-#define bitrev8(value) ({                   \
+#define bfdev_bitrev8(value) ({             \
     uint8_t __value = (uint8_t)(value);     \
     __builtin_constant_p(__value)           \
-    ? bitrev8_constant(__value)             \
-    : bitrev8_dynamic(__value);             \
+    ? bfdev_bitrev8_constant(__value)       \
+    : bfdev_bitrev8_dynamic(__value);       \
 })
 
-#define bitrev16(value) ({                  \
+#define bfdev_bitrev16(value) ({            \
     uint16_t __value = (uint16_t)(value);   \
     __builtin_constant_p(__value)           \
-    ? bitrev16_constant(__value)            \
-    : bitrev16_dynamic(__value);            \
+    ? bfdev_bitrev16_constant(__value)      \
+    : bfdev_bitrev16_dynamic(__value);      \
 })
 
-#define bitrev32(value) ({                  \
+#define bfdev_bitrev32(value) ({            \
     uint32_t __value = (uint32_t)(value);   \
     __builtin_constant_p(__value)           \
-    ? bitrev32_constant(__value)            \
-    : bitrev32_dynamic(__value);            \
+    ? bfdev_bitrev32_constant(__value)      \
+    : bfdev_bitrev32_dynamic(__value);      \
 })
 
-#define bitrev64(value) ({                  \
+#define bfdev_bitrev64(value) ({            \
     uint64_t __value = (uint64_t)(value);   \
     __builtin_constant_p(__value)           \
-    ? bitrev64_constant(__value)            \
-    : bitrev64_dynamic(__value);            \
+    ? bfdev_bitrev64_constant(__value)      \
+    : bfdev_bitrev64_dynamic(__value);      \
 })
 
 #ifdef __cplusplus
