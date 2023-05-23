@@ -4,6 +4,7 @@
 #
 
 add_subdirectory(hlist)
+add_subdirectory(levenshtein)
 add_subdirectory(list)
 add_subdirectory(rbtree)
 add_subdirectory(segtree)
