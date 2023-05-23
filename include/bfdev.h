@@ -16,6 +16,7 @@
 #include <bfdev/stdio.h>
 #include <bfdev/stdlib.h>
 #include <bfdev/string.h>
+#include <bfdev/allocator.h>
 
 #include <bfdev/align.h>
 #include <bfdev/attributes.h>
