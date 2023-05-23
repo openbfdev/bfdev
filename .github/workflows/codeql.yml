@@ -20,15 +20,21 @@ jobs:
         language: [ 'cpp' ]
 
     steps:
-    - name: checkout
-      uses: actions/checkout@v3
-    - name: initialize codeql
-      uses: github/codeql-action/init@v2
-      with:
-        languages: ${{ matrix.language }}
-    - name: autobuild
-      uses: github/codeql-action/autobuild@v2
-    - name: perform analysis
-      uses: github/codeql-action/analyze@v2
-      with:
-        category: "/language:${{matrix.language}}"
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: install dependencies
+        run: |
+          sudo apt update
+          sudo apt install \
+              cmake make clang python3 pip doxygen
+          pip install sphinx breathe
+      - name: initialize codeql
+        uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ matrix.language }}
+      - name: autobuild
+        uses: github/codeql-action/autobuild@v2
+      - name: perform analysis
+        uses: github/codeql-action/analyze@v2
+        with:
+          category: "/language:${{matrix.language}}"

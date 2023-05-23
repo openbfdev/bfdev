@@ -4,36 +4,14 @@
 # Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
 #
 
-cmake_minimum_required(VERSION 3.6)
-project(bfdev LANGUAGES C)
-
-include(scripts/asm-generic.cmake)
-include(scripts/commit.cmake)
+cmake_minimum_required(VERSION 3.9)
+project(bfdev VERSION "1.0" LANGUAGES C)
 
 include(GNUInstallDirs)
 include(CheckIncludeFiles)
 include(CheckCXXSymbolExists)
 include(CheckFunctionExists)
 include(CheckCSourceCompiles)
-
-set(BFDEV_MAJORLEVEL 1)
-set(BFDEV_PATCHLEVEL 0)
-set(BFDEV_MINORLEVEL 0)
-set(BFDEV_EXTREVERSION 0)
-
-set(BFDEV_VERSION ${BFDEV_MAJORLEVEL})
-string(APPEND BFDEV_VERSION . ${BFDEV_PATCHLEVEL})
-
-if(BFDEV_MINORLEVEL)
-    string(APPEND BFDEV_VERSION . ${BFDEV_MINORLEVEL})
-endif(BFDEV_MINORLEVEL)
-
-if(BFDEV_EXTREVERSION)
-    string(APPEND BFDEV_VERSION ${BFDEV_EXTREVERSION})
-endif(BFDEV_EXTREVERSION)
-
-commit_hash(BFDEV_COMMITID)
-commit_branch(BFDEV_BRANCH)
 
 set(BFDEV_ARCH dummy)
 
@@ -45,6 +23,47 @@ set(BFDEV_GENERATED_PATH ${PROJECT_BINARY_DIR}/generated)
 set(BFDEV_ARCH_PATH ${PROJECT_SOURCE_DIR}/arch/${BFDEV_ARCH})
 set(BFDEV_ARCH_HEADER_PATH ${BFDEV_ARCH_PATH}/include)
 set(BFDEV_ARCH_SOURCE_PATH ${BFDEV_ARCH_PATH}/src)
+
+include(scripts/asm-generic.cmake)
+include(scripts/commit.cmake)
+
+find_package(Doxygen REQUIRED)
+find_package(Sphinx REQUIRED breathe)
+
+commit_hash(BFDEV_COMMITID)
+commit_branch(BFDEV_BRANCH)
+
+set(DOXYGEN_GENERATE_HTML NO)
+set(DOXYGEN_GENERATE_XML YES)
+doxygen_add_docs(doxygen_docs ${PROJECT_SOURCE_DIR})
+
+sphinx_add_docs(
+    htmldocs
+    BREATHE_PROJECTS doxygen_docs
+    BUILDER html
+    SOURCE_DIRECTORY docs
+)
+
+sphinx_add_docs(
+    latexdocs
+    BREATHE_PROJECTS doxygen_docs
+    BUILDER latex
+    SOURCE_DIRECTORY docs
+)
+
+sphinx_add_docs(
+    epubdocs
+    BREATHE_PROJECTS doxygen_docs
+    BUILDER epub
+    SOURCE_DIRECTORY docs
+)
+
+sphinx_add_docs(
+    xmldocs
+    BREATHE_PROJECTS doxygen_docs
+    BUILDER xml
+    SOURCE_DIRECTORY docs
+)
 
 asm_generic(
     bfdev/asm-generic/

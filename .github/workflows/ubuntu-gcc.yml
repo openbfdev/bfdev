@@ -16,6 +16,12 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v3
+      - name: install dependencies
+        run: |
+          sudo apt update
+          sudo apt install \
+              cmake make gcc python3 pip doxygen
+          pip install sphinx breathe
       - name: configure cmake
         run: |
             cmake -B ${{github.workspace}}/build \
