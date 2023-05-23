@@ -76,7 +76,7 @@ bfdev_free(const struct bfdev_alloc *alloc, const void *block)
     void *pdata;
 
     if (!alloc || !alloc->free)
-        generic_free(block);
+        return generic_free(block);
 
     pdata = alloc->pdata;
     alloc->free(block, pdata);

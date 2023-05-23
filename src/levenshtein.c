@@ -18,6 +18,12 @@ bfdev_levenshtein_len(const struct bfdev_alloc *alloc,
     unsigned int distance, *cache;
     size_t index1, index2;
 
+    if (unlikely(!len1))
+        return len2 * a;
+
+    if (unlikely(!len2))
+        return len1 * a;
+
     if (len1 > len2) {
         swap(str1, str2);
         swap(len1, len2);
