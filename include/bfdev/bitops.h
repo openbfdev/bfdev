@@ -158,6 +158,70 @@ bfdev_bit_atomic_test_change(volatile unsigned long *addr, unsigned int bit, boo
 }
 #endif
 
+#ifndef bfdev_rol8
+static __always_inline uint8_t
+bfdev_rol8(uint8_t value, unsigned int shift)
+{
+    return bfdev_arch_rol8(value, shift);
+}
+#endif
+
+#ifndef bfdev_ror8
+static __always_inline uint8_t
+bfdev_ror8(uint8_t value, unsigned int shift)
+{
+    return bfdev_arch_ror8(value, shift);
+}
+#endif
+
+#ifndef bfdev_rol16
+static __always_inline uint16_t
+bfdev_rol16(uint16_t value, unsigned int shift)
+{
+    return bfdev_arch_rol16(value, shift);
+}
+#endif
+
+#ifndef bfdev_ror16
+static __always_inline uint16_t
+bfdev_ror16(uint16_t value, unsigned int shift)
+{
+    return bfdev_arch_ror16(value, shift);
+}
+#endif
+
+#ifndef bfdev_rol32
+static __always_inline uint32_t
+bfdev_rol32(uint32_t value, unsigned int shift)
+{
+    return bfdev_arch_rol32(value, shift);
+}
+#endif
+
+#ifndef bfdev_ror32
+static __always_inline uint32_t
+bfdev_ror32(uint32_t value, unsigned int shift)
+{
+    return bfdev_arch_ror32(value, shift);
+}
+#endif
+
+#ifndef bfdev_rol64
+static __always_inline uint64_t
+bfdev_rol64(uint64_t value, unsigned int shift)
+{
+    return bfdev_arch_rol64(value, shift);
+}
+#endif
+
+#ifndef bfdev_ror64
+static __always_inline uint64_t
+bfdev_ror64(uint64_t value, unsigned int shift)
+{
+    return bfdev_arch_ror64(value, shift);
+}
+#endif
+
 #ifndef bfdev_ffsuf
 static __always_inline unsigned int
 bfdev_ffsuf(unsigned long value)

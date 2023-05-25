@@ -213,6 +213,110 @@ bfdev_arch_bit_atomic_test_change(volatile unsigned long *addr, unsigned int bit
 #endif
 
 /**
+ * bfdev_arch_rol8 - rotate an 8-bit value left.
+ * @value: value to rotate.
+ * @shift: bits to roll.
+ */
+#ifndef bfdev_arch_rol8
+static __always_inline uint8_t
+bfdev_arch_rol8(uint8_t value, unsigned int shift)
+{
+    return (value << (shift & 7)) | (value >> ((-shift) & 7));
+}
+#endif
+
+/**
+ * bfdev_arch_ror8 - rotate an 8-bit value right.
+ * @value: value to rotate.
+ * @shift: bits to roll.
+ */
+#ifndef bfdev_arch_ror8
+static __always_inline uint8_t
+bfdev_arch_ror8(uint8_t value, unsigned int shift)
+{
+    return (value >> (shift & 7)) | (value << ((-shift) & 7));
+}
+#endif
+
+/**
+ * bfdev_arch_rol16 - rotate a 16-bit value left.
+ * @value: value to rotate.
+ * @shift: bits to roll.
+ */
+#ifndef bfdev_arch_rol16
+static __always_inline uint16_t
+bfdev_arch_rol16(uint16_t value, unsigned int shift)
+{
+    return (value << (shift & 15)) | (value >> ((-shift) & 15));
+}
+#endif
+
+/**
+ * bfdev_arch_ror16 - rotate a 16-bit value right.
+ * @value: value to rotate.
+ * @shift: bits to roll.
+ */
+#ifndef bfdev_arch_ror16
+static __always_inline uint16_t
+bfdev_arch_ror16(uint16_t value, unsigned int shift)
+{
+    return (value >> (shift & 15)) | (value << ((-shift) & 15));
+}
+#endif
+
+/**
+ * bfdev_arch_rol32 - rotate a 32-bit value left.
+ * @value: value to rotate.
+ * @shift: bits to roll.
+ */
+#ifndef bfdev_arch_rol32
+static __always_inline uint32_t
+bfdev_arch_rol32(uint32_t value, unsigned int shift)
+{
+    return (value << (shift & 31)) | (value >> ((-shift) & 31));
+}
+#endif
+
+/**
+ * bfdev_arch_ror32 - rotate a 32-bit value right.
+ * @value: value to rotate.
+ * @shift: bits to roll.
+ */
+#ifndef bfdev_arch_ror32
+static __always_inline uint32_t
+bfdev_arch_ror32(uint32_t value, unsigned int shift)
+{
+    return (value >> (shift & 31)) | (value << ((-shift) & 31));
+}
+#endif
+
+/**
+ * bfdev_arch_rol64 - rotate a 64-bit value left.
+ * @value: value to rotate.
+ * @shift: bits to roll.
+ */
+#ifndef bfdev_arch_rol64
+static __always_inline uint64_t
+bfdev_arch_rol64(uint64_t value, unsigned int shift)
+{
+    return (value << (shift & 63)) | (value >> ((-shift) & 63));
+}
+#endif
+
+/**
+ * bfdev_arch_ror64 - rotate a 64-bit value right.
+ * @value: value to rotate.
+ * @shift: bits to roll.
+ */
+#ifndef bfdev_arch_ror64
+static __always_inline uint64_t
+bfdev_arch_ror64(uint64_t value, unsigned int shift)
+{
+    return (value >> (shift & 63)) | (value << ((-shift) & 63));
+}
+#endif
+
+/**
  * bfdev_arch_ffsuf - find first set bit in word (unsafe).
  * @val: The word to search.
  * Undefined if no bit exists, so code should check against 0 first..
