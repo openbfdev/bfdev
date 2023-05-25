@@ -238,6 +238,156 @@ bfdev_clz(unsigned long value)
 }
 #endif
 
+#if BFDEV_BITS_PER_LONG == 32
+static __always_inline unsigned int
+bfdev_ffsuf64(uint64_t value)
+{
+    uint32_t hi = value >> 32;
+
+    if ((uint32_t)value)
+        return bfdev_ffsuf((uint32_t)value);
+
+    return bfdev_ffsuf(hi) + 32;
+}
+#else
+# define bfdev_ffsuf64 bfdev_ffsuf
+#endif
+
+#if BFDEV_BITS_PER_LONG == 32
+static __always_inline unsigned int
+bfdev_flsuf64(uint64_t value)
+{
+    uint32_t hi = value >> 32;
+
+    if (hi)
+        return bfdev_flsuf(hi) + 32;
+
+    return bfdev_flsuf((uint32_t)value);
+}
+#else
+# define bfdev_flsuf64 bfdev_flsuf
+#endif
+
+#if BFDEV_BITS_PER_LONG == 32
+static __always_inline unsigned int
+bfdev_ffzuf64(uint64_t value)
+{
+    uint32_t hi = value >> 32;
+
+    if ((uint32_t)value)
+        return bfdev_ffzuf((uint32_t)value);
+
+    return bfdev_ffzuf(hi) + 32;
+}
+#else
+# define bfdev_ffzuf64 bfdev_ffzuf
+#endif
+
+#if BFDEV_BITS_PER_LONG == 32
+static __always_inline unsigned int
+bfdev_flzuf64(uint64_t value)
+{
+    uint32_t hi = value >> 32;
+
+    if (hi)
+        return bfdev_flzuf(hi) + 32;
+
+    return bfdev_flzuf((uint32_t)value);
+}
+#else
+# define bfdev_flzuf64 bfdev_flzuf
+#endif
+
+#if BFDEV_BITS_PER_LONG == 32
+static __always_inline unsigned int
+bfdev_ffs64(uint64_t value)
+{
+    uint32_t hi = value >> 32;
+
+    if ((uint32_t)value)
+        return bfdev_ffs((uint32_t)value);
+
+    return bfdev_ffs(hi) + 32;
+}
+#else
+# define bfdev_ffs64 bfdev_ffs
+#endif
+
+#if BFDEV_BITS_PER_LONG == 32
+static __always_inline unsigned int
+bfdev_fls64(uint64_t value)
+{
+    uint32_t hi = value >> 32;
+
+    if (hi)
+        return bfdev_fls(hi) + 32;
+
+    return bfdev_fls((uint32_t)value);
+}
+#else
+# define bfdev_fls64 bfdev_fls
+#endif
+
+#if BFDEV_BITS_PER_LONG == 32
+static __always_inline unsigned int
+bfdev_ffz64(uint64_t value)
+{
+    uint32_t hi = value >> 32;
+
+    if ((uint32_t)value)
+        return bfdev_ffz((uint32_t)value);
+
+    return bfdev_ffz(hi) + 32;
+}
+#else
+# define bfdev_ffz64 bfdev_ffz
+#endif
+
+#if BFDEV_BITS_PER_LONG == 32
+static __always_inline unsigned int
+bfdev_flz64(uint64_t value)
+{
+    uint32_t hi = value >> 32;
+
+    if (hi)
+        return bfdev_flz(hi) + 32;
+
+    return bfdev_flz((uint32_t)value);
+}
+#else
+# define bfdev_flz64 bfdev_flz
+#endif
+
+#if BFDEV_BITS_PER_LONG == 32
+static __always_inline unsigned int
+bfdev_ctz64(uint64_t value)
+{
+    uint32_t hi = value >> 32;
+
+    if ((uint32_t)value)
+        return bfdev_ctz(value);
+
+    return bfdev_ctz(hi) + 32;
+}
+#else
+# define bfdev_ctz64 bfdev_ctz
+#endif
+
+#if BFDEV_BITS_PER_LONG == 32
+static __always_inline unsigned int
+bfdev_clz64(uint64_t value)
+{
+    uint32_t hi = value >> 32;
+
+    if (hi)
+        return bfdev_clz(hi);
+
+    return bfdev_clz((uint32_t)value) + 32;
+}
+#else
+# define bfdev_clz64 bfdev_clz
+#endif
+
 #ifdef __cplusplus
 }
 #endif
