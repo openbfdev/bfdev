@@ -2,3 +2,5 @@
 
 The bfdev library documentation
 ===============================
+
+.. image:: logo.png
