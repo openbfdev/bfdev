@@ -9,7 +9,7 @@
 #define TEST_LOOP 10
 
 struct segtree_test_node {
-    struct segtree_node segnode;
+    struct bfdev_segtree_node node;
     unsigned int num;
 };
 
@@ -18,72 +18,72 @@ struct segtree_test_pdata {
     unsigned int queries[TEST_LOOP];
 };
 
-#define segtree_to_test(ptr) \
-    segtree_entry(ptr, struct segtree_test_node, segnode)
+#define bfdev_segtree_to_test(ptr) \
+    bfdev_segtree_entry(ptr, struct segtree_test_node, node)
 
-static int segtree_test_testing(struct segtree_test_pdata *sdata)
+static int bfdev_segtree_test_testing(struct segtree_test_pdata *sdata)
 {
     struct segtree_test_node *node, *tnode;
-    struct segtree_node *snode, *tsnode;
+    struct bfdev_segtree_node *snode, *tsnode;
     unsigned int count;
 
-    RB_ROOT_CACHED(segtree_root);
+    BFDEV_RB_ROOT_CACHED(segtree_root);
 
     for (count = 0; count < TEST_LOOP; ++count)
-        segtree_insert(&segtree_root, &sdata->nodes[count].segnode);
+        bfdev_segtree_insert(&segtree_root, &sdata->nodes[count].node);
 
     for (count = 0; count < TEST_LOOP; ++count) {
-        segtree_for_each_entry(node, 0, sdata->queries[count], &segtree_root, segnode) {
+        bfdev_segtree_for_each_entry(node, 0, sdata->queries[count], &segtree_root, node) {
             printf("srgtree search %u: %lu - %lu\n", sdata->queries[count],
-                    node->segnode.start, node->segnode.end);
+                    node->node.start, node->node.end);
         }
     }
 
     count = 0;
-    segtree_for_each(snode, 0, ~0UL, &segtree_root) {
-        node = segtree_to_test(snode);
+    bfdev_segtree_for_each(snode, 0, ~0UL, &segtree_root) {
+        node = bfdev_segtree_to_test(snode);
         printf("srgtree 'segtree_for_each' test: %lu - %lu\n",
-                node->segnode.start, node->segnode.end);
+                node->node.start, node->node.end);
         if (count++ == TEST_LOOP / 2)
             break;
     }
 
     tsnode = snode;
-    segtree_for_each_form(snode, 0, ~0UL) {
-        node = segtree_to_test(snode);
+    bfdev_segtree_for_each_form(snode, 0, ~0UL) {
+        node = bfdev_segtree_to_test(snode);
         printf("srgtree 'segtree_for_each_form' test: %lu - %lu\n",
-                node->segnode.start, node->segnode.end);
+                node->node.start, node->node.end);
     }
 
     snode = tsnode;
-    segtree_for_each_continue(snode, 0, ~0UL) {
-        node = segtree_to_test(snode);
+    bfdev_segtree_for_each_continue(snode, 0, ~0UL) {
+        node = bfdev_segtree_to_test(snode);
         printf("srgtree 'segtree_for_each_continue' test: %lu - %lu\n",
-                node->segnode.start, node->segnode.end);
+                node->node.start, node->node.end);
     }
 
     count = 0;
-    segtree_for_each_entry(node, 0, ~0UL, &segtree_root, segnode) {
+    bfdev_segtree_for_each_entry(node, 0, ~0UL, &segtree_root, node) {
         printf("srgtree 'segtree_for_each_entry' test: %lu - %lu\n",
-                node->segnode.start, node->segnode.end);
+                node->node.start, node->node.end);
         if (count++ == TEST_LOOP / 2)
             break;
     }
 
     tnode = node;
-    segtree_for_each_entry_from(node, 0, ~0UL, segnode) {
+    bfdev_segtree_for_each_entry_from(node, 0, ~0UL, node) {
         printf("srgtree 'segtree_for_each_entry_from' test: %lu - %lu\n",
-                node->segnode.start, node->segnode.end);
+                node->node.start, node->node.end);
     }
 
     node = tnode;
-    segtree_for_each_entry_continue(node, 0, ~0UL, segnode) {
+    bfdev_segtree_for_each_entry_continue(node, 0, ~0UL, node) {
         printf("srgtree 'segtree_for_each_entry_continue' test: %lu - %lu\n",
-                node->segnode.start, node->segnode.end);
+                node->node.start, node->node.end);
     }
 
     for (count = 0; count < TEST_LOOP; ++count)
-        segtree_delete(&segtree_root, &sdata->nodes[count].segnode);
+        bfdev_segtree_delete(&segtree_root, &sdata->nodes[count].node);
 
     return 0;
 }
@@ -101,11 +101,11 @@ int main(void)
 
     for (count = 0; count < ARRAY_SIZE(sdata->nodes); ++count) {
         sdata->queries[count] = rand();
-        sdata->nodes[count].segnode.end = (random = rand());
-        sdata->nodes[count].segnode.start = rand() % random;
+        sdata->nodes[count].node.end = (random = rand());
+        sdata->nodes[count].node.start = rand() % random;
     }
 
-    retval = segtree_test_testing(sdata);
+    retval = bfdev_segtree_test_testing(sdata);
     free(sdata);
 
     return retval;

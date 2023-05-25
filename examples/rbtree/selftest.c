@@ -10,7 +10,7 @@
 #define TEST_LOOP 100
 
 struct rbtree_test_node {
-    struct rb_node node;
+    struct bfdev_rb_node node;
     unsigned long data;
 };
 
@@ -19,19 +19,19 @@ struct rbtree_test_pdata {
 };
 
 #define rbnode_to_test(ptr) \
-    rb_entry(ptr, struct rbtree_test_node, node)
+    bfdev_rb_entry(ptr, struct rbtree_test_node, node)
 
 #define rbnode_to_test_safe(ptr) \
-    rb_entry_safe(ptr, struct rbtree_test_node, node)
+    bfdev_rb_entry_safe(ptr, struct rbtree_test_node, node)
 
-static long rbtest_rb_cmp(const struct rb_node *rba, const struct rb_node *rbb)
+static long rbtest_rb_cmp(const struct bfdev_rb_node *rba, const struct bfdev_rb_node *rbb)
 {
     struct rbtree_test_node *nodea = rbnode_to_test(rba);
     struct rbtree_test_node *nodeb = rbnode_to_test(rbb);
     return nodea->data < nodeb->data ? -1 : 1;
 }
 
-static long rbtest_rb_find(const struct rb_node *rb, const void *key)
+static long rbtest_rb_find(const struct bfdev_rb_node *rb, const void *key)
 {
     struct rbtree_test_node *node = rbnode_to_test(rb);
     if (node->data == (unsigned long)key) return 0;
@@ -41,30 +41,30 @@ static long rbtest_rb_find(const struct rb_node *rb, const void *key)
 static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
 {
     struct rbtree_test_node *node, *nnode, *tnode;
-    struct rb_node *rbnode, *nrbnode, *trbnode;
+    struct bfdev_rb_node *rbnode, *nrbnode, *trbnode;
     unsigned long count;
 
-    RB_ROOT_CACHED(test_root);
+    BFDEV_RB_ROOT_CACHED(test_root);
 
     for (count = 0; count < TEST_LOOP; ++count)
-        rb_cached_insert(&test_root, &sdata->nodes[count].node, rbtest_rb_cmp);
+        bfdev_rb_cached_insert(&test_root, &sdata->nodes[count].node, rbtest_rb_cmp);
 
     for (count = 0; count < TEST_LOOP; ++count) {
-        rbnode = rb_find(&test_root.root, (void *)sdata->nodes[count].data, rbtest_rb_find);
+        rbnode = bfdev_rb_find(&test_root.root, (void *)sdata->nodes[count].data, rbtest_rb_find);
         if (!(node = rbnode_to_test_safe(rbnode)))
             return -BFDEV_EFAULT;
         printf("rbtree 'rb_cached' test: %lu\n", node->data);
     }
 
     for (count = 0; count < TEST_LOOP; ++count) {
-        rbnode = rb_cached_find(&test_root, (void *)sdata->nodes[count].data, rbtest_rb_find);
+        rbnode = bfdev_rb_cached_find(&test_root, (void *)sdata->nodes[count].data, rbtest_rb_find);
         if (!(node = rbnode_to_test_safe(rbnode)))
             return -BFDEV_EFAULT;
         printf("rbtree 'rb_cached_find' test: %lu\n", node->data);
     }
 
     count = 0;
-    rb_for_each(rbnode, &test_root.root) {
+    bfdev_rb_for_each(rbnode, &test_root.root) {
         node = rbnode_to_test(rbnode);
         printf("rbtree 'rb_for_each' test: %lu\n", node->data);
         if (count++ == TEST_LOOP / 2)
@@ -72,14 +72,14 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     }
 
     trbnode = rbnode;
-    rb_for_each_continue(rbnode) {
+    bfdev_rb_for_each_continue(rbnode) {
         node = rbnode_to_test(rbnode);
         printf("rbtree 'rb_for_each_continue' test: %lu\n", node->data);
         count++;
     }
 
     rbnode = trbnode;
-    rb_for_each_from(rbnode) {
+    bfdev_rb_for_each_from(rbnode) {
         node = rbnode_to_test(rbnode);
         printf("rbtree 'rb_for_each_from' test: %lu\n", node->data);
         count++;
@@ -89,7 +89,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
         return -BFDEV_ENODATA;
 
     count = 0;
-    rb_for_each_reverse(rbnode, &test_root.root) {
+    bfdev_rb_for_each_reverse(rbnode, &test_root.root) {
         node = rbnode_to_test(rbnode);
         printf("rbtree 'rb_for_each_reverse' test: %lu\n", node->data);
         if (count++ == TEST_LOOP / 2)
@@ -97,14 +97,14 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     }
 
     trbnode = rbnode;
-    rb_for_each_reverse_continue(rbnode) {
+    bfdev_rb_for_each_reverse_continue(rbnode) {
         node = rbnode_to_test(rbnode);
         printf("rbtree 'rb_for_each_reverse_continue' test: %lu\n", node->data);
         count++;
     }
 
     rbnode = trbnode;
-    rb_for_each_reverse_from(rbnode) {
+    bfdev_rb_for_each_reverse_from(rbnode) {
         node = rbnode_to_test(rbnode);
         printf("rbtree 'rb_for_each_reverse_from' test: %lu\n", node->data);
         count++;
@@ -114,7 +114,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
         return -BFDEV_ENODATA;
 
     count = 0;
-    rb_post_for_each(rbnode, &test_root.root) {
+    bfdev_rb_post_for_each(rbnode, &test_root.root) {
         node = rbnode_to_test(rbnode);
         printf("rbtree 'rb_post_for_each' test: %lu\n", node->data);
         if (count++ == TEST_LOOP / 2)
@@ -122,14 +122,14 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     }
 
     trbnode = rbnode;
-    rb_post_for_each_continue(rbnode) {
+    bfdev_rb_post_for_each_continue(rbnode) {
         node = rbnode_to_test(rbnode);
         printf("rbtree 'rb_post_for_each_continue' test: %lu\n", node->data);
         count++;
     }
 
     rbnode = trbnode;
-    rb_post_for_each_from(rbnode) {
+    bfdev_rb_post_for_each_from(rbnode) {
         node = rbnode_to_test(rbnode);
         printf("rbtree 'rb_post_for_each_from' test: %lu\n", node->data);
         count++;
@@ -139,7 +139,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
         return -BFDEV_ENODATA;
 
     count = 0;
-    rb_post_for_each_safe(rbnode, nrbnode, &test_root.root) {
+    bfdev_rb_post_for_each_safe(rbnode, nrbnode, &test_root.root) {
         node = rbnode_to_test(rbnode);
         printf("rbtree 'rb_post_for_each_safe' test: %lu\n", node->data);
         if (count++ == TEST_LOOP / 2)
@@ -147,14 +147,14 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     }
 
     trbnode = rbnode;
-    rb_post_for_each_safe_continue(rbnode, nrbnode) {
+    bfdev_rb_post_for_each_safe_continue(rbnode, nrbnode) {
         node = rbnode_to_test(rbnode);
         printf("rbtree 'rb_post_for_each_safe_continue' test: %lu\n", node->data);
         count++;
     }
 
     rbnode = trbnode;
-    rb_post_for_each_safe_from(rbnode, nrbnode) {
+    bfdev_rb_post_for_each_safe_from(rbnode, nrbnode) {
         node = rbnode_to_test(rbnode);
         printf("rbtree 'rb_post_for_each_safe_from' test: %lu\n", node->data);
         count++;
@@ -164,20 +164,20 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
         return -BFDEV_ENODATA;
 
     count = 0;
-    rb_for_each_entry(node, &test_root.root, node) {
+    bfdev_rb_for_each_entry(node, &test_root.root, node) {
         printf("rbtree 'rb_for_each_entry' test: %lu\n", node->data);
         if (count++ == TEST_LOOP / 2)
             break;
     }
 
     tnode = node;
-    rb_for_each_entry_continue(node, node) {
+    bfdev_rb_for_each_entry_continue(node, node) {
         printf("rbtree 'rb_for_each_entry_continue' test: %lu\n", node->data);
         count++;
     }
 
     node = tnode;
-    rb_for_each_entry_from(node, node) {
+    bfdev_rb_for_each_entry_from(node, node) {
         printf("rbtree 'rb_for_each_entry_from' test: %lu\n", node->data);
         count++;
     }
@@ -186,20 +186,20 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
         return -BFDEV_ENODATA;
 
     count = 0;
-    rb_for_each_entry_reverse(node, &test_root.root, node) {
+    bfdev_rb_for_each_entry_reverse(node, &test_root.root, node) {
         printf("rbtree 'rb_for_each_entry_reverse' test: %lu\n", node->data);
         if (count++ == TEST_LOOP / 2)
             break;
     }
 
     tnode = node;
-    rb_for_each_entry_reverse_continue(node, node) {
+    bfdev_rb_for_each_entry_reverse_continue(node, node) {
         printf("rbtree 'rb_for_each_entry_reverse_continue' test: %lu\n", node->data);
         count++;
     }
 
     node = tnode;
-    rb_for_each_entry_reverse_from(node, node) {
+    bfdev_rb_for_each_entry_reverse_from(node, node) {
         printf("rbtree 'rb_for_each_entry_reverse_from' test: %lu\n", node->data);
         count++;
     }
@@ -208,20 +208,20 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
         return -BFDEV_ENODATA;
 
     count = 0;
-    rb_post_for_each_entry(node, &test_root.root, node) {
+    bfdev_rb_post_for_each_entry(node, &test_root.root, node) {
         printf("rbtree 'rb_post_for_each_entry' test: %lu\n", node->data);
         if (count++ == TEST_LOOP / 2)
             break;
     }
 
     tnode = node;
-    rb_post_for_each_entry_continue(node, node) {
+    bfdev_rb_post_for_each_entry_continue(node, node) {
         printf("rbtree 'rb_post_for_each_entry_continue' test: %lu\n", node->data);
         count++;
     }
 
     node = tnode;
-    rb_post_for_each_entry_from(node, node) {
+    bfdev_rb_post_for_each_entry_from(node, node) {
         printf("rbtree 'rb_post_for_each_entry_from' test: %lu\n", node->data);
         count++;
     }
@@ -230,7 +230,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
         return -BFDEV_ENODATA;
 
     count = 0;
-    rb_pre_for_each(rbnode, &test_root.root) {
+    bfdev_rb_pre_for_each(rbnode, &test_root.root) {
         node = rbnode_to_test(rbnode);
         printf("rbtree 'rb_pre_for_each' test: %lu\n", node->data);
         if (count++ == TEST_LOOP / 2)
@@ -238,14 +238,14 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     }
 
     trbnode = rbnode;
-    rb_pre_for_each_continue(rbnode) {
+    bfdev_rb_pre_for_each_continue(rbnode) {
         node = rbnode_to_test(rbnode);
         printf("rbtree 'rb_pre_for_each_continue' test: %lu\n", node->data);
         count++;
     }
 
     rbnode = trbnode;
-    rb_pre_for_each_from(rbnode) {
+    bfdev_rb_pre_for_each_from(rbnode) {
         node = rbnode_to_test(rbnode);
         printf("rbtree 'rb_pre_for_each_from' test: %lu\n", node->data);
         count++;
@@ -255,20 +255,20 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
         return -BFDEV_ENODATA;
 
     count = 0;
-    rb_pre_for_each_entry(node, &test_root.root, node) {
+    bfdev_rb_pre_for_each_entry(node, &test_root.root, node) {
         printf("rbtree 'rb_pre_for_each_entry' test: %lu\n", node->data);
         if (count++ == TEST_LOOP / 2)
             break;
     }
 
     tnode = node;
-    rb_pre_for_each_entry_continue(node, node) {
+    bfdev_rb_pre_for_each_entry_continue(node, node) {
         printf("rbtree 'rb_pre_for_each_entry_continue' test: %lu\n", node->data);
         count++;
     }
 
     node = tnode;
-    rb_pre_for_each_entry_from(node, node) {
+    bfdev_rb_pre_for_each_entry_from(node, node) {
         printf("rbtree 'rb_pre_for_each_entry_from' test: %lu\n", node->data);
         count++;
     }
@@ -277,7 +277,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
         return -BFDEV_ENODATA;
 
     count = 0;
-    rb_post_for_each(rbnode, &test_root.root) {
+    bfdev_rb_post_for_each(rbnode, &test_root.root) {
         node = rbnode_to_test(rbnode);
         printf("rbtree 'rb_post_for_each' test: %lu\n", node->data);
         if (count++ == TEST_LOOP / 2)
@@ -285,13 +285,13 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     }
 
     tnode = node;
-    rb_post_for_each_entry_continue(node, node) {
+    bfdev_rb_post_for_each_entry_continue(node, node) {
         printf("rbtree 'rb_post_for_each_entry_continue' test: %lu\n", node->data);
         count++;
     }
 
     node = tnode;
-    rb_post_for_each_entry_from(node, node) {
+    bfdev_rb_post_for_each_entry_from(node, node) {
         printf("rbtree 'rb_post_for_each_entry_from' test: %lu\n", node->data);
         count++;
     }
@@ -300,20 +300,20 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
         return -BFDEV_ENODATA;
 
     count = 0;
-    rb_post_for_each_entry_safe(node, nnode, &test_root.root, node) {
+    bfdev_rb_post_for_each_entry_safe(node, nnode, &test_root.root, node) {
         printf("rbtree 'rb_post_for_each_entry_safe' test: %lu\n", node->data);
         if (count++ == TEST_LOOP / 2)
             break;
     }
 
     tnode = node;
-    rb_post_for_each_entry_continue_safe(node, nnode, node) {
+    bfdev_rb_post_for_each_entry_continue_safe(node, nnode, node) {
         printf("rbtree 'rb_post_for_each_entry_continue_safe' test: %lu\n", node->data);
         count++;
     }
 
     node = tnode;
-    rb_post_for_each_entry_from_safe(node, nnode, node) {
+    bfdev_rb_post_for_each_entry_from_safe(node, nnode, node) {
         printf("rbtree 'rb_post_for_each_entry_from_safe' test: %lu\n", node->data);
         count++;
     }
@@ -322,7 +322,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
         return -BFDEV_ENODATA;
 
     count = 0;
-    rb_cached_for_each(rbnode, &test_root) {
+    bfdev_rb_cached_for_each(rbnode, &test_root) {
         node = rbnode_to_test(rbnode);
         printf("rbtree 'rb_cached_for_each' test: %lu\n", node->data);
         count++;
@@ -332,7 +332,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
         return -BFDEV_ENODATA;
 
     count = 0;
-    rb_cached_for_each_reverse(rbnode, &test_root) {
+    bfdev_rb_cached_for_each_reverse(rbnode, &test_root) {
         node = rbnode_to_test(rbnode);
         printf("rbtree 'rb_cached_for_each_reverse' test: %lu\n", node->data);
         count++;
@@ -342,7 +342,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
         return -BFDEV_ENODATA;
 
     count = 0;
-    rb_cached_for_each_entry(node, &test_root, node) {
+    bfdev_rb_cached_for_each_entry(node, &test_root, node) {
         printf("rbtree 'rb_cached_for_each_entry' test: %lu\n", node->data);
         count++;
     }
@@ -351,7 +351,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
         return -BFDEV_ENODATA;
 
     count = 0;
-    rb_cached_for_each_entry_reverse(node, &test_root, node) {
+    bfdev_rb_cached_for_each_entry_reverse(node, &test_root, node) {
         printf("rbtree 'rb_cached_for_each_entry_reverse' test: %lu\n", node->data);
         count++;
     }
@@ -360,7 +360,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
         return -BFDEV_ENODATA;
 
     count = 0;
-    rb_cached_pre_for_each(rbnode, &test_root) {
+    bfdev_rb_cached_pre_for_each(rbnode, &test_root) {
         node = rbnode_to_test(rbnode);
         printf("rbtree 'rb_cached_pre_for_each' test: %lu\n", node->data);
         count++;
@@ -370,7 +370,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
         return -BFDEV_ENODATA;
 
     count = 0;
-    rb_cached_pre_for_each_entry(node, &test_root, node) {
+    bfdev_rb_cached_pre_for_each_entry(node, &test_root, node) {
         printf("rbtree 'rb_cached_pre_for_each_entry' test: %lu\n", node->data);
         count++;
     }
@@ -379,7 +379,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
         return -BFDEV_ENODATA;
 
     count = 0;
-    rb_cached_post_for_each(rbnode, &test_root) {
+    bfdev_rb_cached_post_for_each(rbnode, &test_root) {
         node = rbnode_to_test(rbnode);
         printf("rbtree 'rb_cached_post_for_each' test: %lu\n", node->data);
         count++;
@@ -389,7 +389,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
         return -BFDEV_ENODATA;
 
     count = 0;
-    rb_cached_post_for_each_safe(rbnode, nrbnode, &test_root) {
+    bfdev_rb_cached_post_for_each_safe(rbnode, nrbnode, &test_root) {
         node = rbnode_to_test(rbnode);
         printf("rbtree 'rb_cached_post_for_each_safe' test: %lu\n", node->data);
         count++;
@@ -399,7 +399,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
         return -BFDEV_ENODATA;
 
     count = 0;
-    rb_cached_post_for_each_entry(node, &test_root, node) {
+    bfdev_rb_cached_post_for_each_entry(node, &test_root, node) {
         printf("rbtree 'rb_cached_post_for_each_entry' test: %lu\n", node->data);
         count++;
     }
@@ -408,7 +408,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
         return -BFDEV_ENODATA;
 
     count = 0;
-    rb_cached_post_for_each_entry_safe(node, nnode, &test_root, node) {
+    bfdev_rb_cached_post_for_each_entry_safe(node, nnode, &test_root, node) {
         printf("rbtree 'rb_cached_post_for_each_entry_safe' test: %lu\n", node->data);
         count++;
     }

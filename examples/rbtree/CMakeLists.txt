@@ -9,7 +9,7 @@ target_link_libraries(rbtree-benchmark bfdev)
 add_executable(rbtree-selftest selftest.c)
 target_link_libraries(rbtree-selftest bfdev)
 
-add_executable(rbtree-simple selftest.c)
+add_executable(rbtree-simple simple.c)
 target_link_libraries(rbtree-simple bfdev)
 
 install(FILES

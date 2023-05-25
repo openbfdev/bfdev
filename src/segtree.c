@@ -8,4 +8,4 @@
 
 #define SEGTREE_START(segnode) ((segnode)->start)
 #define SEGTREE_END(segnode) ((segnode)->end)
-SEGTREE_DEFINE(export, segtree, struct segtree_node, node, unsigned long, subtree, SEGTREE_START, SEGTREE_END);
+BFDEV_SEGTREE_DEFINE(export, bfdev_segtree, struct bfdev_segtree_node, node, unsigned long, subtree, SEGTREE_START, SEGTREE_END);
