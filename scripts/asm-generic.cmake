@@ -21,9 +21,9 @@ macro(asm_generic prefix generated compare source)
                 " */\n"
                 "#include <" ${prefix} ${filename} ">\n"
             )
-        endif(${retval})
-    endforeach(srcpath)
+        endif()
+    endforeach()
 
     unset(srclist)
     unset(cmplist)
-endmacro(asm_generic)
+endmacro()
