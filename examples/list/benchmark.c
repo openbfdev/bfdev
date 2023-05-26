@@ -3,10 +3,11 @@
  * Copyright(c) 2021 Sanpe <sanpeqf@gmail.com>
  */
 
-#include <bfdev.h>
-#include <bfdev/list.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <sys/times.h>
+#include <bfdev/list.h>
 
 #define LIST_DEBUG 0
 #define TEST_LEN 1000000
@@ -24,7 +25,7 @@ struct list_demo {
 #if LIST_DEBUG
 static void node_dump(struct list_demo *node)
 {
-    printf("  %08d: data 0x%016lx\n", node->num, node->data);
+    printf("\t%08d: data 0x%016lx\n", node->num, node->data);
 }
 #else
 # define node_dump(node) ((void)(node))
@@ -32,9 +33,9 @@ static void node_dump(struct list_demo *node)
 
 static void time_dump(int ticks, clock_t start, clock_t stop, struct tms *start_tms, struct tms *stop_tms)
 {
-    printf("  real time: %lf\n", (stop - start) / (double)ticks);
-    printf("  user time: %lf\n", (stop_tms->tms_utime - start_tms->tms_utime) / (double)ticks);
-    printf("  kern time: %lf\n", (stop_tms->tms_stime - start_tms->tms_stime) / (double)ticks);
+    printf("\treal time: %lf\n", (stop - start) / (double)ticks);
+    printf("\tuser time: %lf\n", (stop_tms->tms_utime - start_tms->tms_utime) / (double)ticks);
+    printf("\tkern time: %lf\n", (stop_tms->tms_stime - start_tms->tms_stime) / (double)ticks);
 }
 
 static long demo_cmp(struct list_head *a, struct list_head *b, void *pdata)

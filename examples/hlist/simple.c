@@ -3,7 +3,8 @@
  * Copyright(c) 2021 Sanpe <sanpeqf@gmail.com>
  */
 
-#include <bfdev.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <bfdev/hlist.h>
 
 #define TEST_LEN 100
@@ -38,7 +39,7 @@ int main(void)
     }
 
     hlist_for_each_entry(node, &demo_list, list)
-        printf("  %04u: 0x%016lx\n", node->num, node->data);
+        printf("\t%04u: 0x%016lx\n", node->num, node->data);
 
     printf("Deletion All Node...\n");
 error:

@@ -10,6 +10,7 @@
 #include <bfdev/stddef.h>
 #include <bfdev/stdbool.h>
 #include <bfdev/poison.h>
+#include <bfdev/container.h>
 
 #ifdef __cplusplus
 extern "C" {

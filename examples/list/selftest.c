@@ -3,7 +3,9 @@
  * Copyright(c) 2021 Sanpe <sanpeqf@gmail.com>
  */
 
-#include <bfdev.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <bfdev/macro.h>
 #include <bfdev/list.h>
 
 #define TEST_LOOP 10

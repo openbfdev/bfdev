@@ -3,7 +3,9 @@
  * Copyright(c) 2022 Sanpe <sanpeqf@gmail.com>
  */
 
-#include <bfdev.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
 #include <bfdev/skiplist.h>
 
 #define TEST_LOOP 100

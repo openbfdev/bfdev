@@ -3,19 +3,21 @@
  * Copyright(c) 2022 Sanpe <sanpeqf@gmail.com>
  */
 
-#include <bfdev.h>
-#include <bfdev/skiplist.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
 #include <unistd.h>
 #include <sys/times.h>
+#include <bfdev/skiplist.h>
 
 #define TEST_DEPTH 32
 #define TEST_LEN 10000000
 
 static inline void time_dump(int ticks, clock_t start, clock_t stop, struct tms *start_tms, struct tms *stop_tms)
 {
-    printf("  real time: %lf\n", (stop - start) / (double)ticks);
-    printf("  user time: %lf\n", (stop_tms->tms_utime - start_tms->tms_utime) / (double)ticks);
-    printf("  kern time: %lf\n", (stop_tms->tms_stime - start_tms->tms_stime) / (double)ticks);
+    printf("\treal time: %lf\n", (stop - start) / (double)ticks);
+    printf("\tuser time: %lf\n", (stop_tms->tms_utime - start_tms->tms_utime) / (double)ticks);
+    printf("\tkern time: %lf\n", (stop_tms->tms_stime - start_tms->tms_stime) / (double)ticks);
 }
 
 static inline long skiplist_bench_cmp(const void *nodea, const void *nodeb)
