@@ -27,43 +27,46 @@ set(BFDEV_ARCH_SOURCE_PATH ${BFDEV_ARCH_PATH}/src)
 include(scripts/asm-generic.cmake)
 include(scripts/commit.cmake)
 
-find_package(Doxygen REQUIRED)
-find_package(Sphinx REQUIRED breathe)
-
 commit_hash(BFDEV_COMMITID)
 commit_branch(BFDEV_BRANCH)
 
-set(DOXYGEN_GENERATE_HTML NO)
-set(DOXYGEN_GENERATE_XML YES)
-doxygen_add_docs(doxygen_docs ${PROJECT_SOURCE_DIR})
+option(ENABLE_DOCUMENT "Enable document" OFF)
+if(ENABLE_DOCUMENT)
+    find_package(Doxygen REQUIRED)
+    find_package(Sphinx REQUIRED breathe)
 
-sphinx_add_docs(
-    htmldocs
-    BREATHE_PROJECTS doxygen_docs
-    BUILDER html
-    SOURCE_DIRECTORY docs
-)
+    set(DOXYGEN_GENERATE_HTML NO)
+    set(DOXYGEN_GENERATE_XML YES)
+    doxygen_add_docs(doxygen_docs ${PROJECT_SOURCE_DIR})
 
-sphinx_add_docs(
-    latexdocs
-    BREATHE_PROJECTS doxygen_docs
-    BUILDER latex
-    SOURCE_DIRECTORY docs
-)
+    sphinx_add_docs(
+        htmldocs
+        BREATHE_PROJECTS doxygen_docs
+        BUILDER html
+        SOURCE_DIRECTORY docs
+    )
 
-sphinx_add_docs(
-    epubdocs
-    BREATHE_PROJECTS doxygen_docs
-    BUILDER epub
-    SOURCE_DIRECTORY docs
-)
+    sphinx_add_docs(
+        latexdocs
+        BREATHE_PROJECTS doxygen_docs
+        BUILDER latex
+        SOURCE_DIRECTORY docs
+    )
 
-sphinx_add_docs(
-    xmldocs
-    BREATHE_PROJECTS doxygen_docs
-    BUILDER xml
-    SOURCE_DIRECTORY docs
-)
+    sphinx_add_docs(
+        epubdocs
+        BREATHE_PROJECTS doxygen_docs
+        BUILDER epub
+        SOURCE_DIRECTORY docs
+    )
+
+    sphinx_add_docs(
+        xmldocs
+        BREATHE_PROJECTS doxygen_docs
+        BUILDER xml
+        SOURCE_DIRECTORY docs
+    )
+endif()
 
 asm_generic(
     bfdev/asm-generic/
@@ -71,6 +74,14 @@ asm_generic(
     ${BFDEV_ARCH_HEADER_PATH}/bfdev/asm
     ${BFDEV_HEADER_PATH}/bfdev/asm-generic
 )
+
+configure_file(
+    ${CMAKE_MODULE_PATH}/config.h.in
+    ${PROJECT_BINARY_DIR}/generated/bfdev/config.h
+)
+
+include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${PROJECT_BINARY_DIR}/generated)
 
 file(GLOB BFDEV_HEADER
     ${BFDEV_HEADER_PATH}/bfdev/*.h
@@ -113,7 +124,7 @@ if(ENABLE_STRICT)
     add_definitions(
         "-Werror "
     )
-endif(ENABLE_STRICT)
+endif()
 
 option(ENABLE_ASAN "Enable Address Sanitizer" OFF)
 if(ENABLE_ASAN)
@@ -123,7 +134,7 @@ if(ENABLE_ASAN)
          -fsanitize=leak -fsanitize-recover=all \
          -fno-omit-frame-pointer -fno-stack-protector"
     )
-endif(ENABLE_ASAN)
+endif()
 
 option(ENABLE_UBSAN "Enable Undefined Behaviour Sanitizer" OFF)
 if(ENABLE_UBSAN)
@@ -138,43 +149,27 @@ if(ENABLE_UBSAN)
          -fsanitize=enum \
          -fsanitize-undefined-trap-on-error"
     )
-endif(ENABLE_UBSAN)
+endif()
 
 option(ENABLE_DBGLIST "Dynamic debug list" OFF)
 if(ENABLE_DBGLIST)
     set(BFDEV_DEBUG_LIST ON)
-    set(BFDEV_SOURCE
-        src/list-debug.c
-        ${BFDEV_SOURCE}
-    )
-endif(ENABLE_DBGLIST)
+endif()
 
 option(ENABLE_DBGSLIST "Dynamic debug slist" OFF)
 if(ENABLE_DBGSLIST)
     set(BFDEV_DEBUG_SLIST ON)
-    set(BFDEV_SOURCE
-        src/slist-debug.c
-        ${BFDEV_SOURCE}
-    )
-endif(ENABLE_DBGSLIST)
+endif()
 
 option(ENABLE_DBGHLIST "Dynamic debug hlist" OFF)
 if(ENABLE_DBGHLIST)
     set(BFDEV_DEBUG_HLIST ON)
-    set(BFDEV_SOURCE
-        src/hlist-debug.c
-        ${BFDEV_SOURCE}
-    )
-endif(ENABLE_DBGHLIST)
+endif()
 
 option(ENABLE_DBGRBTREE "Dynamic debug rbtree" OFF)
 if(ENABLE_DBGRBTREE)
     set(BFDEV_DEBUG_RBTREE ON)
-    set(BFDEV_SOURCE
-        src/rbtree-debug.c
-        ${BFDEV_SOURCE}
-    )
-endif(ENABLE_DBGRBTREE)
+endif()
 
 set(BFDEV_LIBRARY
     ${BFDEV_HEADER}
@@ -186,16 +181,14 @@ set(BFDEV_LIBRARY
     ${BFDEV_ARCH_SOURCE}
 )
 
-configure_file(
-    ${CMAKE_MODULE_PATH}/config.h.in
-    ${PROJECT_BINARY_DIR}/generated/bfdev/config.h
-)
-
-include_directories(${PROJECT_SOURCE_DIR}/include)
-include_directories(${PROJECT_BINARY_DIR}/generated)
-
 add_library(bfdev_shared SHARED ${BFDEV_LIBRARY})
 add_library(bfdev_static STATIC ${BFDEV_LIBRARY})
+add_library(bfdev ALIAS bfdev_shared)
+
+option(ENABLE_EXAMPLES "Build examples" OFF)
+if(ENABLE_EXAMPLES)
+    add_subdirectory(examples)
+endif()
 
 SET_TARGET_PROPERTIES(bfdev_shared
     PROPERTIES VERSION 1.0 SOVERSION 1
@@ -229,6 +222,3 @@ install(TARGETS
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
-
-add_library(bfdev ALIAS bfdev_shared)
-add_subdirectory(examples)

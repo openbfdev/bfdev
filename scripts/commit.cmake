@@ -14,8 +14,8 @@ macro(commit_hash hash)
             WORKING_DIRECTORY
             ${CMAKE_CURRENT_SOURCE_DIR}
         )
-    endif(GIT_FOUND)
-endmacro(commit_hash)
+    endif()
+endmacro()
 
 macro(commit_branch branch)
     find_package(Git QUIET)
@@ -28,5 +28,5 @@ macro(commit_branch branch)
             WORKING_DIRECTORY
             ${CMAKE_CURRENT_SOURCE_DIR}
         )
-    endif(GIT_FOUND)
-endmacro(commit_branch)
+    endif()
+endmacro()
