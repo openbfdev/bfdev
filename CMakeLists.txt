@@ -30,7 +30,28 @@ include(scripts/commit.cmake)
 commit_hash(BFDEV_COMMITID)
 commit_branch(BFDEV_BRANCH)
 
-option(ENABLE_DOCUMENT "Enable document" OFF)
+option(ENABLE_DEVEL "Enable development mode" OFF)
+option(ENABLE_EXAMPLES "Build examples" OFF)
+option(ENABLE_DOCUMENT "Build document" OFF)
+option(ENABLE_STRICT "Enable strict compilation" ON)
+option(ENABLE_ASAN "Enable Address Sanitizer" OFF)
+option(ENABLE_UBSAN "Enable Undefined Behaviour Sanitizer" OFF)
+option(ENABLE_DBGLIST "Dynamic debug list" OFF)
+option(ENABLE_DBGSLIST "Dynamic debug slist" OFF)
+option(ENABLE_DBGHLIST "Dynamic debug hlist" OFF)
+option(ENABLE_DBGRBTREE "Dynamic debug rbtree" OFF)
+
+if(ENABLE_DEVEL)
+    set(ENABLE_EXAMPLES ON)
+    set(ENABLE_DOCUMENT ON)
+    set(ENABLE_ASAN ON)
+    set(ENABLE_UBSAN ON)
+    set(ENABLE_DBGLIST ON)
+    set(ENABLE_DBGSLIST ON)
+    set(ENABLE_DBGHLIST ON)
+    set(ENABLE_DBGRBTREE ON)
+endif()
+
 if(ENABLE_DOCUMENT)
     find_package(Doxygen REQUIRED)
     find_package(Sphinx REQUIRED breathe)
@@ -119,14 +140,13 @@ add_definitions(
     " -fvisibility=hidden"
 )
 
-option(ENABLE_STRICT "Enable strict compilation" ON)
 if(ENABLE_STRICT)
-    add_definitions(
-        "-Werror "
+    set(CMAKE_C_FLAGS
+        "${CMAKE_C_FLAGS} \
+         -Werror"
     )
 endif()
 
-option(ENABLE_ASAN "Enable Address Sanitizer" OFF)
 if(ENABLE_ASAN)
     set(CMAKE_C_FLAGS
         "${CMAKE_C_FLAGS} \
@@ -136,7 +156,6 @@ if(ENABLE_ASAN)
     )
 endif()
 
-option(ENABLE_UBSAN "Enable Undefined Behaviour Sanitizer" OFF)
 if(ENABLE_UBSAN)
     set(CMAKE_C_FLAGS
         "${CMAKE_C_FLAGS} \
@@ -151,22 +170,18 @@ if(ENABLE_UBSAN)
     )
 endif()
 
-option(ENABLE_DBGLIST "Dynamic debug list" OFF)
 if(ENABLE_DBGLIST)
     set(BFDEV_DEBUG_LIST ON)
 endif()
 
-option(ENABLE_DBGSLIST "Dynamic debug slist" OFF)
 if(ENABLE_DBGSLIST)
     set(BFDEV_DEBUG_SLIST ON)
 endif()
 
-option(ENABLE_DBGHLIST "Dynamic debug hlist" OFF)
 if(ENABLE_DBGHLIST)
     set(BFDEV_DEBUG_HLIST ON)
 endif()
 
-option(ENABLE_DBGRBTREE "Dynamic debug rbtree" OFF)
 if(ENABLE_DBGRBTREE)
     set(BFDEV_DEBUG_RBTREE ON)
 endif()
@@ -185,7 +200,6 @@ add_library(bfdev_shared SHARED ${BFDEV_LIBRARY})
 add_library(bfdev_static STATIC ${BFDEV_LIBRARY})
 add_library(bfdev ALIAS bfdev_shared)
 
-option(ENABLE_EXAMPLES "Build examples" OFF)
 if(ENABLE_EXAMPLES)
     add_subdirectory(examples)
 endif()
