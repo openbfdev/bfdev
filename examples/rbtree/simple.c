@@ -3,9 +3,10 @@
  * Copyright(c) 2021-2022 John Sanpe <sanpeqf@gmail.com>
  */
 
-#include <bfdev.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <bfdev/errno.h>
 #include <bfdev/rbtree.h>
-#include <errno.h>
 
 #define TEST_LEN 10
 static BFDEV_RB_ROOT(simple_root);

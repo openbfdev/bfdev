@@ -3,11 +3,12 @@
  * Copyright(c) 2021-2022 John Sanpe <sanpeqf@gmail.com>
  */
 
-#include <bfdev.h>
-#include <bfdev/rbtree.h>
-#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
+#include <errno.h>
 #include <sys/times.h>
+#include <bfdev/rbtree.h>
 
 #define RB_DEBUG    0
 #define RB_CACHED   1
@@ -91,7 +92,7 @@ int main(void)
     node = malloc(sizeof(*node) * TEST_LEN);
     if (!node) {
         printf("Insufficient Memory!\n");
-        return -BFDEV_ENOMEM;
+        return -ENOMEM;
     }
 
     printf("Generate %u Node:\n", TEST_LEN);

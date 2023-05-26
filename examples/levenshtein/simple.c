@@ -3,7 +3,8 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
-#include <bfdev.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <bfdev/levenshtein.h>
 
 int main(void)
