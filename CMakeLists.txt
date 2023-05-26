@@ -150,10 +150,18 @@ endif()
 if(ENABLE_ASAN)
     set(CMAKE_C_FLAGS
         "${CMAKE_C_FLAGS} \
-         -fsanitize=address -fsanitize=undefined \
-         -fsanitize=leak -fsanitize-recover=all \
-         -fno-omit-frame-pointer -fno-stack-protector"
+         -fsanitize=address \
+         -fsanitize=undefined \
+         -fsanitize-recover=all \
+         -fno-omit-frame-pointer \
+         -fno-stack-protector"
     )
+    if(NOT APPLE)
+        set(CMAKE_C_FLAGS
+            "${CMAKE_C_FLAGS} \
+             -fsanitize=leak"
+        )
+    endif()
 endif()
 
 if(ENABLE_UBSAN)
