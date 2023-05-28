@@ -5,9 +5,11 @@
 
 add_executable(skiplist-benchmark benchmark.c)
 target_link_libraries(skiplist-benchmark bfdev)
+add_test(skiplist-benchmark skiplist-benchmark)
 
 add_executable(skiplist-selftest selftest.c)
 target_link_libraries(skiplist-selftest bfdev)
+add_test(skiplist-selftest skiplist-selftest)
 
 install(FILES
     benchmark.c

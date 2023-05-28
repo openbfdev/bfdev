@@ -5,12 +5,15 @@
 
 add_executable(rbtree-benchmark benchmark.c)
 target_link_libraries(rbtree-benchmark bfdev)
+add_test(rbtree-benchmark rbtree-benchmark)
 
 add_executable(rbtree-selftest selftest.c)
 target_link_libraries(rbtree-selftest bfdev)
+add_test(rbtree-selftest rbtree-selftest)
 
 add_executable(rbtree-simple simple.c)
 target_link_libraries(rbtree-simple bfdev)
+add_test(rbtree-simple rbtree-simple)
 
 install(FILES
     benchmark.c
