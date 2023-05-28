@@ -6,10 +6,11 @@
 #include <bfdev/list.h>
 #include <export.h>
 
-static inline struct list_head *
-list_merge(list_cmp_t cmp, void *data, struct list_head *a, struct list_head *b)
+static inline struct bfdev_list_head *
+bfdev_list_merge(bfdev_list_cmp_t cmp, void *data, struct bfdev_list_head *a,
+                 struct bfdev_list_head *b)
 {
-    struct list_head *node, **tail = &node;
+    struct bfdev_list_head *node, **tail = &node;
 
     for (;;) {
         if (cmp(a, b, data) <= 0) {
@@ -35,9 +36,10 @@ list_merge(list_cmp_t cmp, void *data, struct list_head *a, struct list_head *b)
 }
 
 static inline void
-list_finish(list_cmp_t cmp, void *data, struct list_head *head, struct list_head *a, struct list_head *b)
+bfdev_list_finish(bfdev_list_cmp_t cmp, void *data, struct bfdev_list_head *head,
+                  struct bfdev_list_head *a, struct bfdev_list_head *b)
 {
-    struct list_head *tail = head;
+    struct bfdev_list_head *tail = head;
     unsigned int count = 0;
 
     for (;;) {
@@ -73,9 +75,10 @@ list_finish(list_cmp_t cmp, void *data, struct list_head *head, struct list_head
     head->prev = tail;
 }
 
-export void list_qsort(struct list_head *head, list_cmp_t cmp, void *data)
+export void
+bfdev_list_qsort(struct bfdev_list_head *head, bfdev_list_cmp_t cmp, void *data)
 {
-    struct list_head *pending = NULL, *node = head->next;
+    struct bfdev_list_head *pending = NULL, *node = head->next;
     unsigned int count = 0;
 
     if (unlikely(node == head->prev))
@@ -84,15 +87,15 @@ export void list_qsort(struct list_head *head, list_cmp_t cmp, void *data)
     head->prev->next = NULL;
 
     do {
-        struct list_head **tail = &pending;
+        struct bfdev_list_head **tail = &pending;
         size_t bits;
 
         for (bits = count; bits & 1; bits >>= 1)
             tail = &(*tail)->prev;
 
         if (likely(bits)) {
-            struct list_head *b = *tail, *a = b->prev;
-            b = list_merge(cmp, data, a, b);
+            struct bfdev_list_head *b = *tail, *a = b->prev;
+            b = bfdev_list_merge(cmp, data, a, b);
             b->prev = a->prev;
             *tail = b;
         }
@@ -108,20 +111,21 @@ export void list_qsort(struct list_head *head, list_cmp_t cmp, void *data)
     pending = pending->prev;
 
     for (;;) {
-        struct list_head *next = pending->prev;
+        struct bfdev_list_head *next = pending->prev;
 
         if (!next)
             break;
-        node = list_merge(cmp, data, pending, node);
+        node = bfdev_list_merge(cmp, data, pending, node);
         pending = next;
     }
 
-    list_finish(cmp, data, head, pending, node);
+    bfdev_list_finish(cmp, data, head, pending, node);
 }
 
-export void list_bsort(struct list_head *head, list_cmp_t cmp, void *data)
+export void
+bfdev_list_bsort(struct bfdev_list_head *head, bfdev_list_cmp_t cmp, void *data)
 {
-    struct list_head *walk, *prev, *tmp;
+    struct bfdev_list_head *walk, *prev, *tmp;
     unsigned int count, number;
     bool swapped, record;
 
@@ -129,7 +133,7 @@ export void list_bsort(struct list_head *head, list_cmp_t cmp, void *data)
          swapped && ({swapped = false; count = 1; true;});
          record = false, --number) {
         prev = walk = head->next;
-        list_for_each_continue_safe(walk, tmp, head) {
+        bfdev_list_for_each_continue_safe(walk, tmp, head) {
             if (record)
                 number++;
             else if (count++ >= number)
@@ -137,7 +141,7 @@ export void list_bsort(struct list_head *head, list_cmp_t cmp, void *data)
             if (cmp(prev, walk, data) <= 0)
                 prev = walk;
             else {
-                list_swap(walk, prev);
+                bfdev_list_swap(walk, prev);
                 swapped = true;
             }
         }
