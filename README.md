@@ -20,6 +20,9 @@ bfdev is a high performance, beautiful and portable infrastructure provision lib
 - The APIs available to the users are very rich and clearly categorised.
 - Designed based on gnuc standard, with good cross platform compatibility.
 
+### WARNING
+This project is not completely completed, please do not use in the production environment.
+
 ## Directory Structure
 
 ```
