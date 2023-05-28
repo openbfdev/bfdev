@@ -7,7 +7,8 @@
 #include <bfdev/list.h>
 #include <export.h>
 
-export bool list_debug_add_check(struct list_head *prev, struct list_head *next, struct list_head *new)
+export bool
+list_debug_add_check(struct list_head *prev, struct list_head *next, struct list_head *new)
 {
     if (unlikely(prev->next != next)) {
         fprintf(stderr, "list_add corruption (%p) prev->next should be next (%p), but was (%p)\n",
@@ -30,17 +31,18 @@ export bool list_debug_add_check(struct list_head *prev, struct list_head *next,
     return true;
 }
 
-export bool list_debug_del_check(struct list_head *node)
+export bool
+list_debug_del_check(struct list_head *node)
 {
-    if (unlikely(node->next == POISON_LIST1)) {
-        printf("list_del corruption (%p) node->next should not be POISON_LIST1 (%p)\n",
-        node, POISON_LIST1);
+    if (unlikely(node->next == BFDEV_POISON_LIST1)) {
+        printf("list_del corruption (%p) node->next should not be BFDEV_POISON_LIST1 (%p)\n",
+        node, BFDEV_POISON_LIST1);
         return false;
     }
 
-    if (unlikely(node->prev == POISON_LIST2)) {
-        printf("list_del corruption (%p) node->prev should not be POISON_LIST2 (%p)\n",
-        node, POISON_LIST2);
+    if (unlikely(node->prev == BFDEV_POISON_LIST2)) {
+        printf("list_del corruption (%p) node->prev should not be BFDEV_POISON_LIST2 (%p)\n",
+        node, BFDEV_POISON_LIST2);
         return false;
     }
 

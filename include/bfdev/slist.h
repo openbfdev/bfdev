@@ -78,7 +78,7 @@ static inline void slist_del(struct slist_head *head, struct slist_head *node)
         walk = walk->next;
 
     walk->next = node->next;
-    node->next = POISON_SLIST;
+    node->next = BFDEV_POISON_SLIST;
 }
 
 /**
