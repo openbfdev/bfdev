@@ -20,13 +20,13 @@ typedef void (*skiplist_release_t)(void *data);
 
 struct skip_node {
     void *pdata;
-    struct list_head list[0];
+    struct bfdev_list_head list[0];
 };
 
 struct skip_head {
     unsigned int curr;
     unsigned int levels;
-    struct list_head nodes[0];
+    struct bfdev_list_head nodes[0];
 };
 
 extern int skiplist_insert(struct skip_head *head, void *data, skiplist_cmp_t cmp);
@@ -43,7 +43,7 @@ extern struct skip_head *skiplist_create(unsigned int levels);
  * @head: the head for your list.
  */
 #define skip_for_each(pos, head, level) \
-    list_for_each_entry(pos, &(head)->nodes[level], list[level])
+    bfdev_list_for_each_entry(pos, &(head)->nodes[level], list[level])
 
 /**
  * skip_for_each_reverse - iterate backwards over list of given type.
@@ -51,7 +51,7 @@ extern struct skip_head *skiplist_create(unsigned int levels);
  * @head: the head for your list.
  */
 #define skip_for_each_reverse(pos, head, level) \
-    list_for_each_entry_reverse(pos, &(head)->nodes[level], list[level])
+    bfdev_list_for_each_entry_reverse(pos, &(head)->nodes[level], list[level])
 
 /**
  * skip_for_each_from - iterate over list of given type from the current point.
@@ -59,7 +59,7 @@ extern struct skip_head *skiplist_create(unsigned int levels);
  * @head: the head for your list.
  */
 #define skip_for_each_from(pos, head, level) \
-    list_for_each_entry_from(pos, &(head)->nodes[level], list[level])
+    bfdev_list_for_each_entry_from(pos, &(head)->nodes[level], list[level])
 
 /**
  * skip_for_each_reverse_from - iterate backwards over list of given type from the current point.
@@ -67,7 +67,7 @@ extern struct skip_head *skiplist_create(unsigned int levels);
  * @head: the head for your list.
  */
 #define skip_for_each_reverse_from(pos, head, level) \
-    list_for_each_entry_reverse_from(pos, &(head)->nodes[level], list[level])
+    bfdev_list_for_each_entry_reverse_from(pos, &(head)->nodes[level], list[level])
 
 /**
  * skip_for_each_continue - continue iteration over list of given type.
@@ -75,7 +75,7 @@ extern struct skip_head *skiplist_create(unsigned int levels);
  * @head: the head for your list.
  */
 #define skip_for_each_continue(pos, head, level) \
-    list_for_each_entry_continue(pos, &(head)->nodes[level], list[level])
+    bfdev_list_for_each_entry_continue(pos, &(head)->nodes[level], list[level])
 
 /**
  * skip_for_each_reverse_continue - iterate backwards from the given point.
@@ -83,7 +83,7 @@ extern struct skip_head *skiplist_create(unsigned int levels);
  * @head: the head for your list.
  */
 #define skip_for_each_reverse_continue(pos, head, level) \
-    list_for_each_entry_reverse_continue(pos, &(head)->nodes[level], list[level])
+    bfdev_list_for_each_entry_reverse_continue(pos, &(head)->nodes[level], list[level])
 
 /**
  * skip_for_each_safe - iterate over list of given type safe against removal of list entry.
@@ -92,7 +92,7 @@ extern struct skip_head *skiplist_create(unsigned int levels);
  * @head: the head for your list.
  */
 #define skip_for_each_safe(pos, tmp, head, level) \
-    list_for_each_entry_safe(pos, tmp, &(head)->nodes[level], list[level])
+    bfdev_list_for_each_entry_safe(pos, tmp, &(head)->nodes[level], list[level])
 
 /**
  * skip_for_each_reverse_safe - iterate backwards over list safe against removal.
@@ -101,7 +101,7 @@ extern struct skip_head *skiplist_create(unsigned int levels);
  * @head: the head for your list.
  */
 #define skip_for_each_reverse_safe(pos, tmp, head, level) \
-    list_for_each_entry_reverse_safe(pos, tmp, &(head)->nodes[level], list[level])
+    bfdev_list_for_each_entry_reverse_safe(pos, tmp, &(head)->nodes[level], list[level])
 
 /**
  * skip_for_each_from_safe - iterate over list from current point safe against removal.
@@ -110,7 +110,7 @@ extern struct skip_head *skiplist_create(unsigned int levels);
  * @head: the head for your list.
  */
 #define skip_for_each_from_safe(pos, tmp, head, level) \
-    list_for_each_entry_from_safe(pos, tmp, &(head)->nodes[level], list[level])
+    bfdev_list_for_each_entry_from_safe(pos, tmp, &(head)->nodes[level], list[level])
 
 /**
  * skip_for_each_reverse_from_safe - iterate backwards over list from current point safe against removal.
@@ -119,7 +119,7 @@ extern struct skip_head *skiplist_create(unsigned int levels);
  * @head: the head for your list.
  */
 #define skip_for_each_reverse_from_safe(pos, tmp, head, level) \
-    list_for_each_entry_reverse_from_safe(pos, tmp, &(head)->nodes[level], list[level])
+    bfdev_list_for_each_entry_reverse_from_safe(pos, tmp, &(head)->nodes[level], list[level])
 
 /**
  * skip_for_each_continue_safe - continue list iteration safe against removal.
@@ -128,7 +128,7 @@ extern struct skip_head *skiplist_create(unsigned int levels);
  * @head: the head for your list.
  */
 #define skip_for_each_continue_safe(pos, tmp, head, level) \
-    list_for_each_entry_continue_safe(pos, tmp, &(head)->nodes[level], list[level])
+    bfdev_list_for_each_entry_continue_safe(pos, tmp, &(head)->nodes[level], list[level])
 
 /**
  * skip_for_each_reverse_continue_safe - continue backwards over list iteration safe against removal.
@@ -137,7 +137,7 @@ extern struct skip_head *skiplist_create(unsigned int levels);
  * @head: the head for your list.
  */
 #define skip_for_each_reverse_continue_safe(pos, tmp, head, level) \
-    list_for_each_entry_reverse_continue_safe(pos, tmp, &(head)->nodes[level], list[level])
+    bfdev_list_for_each_entry_reverse_continue_safe(pos, tmp, &(head)->nodes[level], list[level])
 
 #ifdef __cplusplus
 }

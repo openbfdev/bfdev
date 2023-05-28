@@ -11,19 +11,19 @@
 
 #define LIST_DEBUG 0
 #define TEST_LEN 1000000
-static LIST_HEAD(demo_list);
+static BFDEV_LIST_HEAD(demo_list);
 
-struct list_demo {
-    struct list_head list;
+struct benchmark {
+    struct bfdev_list_head list;
     unsigned int num;
     unsigned long data;
 };
 
 #define list_to_demo(node) \
-    list_entry(node, struct list_demo, list)
+    bfdev_list_entry(node, struct benchmark, list)
 
 #if LIST_DEBUG
-static void node_dump(struct list_demo *node)
+static void node_dump(struct benchmark *node)
 {
     printf("\t%08d: data 0x%016lx\n", node->num, node->data);
 }
@@ -38,16 +38,18 @@ static void time_dump(int ticks, clock_t start, clock_t stop, struct tms *start_
     printf("\tkern time: %lf\n", (stop_tms->tms_stime - start_tms->tms_stime) / (double)ticks);
 }
 
-static long demo_cmp(struct list_head *a, struct list_head *b, void *pdata)
+static long
+demo_cmp(const struct bfdev_list_head *a,
+         const struct bfdev_list_head *b, void *pdata)
 {
-    struct list_demo *demo_a = list_to_demo(a);
-    struct list_demo *demo_b = list_to_demo(b);
+    struct benchmark *demo_a = list_to_demo(a);
+    struct benchmark *demo_b = list_to_demo(b);
     return demo_a->data - demo_b->data;
 }
 
 int main(void)
 {
-    struct list_demo *node, *tmp;
+    struct benchmark *node, *tmp;
     struct tms start_tms, stop_tms;
     clock_t start, stop;
     unsigned int count, ticks;
@@ -68,27 +70,27 @@ int main(void)
         node->data = ((unsigned long)rand() << 32) | rand();
         node_dump(node);
 
-        list_add(&demo_list, &node->list);
+        bfdev_list_add(&demo_list, &node->list);
     }
     stop = times(&stop_tms);
     time_dump(ticks, start, stop, &start_tms, &stop_tms);
 
     start = times(&start_tms);
     printf("List sort:\n");
-    list_qsort(&demo_list, demo_cmp, NULL);
+    bfdev_list_qsort(&demo_list, demo_cmp, NULL);
     stop = times(&stop_tms);
     time_dump(ticks, start, stop, &start_tms, &stop_tms);
 
     start = times(&start_tms);
     printf("List for each:\n");
-    list_for_each_entry(node, &demo_list, list)
+    bfdev_list_for_each_entry(node, &demo_list, list)
         node_dump(node);
     stop = times(&stop_tms);
     time_dump(ticks, start, stop, &start_tms, &stop_tms);
 
     printf("Deletion All Node...\n");
 error:
-    list_for_each_entry_safe(node, tmp, &demo_list, list)
+    bfdev_list_for_each_entry_safe(node, tmp, &demo_list, list)
         free(node);
 
     if (!ret)

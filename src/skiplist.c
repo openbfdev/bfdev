@@ -25,7 +25,7 @@ skipnode_find(struct skip_head *head, const void *key,
               skiplist_find_t find, unsigned int *plev)
 {
     unsigned int level = head->curr;
-    struct list_head *list, *end;
+    struct bfdev_list_head *list, *end;
     struct skip_node *walk;
     long retval;
 
@@ -36,8 +36,8 @@ skipnode_find(struct skip_head *head, const void *key,
     end = &head->nodes[level - 1];
 
     for (; level--; --list, --end) {
-        list_for_each_continue(list, end) {
-            walk = list_entry(list, struct skip_node, list[level]);
+        bfdev_list_for_each_continue(list, end) {
+            walk = bfdev_list_entry(list, struct skip_node, list[level]);
             retval = find(walk->pdata, key);
             if (retval >= 0) {
                 end = list;
@@ -61,7 +61,7 @@ export int
 skiplist_insert(struct skip_head *head, void *data,
                 skiplist_cmp_t cmp)
 {
-    struct list_head *list, *end;
+    struct bfdev_list_head *list, *end;
     struct skip_node *walk, *node;
     unsigned int level, count;
     long retval;
@@ -78,8 +78,8 @@ skiplist_insert(struct skip_head *head, void *data,
     end = &head->nodes[head->curr - 1];
 
     for (count = head->curr; count--; --list, --end) {
-        list_for_each_continue(list, end) {
-            walk = list_entry(list, struct skip_node, list[count]);
+        bfdev_list_for_each_continue(list, end) {
+            walk = bfdev_list_entry(list, struct skip_node, list[count]);
             retval = cmp(walk->pdata, data);
             if (retval >= 0) {
                 end = list;
@@ -89,7 +89,7 @@ skiplist_insert(struct skip_head *head, void *data,
 
         list = end->prev;
         if (count < level)
-            list_add(list, &node->list[count]);
+            bfdev_list_add(list, &node->list[count]);
     }
 
     return 0;
@@ -106,8 +106,8 @@ skiplist_delete(struct skip_head *head, void *key, skiplist_find_t find)
         return;
 
     while (level--) {
-        list_del(&node->list[level]);
-        if (list_check_empty(&head->nodes[level]))
+        bfdev_list_del(&node->list[level]);
+        if (bfdev_list_check_empty(&head->nodes[level]))
             head->curr = level;
     }
 
@@ -125,7 +125,7 @@ skiplist_find(struct skip_head *head, void *key, skiplist_find_t find)
 static void skiplist_release(struct skip_head *head, skiplist_release_t relse)
 {
     struct skip_node *node, *tmp;
-    list_for_each_entry_safe(node, tmp, head->nodes, list[0]) {
+    bfdev_list_for_each_entry_safe(node, tmp, head->nodes, list[0]) {
         if (relse)
             relse(node->pdata);
         free(node);
@@ -139,7 +139,7 @@ skiplist_reset(struct skip_head *head, skiplist_release_t relse)
 
     skiplist_release(head, relse);
     for (count = 0; count < head->levels; ++count)
-        list_head_init(&head->nodes[count]);
+        bfdev_list_head_init(&head->nodes[count]);
 
     head->curr = 0;
 }
@@ -165,7 +165,7 @@ skiplist_create(unsigned int levels)
         return NULL;
 
     for (count = 0; count < levels; ++count)
-        list_head_init(&head->nodes[count]);
+        bfdev_list_head_init(&head->nodes[count]);
 
     head->levels = levels;
     head->curr = 0;
