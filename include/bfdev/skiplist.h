@@ -9,6 +9,7 @@
 #include <bfdev/config.h>
 #include <bfdev/errno.h>
 #include <bfdev/list.h>
+#include <bfdev/allocator.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -24,6 +25,7 @@ struct bfdev_skip_node {
 };
 
 struct bfdev_skip_head {
+    const struct bfdev_alloc *alloc;
     unsigned int curr;
     unsigned int levels;
     struct bfdev_list_head nodes[0];
@@ -35,7 +37,7 @@ extern void *bfdev_skiplist_find(struct bfdev_skip_head *head, void *key, bfdev_
 
 extern void bfdev_skiplist_reset(struct bfdev_skip_head *head, bfdev_skiplist_release_t relse);
 extern void bfdev_skiplist_destroy(struct bfdev_skip_head *head, bfdev_skiplist_release_t relse);
-extern struct bfdev_skip_head *bfdev_skiplist_create(unsigned int levels);
+extern struct bfdev_skip_head *bfdev_skiplist_create(const struct bfdev_alloc *alloc, unsigned int levels);
 
 /**
  * bfdev_skip_for_each - iterate over list of given type.
