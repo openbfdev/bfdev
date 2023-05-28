@@ -11,7 +11,7 @@
 #include <bfdev/skiplist.h>
 
 #define TEST_DEPTH 32
-#define TEST_LEN 10000000
+#define TEST_LEN 1000000
 
 static inline void time_dump(int ticks, clock_t start, clock_t stop, struct tms *start_tms, struct tms *stop_tms)
 {
@@ -30,7 +30,7 @@ static inline long skiplist_bench_cmp(const void *nodea, const void *nodeb)
 
 int main(void)
 {
-    struct skip_head *head;
+    struct bfdev_skip_head *head;
     struct tms start_tms, stop_tms;
     clock_t start, stop;
     unsigned int count, ticks;
@@ -38,7 +38,7 @@ int main(void)
     int retval;
 
     ticks = sysconf(_SC_CLK_TCK);
-    head = skiplist_create(TEST_DEPTH);
+    head = bfdev_skiplist_create(TEST_DEPTH);
     if (!head)
         return 1;
 
@@ -46,7 +46,7 @@ int main(void)
     start = times(&start_tms);
     for (count = 0; count < TEST_LEN; ++count) {
         value = ((unsigned long)rand() << 32) | rand();
-        retval = skiplist_insert(head, (void *)value, skiplist_bench_cmp);
+        retval = bfdev_skiplist_insert(head, (void *)value, skiplist_bench_cmp);
         if (retval)
             goto error;
     }
@@ -54,6 +54,6 @@ int main(void)
     time_dump(ticks, start, stop, &start_tms, &stop_tms);
 
 error:
-    skiplist_destroy(head, NULL);
+    bfdev_skiplist_destroy(head, NULL);
     return retval;
 }

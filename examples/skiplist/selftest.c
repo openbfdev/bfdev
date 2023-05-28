@@ -12,7 +12,7 @@
 #define TEST_LEVEL 32
 
 struct skiplist_test {
-    struct skip_head *head;
+    struct bfdev_skip_head *head;
     uintptr_t values[TEST_LOOP];
 };
 
@@ -30,12 +30,12 @@ static int skiplist_test_testing(struct skiplist_test *test)
     uintptr_t value;
     int retval;
 
-    skiplist_reset(test->head, NULL);
+    bfdev_skiplist_reset(test->head, NULL);
     for (count = 0; count < TEST_LOOP; ++count)
         test->values[count] = rand() | 1;
 
     for (count = 0; count < TEST_LOOP; ++count) {
-        retval = skiplist_insert(test->head,
+        retval = bfdev_skiplist_insert(test->head,
                  (void *)test->values[count], skiplist_test_cmp);
         printf("skiplist insert test%02d: %#010lx ret %d\n",
                count, test->values[count], retval);
@@ -44,7 +44,7 @@ static int skiplist_test_testing(struct skiplist_test *test)
     }
 
     for (count = 0; count < TEST_LOOP; ++count) {
-        value = (uintptr_t)skiplist_find(test->head,
+        value = (uintptr_t)bfdev_skiplist_find(test->head,
                 (void *)test->values[count], skiplist_test_cmp);
         printf("skiplist find test%02d: %#010lx ret %#010lx\n",
                count, test->values[count], value);
@@ -53,8 +53,8 @@ static int skiplist_test_testing(struct skiplist_test *test)
     }
 
     for (count = 0; count < TEST_LOOP; ++count) {
-        skiplist_delete(test->head, (void *)test->values[count],
-                        skiplist_test_cmp);
+        bfdev_skiplist_delete(test->head, (void *)test->values[count],
+            skiplist_test_cmp);
         printf("skiplist delete test%02d\n", count);
     }
 
@@ -70,14 +70,14 @@ int main(void)
     if (unlikely(!test))
         return -BFDEV_ENOMEM;
 
-    test->head = skiplist_create(TEST_LEVEL);
+    test->head = bfdev_skiplist_create(TEST_LEVEL);
     if (unlikely(!test->head)) {
         free(test);
         return -BFDEV_ENOMEM;
     }
 
     retval = skiplist_test_testing(test);
-    skiplist_destroy(test->head, NULL);
+    bfdev_skiplist_destroy(test->head, NULL);
     free(test);
 
     return retval;
