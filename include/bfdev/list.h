@@ -105,8 +105,8 @@ static inline void list_del(struct list_head *node)
 #endif
 
     list_deluf(node);
-    node->next = POISON_LIST1;
-    node->prev = POISON_LIST2;
+    node->next = BFDEV_POISON_LIST1;
+    node->prev = BFDEV_POISON_LIST2;
 }
 
 /**
@@ -164,7 +164,7 @@ static inline bool list_check_another(const struct list_head *head, const struct
  */
 static inline bool list_check_outsize(const struct list_head *node)
 {
-    return node->next == POISON_LIST1;
+    return !node->next || node->next == BFDEV_POISON_LIST1;
 }
 
 /**

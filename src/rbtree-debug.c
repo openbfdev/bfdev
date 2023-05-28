@@ -22,21 +22,21 @@ bfdev_rb_debug_link_check(struct bfdev_rb_node *parent, struct bfdev_rb_node **l
 export bool
 bfdev_rb_debug_delete_check(struct bfdev_rb_node *node)
 {
-    if (unlikely(node->left == POISON_RBNODE1)) {
-        fprintf(stderr, "rb_delete corruption (%p) node->left should not be POISON_RBNODE1 (%p)\n",
-        node, POISON_RBNODE1);
+    if (unlikely(node->left == BFDEV_POISON_RBNODE1)) {
+        fprintf(stderr, "rb_delete corruption (%p) node->left should not be BFDEV_POISON_RBNODE1 (%p)\n",
+        node, BFDEV_POISON_RBNODE1);
         return false;
     }
 
-    if (unlikely(node->right == POISON_RBNODE2)) {
-        fprintf(stderr, "rb_delete corruption (%p) node->right should not be POISON_RBNODE2 (%p)\n",
-        node, POISON_RBNODE2);
+    if (unlikely(node->right == BFDEV_POISON_RBNODE2)) {
+        fprintf(stderr, "rb_delete corruption (%p) node->right should not be BFDEV_POISON_RBNODE2 (%p)\n",
+        node, BFDEV_POISON_RBNODE2);
         return false;
     }
 
-    if (unlikely(node->parent == POISON_RBNODE3)) {
-        fprintf(stderr, "rb_delete corruption (%p) node->parent should not be POISON_RBNODE3 (%p)\n",
-        node, POISON_RBNODE3);
+    if (unlikely(node->parent == BFDEV_POISON_RBNODE3)) {
+        fprintf(stderr, "rb_delete corruption (%p) node->parent should not be BFDEV_POISON_RBNODE3 (%p)\n",
+        node, BFDEV_POISON_RBNODE3);
         return false;
     }
 

@@ -554,9 +554,9 @@ bfdev_rb_delete(struct bfdev_rb_root *root, struct bfdev_rb_node *node)
     if ((rebalance = bfdev_rb_remove(root, node)))
         bfdev_rb_erase(root, rebalance);
 
-    node->left = POISON_RBNODE1;
-    node->right = POISON_RBNODE2;
-    node->parent = POISON_RBNODE3;
+    node->left = BFDEV_POISON_RBNODE1;
+    node->right = BFDEV_POISON_RBNODE2;
+    node->parent = BFDEV_POISON_RBNODE3;
 }
 
 /**
@@ -634,9 +634,9 @@ bfdev_rb_delete_augmented(struct bfdev_rb_root *root, struct bfdev_rb_node *node
     if ((rebalance = bfdev_rb_remove_augmented(root, node, callbacks)))
         bfdev_rb_erase_augmented(root, rebalance, callbacks);
 
-    node->left = POISON_RBNODE1;
-    node->right = POISON_RBNODE2;
-    node->parent = POISON_RBNODE3;
+    node->left = BFDEV_POISON_RBNODE1;
+    node->right = BFDEV_POISON_RBNODE2;
+    node->parent = BFDEV_POISON_RBNODE3;
 }
 
 /**

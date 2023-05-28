@@ -144,8 +144,8 @@ static inline void hlist_del(struct hlist_node *node)
 #endif
 
     hlist_deluf(node);
-    node->next = POISON_HLIST1;
-    node->pprev = POISON_HLIST2;
+    node->next = BFDEV_POISON_HLIST1;
+    node->pprev = BFDEV_POISON_HLIST2;
 }
 
 /**
@@ -203,7 +203,7 @@ static inline bool hlist_check_another(const struct hlist_head *head, const stru
  */
 static inline bool hlist_check_outsize(const struct hlist_node *node)
 {
-    return node->next == POISON_HLIST1;
+    return !node->next || node->next == BFDEV_POISON_HLIST1;
 }
 
 /**

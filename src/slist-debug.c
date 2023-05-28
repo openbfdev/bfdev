@@ -22,9 +22,9 @@ slist_debug_add_check(struct slist_head *node, struct slist_head *new)
 export bool
 slist_debug_del_check(struct slist_head *node)
 {
-    if (unlikely(node->next == POISON_SLIST)) {
-        fprintf(stderr, "slist_del corruption (%p) node->next should not be POISON_SLIST (%p)\n",
-            node, POISON_SLIST);
+    if (unlikely(node->next == BFDEV_POISON_SLIST)) {
+        fprintf(stderr, "slist_del corruption (%p) node->next should not be BFDEV_POISON_SLIST (%p)\n",
+            node, BFDEV_POISON_SLIST);
         return false;
     }
 
