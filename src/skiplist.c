@@ -62,6 +62,7 @@ export int
 bfdev_skiplist_insert(struct bfdev_skip_head *head, void *data,
                       bfdev_skiplist_cmp_t cmp)
 {
+    const struct bfdev_alloc *alloc = head->alloc;
     struct bfdev_list_head *list, *end;
     struct bfdev_skip_node *walk, *node;
     unsigned int level, count;
@@ -70,7 +71,7 @@ bfdev_skiplist_insert(struct bfdev_skip_head *head, void *data,
     level = random_level(head);
     bfdev_max_adj(head->curr, level);
 
-    node = malloc(sizeof(*node) + sizeof(*node->list) * level);
+    node = bfdev_malloc(alloc, sizeof(*node) + sizeof(*node->list) * level);
     if (unlikely(!node))
         return -BFDEV_ENOMEM;
 
@@ -100,6 +101,7 @@ export void
 bfdev_skiplist_delete(struct bfdev_skip_head *head, void *key,
                       bfdev_skiplist_find_t find)
 {
+    const struct bfdev_alloc *alloc = head->alloc;
     struct bfdev_skip_node *node;
     unsigned int level;
 
@@ -113,7 +115,7 @@ bfdev_skiplist_delete(struct bfdev_skip_head *head, void *key,
             head->curr = level;
     }
 
-    free(node);
+    bfdev_free(alloc, node);
 }
 
 export void *
@@ -129,11 +131,13 @@ static void
 bfdev_skiplist_release(struct bfdev_skip_head *head,
                        bfdev_skiplist_release_t relse)
 {
+    const struct bfdev_alloc *alloc = head->alloc;
     struct bfdev_skip_node *node, *tmp;
+
     bfdev_list_for_each_entry_safe(node, tmp, head->nodes, list[0]) {
         if (relse)
             relse(node->pdata);
-        free(node);
+        bfdev_free(alloc, node);
     }
 }
 
@@ -154,12 +158,15 @@ export void
 bfdev_skiplist_destroy(struct bfdev_skip_head *head,
                        bfdev_skiplist_release_t relse)
 {
+    const struct bfdev_alloc *alloc = head->alloc;
+
     bfdev_skiplist_release(head, relse);
-    free(head);
+    bfdev_free(alloc, head);
 }
 
 export struct bfdev_skip_head *
-bfdev_skiplist_create(unsigned int levels)
+bfdev_skiplist_create(const struct bfdev_alloc *alloc,
+                      unsigned int levels)
 {
     struct bfdev_skip_head *head;
     unsigned int count;
@@ -167,13 +174,14 @@ bfdev_skiplist_create(unsigned int levels)
     if (unlikely(!levels))
         return NULL;
 
-    head = malloc(sizeof(*head) + sizeof(*head->nodes) * levels);
+    head = bfdev_malloc(alloc, sizeof(*head) + sizeof(*head->nodes) * levels);
     if (unlikely(!head))
         return NULL;
 
     for (count = 0; count < levels; ++count)
         bfdev_list_head_init(&head->nodes[count]);
 
+    head->alloc = alloc;
     head->levels = levels;
     head->curr = 0;
 

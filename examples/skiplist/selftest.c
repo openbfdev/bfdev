@@ -70,7 +70,7 @@ int main(void)
     if (unlikely(!test))
         return -BFDEV_ENOMEM;
 
-    test->head = bfdev_skiplist_create(TEST_LEVEL);
+    test->head = bfdev_skiplist_create(NULL, TEST_LEVEL);
     if (unlikely(!test->head)) {
         free(test);
         return -BFDEV_ENOMEM;

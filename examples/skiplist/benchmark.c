@@ -38,7 +38,7 @@ int main(void)
     int retval;
 
     ticks = sysconf(_SC_CLK_TCK);
-    head = bfdev_skiplist_create(TEST_DEPTH);
+    head = bfdev_skiplist_create(NULL, TEST_DEPTH);
     if (!head)
         return 1;
 
