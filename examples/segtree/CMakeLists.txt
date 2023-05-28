@@ -5,6 +5,7 @@
 
 add_executable(segtree-selftest selftest.c)
 target_link_libraries(segtree-selftest bfdev)
+add_test(segtree-selftest segtree-selftest)
 
 install(FILES
     selftest.c

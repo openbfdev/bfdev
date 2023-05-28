@@ -209,6 +209,7 @@ add_library(bfdev_static STATIC ${BFDEV_LIBRARY})
 add_library(bfdev ALIAS bfdev_shared)
 
 if(ENABLE_EXAMPLES)
+    enable_testing()
     add_subdirectory(examples)
 endif()
 

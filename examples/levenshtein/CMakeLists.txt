@@ -5,6 +5,7 @@
 
 add_executable(levenshtein-simple simple.c)
 target_link_libraries(levenshtein-simple bfdev)
+add_test(levenshtein-simple levenshtein-simple)
 
 install(FILES
     simple.c

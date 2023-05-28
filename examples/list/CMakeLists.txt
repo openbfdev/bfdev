@@ -5,9 +5,11 @@
 
 add_executable(list-benchmark benchmark.c)
 target_link_libraries(list-benchmark bfdev)
+add_test(list-benchmark list-benchmark)
 
 add_executable(list-selftest selftest.c)
 target_link_libraries(list-selftest bfdev)
+add_test(list-selftest list-selftest)
 
 install(FILES
     benchmark.c
