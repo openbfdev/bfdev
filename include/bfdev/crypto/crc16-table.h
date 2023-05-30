@@ -84,7 +84,8 @@ static const uint16_t bfdev_crc16_table[256] = {
 static inline uint16_t
 bfdev_crc16_byte(uint16_t crc, const uint8_t data)
 {
-    return (crc >> 8) ^ bfdev_crc16_table[(crc ^ data) & 0xff];
+    unsigned int index = (crc ^ data) & 0xff;
+    return bfdev_crc16_table[index] ^ (crc >> 8);
 }
 
 static inline uint16_t

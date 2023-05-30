@@ -84,7 +84,8 @@ static const uint8_t bfdev_crc7_table[256] = {
 static inline uint8_t
 bfdev_crc7_byte(uint8_t crc, const uint8_t data)
 {
-    return bfdev_crc7_table[crc ^ data];
+    unsigned int index = (crc ^ data) & 0xff;
+    return bfdev_crc7_table[index];
 }
 
 static inline uint8_t

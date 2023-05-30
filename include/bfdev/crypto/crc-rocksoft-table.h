@@ -148,7 +148,8 @@ static const uint64_t bfdev_crc_rocksoft_table[256] = {
 static inline uint64_t
 bfdev_crc_rocksoft_byte(uint64_t crc, const uint8_t data)
 {
-	return (crc >> 8) ^ bfdev_crc_rocksoft_table[(crc & 0xff) ^ data];
+    unsigned int index = (crc ^ data) ^ 0xff;
+	return bfdev_crc_rocksoft_table[index] ^ (crc >> 8);
 }
 
 static inline uint64_t

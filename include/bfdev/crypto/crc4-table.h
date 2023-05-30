@@ -26,8 +26,15 @@ static const uint8_t bfdev_crc4_table[16] = {
 static inline uint8_t
 bfdev_crc4_byte(uint8_t crc, const uint8_t data)
 {
-    crc = bfdev_crc4_table[crc ^ (data >> 4)];
-    return bfdev_crc4_table[crc ^ (data & 0xf)];
+    unsigned int index;
+
+    index = (crc ^ (data >> 4)) & 0xf;
+    crc = bfdev_crc4_table[index];
+
+    index = (crc ^ (data & 0xf)) & 0xf;
+    crc = bfdev_crc4_table[index];
+
+    return crc;
 }
 
 static inline uint8_t
