@@ -148,8 +148,8 @@ static const uint64_t bfdev_crc64table[256] = {
 static inline uint64_t
 bfdev_crc64_byte(uint64_t crc, const uint8_t data)
 {
-    uint64_t tmp = ((crc >> 56) ^ data) & 0xff;
-    return bfdev_crc64table[tmp] ^ (crc << 8);
+    uint64_t index = ((crc >> 56) ^ data) & 0xff;
+    return bfdev_crc64table[index] ^ (crc << 8);
 }
 
 static inline uint64_t
