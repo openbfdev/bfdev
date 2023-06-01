@@ -8,7 +8,7 @@
 #include <export.h>
 
 export bool
-list_debug_add_check(struct bfdev_list_head *prev, struct bfdev_list_head *next,
+bfdev_list_debug_add_check(struct bfdev_list_head *prev, struct bfdev_list_head *next,
                      struct bfdev_list_head *new)
 {
     if (unlikely(prev->next != next)) {
@@ -33,7 +33,7 @@ list_debug_add_check(struct bfdev_list_head *prev, struct bfdev_list_head *next,
 }
 
 export bool
-list_debug_del_check(struct bfdev_list_head *node)
+bfdev_list_debug_del_check(struct bfdev_list_head *node)
 {
     if (unlikely(node->next == BFDEV_POISON_LIST1)) {
         printf("list_del corruption (%p) node->next should not be BFDEV_POISON_LIST1 (%p)\n",

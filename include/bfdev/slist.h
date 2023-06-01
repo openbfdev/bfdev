@@ -30,7 +30,7 @@ struct slist_head {
 #define SLIST_HEAD(name) \
     struct slist_head name = SLIST_HEAD_INIT
 
-#ifdef DEBUG_SLIST
+#ifdef BFDEV_DEBUG_SLIST
 extern bool slist_debug_add_check(struct slist_head *node, struct slist_head *new);
 extern bool slist_debug_del_check(struct slist_head *node);
 #endif
@@ -51,7 +51,7 @@ static inline void slist_head_init(struct slist_head *head)
  */
 static inline void slist_add(struct slist_head *node, struct slist_head *new)
 {
-#ifdef DEBUG_SLIST
+#ifdef BFDEV_DEBUG_SLIST
     if (unlikely(!slist_debug_add_check(node, new)))
         return;
 #endif
@@ -69,7 +69,7 @@ static inline void slist_del(struct slist_head *head, struct slist_head *node)
 {
     struct slist_head *walk = head;
 
-#ifdef DEBUG_SLIST
+#ifdef BFDEV_DEBUG_SLIST
     if (unlikely(!slist_debug_del_check(node)))
         return;
 #endif

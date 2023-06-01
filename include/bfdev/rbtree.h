@@ -93,7 +93,7 @@ struct bfdev_rb_callbacks {
 #define bfdev_rb_entry_safe(ptr, type, member) \
     container_of_safe(ptr, type, member)
 
-#ifdef DEBUG_RBTREE
+#ifdef BFDEV_DEBUG_RBTREE
 extern bool bfdev_rb_debug_link_check(struct bfdev_rb_node *parent, struct bfdev_rb_node **link, struct bfdev_rb_node *node);
 extern bool bfdev_rb_debug_delete_check(struct bfdev_rb_node *node);
 #endif
@@ -475,7 +475,7 @@ extern struct bfdev_rb_node *bfdev_rb_post_next(const struct bfdev_rb_node *node
 static inline void
 bfdev_rb_link(struct bfdev_rb_node *parent, struct bfdev_rb_node **link, struct bfdev_rb_node *node)
 {
-#ifdef DEBUG_RBTREE
+#ifdef BFDEV_DEBUG_RBTREE
     if (unlikely(!rb_debug_link_check(parent, link, node)))
         return;
 #endif
@@ -546,7 +546,7 @@ bfdev_rb_delete(struct bfdev_rb_root *root, struct bfdev_rb_node *node)
 {
     struct bfdev_rb_node *rebalance;
 
-#ifdef DEBUG_RBTREE
+#ifdef BFDEV_DEBUG_RBTREE
     if (unlikely(!rb_debug_delete_check(node)))
         return;
 #endif
@@ -626,7 +626,7 @@ bfdev_rb_delete_augmented(struct bfdev_rb_root *root, struct bfdev_rb_node *node
 {
     struct bfdev_rb_node *rebalance;
 
-#ifdef DEBUG_RBTREE
+#ifdef BFDEV_DEBUG_RBTREE
     if (unlikely(!rb_debug_delete_check(node)))
         return;
 #endif
