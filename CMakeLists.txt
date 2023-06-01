@@ -206,7 +206,7 @@ set(BFDEV_LIBRARY
 
 add_library(bfdev_shared SHARED ${BFDEV_LIBRARY})
 add_library(bfdev_static STATIC ${BFDEV_LIBRARY})
-add_library(bfdev ALIAS bfdev_shared)
+add_library(bfdev ALIAS bfdev_static)
 
 if(ENABLE_EXAMPLES)
     enable_testing()

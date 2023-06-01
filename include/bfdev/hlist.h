@@ -34,7 +34,7 @@ struct hlist_head {
 #define HLIST_HEAD(name) \
     struct hlist_head name = HLIST_HEAD_INIT
 
-#ifdef DEBUG_HLIST
+#ifdef BFDEV_DEBUG_HLIST
 extern bool hlist_debug_head_add_check(struct hlist_head *head, struct hlist_node *new);
 extern bool hlist_debug_next_add_check(struct hlist_node *next, struct hlist_node *new);
 extern bool hlist_debug_prev_add_check(struct hlist_node *prev, struct hlist_node *new);
@@ -45,7 +45,8 @@ extern bool hlist_debug_del_check(struct hlist_node *node);
  * hlist_head_init - initialize a hlist_head structure.
  * @head: list_head structure to be initialized.
  */
-static inline void hlist_head_init(struct hlist_head *head)
+static inline void
+hlist_head_init(struct hlist_head *head)
 {
     head->node = NULL;
 }
@@ -54,7 +55,8 @@ static inline void hlist_head_init(struct hlist_head *head)
  * hlist_node_init - initialize a hlist_node structure.
  * @node: hlist_node structure to be initialized.
  */
-static inline void hlist_node_init(struct hlist_node *node)
+static inline void
+hlist_node_init(struct hlist_node *node)
 {
     node->pprev = NULL;
     node->next = NULL;
@@ -65,9 +67,10 @@ static inline void hlist_node_init(struct hlist_node *node)
  * @head: hlist head to add it after.
  * @new: new entry to be added.
  */
-static inline void hlist_head_add(struct hlist_head *head, struct hlist_node *new)
+static inline void
+hlist_head_add(struct hlist_head *head, struct hlist_node *new)
 {
-#ifdef DEBUG_HLIST
+#ifdef BFDEV_DEBUG_HLIST
     if (unlikely(!hlist_debug_head_add_check(head, new)))
         return;
 #endif
@@ -85,9 +88,10 @@ static inline void hlist_head_add(struct hlist_head *head, struct hlist_node *ne
  * @node: hlist node to add it after, which must be non-NULL.
  * @new: new entry to be added.
  */
-static inline void hlist_next_add(struct hlist_node *node, struct hlist_node *new)
+static inline void
+hlist_next_add(struct hlist_node *node, struct hlist_node *new)
 {
-#ifdef DEBUG_HLIST
+#ifdef BFDEV_DEBUG_HLIST
     if (unlikely(!hlist_debug_next_add_check(node, new)))
         return;
 #endif
@@ -105,9 +109,10 @@ static inline void hlist_next_add(struct hlist_node *node, struct hlist_node *ne
  * @node: hlist node to add it before, which must be non-NULL.
  * @new: new entry to be added.
  */
-static inline void hlist_prev_add(struct hlist_node *node, struct hlist_node *new)
+static inline void
+hlist_prev_add(struct hlist_node *node, struct hlist_node *new)
 {
-#ifdef DEBUG_HLIST
+#ifdef BFDEV_DEBUG_HLIST
     if (unlikely(!hlist_debug_prev_add_check(node, new)))
         return;
 #endif
@@ -122,7 +127,8 @@ static inline void hlist_prev_add(struct hlist_node *node, struct hlist_node *ne
  * hlist_deluf - delete the specified hlist_node from its list (unsafe).
  * @node: the element to delete from the list.
  */
-static inline void hlist_deluf(struct hlist_node *node)
+static inline void
+hlist_deluf(struct hlist_node *node)
 {
     struct hlist_node **pprev = node->pprev;
     struct hlist_node *next = node->next;
@@ -136,9 +142,10 @@ static inline void hlist_deluf(struct hlist_node *node)
  * hlist_del - delete the specified hlist_node from its list.
  * @node: the element to delete from the list.
  */
-static inline void hlist_del(struct hlist_node *node)
+static inline void
+hlist_del(struct hlist_node *node)
 {
-#ifdef DEBUG_HLIST
+#ifdef BFDEV_DEBUG_HLIST
     if (unlikely(!hlist_debug_del_check(node)))
         return;
 #endif
@@ -152,7 +159,8 @@ static inline void hlist_del(struct hlist_node *node)
  * hlist_del_init - delete the specified hlist_node from its list and initialize.
  * @node: the element to delete from the list.
  */
-static inline void hlist_del_init(struct hlist_node *node)
+static inline void
+hlist_del_init(struct hlist_node *node)
 {
     hlist_deluf(node);
     hlist_node_init(node);
@@ -162,7 +170,8 @@ static inline void hlist_del_init(struct hlist_node *node)
  * hlist_check_empty - check whether the node is head.
  * @head: hlist head to check.
  */
-static inline bool hlist_check_empty(const struct hlist_head *head)
+static inline bool
+hlist_check_empty(const struct hlist_head *head)
 {
     return !head->node;
 }
@@ -172,7 +181,8 @@ static inline bool hlist_check_empty(const struct hlist_head *head)
  * @head: the head of the hlist.
  * @node: the entry to test.
  */
-static inline bool hlist_check_first(const struct hlist_head *head, const struct hlist_node *node)
+static inline bool
+hlist_check_first(const struct hlist_head *head, const struct hlist_node *node)
 {
     return head->node == node;
 }
@@ -182,7 +192,8 @@ static inline bool hlist_check_first(const struct hlist_head *head, const struct
  * @head: the head of the hlist.
  * @node: the entry to test.
  */
-static inline bool hlist_check_end(const struct hlist_node *node)
+static inline bool
+hlist_check_end(const struct hlist_node *node)
 {
     return !node->next;
 }
@@ -192,7 +203,8 @@ static inline bool hlist_check_end(const struct hlist_node *node)
  * @head: hlist head to check.
  * @node: the unique node.
  */
-static inline bool hlist_check_another(const struct hlist_head *head, const struct hlist_node *node)
+static inline bool
+hlist_check_another(const struct hlist_head *head, const struct hlist_node *node)
 {
     return head->node == node && node->next == NULL;
 }
@@ -201,7 +213,8 @@ static inline bool hlist_check_another(const struct hlist_head *head, const stru
  * hlist_check_outsize - check whether the node is outside the list.
  * @node: list entry to check.
  */
-static inline bool hlist_check_outsize(const struct hlist_node *node)
+static inline bool
+hlist_check_outsize(const struct hlist_node *node)
 {
     return !node->next || node->next == BFDEV_POISON_HLIST1;
 }
@@ -210,7 +223,8 @@ static inline bool hlist_check_outsize(const struct hlist_node *node)
  * hlist_check_unhashed - check whether the node is reinitialized.
  * @node: hlist node to check.
  */
-static inline bool hlist_check_unhashed(const struct hlist_node *node)
+static inline bool
+hlist_check_unhashed(const struct hlist_node *node)
 {
     return !node->pprev;
 }
@@ -220,7 +234,8 @@ static inline bool hlist_check_unhashed(const struct hlist_node *node)
  * @old: hlist_head for old list.
  * @new: hlist_head for new list.
  */
-static inline void hlist_move_list(struct hlist_head *old, struct hlist_head *new)
+static inline void
+hlist_move_list(struct hlist_head *old, struct hlist_head *new)
 {
     new->node = old->node;
     old->node = NULL;

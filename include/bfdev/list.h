@@ -35,7 +35,7 @@ typedef long (*bfdev_list_cmp_t)(const struct bfdev_list_head *, const struct bf
 extern void bfdev_list_qsort(struct bfdev_list_head *head, bfdev_list_cmp_t cmp, void *data);
 extern void bfdev_list_bsort(struct bfdev_list_head *head, bfdev_list_cmp_t cmp, void *data);
 
-#ifdef DEBUG_LIST
+#ifdef BFDEV_DEBUG_LIST
 extern bool bfdev_list_debug_add_check(struct bfdev_list_head *prev, struct bfdev_list_head *next, struct bfdev_list_head *new);
 extern bool bfdev_list_debug_del_check(struct bfdev_list_head *node);
 #endif
@@ -44,7 +44,7 @@ static inline void
 bfdev_list_insert(struct bfdev_list_head *prev, struct bfdev_list_head *next,
                   struct bfdev_list_head *new)
 {
-#ifdef DEBUG_LIST
+#ifdef BFDEV_DEBUG_LIST
     if (unlikely(!bfdev_list_debug_add_check(prev, next, new)))
         return;
 #endif
@@ -106,7 +106,7 @@ bfdev_list_deluf(struct bfdev_list_head *node)
 static inline void
 bfdev_list_del(struct bfdev_list_head *node)
 {
-#ifdef DEBUG_LIST
+#ifdef BFDEV_DEBUG_LIST
     if (unlikely(!bfdev_list_debug_del_check(node)))
         return;
 #endif
