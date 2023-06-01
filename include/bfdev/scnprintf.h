@@ -15,8 +15,11 @@
 extern "C" {
 #endif
 
-extern __printf(3, 0) int vscnprintf(char *buf, size_t size, const char *fmt, va_list args);
-extern __printf(3, 4) int scnprintf(char *buf, size_t size, const char *fmt, ...);
+extern __printf(3, 0) int
+bfdev_vscnprintf(char *buf, size_t size, const char *fmt, va_list args);
+
+extern __printf(3, 4) int
+bfdev_scnprintf(char *buf, size_t size, const char *fmt, ...);
 
 #ifdef __cplusplus
 }

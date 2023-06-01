@@ -8,14 +8,14 @@
 #include <export.h>
 
 /**
- * vscnprintf - format a string and place it in a buffer.
+ * bfdev_vscnprintf() - format a string and place it in a buffer.
  * @buf: The buffer to place the result into.
  * @size: The size of the buffer, including the trailing null space.
  * @fmt: The format string to use.
  * @...: Arguments for the format string.
  */
 export int
-vscnprintf(char *buf, size_t size, const char *fmt, va_list args)
+bfdev_vscnprintf(char *buf, size_t size, const char *fmt, va_list args)
 {
     int len;
 
@@ -30,20 +30,20 @@ vscnprintf(char *buf, size_t size, const char *fmt, va_list args)
 }
 
 /**
- * scnprintf - format a string and place it in a buffer.
+ * bfdev_scnprintf() - format a string and place it in a buffer.
  * @buf: The buffer to place the result into.
  * @size: The size of the buffer, including the trailing null space.
  * @fmt: The format string to use.
  * @...: Arguments for the format string.
  */
 export int
-scnprintf(char *buf, size_t size, const char *fmt, ...)
+bfdev_scnprintf(char *buf, size_t size, const char *fmt, ...)
 {
     va_list args;
     int len;
 
     va_start(args, fmt);
-    len = vscnprintf(buf, size, fmt, args);
+    len = bfdev_vscnprintf(buf, size, fmt, args);
     va_end(args);
 
     return len;
