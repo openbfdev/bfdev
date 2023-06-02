@@ -8,20 +8,20 @@
 #include <bfdev/hlist.h>
 
 #define TEST_LEN 100
-static HLIST_HEAD(demo_list);
+static BFDEV_HLIST_HEAD(demo_list);
 
-struct list_sample {
-    struct hlist_node list;
+struct hlist_sample {
+    struct bfdev_hlist_node list;
     unsigned int num;
     unsigned long data;
 };
 
-#define list_to_sample(node) \
-    container_of(node, struct list_sample, hlist)
+#define hlist_to_sample(node) \
+    bfdev_hlist_entry(node, struct hlist_sample, list)
 
 int main(void)
 {
-    struct list_sample *node, *tmp;
+    struct hlist_sample *node, *tmp;
     unsigned int count;
     int ret = 0;
 
@@ -35,16 +35,16 @@ int main(void)
 
         node->num = count;
         node->data = ((unsigned long)rand() << 32) | rand();
-        hlist_head_add(&demo_list, &node->list);
+        bfdev_hlist_head_add(&demo_list, &node->list);
     }
 
-    hlist_for_each_entry(node, &demo_list, list)
+    bfdev_hlist_for_each_entry(node, &demo_list, list)
         printf("\t%04u: 0x%016lx\n", node->num, node->data);
 
     printf("Deletion All Node...\n");
 error:
-    hlist_for_each_entry_safe(node, tmp, &demo_list, list) {
-        hlist_del(&node->list);
+    bfdev_hlist_for_each_entry_safe(node, tmp, &demo_list, list) {
+        bfdev_hlist_del(&node->list);
         free(node);
     }
 
