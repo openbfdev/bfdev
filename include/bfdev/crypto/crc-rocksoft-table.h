@@ -7,12 +7,11 @@
 #define _BFDEV_CRYPTO_CRC_ROCKSOFT_TABLE_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/stdint.h>
 #include <bfdev/stddef.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 static const uint64_t bfdev_crc_rocksoft_table[256] = {
     0x0000000000000000ULL, 0x7f6ef0c830358979ULL,
@@ -172,8 +171,6 @@ bfdev_crc_rocksoft_inline(const uint8_t *src, int len, uint64_t crc)
     return crc;
 }
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_CRYPTO_CRC_ROCKSOFT_TABLE_H_ */

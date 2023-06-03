@@ -3,15 +3,12 @@
 #define _BFDEV_ASM_GENERIC_SWAB_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 /* Nothing */
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_ASM_GENERIC_SWAB_H_ */

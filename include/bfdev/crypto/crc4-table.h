@@ -7,14 +7,13 @@
 #define _BFDEV_CRYPTO_CRC4_TABLE_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/stdint.h>
 #include <bfdev/stddef.h>
 #include <bfdev/minmax.h>
 #include <bfdev/bits.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 static const uint8_t bfdev_crc4_table[16] = {
     0x00, 0x07, 0x0e, 0x09,
@@ -62,8 +61,6 @@ bfdev_crc4_inline(const uint8_t *src, size_t bits, uint8_t crc)
     return crc;
 }
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_CRYPTO_CRC4_TABLE_H_ */

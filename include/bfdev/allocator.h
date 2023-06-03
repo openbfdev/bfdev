@@ -8,13 +8,12 @@
 #define _BFDEV_ALLOCATOR_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/stddef.h>
 #include <bfdev/stdlib.h>
 #include <bfdev/attributes.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 struct bfdev_alloc {
     void *(*malloc)(size_t size, void *pdata);
@@ -28,8 +27,6 @@ extern __malloc void *bfdev_zalloc(const struct bfdev_alloc *alloc, size_t size)
 extern __malloc void *bfdev_realloc(const struct bfdev_alloc *alloc, const void *block, size_t resize);
 extern void bfdev_free(const struct bfdev_alloc *alloc, const void *block);
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_ALLOCATOR_H_ */

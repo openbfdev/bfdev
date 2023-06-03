@@ -7,6 +7,7 @@
 #define _BFDEV_STDARG_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 
 #if defined(__FreeBSD__) && defined(_KERNEL)
 # include <machine/stdarg.h>
@@ -14,12 +15,8 @@
 # include <stdarg.h>
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_STDARG_H_ */

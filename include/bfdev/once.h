@@ -7,12 +7,11 @@
 #define _BFDEV_ONCE_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/stdbool.h>
 #include <bfdev/compiler.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 #define DO_ONCE_DONE(condition) ({                  \
     static bool __already;                          \
@@ -37,8 +36,6 @@ extern "C" {
 #define DO_ONCE(func, ...) \
     DO_ONCE_ON(true, func, ##__VA_ARGS__)
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_ONCE_H_ */

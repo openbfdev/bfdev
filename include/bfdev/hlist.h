@@ -7,14 +7,13 @@
 #define _BFDEV_BFDEV_HLIST_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/stddef.h>
 #include <bfdev/stdbool.h>
 #include <bfdev/poison.h>
 #include <bfdev/container.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 struct bfdev_hlist_node {
     struct bfdev_hlist_node *next;
@@ -382,8 +381,6 @@ bfdev_hlist_move_list(struct bfdev_hlist_head *old, struct bfdev_hlist_head *new
          (pos) && ({(tmp) = bfdev_hlist_next_entry(pos, member); 1;}); \
          (pos) = (tmp), ((tmp) && ((tmp) = bfdev_hlist_next_entry(pos, member))))
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_BFDEV_HLIST_H_ */

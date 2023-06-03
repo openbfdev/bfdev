@@ -7,10 +7,9 @@
 #define _BFDEV_MINMAX_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 /**
  * min - return minimum of two values of the same or compatible types.
@@ -74,8 +73,6 @@ extern "C" {
     (val) = bfdev_clamp(val, lo, hi); \
 })
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_MINMAX_H_ */

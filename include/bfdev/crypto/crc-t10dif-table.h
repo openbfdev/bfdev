@@ -7,12 +7,11 @@
 #define _BFDEV_CRYPTO_CRC_T10DIF_TABLE_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/stdint.h>
 #include <bfdev/stddef.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 static const uint16_t bfdev_crc_t10dif_table[256] = {
     0x0000, 0x8bb7, 0x9cd9, 0x176e,
@@ -108,8 +107,6 @@ bfdev_crc_t10dif_inline(const uint8_t *src, size_t len, uint16_t crc)
     return crc;
 }
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_CRYPTO_CRC_T10DIF_TABLE_H_ */

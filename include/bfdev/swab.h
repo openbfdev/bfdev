@@ -7,13 +7,12 @@
 #define _BFDEV_SWAB_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/stdint.h>
 #include <bfdev/attributes.h>
 #include <bfdev/asm/swab.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 /*
  * casts are necessary for constants, because we never know how for sure
@@ -457,8 +456,6 @@ static inline void bfdev_swahl64s(uint64_t *p)
 #endif
 }
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_SWAB_H_ */

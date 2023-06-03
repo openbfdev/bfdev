@@ -3,12 +3,11 @@
 #define _BFDEV_ASM_GENERIC_BUILTIN_FLSUF_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/bits.h>
 #include <bfdev/attributes.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 #define bfdev_arch_flsuf bfdev_arch_flsuf
 static __always_inline unsigned int bfdev_arch_flsuf(unsigned long value)
@@ -16,8 +15,6 @@ static __always_inline unsigned int bfdev_arch_flsuf(unsigned long value)
 	return BFDEV_BITS_PER_LONG - 1 - __builtin_clzl(value);
 }
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_ASM_GENERIC_BUILTIN_FLSUF_H_ */

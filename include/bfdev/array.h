@@ -8,13 +8,12 @@
 #define _BFDEV_ARRAY_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/stddef.h>
 #include <bfdev/errno.h>
 #include <bfdev/allocator.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 struct bfdev_array {
     const struct bfdev_alloc *alloc;
@@ -39,8 +38,6 @@ bfdev_array_reset(struct bfdev_array *array)
     array->nelts = 0;
 }
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /*_BFDEV_ARRAY_H_*/

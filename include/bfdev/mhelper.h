@@ -7,10 +7,9 @@
 #define _BFDEV_MHELPER_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 #define BFDEV_MMAP_SPLIT0(fn, ...)
 #define BFDEV_MMAP_SPLIT1(fn, arg, ...) fn(arg)
@@ -44,8 +43,6 @@ extern "C" {
 #define BFDEV_MARGFN_ARGS(type, arg) arg
 #define BFDEV_MARGFN_CAST(type, arg) (type) arg
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif  /* _BFDEV_MHELPER_H_ */

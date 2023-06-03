@@ -7,10 +7,9 @@
 #define _BFDEV_ERRNO_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 #define BFDEV_ENOERR                0       /* No error */
 #define BFDEV_EPERM                 1       /* Operation not permitted */
@@ -124,8 +123,6 @@ extern "C" {
 #define BFDEV_EKEYREJECTED          129     /* Key was rejected by service */
 #define BFDEV_ERRNO_MAX             4096
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_ERRNO_H_ */

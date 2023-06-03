@@ -7,10 +7,9 @@
 #define _BFDEV_COMPILER_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 #ifndef likely
 # define likely(x) __builtin_expect(!!(x), 1)
@@ -36,8 +35,6 @@ extern "C" {
 # define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __LINE__)
 #endif
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_COMPILER_H_ */

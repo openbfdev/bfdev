@@ -3,10 +3,9 @@
 #define _BFDEV_ASM_GENERIC_RWONCE_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 #define BFDEV_READ_ONCE(x) ({ \
     *(volatile typeof(x) *)&(x); \
@@ -16,8 +15,6 @@ extern "C" {
     *(volatile typeof(x) *)&(x) = (val); \
 })
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_ASM_GENERIC_RWONCE_H_ */

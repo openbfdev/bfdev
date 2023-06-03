@@ -7,10 +7,9 @@
 #define _BFDEV_TYPECHECK_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 #define bfdev_typecheck(type, object) ({    \
     type __dummy1;                          \
@@ -31,8 +30,6 @@ extern "C" {
     1;                                      \
 })
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_TYPECHECK_H_ */

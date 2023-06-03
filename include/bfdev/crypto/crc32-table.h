@@ -7,12 +7,11 @@
 #define _BFDEV_CRYPTO_CRC32_TABLE_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/stdint.h>
 #include <bfdev/stddef.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 static const uint32_t bfdev_crc32_table[256] = {
     0x00000000, 0x77073096, 0xee0e612c, 0x990951ba,
@@ -110,8 +109,6 @@ bfdev_crc32_inline(const uint8_t *src, int len, uint32_t crc)
     return loop ^ crc;
 }
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_CRYPTO_CRC32_TABLE_H_ */
