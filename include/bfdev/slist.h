@@ -7,15 +7,14 @@
 #define _BFDEV_SLIST_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/stddef.h>
 #include <bfdev/stdbool.h>
 #include <bfdev/compiler.h>
 #include <bfdev/poison.h>
 #include <bfdev/container.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 struct slist_head {
     struct slist_head *next;
@@ -138,7 +137,7 @@ static inline bool slist_check_another(const struct slist_head *head, const stru
 
 /**
  * slist_entry - get the struct for this entry.
- * @ptr: the &struct slist_head pointer.
+ * @ptr: the struct slist head pointer.
  * @type: the type of the struct this is embedded in.
  * @member: the name of the list_head within the struct.
  */
@@ -149,7 +148,7 @@ static inline bool slist_check_another(const struct slist_head *head, const stru
  * slist_first_entry - get the first element from a slist.
  * @ptr: the list head to take the element from.
  * @type: the type of the struct this is embedded in.
- * @member:	the name of the slist_head within the struct.
+ * @member:	the name of the slist head within the struct.
  */
 #define slist_first_entry(ptr, type, member) \
     slist_entry((ptr)->next, type, member)
@@ -157,14 +156,14 @@ static inline bool slist_check_another(const struct slist_head *head, const stru
 /**
  * slist_next_entry - get the next element in slist.
  * @pos: the type * to cursor.
- * @member: the name of the slist_head within the struct.
+ * @member: the name of the slist head within the struct.
  */
 #define slist_next_entry(pos, member) \
     slist_entry((pos)->member.next, typeof(*(pos)), member)
 
 /**
  * slist_for_each - iterate over a slist.
- * @pos: the &struct slist_head to use as a loop cursor.
+ * @pos: the &struct slist head to use as a loop cursor.
  * @head: the head for your slist.
  */
 #define slist_for_each(pos, head) \
@@ -172,22 +171,22 @@ static inline bool slist_check_another(const struct slist_head *head, const stru
 
 /**
  * slist_for_each_from - iterate over a slist from the current point.
- * @pos: the &struct slist_head to use as a loop cursor.
+ * @pos: the &struct slist head to use as a loop cursor.
  */
 #define slist_for_each_from(pos) \
     for (; (pos); (pos) = (pos)->next)
 
 /**
  * slist_for_each_continue - continue iteration over a slist.
- * @pos: the &struct slist_head to use as a loop cursor.
+ * @pos: the &struct slist head to use as a loop cursor.
  */
 #define slist_for_each_continue(pos) \
     for ((pos) = (pos)->next; (pos); (pos) = (pos)->next)
 
 /**
  * slist_for_each_safe - iterate over a slist safe against removal of slist entry.
- * @pos: the &struct slist_head to use as a loop cursor.
- * @tmp: another slist_head to use as temporary storage.
+ * @pos: the &struct slist head to use as a loop cursor.
+ * @tmp: another slist head to use as temporary storage.
  * @head: the head for your slist.
  */
 #define slist_for_each_safe(pos, tmp, head) \
@@ -272,8 +271,6 @@ static inline bool slist_check_another(const struct slist_head *head, const stru
          (tmp) = slist_next_entry(pos, member); (pos); (pos) = (tmp), \
          ((tmp) && ((tmp) = slist_next_entry(pos, member))))
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif  /* _BFDEV_SLIST_H_ */

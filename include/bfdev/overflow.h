@@ -7,11 +7,10 @@
 #define _BFDEV_OVERFLOW_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/stdint.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 #define bfdev_overflow_check_add(a, b, d) ({    \
     typeof(a) ___a = (a);                       \
@@ -97,8 +96,6 @@ BFDEV_GENERIC_OVERFLOW_OPS(u16, uint16_t)
 BFDEV_GENERIC_OVERFLOW_OPS(u32, uint32_t)
 BFDEV_GENERIC_OVERFLOW_OPS(u64, uint64_t)
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_OVERFLOW_H_ */

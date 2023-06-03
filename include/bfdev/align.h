@@ -7,12 +7,11 @@
 #define _BFDEV_ALIGN_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/stdlib.h>
 #include <bfdev/stddef.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 /**
  * align_low/high - aligned value.
@@ -44,8 +43,6 @@ extern "C" {
     bfdev_align_check((uintptr_t)(ptr), align) \
 )
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_ALIGN_H_ */

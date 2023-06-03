@@ -7,13 +7,12 @@
 #define _BFDEV_BITS_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/stdint.h>
 #include <bfdev/limits.h>
 #include <bfdev/bitsperlong.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 #define BFDEV_BITS_PER_BYTE         __CHAR_BIT__
 #define BFDEV_BITS_PER_TYPE(type)   (sizeof(type) * BFDEV_BITS_PER_BYTE)
@@ -104,8 +103,6 @@ extern "C" {
     (~0ULL >> (BFDEV_BITS_PER_LONG_LONG - 1 - (hi))) \
 )
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_BITS_H_ */

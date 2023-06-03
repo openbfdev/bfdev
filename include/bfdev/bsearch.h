@@ -7,12 +7,11 @@
 #define _BFDEV_BSEARCH_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/stdint.h>
 #include <bfdev/stddef.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 typedef long (*bfdev_bsearch_cmp_t)(const void *key, void *pdata);
 
@@ -44,8 +43,6 @@ bfdev_bsearch_inline(const void *base, size_t num, size_t esize,
 extern void *bfdev_bsearch(const void *base, size_t num, size_t esize,
                            bfdev_bsearch_cmp_t cmp, void *pdata);
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_BSEARCH_H_ */

@@ -6,13 +6,13 @@
 #ifndef _BFDEV_LEVENSHTEIN_H_
 #define _BFDEV_LEVENSHTEIN_H_
 
+#include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/stdint.h>
 #include <bfdev/stddef.h>
 #include <bfdev/allocator.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 /**
  * bfdev_levenshtein_len - Calculation string levenshtein edit distance.
@@ -47,8 +47,6 @@ bfdev_levenshtein(const struct bfdev_alloc *alloc,
                   unsigned int s, unsigned int w,
                   unsigned int a, unsigned int d);
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_LEVENSHTEIN_H_ */

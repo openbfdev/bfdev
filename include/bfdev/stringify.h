@@ -7,10 +7,9 @@
 #define _BFDEV_STRINGIFY_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 /*
  * Indirect stringification.  Doing two levels allows the parameter to be a
@@ -21,8 +20,6 @@ extern "C" {
 #define ___stringify(x...) #x
 #define __stringify(x...) ___stringify(x)
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_STRINGIFY_H_ */

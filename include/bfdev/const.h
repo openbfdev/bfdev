@@ -7,10 +7,9 @@
 #define _BFDEV_CONST_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 #ifdef __ASSEMBLY__
 # define _AC(X,Y)   X
@@ -27,8 +26,6 @@ extern "C" {
 #define _BITUL(x)   (_UL(1) << (x))
 #define _BITULL(x)  (_ULL(1) << (x))
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_CONST_H_ */

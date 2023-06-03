@@ -7,10 +7,9 @@
 #define _BFDEV_BITSPERLONG_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 #if __SIZEOF_POINTER__ == 4
 # define BFDEV_BITS_PER_LONG 32
@@ -18,8 +17,6 @@ extern "C" {
 # define BFDEV_BITS_PER_LONG 64
 #endif /* __SIZEOF_POINTER__ == 8 */
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_BITSPERLONG_H_ */

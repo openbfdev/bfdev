@@ -7,13 +7,12 @@
 #define _BFDEV_SKIPLIST_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/errno.h>
 #include <bfdev/list.h>
 #include <bfdev/allocator.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 typedef long (*bfdev_skiplist_find_t)(const void *data, const void *key);
 typedef long (*bfdev_skiplist_cmp_t)(const void *dataa, const void *datab);
@@ -141,8 +140,6 @@ extern struct bfdev_skip_head *bfdev_skiplist_create(const struct bfdev_alloc *a
 #define bfdev_skip_for_each_reverse_continue_safe(pos, tmp, head, level) \
     bfdev_list_for_each_entry_reverse_continue_safe(pos, tmp, &(head)->nodes[level], list[level])
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_SKIPLIST_H_ */

@@ -7,15 +7,14 @@
 #define _BFDEV_LIST_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/stddef.h>
 #include <bfdev/stdbool.h>
 #include <bfdev/compiler.h>
 #include <bfdev/container.h>
 #include <bfdev/poison.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 struct bfdev_list_head {
     struct bfdev_list_head *prev;
@@ -781,8 +780,6 @@ bfdev_list_splice_tail_init(struct bfdev_list_head *head, struct bfdev_list_head
          !bfdev_list_entry_check_head(pos, head, member); \
          (pos) = (tmp), (tmp) = bfdev_list_prev_entry(tmp, member))
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_LIST_H_ */

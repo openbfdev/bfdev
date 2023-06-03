@@ -7,13 +7,12 @@
 #define _BFDEV_BCD_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/stdint.h>
 #include <bfdev/limits.h>
 #include <bfdev/attributes.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 #define bfdev_bcd2bin_constant(bcd) ( \
     ((bcd) & 0x0f) + ((bcd) >> 4) * 10 \
@@ -60,8 +59,6 @@ uint8_t bfdev_bin2bcd_dynamic(uint8_t bin)
     : bfdev_bin2bcd_dynamic(__bin);     \
 })
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_BCD_H_ */

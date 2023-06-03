@@ -7,13 +7,12 @@
 #define _BFDEV_ASM_GENERIC_ATOMIC_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/stdint.h>
 #include <bfdev/attributes.h>
 #include <bfdev/asm/rwonce.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 #define bfdev_arch_atomic_read bfdev_arch_atomic_read
 static __always_inline bfdev_atomic_t
@@ -79,8 +78,6 @@ BFDEV_GENERIC_ATOMIC_FETCH(and_fetch, __sync_and_and_fetch)
 BFDEV_GENERIC_ATOMIC_FETCH(or_fetch, __sync_or_and_fetch)
 BFDEV_GENERIC_ATOMIC_FETCH(xor_fetch, __sync_xor_and_fetch)
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_ASM_GENERIC_ATOMIC_H_ */

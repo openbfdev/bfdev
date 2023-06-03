@@ -27,12 +27,4 @@
 #include <bfdev/minmax.h>
 #include <bfdev/stringify.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#ifdef __cplusplus
-}
-#endif
-
 #endif /* _BFDEV_H_ */

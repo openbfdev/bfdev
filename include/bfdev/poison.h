@@ -7,11 +7,10 @@
 #define _BFDEV_POISON_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/const.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 #ifdef BFDEV_POISON_ILLEGAL_ADDRESS
 # define BFDEV_POISON_OFFSET _AC(POISON_ILLEGAL_ADDRESS, UL)
@@ -33,8 +32,6 @@ extern "C" {
 #define BFDEV_POISON_HPNODE2    ((void *) BFDEV_POISON_OFFSET + 0x510)
 #define BFDEV_POISON_HPNODE3    ((void *) BFDEV_POISON_OFFSET + 0x520)
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_POISON_H_ */

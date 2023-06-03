@@ -2,6 +2,8 @@
 #ifndef _BFDEV_BYTEORDER_H_
 #define _BFDEV_BYTEORDER_H_
 
+#include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/bits.h>
 #include <bfdev/asm/byteorder.h>
 

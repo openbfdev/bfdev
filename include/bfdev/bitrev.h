@@ -7,11 +7,10 @@
 #define _BFDEV_BITREV_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/stdint.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 #define bfdev_bitrev8_constant(value) (             \
     (((uint8_t)(value) & (uint8_t)0x01UL) << 7) |   \
@@ -194,8 +193,6 @@ static inline uint64_t bfdev_bitrev64_dynamic(uint64_t value)
     : bfdev_bitrev64_dynamic(__value);      \
 })
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_BITREV_H_ */

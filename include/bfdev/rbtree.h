@@ -7,6 +7,7 @@
 #define _RBTREE_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/stddef.h>
 #include <bfdev/limits.h>
 #include <bfdev/stdbool.h>
@@ -15,9 +16,7 @@
 #include <bfdev/poison.h>
 #include <bfdev/container.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 #define BFDEV_RB_RED    (0)
 #define BFDEV_RB_BLACK  (1)
@@ -994,8 +993,6 @@ static inline bool RBNAME##_compute_max(RBSTRUCT *node, bool exit)              
 }                                                                                                               \
 BFDEV_RB_DECLARE_CALLBACKS(RBSTATIC, RBNAME, RBSTRUCT, RBFIELD, RBAUGMENTED, RBNAME##_compute_max)
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _RBTREE_H_ */

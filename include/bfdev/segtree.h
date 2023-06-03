@@ -7,11 +7,10 @@
 #define _BFDEV_SEGTREE_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/rbtree.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 struct bfdev_segtree_node {
     struct bfdev_rb_node node;
@@ -228,8 +227,6 @@ STSTATIC STSTRUCT *STNAME##_next(STSTRUCT *node, STTYPE start, STTYPE end)      
     }                                                                                                   \
 }
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_SEGTREE_ */

@@ -7,11 +7,10 @@
 #define _BFDEV_ATOMIC_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/asm/atomic.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 /**
  * bfdev_atomic_read - atomic read variable.
@@ -233,8 +232,6 @@ bfdev_atomic_xor_fetch(bfdev_atomic_t *atomic, bfdev_atomic_t value)
 }
 #endif
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_ATOMIC_H_ */

@@ -7,14 +7,13 @@
 #define _BFDEV_ASM_GENERIC_BITOPS_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/stdint.h>
 #include <bfdev/stdbool.h>
 #include <bfdev/bits.h>
 #include <bfdev/asm/atomic.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 #ifndef bfdev_arch_bit_clr
 static __always_inline void
@@ -517,8 +516,6 @@ bfdev_arch_clz(unsigned long value)
 }
 #endif
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_ASM_GENERIC_BITOPS_H_ */

@@ -7,10 +7,9 @@
 #define _BFDEV_CONTAINER_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 /**
  * container_of - cast a member of a structure out to the containing structure.
@@ -28,8 +27,6 @@ extern "C" {
     _ptr ? container_of(_ptr, type, member) : NULL; \
 })
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_CONTAINER_H_ */

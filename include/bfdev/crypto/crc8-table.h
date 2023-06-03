@@ -7,12 +7,11 @@
 #define _BFDEV_CRYPTO_CRC8_TABLE_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/stdint.h>
 #include <bfdev/stddef.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 static const uint8_t bfdev_crc8_table[256] = {
     0x00, 0x07, 0x0e, 0x09,
@@ -108,8 +107,6 @@ bfdev_crc8_inline(const uint8_t *src, size_t len, uint8_t crc)
     return crc;
 }
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_CRYPTO_CRC8_TABLE_H_ */

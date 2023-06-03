@@ -7,12 +7,11 @@
 #define _BFDEV_CRC_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/stdint.h>
 #include <bfdev/stddef.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 extern uint8_t bfdev_crc4(const uint8_t *src, size_t bits, uint8_t crc);
 extern uint8_t bfdev_crc7(const uint8_t *src, size_t len, uint8_t crc);
@@ -27,8 +26,6 @@ extern uint16_t bfdev_crc_itut(const uint8_t *src, size_t len, uint16_t crc);
 extern uint16_t bfdev_crc_t10dif(const uint8_t *src, size_t len, uint16_t crc);
 extern uint64_t bfdev_crc_rocksoft(const uint8_t *src, size_t len, uint64_t crc);
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_CRYPTO_CRC_H_ */

@@ -7,6 +7,7 @@
 #define _BFDEV_STDINT_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 
 #if defined(__FreeBSD__) && defined(_KERNEL)
 # include <sys/stdint.h>
@@ -14,9 +15,7 @@
 # include <stdint.h>
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 #ifdef __CHECKER__
 # define __bitwise __attribute__((bitwise))
@@ -46,8 +45,6 @@ typedef unsigned long bfdev_atomic_t;
 #define BFDEV_BYTES_PER_UINTMAX     sizeof(uintmax_t)
 #define BFDEV_BYTES_PER_UINTPTR     sizeof(uintptr_t)
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_STDINT_H_ */

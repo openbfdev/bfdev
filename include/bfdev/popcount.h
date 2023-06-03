@@ -7,13 +7,12 @@
 #define _BFDEV_POPCOUNT_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/stdint.h>
 #include <bfdev/stdbool.h>
 #include <bfdev/attributes.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 extern const uint8_t bfdev_popcount_table[256];
 extern const uint8_t bfdev_popparity_table[256];
@@ -214,8 +213,6 @@ bool bfdev_popparity64_dynamic(uint64_t value)
     : bfdev_popparity64_dynamic(__value);   \
 })
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_POPCOUNT_H_ */

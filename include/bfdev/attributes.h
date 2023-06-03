@@ -3,10 +3,9 @@
 #define _BFDEV_ATTRIBUTES_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 /*
  * The attributes in this file are unconditionally defined and they directly
@@ -376,8 +375,6 @@ extern "C" {
 # define __dtor __attribute__((destructor))
 #endif
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_ATTRIBUTES_H_ */

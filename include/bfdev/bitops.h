@@ -7,12 +7,11 @@
 #define _BFDEV_BITOPS_H_
 
 #include <bfdev/config.h>
+#include <bfdev/cdefs.h>
 #include <bfdev/stdbool.h>
 #include <bfdev/asm/bitops.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+BFDEV_BEGIN_DECLS
 
 #ifndef bfdev_bit_clr
 static __always_inline void
@@ -452,8 +451,6 @@ bfdev_clz64(uint64_t value)
 # define bfdev_clz64 bfdev_clz
 #endif
 
-#ifdef __cplusplus
-}
-#endif
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_BITOPS_H_ */
