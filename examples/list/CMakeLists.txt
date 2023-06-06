@@ -11,16 +11,18 @@ add_executable(list-selftest selftest.c)
 target_link_libraries(list-selftest bfdev)
 add_test(list-selftest list-selftest)
 
-install(FILES
-    benchmark.c
-    selftest.c
-    DESTINATION
-    ${CMAKE_INSTALL_DOCDIR}/examples/list
-)
+if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
+    install(FILES
+        benchmark.c
+        selftest.c
+        DESTINATION
+        ${CMAKE_INSTALL_DOCDIR}/examples/list
+    )
 
-install(TARGETS
-    list-benchmark
-    list-selftest
-    DESTINATION
-    ${CMAKE_INSTALL_DOCDIR}/bin
-)
+    install(TARGETS
+        list-benchmark
+        list-selftest
+        DESTINATION
+        ${CMAKE_INSTALL_DOCDIR}/bin
+    )
+endif()

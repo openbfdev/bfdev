@@ -11,16 +11,18 @@ add_executable(slist-simple simple.c)
 target_link_libraries(slist-simple bfdev)
 add_test(slist-simple slist-simple)
 
-install(FILES
-    selftest.c
-    simple.c
-    DESTINATION
-    ${CMAKE_INSTALL_DOCDIR}/examples/slist
-)
+if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
+    install(FILES
+        selftest.c
+        simple.c
+        DESTINATION
+        ${CMAKE_INSTALL_DOCDIR}/examples/slist
+    )
 
-install(TARGETS
-    slist-selftest
-    slist-simple
-    DESTINATION
-    ${CMAKE_INSTALL_DOCDIR}/bin
-)
+    install(TARGETS
+        slist-selftest
+        slist-simple
+        DESTINATION
+        ${CMAKE_INSTALL_DOCDIR}/bin
+    )
+endif()
