@@ -7,14 +7,16 @@ add_executable(levenshtein-simple simple.c)
 target_link_libraries(levenshtein-simple bfdev)
 add_test(levenshtein-simple levenshtein-simple)
 
-install(FILES
-    simple.c
-    DESTINATION
-    ${CMAKE_INSTALL_DOCDIR}/examples/levenshtein
-)
+if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
+    install(FILES
+        simple.c
+        DESTINATION
+        ${CMAKE_INSTALL_DOCDIR}/examples/levenshtein
+    )
 
-install(TARGETS
-    levenshtein-simple
-    DESTINATION
-    ${CMAKE_INSTALL_DOCDIR}/bin
-)
+    install(TARGETS
+        levenshtein-simple
+        DESTINATION
+        ${CMAKE_INSTALL_DOCDIR}/bin
+    )
+endif()

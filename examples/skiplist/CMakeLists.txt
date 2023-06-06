@@ -11,16 +11,18 @@ add_executable(skiplist-selftest selftest.c)
 target_link_libraries(skiplist-selftest bfdev)
 add_test(skiplist-selftest skiplist-selftest)
 
-install(FILES
-    benchmark.c
-    selftest.c
-    DESTINATION
-    ${CMAKE_INSTALL_DOCDIR}/examples/skiplist
-)
+if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
+    install(FILES
+        benchmark.c
+        selftest.c
+        DESTINATION
+        ${CMAKE_INSTALL_DOCDIR}/examples/skiplist
+    )
 
-install(TARGETS
-    skiplist-benchmark
-    skiplist-selftest
-    DESTINATION
-    ${CMAKE_INSTALL_DOCDIR}/bin
-)
+    install(TARGETS
+        skiplist-benchmark
+        skiplist-selftest
+        DESTINATION
+        ${CMAKE_INSTALL_DOCDIR}/bin
+    )
+endif()

@@ -15,6 +15,7 @@ add_executable(rbtree-simple simple.c)
 target_link_libraries(rbtree-simple bfdev)
 add_test(rbtree-simple rbtree-simple)
 
+if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
 install(FILES
     benchmark.c
     selftest.c
@@ -30,3 +31,4 @@ install(TARGETS
     DESTINATION
     ${CMAKE_INSTALL_DOCDIR}/bin
 )
+endif()

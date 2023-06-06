@@ -213,35 +213,37 @@ if(ENABLE_EXAMPLES)
     add_subdirectory(examples)
 endif()
 
-SET_TARGET_PROPERTIES(bfdev_shared
+set_target_properties(bfdev_shared
     PROPERTIES VERSION 1.0 SOVERSION 1
     OUTPUT_NAME bfdev
     MACOSX_RPATH ON
     LINKER_LANGUAGE C
 )
 
-SET_TARGET_PROPERTIES(bfdev_static
+set_target_properties(bfdev_static
     PROPERTIES
     OUTPUT_NAME bfdev
     LINKER_LANGUAGE C
 )
 
-install(DIRECTORY
-    ${BFDEV_HEADER_PATH}/bfdev
-    ${BFDEV_GENERATED_PATH}/bfdev
-    ${BFDEV_ARCH_HEADER_PATH}/bfdev
-    DESTINATION
-    "${CMAKE_INSTALL_INCLUDEDIR}"
-)
+if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
+    install(DIRECTORY
+        ${BFDEV_HEADER_PATH}/bfdev
+        ${BFDEV_GENERATED_PATH}/bfdev
+        ${BFDEV_ARCH_HEADER_PATH}/bfdev
+        DESTINATION
+        "${CMAKE_INSTALL_INCLUDEDIR}"
+    )
 
-install(FILES
-    docs/logo.svg
-    DESTINATION
-    "${CMAKE_INSTALL_DOCDIR}"
-)
+    install(FILES
+        docs/logo.svg
+        DESTINATION
+        "${CMAKE_INSTALL_DOCDIR}"
+    )
 
-install(TARGETS
-    bfdev_static bfdev_shared
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-)
+    install(TARGETS
+        bfdev_static bfdev_shared
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    )
+endif()
