@@ -31,10 +31,11 @@ bfdev_malloc(const struct bfdev_alloc *alloc, size_t size)
     void *pdata, *retval;
 
     if (!alloc || !alloc->malloc)
-        return generic_malloc(size);
-
-    pdata = alloc->pdata;
-    retval = alloc->malloc(size, pdata);
+        retval = generic_malloc(size);
+    else {
+        pdata = alloc->pdata;
+        retval = alloc->malloc(size, pdata);
+    }
 
     return retval;
 }
@@ -45,10 +46,11 @@ bfdev_zalloc(const struct bfdev_alloc *alloc, size_t size)
     void *pdata, *retval;
 
     if (!alloc || !alloc->malloc)
-        return generic_malloc(size);
-
-    pdata = alloc->pdata;
-    retval = alloc->malloc(size, pdata);
+        retval = generic_malloc(size);
+    else {
+        pdata = alloc->pdata;
+        retval = alloc->malloc(size, pdata);
+    }
 
     if (likely(retval))
         memset(retval, 0, size);
@@ -62,10 +64,11 @@ bfdev_realloc(const struct bfdev_alloc *alloc, const void *block, size_t resize)
     void *pdata, *retval;
 
     if (!alloc || !alloc->realloc)
-        return generic_realloc(block, resize);
-
-    pdata = alloc->pdata;
-    retval = alloc->realloc(block, resize, pdata);
+        retval = generic_realloc(block, resize);
+    else {
+        pdata = alloc->pdata;
+        retval = alloc->realloc(block, resize, pdata);
+    }
 
     return retval;
 }
@@ -76,8 +79,9 @@ bfdev_free(const struct bfdev_alloc *alloc, const void *block)
     void *pdata;
 
     if (!alloc || !alloc->free)
-        return generic_free(block);
-
-    pdata = alloc->pdata;
-    alloc->free(block, pdata);
+        generic_free(block);
+    else {
+        pdata = alloc->pdata;
+        alloc->free(block, pdata);
+    }
 }
