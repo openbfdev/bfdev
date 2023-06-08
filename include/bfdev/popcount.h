@@ -159,56 +159,56 @@ bool bfdev_popparity64_dynamic(uint64_t value)
 
 #define bfdev_popcount8(value) ({           \
     uint8_t __value = (value);              \
-    __builtin_constant_p(__value)           \
+    __builtin_const_p(__value)              \
     ? bfdev_popcount8_const(__value)        \
     : bfdev_popcount8_dynamic(__value);     \
 })
 
 #define bfdev_popcount16(value) ({          \
     uint16_t __value = (value);             \
-    __builtin_constant_p(__value)           \
+    __builtin_const_p(__value)              \
     ? bfdev_popcount16_const(__value)       \
     : bfdev_popcount16_dynamic(__value);    \
 })
 
 #define bfdev_popcount32(value) ({          \
     uint32_t __value = (value);             \
-    __builtin_constant_p(__value)           \
+    __builtin_const_p(__value)              \
     ? bfdev_popcount32_const(__value)       \
     : bfdev_popcount32_dynamic(__value);    \
 })
 
 #define bfdev_popcount64(value) ({          \
     uint64_t __value = (value);             \
-    __builtin_constant_p(__value)           \
+    __builtin_const_p(__value)              \
     ? bfdev_popcount64_const(__value)       \
     : bfdev_popcount64_dynamic(__value);    \
 })
 
 #define bfdev_popparity8(value) ({          \
     uint8_t __value = (value);              \
-    __builtin_constant_p(__value)           \
+    __builtin_const_p(__value)              \
     ? bfdev_popparity8_const(__value)       \
     : bfdev_popparity8_dynamic(__value);    \
 })
 
 #define bfdev_popparity16(value) ({         \
     uint16_t __value = (value);             \
-    __builtin_constant_p(__value)           \
+    __builtin_const_p(__value)              \
     ? bfdev_popparity16_const(__value)      \
     : bfdev_popparity16_dynamic(__value);   \
 })
 
 #define bfdev_popparity32(value) ({         \
     uint32_t __value = (value);             \
-    __builtin_constant_p(__value)           \
+    __builtin_const_p(__value)              \
     ? bfdev_popparity32_const(__value)      \
     : bfdev_popparity32_dynamic(__value);   \
 })
 
 #define bfdev_popparity64(value) ({         \
     uint64_t __value = (value);             \
-    __builtin_constant_p(__value)           \
+    __builtin_const_p(__value)              \
     ? bfdev_popparity64_const(__value)      \
     : bfdev_popparity64_dynamic(__value);   \
 })

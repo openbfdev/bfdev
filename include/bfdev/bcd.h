@@ -14,11 +14,11 @@
 
 BFDEV_BEGIN_DECLS
 
-#define bfdev_bcd2bin_constant(bcd) ( \
+#define bfdev_bcd2bin_const(bcd) ( \
     ((bcd) & 0x0f) + ((bcd) >> 4) * 10 \
 )
 
-#define bfdev_bin2bcd_constant(bin) ( \
+#define bfdev_bin2bcd_const(bin) ( \
     (((bin) / 10) << 4) + (bin) % 10 \
 )
 
@@ -41,22 +41,22 @@ uint8_t bfdev_bin2bcd_dynamic(uint8_t bin)
  * bcd2bin - convert bcd to bin.
  * @bcd: the bcd to convert.
  */
-#define bfdev_bcd2bin(bcd) ({           \
-    uint8_t __bcd = (uint8_t)(bcd);     \
-    __builtin_constant_p(__bcd)         \
-    ? bfdev_bcd2bin_constant(__bcd)     \
-    : bfdev_bcd2bin_dynamic(__bcd);     \
+#define bfdev_bcd2bin(bcd) ({       \
+    uint8_t __bcd = (uint8_t)(bcd); \
+    __builtin_const_p(__bcd)        \
+    ? bfdev_bcd2bin_const(__bcd)    \
+    : bfdev_bcd2bin_dynamic(__bcd); \
 })
 
 /**
  * bin2bcd - convert bin to bcd.
  * @bcd: the bin to convert.
  */
-#define bfdev_bin2bcd(bin) ({           \
-    uint8_t __bin = (uint8_t)(bin);     \
-    __builtin_constant_p(__bin)         \
-    ? bfdev_bin2bcd_constant(__bin)     \
-    : bfdev_bin2bcd_dynamic(__bin);     \
+#define bfdev_bin2bcd(bin) ({       \
+    uint8_t __bin = (uint8_t)(bin); \
+    __builtin_const_p(__bin)        \
+    ? bfdev_bin2bcd_const(__bin)    \
+    : bfdev_bin2bcd_dynamic(__bin); \
 })
 
 BFDEV_END_DECLS
