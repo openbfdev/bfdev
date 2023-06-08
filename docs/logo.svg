@@ -26,8 +26,8 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="1.5001963"
-     inkscape:cx="233.96938"
-     inkscape:cy="181.30961"
+     inkscape:cx="182.64276"
+     inkscape:cy="235.30254"
      inkscape:window-width="1920"
      inkscape:window-height="1017"
      inkscape:window-x="-8"
@@ -63,7 +63,14 @@
            y="56.729294">bfdev</tspan></text></pattern></defs><g
      inkscape:label="layer1"
      inkscape:groupmode="layer"
-     id="layer1"><text
+     id="layer1"><rect
+       style="fill:#ffffff;stroke-width:1.91509"
+       id="rect132"
+       width="120"
+       height="120"
+       x="0"
+       y="0"
+       inkscape:label="back" /><text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:19.7556px;line-height:1.25;font-family:'Simply Mono';-inkscape-font-specification:'Simply Mono Bold';stroke-width:0.264583;image-rendering:auto"
        x="48.553055"
