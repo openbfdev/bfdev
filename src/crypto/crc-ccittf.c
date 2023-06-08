@@ -4,7 +4,7 @@
  */
 
 #include <bfdev/crc.h>
-#include <bfdev/crypto/crc-ccittf-table.h>
+#include <bfdev/crypto/crc-ccittf-inline.h>
 #include <export.h>
 
 export uint16_t

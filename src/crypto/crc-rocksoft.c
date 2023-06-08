@@ -4,7 +4,7 @@
  */
 
 #include <bfdev/crc.h>
-#include <bfdev/crypto/crc-rocksoft-table.h>
+#include <bfdev/crypto/crc-rocksoft-inline.h>
 #include <export.h>
 
 export uint64_t

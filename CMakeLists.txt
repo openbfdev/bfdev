@@ -26,6 +26,7 @@ set(BFDEV_ARCH_SOURCE_PATH ${BFDEV_ARCH_PATH}/src)
 
 include(scripts/asm-generic.cmake)
 include(scripts/commit.cmake)
+add_subdirectory(scripts)
 
 commit_hash(BFDEV_COMMITID)
 commit_branch(BFDEV_BRANCH)
@@ -207,6 +208,16 @@ set(BFDEV_LIBRARY
 add_library(bfdev_shared SHARED ${BFDEV_LIBRARY})
 add_library(bfdev_static STATIC ${BFDEV_LIBRARY})
 add_library(bfdev ALIAS bfdev_static)
+
+add_dependencies(
+    bfdev_shared
+    gen-crc32
+)
+
+add_dependencies(
+    bfdev_static
+    gen-crc32
+)
 
 if(ENABLE_EXAMPLES)
     enable_testing()

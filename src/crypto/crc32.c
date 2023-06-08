@@ -4,7 +4,7 @@
  */
 
 #include <bfdev/crc.h>
-#include <bfdev/crypto/crc32-table.h>
+#include <bfdev/crypto/crc32-inline.h>
 #include <export.h>
 
 export uint32_t
