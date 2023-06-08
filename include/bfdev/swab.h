@@ -19,52 +19,52 @@ BFDEV_BEGIN_DECLS
  * how U/UL/ULL map to uint16_t, uint32_t, uint64_t. At least not in a portable way.
  */
 
-#define bfdev_swab16_constant(x) ((uint16_t)(                       \
-    (((uint16_t)(x) & (uint16_t)0x00ffU) << 8) |                    \
-    (((uint16_t)(x) & (uint16_t)0xff00U) >> 8)                      \
+#define bfdev_swab16_const(x) ((uint16_t)(          \
+    (((uint16_t)(x) & (uint16_t)0x00ffU) << 8) |    \
+    (((uint16_t)(x) & (uint16_t)0xff00U) >> 8)      \
 ))
 
-#define bfdev_swab32_constant(x) ((uint32_t)(                       \
-    (((uint32_t)(x) & (uint32_t)0x000000ffUL) << 24) |              \
-    (((uint32_t)(x) & (uint32_t)0x0000ff00UL) <<  8) |              \
-    (((uint32_t)(x) & (uint32_t)0x00ff0000UL) >>  8) |              \
-    (((uint32_t)(x) & (uint32_t)0xff000000UL) >> 24)                \
+#define bfdev_swab32_const(x) ((uint32_t)(              \
+    (((uint32_t)(x) & (uint32_t)0x000000ffUL) << 24) |  \
+    (((uint32_t)(x) & (uint32_t)0x0000ff00UL) <<  8) |  \
+    (((uint32_t)(x) & (uint32_t)0x00ff0000UL) >>  8) |  \
+    (((uint32_t)(x) & (uint32_t)0xff000000UL) >> 24)    \
 ))
 
-#define bfdev_swab64_constant(x) ((uint64_t)(                       \
-    (((uint64_t)(x) & (uint64_t)0x00000000000000ffULL) << 56) |     \
-    (((uint64_t)(x) & (uint64_t)0x000000000000ff00ULL) << 40) |     \
-    (((uint64_t)(x) & (uint64_t)0x0000000000ff0000ULL) << 24) |     \
-    (((uint64_t)(x) & (uint64_t)0x00000000ff000000ULL) <<  8) |     \
-    (((uint64_t)(x) & (uint64_t)0x000000ff00000000ULL) >>  8) |     \
-    (((uint64_t)(x) & (uint64_t)0x0000ff0000000000ULL) >> 24) |     \
-    (((uint64_t)(x) & (uint64_t)0x00ff000000000000ULL) >> 40) |     \
-    (((uint64_t)(x) & (uint64_t)0xff00000000000000ULL) >> 56)       \
+#define bfdev_swab64_const(x) ((uint64_t)(                      \
+    (((uint64_t)(x) & (uint64_t)0x00000000000000ffULL) << 56) | \
+    (((uint64_t)(x) & (uint64_t)0x000000000000ff00ULL) << 40) | \
+    (((uint64_t)(x) & (uint64_t)0x0000000000ff0000ULL) << 24) | \
+    (((uint64_t)(x) & (uint64_t)0x00000000ff000000ULL) <<  8) | \
+    (((uint64_t)(x) & (uint64_t)0x000000ff00000000ULL) >>  8) | \
+    (((uint64_t)(x) & (uint64_t)0x0000ff0000000000ULL) >> 24) | \
+    (((uint64_t)(x) & (uint64_t)0x00ff000000000000ULL) >> 40) | \
+    (((uint64_t)(x) & (uint64_t)0xff00000000000000ULL) >> 56)   \
 ))
 
-#define bfdev_swahb32_constant(x) ((uint32_t)(                      \
-    (((uint32_t)(x) & (uint32_t)0x00ff00ffUL) << 8) |               \
-    (((uint32_t)(x) & (uint32_t)0xff00ff00UL) >> 8)                 \
+#define bfdev_swahb32_const(x) ((uint32_t)(             \
+    (((uint32_t)(x) & (uint32_t)0x00ff00ffUL) << 8) |   \
+    (((uint32_t)(x) & (uint32_t)0xff00ff00UL) >> 8)     \
 ))
 
-#define bfdev_swahw32_constant(x) ((uint32_t)(                      \
-    (((uint32_t)(x) & (uint32_t)0x0000ffffUL) << 16) |              \
-    (((uint32_t)(x) & (uint32_t)0xffff0000UL) >> 16)                \
+#define bfdev_swahw32_const(x) ((uint32_t)(             \
+    (((uint32_t)(x) & (uint32_t)0x0000ffffUL) << 16) |  \
+    (((uint32_t)(x) & (uint32_t)0xffff0000UL) >> 16)    \
 ))
 
-#define bfdev_swahb64_constant(x) ((uint64_t)(                      \
-    (((uint64_t)(x) & (uint64_t)0x00ff00ff00ff00ffULL) << 8) |      \
-    (((uint64_t)(x) & (uint64_t)0xff00ff00ff00ff00ULL) >> 8)        \
+#define bfdev_swahb64_const(x) ((uint64_t)(                     \
+    (((uint64_t)(x) & (uint64_t)0x00ff00ff00ff00ffULL) << 8) |  \
+    (((uint64_t)(x) & (uint64_t)0xff00ff00ff00ff00ULL) >> 8)    \
 ))
 
-#define bfdev_swahw64_constant(x) ((uint64_t)(                      \
-    (((uint64_t)(x) & (uint64_t)0x0000ffff0000ffffULL) << 16) |     \
-    (((uint64_t)(x) & (uint64_t)0xffff0000ffff0000ULL) >> 16)       \
+#define bfdev_swahw64_const(x) ((uint64_t)(                     \
+    (((uint64_t)(x) & (uint64_t)0x0000ffff0000ffffULL) << 16) | \
+    (((uint64_t)(x) & (uint64_t)0xffff0000ffff0000ULL) >> 16)   \
 ))
 
-#define bfdev_swahl64_constant(x) ((uint64_t)(                      \
-    (((uint64_t)(x) & (uint64_t)0x00000000ffffffffULL) << 32) |     \
-    (((uint64_t)(x) & (uint64_t)0xffffffff00000000ULL) >> 32)       \
+#define bfdev_swahl64_const(x) ((uint64_t)(                     \
+    (((uint64_t)(x) & (uint64_t)0x00000000ffffffffULL) << 32) | \
+    (((uint64_t)(x) & (uint64_t)0xffffffff00000000ULL) >> 32)   \
 ))
 
 /*
@@ -79,7 +79,7 @@ uint16_t bfdev_fswab16(uint16_t val)
 #ifdef bfdev_arch_swab16
     return bfdev_arch_swab16(val);
 #else
-    return bfdev_swab16_constant(val);
+    return bfdev_swab16_const(val);
 #endif
 }
 
@@ -89,7 +89,7 @@ uint32_t bfdev_fswab32(uint32_t val)
 #ifdef bfdev_arch_swab32
     return bfdev_arch_swab32(val);
 #else
-    return bfdev_swab32_constant(val);
+    return bfdev_swab32_const(val);
 #endif
 }
 
@@ -99,7 +99,7 @@ uint64_t bfdev_fswab64(uint64_t val)
 #ifdef bfdev_arch_swab64
     return bfdev_arch_swab64(val);
 #else
-    return bfdev_swab64_constant(val);
+    return bfdev_swab64_const(val);
 #endif
 }
 
@@ -109,7 +109,7 @@ uint32_t bfdev_fswahb32(uint32_t val)
 #ifdef bfdev_arch_swahb32
     return bfdev_arch_swahb32(val);
 #else
-    return bfdev_swahb32_constant(val);
+    return bfdev_swahb32_const(val);
 #endif
 }
 
@@ -119,7 +119,7 @@ uint32_t bfdev_fswahw32(uint32_t val)
 #ifdef bfdev_arch_swahw32
     return bfdev_arch_swahw32(val);
 #else
-    return bfdev_swahw32_constant(val);
+    return bfdev_swahw32_const(val);
 #endif
 }
 
@@ -129,7 +129,7 @@ uint64_t bfdev_fswahb64(uint64_t val)
 #ifdef bfdev_arch_swahb64
     return bfdev_arch_swahb64(val);
 #else
-    return bfdev_swahb64_constant(val);
+    return bfdev_swahb64_const(val);
 #endif
 }
 
@@ -139,7 +139,7 @@ uint64_t bfdev_fswahw64(uint64_t val)
 #ifdef bfdev_arch_swahw64
     return bfdev_arch_swahw64(val);
 #else
-    return bfdev_swahw64_constant(val);
+    return bfdev_swahw64_const(val);
 #endif
 }
 
@@ -149,7 +149,7 @@ uint64_t bfdev_fswahl64(uint64_t val)
 #ifdef bfdev_arch_swahl64
     return bfdev_arch_swahl64(val);
 #else
-    return bfdev_swahl64_constant(val);
+    return bfdev_swahl64_const(val);
 #endif
 }
 
@@ -162,7 +162,7 @@ uint64_t bfdev_fswahl64(uint64_t val)
 #else
 # define bfdev_swab16(x) (                  \
     __builtin_constant_p((uint16_t)(x)) ?   \
-    bfdev_swab16_constant(x) :              \
+    bfdev_swab16_const(x) :                 \
     bfdev_fswab16(x)                        \
 )
 #endif
@@ -176,7 +176,7 @@ uint64_t bfdev_fswahl64(uint64_t val)
 #else
 # define bfdev_swab32(x) (                  \
     __builtin_constant_p((uint32_t)(x)) ?   \
-    bfdev_swab32_constant(x) :              \
+    bfdev_swab32_const(x) :                 \
     bfdev_fswab32(x)                        \
 )
 #endif
@@ -190,7 +190,7 @@ uint64_t bfdev_fswahl64(uint64_t val)
 #else
 # define bfdev_swab64(x) (                  \
     __builtin_constant_p((uint64_t)(x)) ?   \
-    bfdev_swab64_constant(x) :              \
+    bfdev_swab64_const(x) :                 \
     bfdev_fswab64(x)                        \
 )
 #endif
@@ -201,7 +201,7 @@ uint64_t bfdev_fswahl64(uint64_t val)
  */
 #define bfdev_swahb32(x) (                  \
     __builtin_constant_p((uint32_t)(x)) ?   \
-    bfdev_swahb32_constant(x) :             \
+    bfdev_swahb32_const(x) :                \
     bfdev_fswahb32(x)                       \
 )
 
@@ -211,7 +211,7 @@ uint64_t bfdev_fswahl64(uint64_t val)
  */
 #define bfdev_swahw32(x) (                  \
     __builtin_constant_p((uint32_t)(x)) ?   \
-    bfdev_swahw32_constant(x) :             \
+    bfdev_swahw32_const(x) :                \
     bfdev_fswahw32(x)                       \
 )
 
@@ -221,7 +221,7 @@ uint64_t bfdev_fswahl64(uint64_t val)
  */
 #define bfdev_swahb64(x) (                  \
     __builtin_constant_p((uint64_t)(x)) ?   \
-    bfdev_swahb64_constant(x) :             \
+    bfdev_swahb64_const(x) :                \
     bfdev_fswahb64(x)                       \
 )
 
@@ -231,7 +231,7 @@ uint64_t bfdev_fswahl64(uint64_t val)
  */
 #define bfdev_swahw64(x) (                  \
     __builtin_constant_p((uint64_t)(x)) ?   \
-    bfdev_swahw64_constant(x) :             \
+    bfdev_swahw64_const(x) :                \
     bfdev_fswahw64(x)                       \
 )
 
@@ -241,7 +241,7 @@ uint64_t bfdev_fswahl64(uint64_t val)
  */
 #define bfdev_swahl64(x) (                  \
     __builtin_constant_p((uint64_t)(x)) ?   \
-    bfdev_swahl64_constant(x) :             \
+    bfdev_swahl64_const(x) :                \
     bfdev_fswahl64(x)                       \
 )
 
