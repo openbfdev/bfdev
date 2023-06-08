@@ -3,8 +3,8 @@
  * Copyright(c) 2022 John Sanpe <sanpeqf@gmail.com>
  */
 
-#ifndef _BFDEV_CRYPTO_CRC_ITUT_TABLE_H_
-#define _BFDEV_CRYPTO_CRC_ITUT_TABLE_H_
+#ifndef _BFDEV_CRYPTO_CRC_ITUT_INLINE_H_
+#define _BFDEV_CRYPTO_CRC_ITUT_INLINE_H_
 
 #include <bfdev/config.h>
 #include <bfdev/cdefs.h>
@@ -109,4 +109,4 @@ bfdev_crc_itut_inline(const uint8_t *src, size_t len, uint16_t crc)
 
 BFDEV_END_DECLS
 
-#endif /* _BFDEV_CRYPTO_CRC_ITUT_TABLE_H_ */
+#endif /* _BFDEV_CRYPTO_CRC_ITUT_INLINE_H_ */

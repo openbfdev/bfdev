@@ -4,7 +4,7 @@
  */
 
 #include <bfdev/crc.h>
-#include <bfdev/crypto/crc4-table.h>
+#include <bfdev/crypto/crc4-inline.h>
 #include <export.h>
 
 export uint8_t
