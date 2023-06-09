@@ -1,6 +1,6 @@
 #  BFDEV Introduce
 
-bfdev is a high performance, beautiful and portable infrastructure provision library, its goal is to provide a one-stop and brief development environment.
+bfdev is a high-performance, aesthetically pleasing, and portable infrastructure provisioning library. Its goal is to provide a comprehensive and streamlined development environment.
 
 ![logo](docs/logo.png)
 
@@ -14,14 +14,14 @@ bfdev is a high performance, beautiful and portable infrastructure provision lib
 
 ## Why Choose
 
-- Provide common data structures, refusing to reinvent the wheel.
-- Support dynamic checking of data structures.
-- Design based on the idea of oriented object, compatible with any things.
-- The APIs available to the users are very rich and clearly categorised.
-- Designed based on gnuc standard, with good cross platform compatibility.
+- The library provides common data structures, eliminating the need to reinvent the wheel.
+- Supports dynamic checking of data structures.
+- Designed with an object-oriented approach, providing compatibility with various project.
+- Offers a rich and well-organized set of APIs for users.
+- Conforms to the GNUC standard, ensuring strong cross-platform compatibility.
 
 ### WARNING
-This project is not completely completed, please do not use in the production environment.
+This project is not yet fully completed, so it is not recommended for use in a production environment.
 
 ## Directory Structure
 
