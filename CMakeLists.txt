@@ -37,20 +37,17 @@ option(ENABLE_DOCUMENT "Build document" OFF)
 option(ENABLE_STRICT "Enable strict compilation" ON)
 option(ENABLE_ASAN "Enable Address Sanitizer" OFF)
 option(ENABLE_UBSAN "Enable Undefined Behaviour Sanitizer" OFF)
-option(ENABLE_DBGLIST "Dynamic debug list" OFF)
-option(ENABLE_DBGSLIST "Dynamic debug slist" OFF)
-option(ENABLE_DBGHLIST "Dynamic debug hlist" OFF)
-option(ENABLE_DBGRBTREE "Dynamic debug rbtree" OFF)
+
+option(ENABLE_DBGLIST "Dynamic debug list" ON)
+option(ENABLE_DBGSLIST "Dynamic debug slist" ON)
+option(ENABLE_DBGHLIST "Dynamic debug hlist" ON)
+option(ENABLE_DBGRBTREE "Dynamic debug rbtree" ON)
 
 if(ENABLE_DEVEL)
     set(ENABLE_EXAMPLES ON)
     set(ENABLE_DOCUMENT ON)
     set(ENABLE_ASAN ON)
     set(ENABLE_UBSAN ON)
-    set(ENABLE_DBGLIST ON)
-    set(ENABLE_DBGSLIST ON)
-    set(ENABLE_DBGHLIST ON)
-    set(ENABLE_DBGRBTREE ON)
 endif()
 
 if(ENABLE_DOCUMENT)
@@ -95,11 +92,6 @@ asm_generic(
     ${BFDEV_GENERATED_PATH}/bfdev/asm
     ${BFDEV_ARCH_HEADER_PATH}/bfdev/asm
     ${BFDEV_HEADER_PATH}/bfdev/asm-generic
-)
-
-configure_file(
-    ${CMAKE_MODULE_PATH}/config.h.in
-    ${PROJECT_BINARY_DIR}/generated/bfdev/config.h
 )
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
@@ -203,6 +195,11 @@ set(BFDEV_LIBRARY
     ${BFDEV_INCLUDE}
     ${BFDEV_SOURCE}
     ${BFDEV_ARCH_SOURCE}
+)
+
+configure_file(
+    ${CMAKE_MODULE_PATH}/config.h.in
+    ${PROJECT_BINARY_DIR}/generated/bfdev/config.h
 )
 
 add_library(bfdev_shared SHARED ${BFDEV_LIBRARY})
