@@ -8,10 +8,10 @@
 #include <bfdev/slist.h>
 
 #define TEST_LEN 100
-static SLIST_HEAD(demo_list);
+static BFDEV_SLIST_HEAD(demo_list);
 
 struct list_sample {
-    struct slist_head list;
+    struct bfdev_slist_head list;
     unsigned int num;
     unsigned long data;
 };
@@ -35,16 +35,16 @@ int main(void)
 
         node->num = count;
         node->data = ((unsigned long)rand() << 32) | rand();
-        slist_add(&demo_list, &node->list);
+        bfdev_slist_add(&demo_list, &node->list);
     }
 
-    slist_for_each_entry(node, &demo_list, list)
+    bfdev_slist_for_each_entry(node, &demo_list, list)
         printf("\t%04u: 0x%016lx\n", node->num, node->data);
 
     printf("Deletion All Node...\n");
 error:
-    slist_for_each_entry_safe(node, tmp, &demo_list, list) {
-        slist_del(&demo_list, &node->list);
+    bfdev_slist_for_each_entry_safe(node, tmp, &demo_list, list) {
+        bfdev_slist_del(&demo_list, &node->list);
         free(node);
     }
 

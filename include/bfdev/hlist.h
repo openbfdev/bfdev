@@ -3,8 +3,8 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
-#ifndef _BFDEV_BFDEV_HLIST_H_
-#define _BFDEV_BFDEV_HLIST_H_
+#ifndef _BFDEV_HLIST_H_
+#define _BFDEV_HLIST_H_
 
 #include <bfdev/config.h>
 #include <bfdev/cdefs.h>
@@ -383,4 +383,4 @@ bfdev_hlist_move_list(struct bfdev_hlist_head *old, struct bfdev_hlist_head *new
 
 BFDEV_END_DECLS
 
-#endif /* _BFDEV_BFDEV_HLIST_H_ */
+#endif /* _BFDEV_HLIST_H_ */
