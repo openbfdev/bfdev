@@ -10,18 +10,18 @@
 #define TEST_LEN 100
 static BFDEV_SLIST_HEAD(demo_list);
 
-struct list_sample {
+struct list_simple {
     struct bfdev_slist_head list;
     unsigned int num;
     unsigned long data;
 };
 
-#define list_to_sample(node) \
-    container_of(node, struct list_sample, slist)
+#define list_to_simple(node) \
+    container_of(node, struct list_simple, slist)
 
 int main(void)
 {
-    struct list_sample *node, *tmp;
+    struct list_simple *node, *tmp;
     unsigned int count;
     int ret = 0;
 
