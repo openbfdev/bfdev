@@ -173,30 +173,6 @@ bfdev_list_check_another(const struct bfdev_list_head *head,
     return head->next == node && head->prev == node;
 }
 
-/**
- * bfdev_list_check_outsize - check whether the node is outside the list.
- * @node: list entry to check.
- */
-static inline bool
-bfdev_list_check_outsize(const struct bfdev_list_head *node)
-{
-    return !node->next || node->next == BFDEV_POISON_LIST1;
-}
-
-/**
- * bfdev_list_replace - replace a list node with an external node.
- * @old: the element to be replaced.
- * @new: the new element to insert.
- */
-static inline void
-bfdev_list_replace(struct bfdev_list_head *old, struct bfdev_list_head *new)
-{
-    new->prev = old->prev;
-    new->next = old->next;
-    new->prev->next = new;
-    new->next->prev = new;
-}
-
 static inline void
 bfdev_list_relocate(struct bfdev_list_head *prev, struct bfdev_list_head *next,
                     struct bfdev_list_head *list)
@@ -233,6 +209,20 @@ bfdev_list_splice_prev(struct bfdev_list_head *head, struct bfdev_list_head *lis
 {
     if (!bfdev_list_check_empty(list))
         bfdev_list_relocate(head->prev, head, list);
+}
+
+/**
+ * bfdev_list_replace - replace a list node with an external node.
+ * @old: the element to be replaced.
+ * @new: the new element to insert.
+ */
+static inline void
+bfdev_list_replace(struct bfdev_list_head *old, struct bfdev_list_head *new)
+{
+    new->prev = old->prev;
+    new->next = old->next;
+    new->prev->next = new;
+    new->next->prev = new;
 }
 
 /**
@@ -284,7 +274,7 @@ bfdev_list_swap(struct bfdev_list_head *node1, struct bfdev_list_head *node2)
 static inline void
 bfdev_list_del_init(struct bfdev_list_head *node)
 {
-    bfdev_list_del(node);
+    bfdev_list_deluf(node);
     bfdev_list_head_init(node);
 }
 
