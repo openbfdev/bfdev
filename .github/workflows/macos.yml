@@ -19,8 +19,7 @@ jobs:
       - name: install dependencies
         run: |
           brew update
-          brew install \
-              python3 doxygen sphinx
+          brew install sphinx
           pip3 install breathe
       - name: configure cmake
         run: |

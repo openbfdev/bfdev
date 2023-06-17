@@ -26,7 +26,7 @@ jobs:
         run: |
           sudo apt update
           sudo apt install \
-              cmake make clang python3 pip doxygen
+              cmake make clang python3 pip
           pip install sphinx breathe
       - name: initialize codeql
         uses: github/codeql-action/init@v2

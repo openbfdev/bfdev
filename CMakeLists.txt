@@ -50,37 +50,28 @@ if(ENABLE_DEVEL)
 endif()
 
 if(ENABLE_DOCUMENT)
-    find_package(Doxygen REQUIRED)
     find_package(Sphinx REQUIRED breathe)
-
-    set(DOXYGEN_GENERATE_HTML NO)
-    set(DOXYGEN_GENERATE_XML YES)
-    doxygen_add_docs(doxygen_docs ${PROJECT_SOURCE_DIR})
 
     sphinx_add_docs(
         htmldocs
-        BREATHE_PROJECTS doxygen_docs
         BUILDER html
         SOURCE_DIRECTORY docs
     )
 
     sphinx_add_docs(
         latexdocs
-        BREATHE_PROJECTS doxygen_docs
         BUILDER latex
         SOURCE_DIRECTORY docs
     )
 
     sphinx_add_docs(
         epubdocs
-        BREATHE_PROJECTS doxygen_docs
         BUILDER epub
         SOURCE_DIRECTORY docs
     )
 
     sphinx_add_docs(
         xmldocs
-        BREATHE_PROJECTS doxygen_docs
         BUILDER xml
         SOURCE_DIRECTORY docs
     )
