@@ -156,17 +156,6 @@ bfdev_hlist_del(struct bfdev_hlist_node *node)
 }
 
 /**
- * bfdev_hlist_del_init - delete the specified hlist node from its list and initialize.
- * @node: the element to delete from the list.
- */
-static inline void
-bfdev_hlist_del_init(struct bfdev_hlist_node *node)
-{
-    bfdev_hlist_deluf(node);
-    bfdev_hlist_node_init(node);
-}
-
-/**
  * bfdev_hlist_check_empty - check whether the node is head.
  * @head: hlist head to check.
  */
@@ -190,7 +179,6 @@ bfdev_hlist_check_first(const struct bfdev_hlist_head *head,
 
 /**
  * bfdev_hlist_check_end - check whether the node is a ending.
- * @head: the head of the hlist.
  * @node: the entry to test.
  */
 static inline bool
@@ -212,16 +200,6 @@ bfdev_hlist_check_another(const struct bfdev_hlist_head *head,
 }
 
 /**
- * bfdev_hlist_check_outsize - check whether the node is outside the list.
- * @node: list entry to check.
- */
-static inline bool
-bfdev_hlist_check_outsize(const struct bfdev_hlist_node *node)
-{
-    return !node->next || node->next == BFDEV_POISON_HLIST1;
-}
-
-/**
  * bfdev_hlist_check_unhashed - check whether the node is reinitialized.
  * @node: hlist node to check.
  */
@@ -232,17 +210,43 @@ bfdev_hlist_check_unhashed(const struct bfdev_hlist_node *node)
 }
 
 /**
- * bfdev_hlist_move_list - move an hlist.
+ * bfdev_hlist_head_replace - replace a list head with an external head.
  * @old: bfdev_hlist_head for old list.
  * @new: bfdev_hlist_head for new list.
  */
 static inline void
-bfdev_hlist_move_list(struct bfdev_hlist_head *old, struct bfdev_hlist_head *new)
+bfdev_hlist_head_replace(struct bfdev_hlist_head *old, struct bfdev_hlist_head *new)
 {
     new->node = old->node;
     old->node = NULL;
     if (new->node)
         new->node->pprev = &new->node;
+}
+
+/**
+ * bfdev_hlist_replace - replace a list node with an external node.
+ * @old: bfdev_hlist_head for old list.
+ * @new: bfdev_hlist_head for new list.
+ */
+static inline void
+bfdev_hlist_replace(struct bfdev_hlist_node *old, struct bfdev_hlist_node *new)
+{
+    new->next = old->next;
+    new->pprev = old->pprev;
+    if (new->next)
+        new->next->pprev = &new->next;
+    *new->pprev = new;
+}
+
+/**
+ * bfdev_hlist_del_init -  deletes entry from list and reinitialize it.
+ * @node: the element to delete from the list.
+ */
+static inline void
+bfdev_hlist_del_init(struct bfdev_hlist_node *node)
+{
+    bfdev_hlist_deluf(node);
+    bfdev_hlist_node_init(node);
 }
 
 /**

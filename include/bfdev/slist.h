@@ -35,11 +35,11 @@ extern bool bfdev_slist_debug_del_check(struct bfdev_slist_head *node);
 #endif
 
 /**
- * bfdev_slist_init - initialize a slist head structure.
+ * bfdev_slist_head_init - initialize a slist head structure.
  * @head: slist head structure to be initialized.
  */
 static inline void
-bfdev_slist_init(struct bfdev_slist_head *head)
+bfdev_slist_head_init(struct bfdev_slist_head *head)
 {
     head->next = NULL;
 }
@@ -84,25 +84,6 @@ bfdev_slist_del(struct bfdev_slist_head *head, struct bfdev_slist_head *node)
 }
 
 /**
- * bfdev_slist_replace - replace a linked slist node with an external node.
- * @head: the head of the slist.
- * @old: the element to be replaced.
- * @new: the new element to insert.
- */
-static inline void
-bfdev_slist_replace(struct bfdev_slist_head *head, struct bfdev_slist_head *old,
-                    struct bfdev_slist_head *new)
-{
-    struct bfdev_slist_head *walk = head;
-
-    while (walk->next != old)
-        walk = walk->next;
-
-    walk->next = new;
-    new->next = old->next;
-}
-
-/**
  * bfdev_slist_check_empty - check whether the node is head.
  * @head: slist head to check.
  */
@@ -125,13 +106,13 @@ bfdev_slist_check_first(const struct bfdev_slist_head *head,
 }
 
 /**
- * bfdev_slist_check_next - check whether the node have next.
+ * bfdev_slist_check_next - check whether the node is a ending.
  * @node: the node to check.
  */
 static inline bool
-bfdev_slist_check_next(const struct bfdev_slist_head *node)
+bfdev_slist_check_end(const struct bfdev_slist_head *node)
 {
-    return node->next;
+    return !node->next;
 }
 
 /**
@@ -144,6 +125,25 @@ bfdev_slist_check_another(const struct bfdev_slist_head *head,
                           const struct bfdev_slist_head *node)
 {
     return head->next == node && node->next == NULL;
+}
+
+/**
+ * bfdev_slist_replace - replace a linked slist node with an external node.
+ * @head: the head of the slist.
+ * @old: the element to be replaced.
+ * @new: the new element to insert.
+ */
+static inline void
+bfdev_slist_replace(struct bfdev_slist_head *head, struct bfdev_slist_head *old,
+                    struct bfdev_slist_head *new)
+{
+    struct bfdev_slist_head *walk = head;
+
+    while (walk->next != old)
+        walk = walk->next;
+
+    walk->next = new;
+    new->next = old->next;
 }
 
 /**
