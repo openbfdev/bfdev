@@ -8,7 +8,8 @@
 BFDEV_BEGIN_DECLS
 
 #define bfdev_arch_clz bfdev_arch_clz
-static __always_inline unsigned int bfdev_arch_clz(unsigned long value)
+static __bfdev_always_inline unsigned int
+bfdev_arch_clz(unsigned long value)
 {
 	return __builtin_clzl(value);
 }

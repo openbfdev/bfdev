@@ -13,7 +13,7 @@
 BFDEV_BEGIN_DECLS
 
 #ifndef bfdev_bit_clr
-static __always_inline void
+static __bfdev_always_inline void
 bfdev_bit_clr(volatile unsigned long *addr, unsigned int bit)
 {
     bfdev_arch_bit_clr(addr, bit);
@@ -21,7 +21,7 @@ bfdev_bit_clr(volatile unsigned long *addr, unsigned int bit)
 #endif
 
 #ifndef bfdev_bit_set
-static __always_inline void
+static __bfdev_always_inline void
 bfdev_bit_set(volatile unsigned long *addr, unsigned int bit)
 {
     bfdev_arch_bit_set(addr, bit);
@@ -29,7 +29,7 @@ bfdev_bit_set(volatile unsigned long *addr, unsigned int bit)
 #endif
 
 #ifndef bfdev_bit_flip
-static __always_inline void
+static __bfdev_always_inline void
 bfdev_bit_flip(volatile unsigned long *addr, unsigned int bit)
 {
     bfdev_arch_bit_flip(addr, bit);
@@ -37,7 +37,7 @@ bfdev_bit_flip(volatile unsigned long *addr, unsigned int bit)
 #endif
 
 #ifndef bfdev_bit_change
-static __always_inline void
+static __bfdev_always_inline void
 bfdev_bit_change(volatile unsigned long *addr, unsigned int bit, bool val)
 {
     bfdev_arch_bit_change(addr, bit, val);
@@ -45,7 +45,7 @@ bfdev_bit_change(volatile unsigned long *addr, unsigned int bit, bool val)
 #endif
 
 #ifndef bfdev_bit_test
-static __always_inline bool
+static __bfdev_always_inline bool
 bfdev_bit_test(volatile unsigned long *addr, unsigned int bit)
 {
     return bfdev_arch_bit_test(addr, bit);
@@ -53,7 +53,7 @@ bfdev_bit_test(volatile unsigned long *addr, unsigned int bit)
 #endif
 
 #ifndef bfdev_bit_test_clr
-static __always_inline bool
+static __bfdev_always_inline bool
 bfdev_bit_test_clr(volatile unsigned long *addr, unsigned int bit)
 {
     return bfdev_arch_bit_test_clr(addr, bit);
@@ -61,7 +61,7 @@ bfdev_bit_test_clr(volatile unsigned long *addr, unsigned int bit)
 #endif
 
 #ifndef bfdev_bit_test_set
-static __always_inline bool
+static __bfdev_always_inline bool
 bfdev_bit_test_set(volatile unsigned long *addr, unsigned int bit)
 {
     return bfdev_arch_bit_test_set(addr, bit);
@@ -69,7 +69,7 @@ bfdev_bit_test_set(volatile unsigned long *addr, unsigned int bit)
 #endif
 
 #ifndef bfdev_bit_test_flip
-static __always_inline bool
+static __bfdev_always_inline bool
 bfdev_bit_test_flip(volatile unsigned long *addr, unsigned int bit)
 {
     return bfdev_arch_bit_test_flip(addr, bit);
@@ -77,7 +77,7 @@ bfdev_bit_test_flip(volatile unsigned long *addr, unsigned int bit)
 #endif
 
 #ifndef bfdev_bit_test_change
-static __always_inline bool
+static __bfdev_always_inline bool
 bfdev_bit_test_change(volatile unsigned long *addr, unsigned int bit, bool val)
 {
     return bfdev_arch_bit_test_change(addr, bit, val);
@@ -85,7 +85,7 @@ bfdev_bit_test_change(volatile unsigned long *addr, unsigned int bit, bool val)
 #endif
 
 #ifndef bfdev_bit_atomic_clr
-static __always_inline void
+static __bfdev_always_inline void
 bfdev_bit_atomic_clr(volatile unsigned long *addr, unsigned int bit)
 {
     bfdev_arch_bit_atomic_clr(addr, bit);
@@ -93,7 +93,7 @@ bfdev_bit_atomic_clr(volatile unsigned long *addr, unsigned int bit)
 #endif
 
 #ifndef bfdev_bit_atomic_set
-static __always_inline void
+static __bfdev_always_inline void
 bfdev_bit_atomic_set(volatile unsigned long *addr, unsigned int bit)
 {
     bfdev_arch_bit_atomic_set(addr, bit);
@@ -101,7 +101,7 @@ bfdev_bit_atomic_set(volatile unsigned long *addr, unsigned int bit)
 #endif
 
 #ifndef bfdev_bit_atomic_flip
-static __always_inline void
+static __bfdev_always_inline void
 bfdev_bit_atomic_flip(volatile unsigned long *addr, unsigned int bit)
 {
     bfdev_arch_bit_atomic_flip(addr, bit);
@@ -109,7 +109,7 @@ bfdev_bit_atomic_flip(volatile unsigned long *addr, unsigned int bit)
 #endif
 
 #ifndef bfdev_bit_atomic_change
-static __always_inline void
+static __bfdev_always_inline void
 bfdev_bit_atomic_change(volatile unsigned long *addr, unsigned int bit, bool val)
 {
     bfdev_arch_bit_atomic_change(addr, bit, val);
@@ -117,7 +117,7 @@ bfdev_bit_atomic_change(volatile unsigned long *addr, unsigned int bit, bool val
 #endif
 
 #ifndef bfdev_bit_atomic_test
-static __always_inline bool
+static __bfdev_always_inline bool
 bfdev_bit_atomic_test(volatile unsigned long *addr, unsigned int bit)
 {
     return bfdev_arch_bit_atomic_test(addr, bit);
@@ -125,7 +125,7 @@ bfdev_bit_atomic_test(volatile unsigned long *addr, unsigned int bit)
 #endif
 
 #ifndef bfdev_bit_atomic_test_clr
-static __always_inline bool
+static __bfdev_always_inline bool
 bfdev_bit_atomic_test_clr(volatile unsigned long *addr, unsigned int bit)
 {
     return bfdev_arch_bit_atomic_test_clr(addr, bit);
@@ -133,7 +133,7 @@ bfdev_bit_atomic_test_clr(volatile unsigned long *addr, unsigned int bit)
 #endif
 
 #ifndef bfdev_bit_atomic_test_set
-static __always_inline bool
+static __bfdev_always_inline bool
 bfdev_bit_atomic_test_set(volatile unsigned long *addr, unsigned int bit)
 {
     return bfdev_arch_bit_atomic_test_set(addr, bit);
@@ -141,7 +141,7 @@ bfdev_bit_atomic_test_set(volatile unsigned long *addr, unsigned int bit)
 #endif
 
 #ifndef bfdev_bit_atomic_test_flip
-static __always_inline bool
+static __bfdev_always_inline bool
 bfdev_bit_atomic_test_flip(volatile unsigned long *addr, unsigned int bit)
 {
     return bfdev_arch_bit_atomic_test_flip(addr, bit);
@@ -149,7 +149,7 @@ bfdev_bit_atomic_test_flip(volatile unsigned long *addr, unsigned int bit)
 #endif
 
 #ifndef bfdev_bit_atomic_test_change
-static __always_inline bool
+static __bfdev_always_inline bool
 bfdev_bit_atomic_test_change(volatile unsigned long *addr, unsigned int bit, bool val)
 {
     return bfdev_arch_bit_atomic_test_change(addr, bit, val);
@@ -157,7 +157,7 @@ bfdev_bit_atomic_test_change(volatile unsigned long *addr, unsigned int bit, boo
 #endif
 
 #ifndef bfdev_rol8
-static __always_inline uint8_t
+static __bfdev_always_inline uint8_t
 bfdev_rol8(uint8_t value, unsigned int shift)
 {
     return bfdev_arch_rol8(value, shift);
@@ -165,7 +165,7 @@ bfdev_rol8(uint8_t value, unsigned int shift)
 #endif
 
 #ifndef bfdev_ror8
-static __always_inline uint8_t
+static __bfdev_always_inline uint8_t
 bfdev_ror8(uint8_t value, unsigned int shift)
 {
     return bfdev_arch_ror8(value, shift);
@@ -173,7 +173,7 @@ bfdev_ror8(uint8_t value, unsigned int shift)
 #endif
 
 #ifndef bfdev_rol16
-static __always_inline uint16_t
+static __bfdev_always_inline uint16_t
 bfdev_rol16(uint16_t value, unsigned int shift)
 {
     return bfdev_arch_rol16(value, shift);
@@ -181,7 +181,7 @@ bfdev_rol16(uint16_t value, unsigned int shift)
 #endif
 
 #ifndef bfdev_ror16
-static __always_inline uint16_t
+static __bfdev_always_inline uint16_t
 bfdev_ror16(uint16_t value, unsigned int shift)
 {
     return bfdev_arch_ror16(value, shift);
@@ -189,7 +189,7 @@ bfdev_ror16(uint16_t value, unsigned int shift)
 #endif
 
 #ifndef bfdev_rol32
-static __always_inline uint32_t
+static __bfdev_always_inline uint32_t
 bfdev_rol32(uint32_t value, unsigned int shift)
 {
     return bfdev_arch_rol32(value, shift);
@@ -197,7 +197,7 @@ bfdev_rol32(uint32_t value, unsigned int shift)
 #endif
 
 #ifndef bfdev_ror32
-static __always_inline uint32_t
+static __bfdev_always_inline uint32_t
 bfdev_ror32(uint32_t value, unsigned int shift)
 {
     return bfdev_arch_ror32(value, shift);
@@ -205,7 +205,7 @@ bfdev_ror32(uint32_t value, unsigned int shift)
 #endif
 
 #ifndef bfdev_rol64
-static __always_inline uint64_t
+static __bfdev_always_inline uint64_t
 bfdev_rol64(uint64_t value, unsigned int shift)
 {
     return bfdev_arch_rol64(value, shift);
@@ -213,7 +213,7 @@ bfdev_rol64(uint64_t value, unsigned int shift)
 #endif
 
 #ifndef bfdev_ror64
-static __always_inline uint64_t
+static __bfdev_always_inline uint64_t
 bfdev_ror64(uint64_t value, unsigned int shift)
 {
     return bfdev_arch_ror64(value, shift);
@@ -221,7 +221,7 @@ bfdev_ror64(uint64_t value, unsigned int shift)
 #endif
 
 #ifndef bfdev_ffsuf
-static __always_inline unsigned int
+static __bfdev_always_inline unsigned int
 bfdev_ffsuf(unsigned long value)
 {
     return bfdev_arch_ffsuf(value);
@@ -229,7 +229,7 @@ bfdev_ffsuf(unsigned long value)
 #endif
 
 #ifndef bfdev_flsuf
-static __always_inline unsigned int
+static __bfdev_always_inline unsigned int
 bfdev_flsuf(unsigned long value)
 {
     return bfdev_arch_flsuf(value);
@@ -237,7 +237,7 @@ bfdev_flsuf(unsigned long value)
 #endif
 
 #ifndef bfdev_ffzuf
-static __always_inline unsigned int
+static __bfdev_always_inline unsigned int
 bfdev_ffzuf(unsigned long value)
 {
     return bfdev_arch_ffzuf(value);
@@ -245,7 +245,7 @@ bfdev_ffzuf(unsigned long value)
 #endif
 
 #ifndef bfdev_flzuf
-static __always_inline unsigned int
+static __bfdev_always_inline unsigned int
 bfdev_flzuf(unsigned long value)
 {
     return bfdev_arch_flzuf(value);
@@ -253,7 +253,7 @@ bfdev_flzuf(unsigned long value)
 #endif
 
 #ifndef bfdev_ffs
-static __always_inline unsigned int
+static __bfdev_always_inline unsigned int
 bfdev_ffs(unsigned long value)
 {
     return bfdev_arch_ffs(value);
@@ -261,7 +261,7 @@ bfdev_ffs(unsigned long value)
 #endif
 
 #ifndef bfdev_fls
-static __always_inline unsigned int
+static __bfdev_always_inline unsigned int
 bfdev_fls(unsigned long value)
 {
     return bfdev_arch_fls(value);
@@ -269,7 +269,7 @@ bfdev_fls(unsigned long value)
 #endif
 
 #ifndef bfdev_ffz
-static __always_inline unsigned int
+static __bfdev_always_inline unsigned int
 bfdev_ffz(unsigned long value)
 {
     return bfdev_arch_ffz(value);
@@ -277,7 +277,7 @@ bfdev_ffz(unsigned long value)
 #endif
 
 #ifndef bfdev_flz
-static __always_inline unsigned int
+static __bfdev_always_inline unsigned int
 bfdev_flz(unsigned long value)
 {
     return bfdev_arch_flz(value);
@@ -285,7 +285,7 @@ bfdev_flz(unsigned long value)
 #endif
 
 #ifndef bfdev_ctz
-static __always_inline unsigned int
+static __bfdev_always_inline unsigned int
 bfdev_ctz(unsigned long value)
 {
     return bfdev_arch_ctz(value);
@@ -293,7 +293,7 @@ bfdev_ctz(unsigned long value)
 #endif
 
 #ifndef bfdev_clz
-static __always_inline unsigned int
+static __bfdev_always_inline unsigned int
 bfdev_clz(unsigned long value)
 {
     return bfdev_arch_clz(value);
@@ -301,7 +301,7 @@ bfdev_clz(unsigned long value)
 #endif
 
 #if BFDEV_BITS_PER_LONG == 32
-static __always_inline unsigned int
+static __bfdev_always_inline unsigned int
 bfdev_ffsuf64(uint64_t value)
 {
     uint32_t hi = value >> 32;
@@ -316,7 +316,7 @@ bfdev_ffsuf64(uint64_t value)
 #endif
 
 #if BFDEV_BITS_PER_LONG == 32
-static __always_inline unsigned int
+static __bfdev_always_inline unsigned int
 bfdev_flsuf64(uint64_t value)
 {
     uint32_t hi = value >> 32;
@@ -331,7 +331,7 @@ bfdev_flsuf64(uint64_t value)
 #endif
 
 #if BFDEV_BITS_PER_LONG == 32
-static __always_inline unsigned int
+static __bfdev_always_inline unsigned int
 bfdev_ffzuf64(uint64_t value)
 {
     uint32_t hi = value >> 32;
@@ -346,7 +346,7 @@ bfdev_ffzuf64(uint64_t value)
 #endif
 
 #if BFDEV_BITS_PER_LONG == 32
-static __always_inline unsigned int
+static __bfdev_always_inline unsigned int
 bfdev_flzuf64(uint64_t value)
 {
     uint32_t hi = value >> 32;
@@ -361,7 +361,7 @@ bfdev_flzuf64(uint64_t value)
 #endif
 
 #if BFDEV_BITS_PER_LONG == 32
-static __always_inline unsigned int
+static __bfdev_always_inline unsigned int
 bfdev_ffs64(uint64_t value)
 {
     uint32_t hi = value >> 32;
@@ -376,7 +376,7 @@ bfdev_ffs64(uint64_t value)
 #endif
 
 #if BFDEV_BITS_PER_LONG == 32
-static __always_inline unsigned int
+static __bfdev_always_inline unsigned int
 bfdev_fls64(uint64_t value)
 {
     uint32_t hi = value >> 32;
@@ -391,7 +391,7 @@ bfdev_fls64(uint64_t value)
 #endif
 
 #if BFDEV_BITS_PER_LONG == 32
-static __always_inline unsigned int
+static __bfdev_always_inline unsigned int
 bfdev_ffz64(uint64_t value)
 {
     uint32_t hi = value >> 32;
@@ -406,7 +406,7 @@ bfdev_ffz64(uint64_t value)
 #endif
 
 #if BFDEV_BITS_PER_LONG == 32
-static __always_inline unsigned int
+static __bfdev_always_inline unsigned int
 bfdev_flz64(uint64_t value)
 {
     uint32_t hi = value >> 32;
@@ -421,7 +421,7 @@ bfdev_flz64(uint64_t value)
 #endif
 
 #if BFDEV_BITS_PER_LONG == 32
-static __always_inline unsigned int
+static __bfdev_always_inline unsigned int
 bfdev_ctz64(uint64_t value)
 {
     uint32_t hi = value >> 32;
@@ -436,7 +436,7 @@ bfdev_ctz64(uint64_t value)
 #endif
 
 #if BFDEV_BITS_PER_LONG == 32
-static __always_inline unsigned int
+static __bfdev_always_inline unsigned int
 bfdev_clz64(uint64_t value)
 {
     uint32_t hi = value >> 32;

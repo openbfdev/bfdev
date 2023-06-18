@@ -30,14 +30,14 @@ BFDEV_BEGIN_DECLS
  * bfdev_hashv{32/64}_generic() - General func for calc hash value.
  * @value: value to hash.
  */
-static __always_inline
+static __bfdev_always_inline
 uint32_t bfdev_hashv32_generic(uint32_t value)
 {
     /* Gold ratio method calc hash value. */
     return value * BFDEV_GOLDEN_RATIO_32;
 }
 
-static __always_inline
+static __bfdev_always_inline
 uint64_t bfdev_hashv64_generic(uint64_t value)
 {
     return value * BFDEV_GOLDEN_RATIO_64;
@@ -48,14 +48,14 @@ uint64_t bfdev_hashv64_generic(uint64_t value)
  * @value: value to hash.
  * @bits: bit number of result.
  */
-static __always_inline
+static __bfdev_always_inline
 uint32_t bfdev_hash32(uint32_t value, unsigned int bits)
 {
     /* High bits are more random, so use them. */
     return bfdev_hashv32(value) >> (BFDEV_BITS_PER_U32 - bits);
 }
 
-static __always_inline
+static __bfdev_always_inline
 uint64_t bfdev_hash64(uint64_t value, unsigned int bits)
 {
     return bfdev_hashv64(value) >> (BFDEV_BITS_PER_U64 - bits);

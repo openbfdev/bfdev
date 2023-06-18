@@ -67,19 +67,19 @@ BFDEV_BEGIN_DECLS
 #define bfdev_overflow_mul(a, b) bfdev_overflow_mul_type(typeof(a), a, b)
 
 #define BFDEV_GENERIC_OVERFLOW_OPS(name, type)      \
-static __always_inline type                         \
+static __bfdev_always_inline type                   \
 bfdev_overflow_add_##name(type a, type b)           \
 {                                                   \
     return bfdev_overflow_add_type(type, a, b);     \
 }                                                   \
                                                     \
-static __always_inline type                         \
+static __bfdev_always_inline type                   \
 bfdev_overflow_sub_##name(type a, type b)           \
 {                                                   \
     return bfdev_overflow_sub_type(type, a, b);     \
 }                                                   \
                                                     \
-static __always_inline type                         \
+static __bfdev_always_inline type                   \
 bfdev_overflow_mul_##name(type a, type b)           \
 {                                                   \
     return bfdev_overflow_mul_type(type, a, b);     \

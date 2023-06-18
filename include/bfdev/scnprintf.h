@@ -12,10 +12,10 @@
 
 BFDEV_BEGIN_DECLS
 
-extern __printf(3, 0) int
+extern __bfdev_printf(3, 0) int
 bfdev_vscnprintf(char *buf, size_t size, const char *fmt, va_list args);
 
-extern __printf(3, 4) int
+extern __bfdev_printf(3, 4) int
 bfdev_scnprintf(char *buf, size_t size, const char *fmt, ...);
 
 BFDEV_END_DECLS

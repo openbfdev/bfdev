@@ -56,73 +56,73 @@
 #define bfdev_be32_to_cpus(x) do { (void)(x); } while (0)
 #define bfdev_be64_to_cpus(x) do { (void)(x); } while (0)
 
-static __always_inline bfdev_le16
+static __bfdev_always_inline bfdev_le16
 bfdev_cpu_to_le16p(const uint16_t *p)
 {
     return (bfdev_le16)bfdev_swab16p(p);
 }
 
-static __always_inline bfdev_le32
+static __bfdev_always_inline bfdev_le32
 bfdev_cpu_to_le32p(const uint32_t *p)
 {
     return (bfdev_le32)bfdev_swab32p(p);
 }
 
-static __always_inline bfdev_le64
+static __bfdev_always_inline bfdev_le64
 bfdev_cpu_to_le64p(const uint64_t *p)
 {
     return (bfdev_le64)bfdev_swab64p(p);
 }
 
-static __always_inline uint16_t
+static __bfdev_always_inline uint16_t
 bfdev_le16_to_cpup(const bfdev_le16 *p)
 {
     return bfdev_swab16p((uint16_t *)p);
 }
 
-static __always_inline uint32_t
+static __bfdev_always_inline uint32_t
 bfdev_le32_to_cpup(const bfdev_le32 *p)
 {
     return bfdev_swab32p((uint32_t *)p);
 }
 
-static __always_inline uint64_t
+static __bfdev_always_inline uint64_t
 bfdev_le64_to_cpup(const bfdev_le64 *p)
 {
     return bfdev_swab64p((uint64_t *)p);
 }
 
-static __always_inline bfdev_be16
+static __bfdev_always_inline bfdev_be16
 bfdev_cpu_to_be16p(const uint16_t *p)
 {
     return (bfdev_be16)*p;
 }
 
-static __always_inline bfdev_be32
+static __bfdev_always_inline bfdev_be32
 bfdev_cpu_to_be32p(const uint32_t *p)
 {
     return (bfdev_be32)*p;
 }
 
-static __always_inline bfdev_be64
+static __bfdev_always_inline bfdev_be64
 bfdev_cpu_to_be64p(const uint64_t *p)
 {
     return (bfdev_be64)*p;
 }
 
-static __always_inline uint16_t
+static __bfdev_always_inline uint16_t
 bfdev_be16_to_cpup(const bfdev_be16 *p)
 {
     return (uint16_t)*p;
 }
 
-static __always_inline uint32_t
+static __bfdev_always_inline uint32_t
 bfdev_be32_to_cpup(const bfdev_be32 *p)
 {
     return (uint32_t)*p;
 }
 
-static __always_inline uint64_t
+static __bfdev_always_inline uint64_t
 bfdev_be64_to_cpup(const bfdev_be64 *p)
 {
     return (uint64_t)*p;

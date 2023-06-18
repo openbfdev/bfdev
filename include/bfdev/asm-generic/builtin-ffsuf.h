@@ -8,7 +8,8 @@
 BFDEV_BEGIN_DECLS
 
 #define bfdev_arch_ffsuf bfdev_arch_ffsuf
-static __always_inline unsigned int bfdev_arch_ffsuf(unsigned long value)
+static __bfdev_always_inline unsigned int
+bfdev_arch_ffsuf(unsigned long value)
 {
 	return __builtin_ctzl(value);
 }

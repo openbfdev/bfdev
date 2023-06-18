@@ -13,28 +13,28 @@
 BFDEV_BEGIN_DECLS
 
 #define bfdev_arch_atomic_read bfdev_arch_atomic_read
-static __always_inline bfdev_atomic_t
+static __bfdev_always_inline bfdev_atomic_t
 bfdev_arch_atomic_read(const bfdev_atomic_t *atomic)
 {
     return BFDEV_READ_ONCE(*atomic);
 }
 
 #define bfdev_arch_atomic_write bfdev_arch_atomic_write
-static __always_inline void
+static __bfdev_always_inline void
 bfdev_arch_atomic_write(bfdev_atomic_t *atomic, bfdev_atomic_t value)
 {
     BFDEV_WRITE_ONCE(*atomic, value);
 }
 
 #define BFDEV_GENERIC_ATOMIC(name, func)                                \
-static __always_inline void                                             \
+static __bfdev_always_inline void                                       \
 bfdev_arch_atomic_##name(bfdev_atomic_t *atomic, bfdev_atomic_t value)  \
 {                                                                       \
     (void)func(atomic, value);                                          \
 }
 
 #define BFDEV_GENERIC_ATOMIC_FETCH(name, func)                          \
-static __always_inline bfdev_atomic_t                                   \
+static __bfdev_always_inline bfdev_atomic_t                             \
 bfdev_arch_atomic_##name(bfdev_atomic_t *atomic, bfdev_atomic_t value)  \
 {                                                                       \
     return func(atomic, value);                                         \
