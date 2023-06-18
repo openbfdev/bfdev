@@ -7,25 +7,25 @@
 #include <bfdev/allocator.h>
 #include <export.h>
 
-static __always_inline void *
+static __bfdev_always_inline void *
 generic_malloc(size_t size)
 {
     return malloc(size);
 }
 
-static __always_inline void *
+static __bfdev_always_inline void *
 generic_realloc(const void *block, size_t resize)
 {
     return realloc((void *)block, resize);
 }
 
-static __always_inline void
+static __bfdev_always_inline void
 generic_free(const void *block)
 {
     free((void *)block);
 }
 
-export __malloc void *
+export __bfdev_malloc void *
 bfdev_malloc(const struct bfdev_alloc *alloc, size_t size)
 {
     void *pdata, *retval;
@@ -40,7 +40,7 @@ bfdev_malloc(const struct bfdev_alloc *alloc, size_t size)
     return retval;
 }
 
-export __malloc void *
+export __bfdev_malloc void *
 bfdev_zalloc(const struct bfdev_alloc *alloc, size_t size)
 {
     void *pdata, *retval;
@@ -58,7 +58,7 @@ bfdev_zalloc(const struct bfdev_alloc *alloc, size_t size)
     return retval;
 }
 
-export __malloc void *
+export __bfdev_malloc void *
 bfdev_realloc(const struct bfdev_alloc *alloc, const void *block, size_t resize)
 {
     void *pdata, *retval;

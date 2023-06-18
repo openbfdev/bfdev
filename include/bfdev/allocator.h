@@ -8,10 +8,8 @@
 #define _BFDEV_ALLOCATOR_H_
 
 #include <bfdev/config.h>
-#include <bfdev/cdefs.h>
 #include <bfdev/stddef.h>
 #include <bfdev/stdlib.h>
-#include <bfdev/attributes.h>
 
 BFDEV_BEGIN_DECLS
 
@@ -22,9 +20,9 @@ struct bfdev_alloc {
     void *pdata;
 };
 
-extern __malloc void *bfdev_malloc(const struct bfdev_alloc *alloc, size_t size);
-extern __malloc void *bfdev_zalloc(const struct bfdev_alloc *alloc, size_t size);
-extern __malloc void *bfdev_realloc(const struct bfdev_alloc *alloc, const void *block, size_t resize);
+extern __bfdev_malloc void *bfdev_malloc(const struct bfdev_alloc *alloc, size_t size);
+extern __bfdev_malloc void *bfdev_zalloc(const struct bfdev_alloc *alloc, size_t size);
+extern __bfdev_malloc void *bfdev_realloc(const struct bfdev_alloc *alloc, const void *block, size_t resize);
 extern void bfdev_free(const struct bfdev_alloc *alloc, const void *block);
 
 BFDEV_END_DECLS

@@ -7,7 +7,6 @@
 #define _BFDEV_CTYPE_H_
 
 #include <bfdev/config.h>
-#include <bfdev/cdefs.h>
 
 #if defined(__FreeBSD__) && defined(_KERNEL)
 # include <sys/ctype.h>

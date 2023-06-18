@@ -7,7 +7,6 @@
 #define _BFDEV_CALLBACK_H_
 
 #include <bfdev/config.h>
-#include <bfdev/cdefs.h>
 
 extern void bfdev_cbfunc_noop(void);
 extern long bfdev_cbfunc_ret0(void);

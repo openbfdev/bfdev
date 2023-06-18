@@ -7,7 +7,6 @@
 #define _BFDEV_CRYPTO_CRC8_INLINE_H_
 
 #include <bfdev/config.h>
-#include <bfdev/cdefs.h>
 #include <bfdev/stdint.h>
 #include <bfdev/stddef.h>
 

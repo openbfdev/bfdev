@@ -7,9 +7,7 @@
 #define _BFDEV_SWAB_H_
 
 #include <bfdev/config.h>
-#include <bfdev/cdefs.h>
 #include <bfdev/stdint.h>
-#include <bfdev/attributes.h>
 #include <bfdev/asm/swab.h>
 
 BFDEV_BEGIN_DECLS
@@ -73,7 +71,7 @@ BFDEV_BEGIN_DECLS
  * _swab16, _swab32, _swab64, ___swahw32, _swahb32
  */
 
-static inline __attribute_const__
+static inline __bfdev_attribute_const
 uint16_t bfdev_fswab16(uint16_t val)
 {
 #ifdef bfdev_arch_swab16
@@ -83,7 +81,7 @@ uint16_t bfdev_fswab16(uint16_t val)
 #endif
 }
 
-static inline __attribute_const__
+static inline __bfdev_attribute_const
 uint32_t bfdev_fswab32(uint32_t val)
 {
 #ifdef bfdev_arch_swab32
@@ -93,7 +91,7 @@ uint32_t bfdev_fswab32(uint32_t val)
 #endif
 }
 
-static inline __attribute_const__
+static inline __bfdev_attribute_const
 uint64_t bfdev_fswab64(uint64_t val)
 {
 #ifdef bfdev_arch_swab64
@@ -103,7 +101,7 @@ uint64_t bfdev_fswab64(uint64_t val)
 #endif
 }
 
-static inline __attribute_const__
+static inline __bfdev_attribute_const
 uint32_t bfdev_fswahb32(uint32_t val)
 {
 #ifdef bfdev_arch_swahb32
@@ -113,7 +111,7 @@ uint32_t bfdev_fswahb32(uint32_t val)
 #endif
 }
 
-static inline __attribute_const__
+static inline __bfdev_attribute_const
 uint32_t bfdev_fswahw32(uint32_t val)
 {
 #ifdef bfdev_arch_swahw32
@@ -123,7 +121,7 @@ uint32_t bfdev_fswahw32(uint32_t val)
 #endif
 }
 
-static inline __attribute_const__
+static inline __bfdev_attribute_const
 uint64_t bfdev_fswahb64(uint64_t val)
 {
 #ifdef bfdev_arch_swahb64
@@ -133,7 +131,7 @@ uint64_t bfdev_fswahb64(uint64_t val)
 #endif
 }
 
-static inline __attribute_const__
+static inline __bfdev_attribute_const
 uint64_t bfdev_fswahw64(uint64_t val)
 {
 #ifdef bfdev_arch_swahw64
@@ -143,7 +141,7 @@ uint64_t bfdev_fswahw64(uint64_t val)
 #endif
 }
 
-static inline __attribute_const__
+static inline __bfdev_attribute_const
 uint64_t bfdev_fswahl64(uint64_t val)
 {
 #ifdef bfdev_arch_swahl64
@@ -249,7 +247,7 @@ uint64_t bfdev_fswahl64(uint64_t val)
  * swab16p - return a byteswapped 16-bit value from a pointer.
  * @p: pointer to a naturally-aligned 16-bit value.
  */
-static __always_inline uint16_t
+static __bfdev_always_inline uint16_t
 bfdev_swab16p(const uint16_t *p)
 {
 #ifdef bfdev_arch_swab16p
@@ -263,7 +261,7 @@ bfdev_swab16p(const uint16_t *p)
  * swab32p - return a byteswapped 32-bit value from a pointer.
  * @p: pointer to a naturally-aligned 32-bit value.
  */
-static __always_inline uint32_t
+static __bfdev_always_inline uint32_t
 bfdev_swab32p(const uint32_t *p)
 {
 #ifdef bfdev_arch_swab32p
@@ -277,7 +275,7 @@ bfdev_swab32p(const uint32_t *p)
  * swab64p - return a byteswapped 64-bit value from a pointer.
  * @p: pointer to a naturally-aligned 64-bit value.
  */
-static __always_inline uint64_t
+static __bfdev_always_inline uint64_t
 bfdev_swab64p(const uint64_t *p)
 {
 #ifdef bfdev_arch_swab64p
@@ -291,7 +289,8 @@ bfdev_swab64p(const uint64_t *p)
  * swahb32p - return a high and low byteswapped 32-bit value from a pointer.
  * @p: pointer to a naturally-aligned 32-bit value.
  */
-static inline uint32_t bfdev_swahb32p(const uint32_t *p)
+static inline uint32_t
+bfdev_swahb32p(const uint32_t *p)
 {
 #ifdef bfdev_arch_swahb32p
     return bfdev_arch_swahb32p(p);
@@ -304,7 +303,8 @@ static inline uint32_t bfdev_swahb32p(const uint32_t *p)
  * swahw32p - return a wordswapped 32-bit value from a pointer.
  * @p: pointer to a naturally-aligned 32-bit value.
  */
-static inline uint32_t bfdev_swahw32p(const uint32_t *p)
+static inline uint32_t
+bfdev_swahw32p(const uint32_t *p)
 {
 #ifdef bfdev_arch_swahw32p
     return bfdev_arch_swahw32p(p);
@@ -317,7 +317,8 @@ static inline uint32_t bfdev_swahw32p(const uint32_t *p)
  * swahb64p - return a high and low byteswapped 64-bit value from a pointer.
  * @p: pointer to a naturally-aligned 64-bit value.
  */
-static inline uint64_t bfdev_swahb64p(const uint64_t *p)
+static inline uint64_t
+bfdev_swahb64p(const uint64_t *p)
 {
 #ifdef bfdev_arch_swahb64p
     return bfdev_arch_swahb64p(p);
@@ -330,7 +331,8 @@ static inline uint64_t bfdev_swahb64p(const uint64_t *p)
  * swahw64p - return a wordswapped 64-bit value from a pointer.
  * @p: pointer to a naturally-aligned 64-bit value.
  */
-static inline uint64_t bfdev_swahw64p(const uint64_t *p)
+static inline uint64_t
+bfdev_swahw64p(const uint64_t *p)
 {
 #ifdef bfdev_arch_swahw64p
     return bfdev_arch_swahw64p(p);
@@ -343,7 +345,8 @@ static inline uint64_t bfdev_swahw64p(const uint64_t *p)
  * swahl64p - return a longswapped 64-bit value from a pointer.
  * @p: pointer to a naturally-aligned 64-bit value.
  */
-static inline uint64_t bfdev_swahl64p(const uint64_t *p)
+static inline uint64_t
+bfdev_swahl64p(const uint64_t *p)
 {
 #ifdef bfdev_arch_swahl64p
     return bfdev_arch_swahl64p(p);
@@ -356,7 +359,8 @@ static inline uint64_t bfdev_swahl64p(const uint64_t *p)
  * swab16s - byteswap a 16-bit value in-place.
  * @p: pointer to a naturally-aligned 16-bit value.
  */
-static inline void bfdev_swab16s(uint16_t *p)
+static inline void
+bfdev_swab16s(uint16_t *p)
 {
 #ifdef bfdev_arch_swab16s
     bfdev_arch_swab16s(p);
@@ -369,7 +373,8 @@ static inline void bfdev_swab16s(uint16_t *p)
  * swab32s - byteswap a 32-bit value in-place.
  * @p: pointer to a naturally-aligned 32-bit value.
  */
-static __always_inline void bfdev_swab32s(uint32_t *p)
+static __bfdev_always_inline void
+bfdev_swab32s(uint32_t *p)
 {
 #ifdef bfdev_arch_swab32s
     bfdev_arch_swab32s(p);
@@ -382,7 +387,8 @@ static __always_inline void bfdev_swab32s(uint32_t *p)
  * swab64s - byteswap a 64-bit value in-place.
  * @p: pointer to a naturally-aligned 64-bit value.
  */
-static __always_inline void bfdev_swab64s(uint64_t *p)
+static __bfdev_always_inline void
+bfdev_swab64s(uint64_t *p)
 {
 #ifdef bfdev_arch_swab64s
     bfdev_arch_swab64s(p);
@@ -395,7 +401,8 @@ static __always_inline void bfdev_swab64s(uint64_t *p)
  * swahb32s - high and low byteswap a 32-bit value in-place.
  * @p: pointer to a naturally-aligned 32-bit value.
  */
-static inline void bfdev_swahb32s(uint32_t *p)
+static inline void
+bfdev_swahb32s(uint32_t *p)
 {
 #ifdef bfdev_arch_swahb32s
     bfdev_arch_swahb32s(p);
@@ -408,7 +415,8 @@ static inline void bfdev_swahb32s(uint32_t *p)
  * swahw32s - wordswap a 32-bit value in-place.
  * @p: pointer to a naturally-aligned 32-bit value.
  */
-static inline void bfdev_swahw32s(uint32_t *p)
+static inline void
+bfdev_swahw32s(uint32_t *p)
 {
 #ifdef bfdev_arch_swahw32s
     bfdev_arch_swahw32s(p);
@@ -421,7 +429,8 @@ static inline void bfdev_swahw32s(uint32_t *p)
  * swahb64s - high and low byteswap a 64-bit value in-place.
  * @p: pointer to a naturally-aligned 64-bit value.
  */
-static inline void bfdev_swahb64s(uint64_t *p)
+static inline void
+bfdev_swahb64s(uint64_t *p)
 {
 #ifdef bfdev_arch_swahb64s
     bfdev_arch_swahb64s(p);
@@ -434,7 +443,8 @@ static inline void bfdev_swahb64s(uint64_t *p)
  * swahw64s - wordswap a 64-bit value in-place.
  * @p: pointer to a naturally-aligned 64-bit value.
  */
-static inline void bfdev_swahw64s(uint64_t *p)
+static inline void
+bfdev_swahw64s(uint64_t *p)
 {
 #ifdef bfdev_arch_swahw64s
     bfdev_arch_swahw64s(p);

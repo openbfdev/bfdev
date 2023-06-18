@@ -7,12 +7,11 @@
 #define _EXPORT_H_
 
 #include <bfdev/config.h>
-#include <bfdev/attributes.h>
 
 #undef hidden
-# define hidden __visibility("hidden")
+# define hidden __bfdev_visibility("hidden")
 
 #undef export
-# define export __visibility("default")
+# define export __bfdev_visibility("default")
 
 #endif /* _EXPORT_H_ */

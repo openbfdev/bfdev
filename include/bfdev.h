@@ -19,8 +19,6 @@
 #include <bfdev/allocator.h>
 
 #include <bfdev/align.h>
-#include <bfdev/attributes.h>
-#include <bfdev/compiler.h>
 #include <bfdev/const.h>
 #include <bfdev/container.h>
 #include <bfdev/macro.h>

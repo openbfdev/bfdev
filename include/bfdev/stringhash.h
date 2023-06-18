@@ -7,7 +7,6 @@
 #define _BFDEV_STRINGHASH_H_
 
 #include <bfdev/config.h>
-#include <bfdev/cdefs.h>
 
 #define BFDEV_PJWHASH_BITS 32
 

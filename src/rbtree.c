@@ -15,7 +15,7 @@
  * @old: node to be replaced.
  * @new: new node to insert.
  */
-static __always_inline void
+static __bfdev_always_inline void
 child_change(struct bfdev_rb_root *root, struct bfdev_rb_node *parent,
              struct bfdev_rb_node *old, struct bfdev_rb_node *new)
 {
@@ -37,7 +37,7 @@ child_change(struct bfdev_rb_root *root, struct bfdev_rb_node *parent,
  * @ccolor: color of child.
  * @callbacks: augmented callback function.
  */
-static __always_inline void
+static __bfdev_always_inline void
 rotate_set(struct bfdev_rb_root *root, struct bfdev_rb_node *node, struct bfdev_rb_node *new,
            struct bfdev_rb_node *child, unsigned int color, unsigned int ccolor,
            const struct bfdev_rb_callbacks *callbacks)
@@ -70,7 +70,7 @@ rotate_set(struct bfdev_rb_root *root, struct bfdev_rb_node *node, struct bfdev_
  * @ccolor: color of child.
  * @callbacks: augmented callback function.
  */
-static __always_inline struct bfdev_rb_node *
+static __bfdev_always_inline struct bfdev_rb_node *
 left_rotate(struct bfdev_rb_root *root, struct bfdev_rb_node *node,
             unsigned int color, unsigned int ccolor,
             const struct bfdev_rb_callbacks *callbacks)
@@ -93,7 +93,7 @@ left_rotate(struct bfdev_rb_root *root, struct bfdev_rb_node *node,
  * @ccolor: color of child.
  * @callbacks: augmented callback function.
  */
-static __always_inline struct bfdev_rb_node *
+static __bfdev_always_inline struct bfdev_rb_node *
 right_rotate(struct bfdev_rb_root *root, struct bfdev_rb_node *node,
              unsigned int color, unsigned int ccolor,
              const struct bfdev_rb_callbacks *callbacks)

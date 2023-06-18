@@ -7,12 +7,9 @@
 #define _RBTREE_H_
 
 #include <bfdev/config.h>
-#include <bfdev/cdefs.h>
 #include <bfdev/stddef.h>
 #include <bfdev/limits.h>
 #include <bfdev/stdbool.h>
-#include <bfdev/compiler.h>
-#include <bfdev/attributes.h>
 #include <bfdev/poison.h>
 #include <bfdev/container.h>
 

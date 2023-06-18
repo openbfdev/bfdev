@@ -7,10 +7,8 @@
 #define _BFDEV_BCD_H_
 
 #include <bfdev/config.h>
-#include <bfdev/cdefs.h>
 #include <bfdev/stdint.h>
 #include <bfdev/limits.h>
-#include <bfdev/attributes.h>
 
 BFDEV_BEGIN_DECLS
 
@@ -25,13 +23,13 @@ BFDEV_BEGIN_DECLS
 extern const uint8_t bfdev_bcd2bin_table[256];
 extern const uint8_t bfdev_bin2bcd_table[256];
 
-static __attribute_const__ inline
+static __bfdev_attribute_const inline
 uint8_t bfdev_bcd2bin_dynamic(uint8_t bcd)
 {
     return bfdev_bcd2bin_table[bcd];
 }
 
-static inline __attribute_const__
+static inline __bfdev_attribute_const
 uint8_t bfdev_bin2bcd_dynamic(uint8_t bin)
 {
     return bfdev_bin2bcd_table[bin];

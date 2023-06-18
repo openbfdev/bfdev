@@ -7,9 +7,7 @@
 #define _BFDEV_ONCE_H_
 
 #include <bfdev/config.h>
-#include <bfdev/cdefs.h>
 #include <bfdev/stdbool.h>
-#include <bfdev/compiler.h>
 
 BFDEV_BEGIN_DECLS
 

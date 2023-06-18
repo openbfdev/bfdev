@@ -7,7 +7,6 @@
 #define _BFDEV_ALIGN_H_
 
 #include <bfdev/config.h>
-#include <bfdev/cdefs.h>
 #include <bfdev/stdlib.h>
 #include <bfdev/stddef.h>
 

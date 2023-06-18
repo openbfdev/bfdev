@@ -7,16 +7,14 @@
 #define _BFDEV_LOG_H_
 
 #include <bfdev/config.h>
-#include <bfdev/cdefs.h>
 #include <bfdev/stdarg.h>
 #include <bfdev/level.h>
-#include <bfdev/attributes.h>
 
 BFDEV_BEGIN_DECLS
 
 extern unsigned int bfdev_log_level(const char *str, const char **endptr);
-extern __printf(1, 0) int bfdev_log_vprint(const char *fmt, va_list args);
-extern __printf(1, 2) int bfdev_log_print(const char *fmt, ...);
+extern __bfdev_printf(1, 0) int bfdev_log_vprint(const char *fmt, va_list args);
+extern __bfdev_printf(1, 2) int bfdev_log_print(const char *fmt, ...);
 
 /**
  * bfdev_log_fmt - used by the bfdev_log_*() macros to generate the printk format string
