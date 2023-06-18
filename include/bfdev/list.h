@@ -7,10 +7,8 @@
 #define _BFDEV_LIST_H_
 
 #include <bfdev/config.h>
-#include <bfdev/cdefs.h>
 #include <bfdev/stddef.h>
 #include <bfdev/stdbool.h>
-#include <bfdev/compiler.h>
 #include <bfdev/container.h>
 #include <bfdev/poison.h>
 

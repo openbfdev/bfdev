@@ -7,9 +7,7 @@
 #define _BFDEV_ASM_GENERIC_ATOMIC_H_
 
 #include <bfdev/config.h>
-#include <bfdev/cdefs.h>
 #include <bfdev/stdint.h>
-#include <bfdev/attributes.h>
 #include <bfdev/asm/rwonce.h>
 
 BFDEV_BEGIN_DECLS

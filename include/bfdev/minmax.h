@@ -7,7 +7,6 @@
 #define _BFDEV_MINMAX_H_
 
 #include <bfdev/config.h>
-#include <bfdev/cdefs.h>
 
 BFDEV_BEGIN_DECLS
 

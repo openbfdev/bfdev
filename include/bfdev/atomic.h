@@ -7,7 +7,6 @@
 #define _BFDEV_ATOMIC_H_
 
 #include <bfdev/config.h>
-#include <bfdev/cdefs.h>
 #include <bfdev/asm/atomic.h>
 
 BFDEV_BEGIN_DECLS

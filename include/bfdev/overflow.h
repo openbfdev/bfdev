@@ -7,7 +7,6 @@
 #define _BFDEV_OVERFLOW_H_
 
 #include <bfdev/config.h>
-#include <bfdev/cdefs.h>
 #include <bfdev/stdint.h>
 
 BFDEV_BEGIN_DECLS

@@ -7,7 +7,6 @@
 #define _BFDEV_SKIPLIST_H_
 
 #include <bfdev/config.h>
-#include <bfdev/cdefs.h>
 #include <bfdev/errno.h>
 #include <bfdev/list.h>
 #include <bfdev/allocator.h>

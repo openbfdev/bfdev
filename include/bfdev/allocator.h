@@ -8,10 +8,8 @@
 #define _BFDEV_ALLOCATOR_H_
 
 #include <bfdev/config.h>
-#include <bfdev/cdefs.h>
 #include <bfdev/stddef.h>
 #include <bfdev/stdlib.h>
-#include <bfdev/attributes.h>
 
 BFDEV_BEGIN_DECLS
 

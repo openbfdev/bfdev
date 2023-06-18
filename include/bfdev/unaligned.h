@@ -7,8 +7,6 @@
 #define _BFDEV_UNALIGNED_H_
 
 #include <bfdev/config.h>
-#include <bfdev/cdefs.h>
-#include <bfdev/attributes.h>
 #include <bfdev/asm/unaligned.h>
 
 #ifndef bfdev_unaligned_get_uint

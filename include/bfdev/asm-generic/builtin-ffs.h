@@ -3,9 +3,7 @@
 #define _BFDEV_ASM_GENERIC_BUILTIN_FFS_H_
 
 #include <bfdev/config.h>
-#include <bfdev/cdefs.h>
 #include <bfdev/bits.h>
-#include <bfdev/attributes.h>
 
 BFDEV_BEGIN_DECLS
 

@@ -7,7 +7,6 @@
 #define _BFDEV_STDLIB_H_
 
 #include <bfdev/config.h>
-#include <bfdev/cdefs.h>
 
 #if defined(__FreeBSD__) && defined(_KERNEL)
 # include <sys/systm.h>

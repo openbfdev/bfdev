@@ -7,10 +7,8 @@
 #define _BFDEV_POPCOUNT_H_
 
 #include <bfdev/config.h>
-#include <bfdev/cdefs.h>
 #include <bfdev/stdint.h>
 #include <bfdev/stdbool.h>
-#include <bfdev/attributes.h>
 
 BFDEV_BEGIN_DECLS
 

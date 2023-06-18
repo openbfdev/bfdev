@@ -7,7 +7,6 @@
 #define _BFDEV_SEGTREE_
 
 #include <bfdev/config.h>
-#include <bfdev/cdefs.h>
 #include <bfdev/rbtree.h>
 
 BFDEV_BEGIN_DECLS

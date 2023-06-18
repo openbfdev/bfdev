@@ -7,7 +7,6 @@
 #define _BFDEV_BSEARCH_H_
 
 #include <bfdev/config.h>
-#include <bfdev/cdefs.h>
 #include <bfdev/stdint.h>
 #include <bfdev/stddef.h>
 

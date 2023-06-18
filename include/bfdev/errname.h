@@ -7,7 +7,6 @@
 #define _BFDEV_ERRNAME_H_
 
 #include <bfdev/config.h>
-#include <bfdev/cdefs.h>
 #include <bfdev/errno.h>
 #include <bfdev/stddef.h>
 

@@ -7,7 +7,6 @@
 #define _BFDEV_ASM_GENERIC_BITOPS_H_
 
 #include <bfdev/config.h>
-#include <bfdev/cdefs.h>
 #include <bfdev/stdint.h>
 #include <bfdev/stdbool.h>
 #include <bfdev/bits.h>
