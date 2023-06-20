@@ -96,37 +96,37 @@ bfdev_ilog2_dynamic(unsigned long val)
  * @val: dynamic 64-bit value to log base 2.
  */
 static inline unsigned int
-bfdev_ilog2_64_dynamic(unsigned long val)
+bfdev_ilog2_64_dynamic(uint64_t val)
 {
     return bfdev_fls64(val) - 1;
 }
 
 /**
- * bfdev_roundup_pow2_dynamic - round up to nearest power of two dynamically.
+ * bfdev_pow2_roundup_dynamic - round up to nearest power of two dynamically.
  * @val: dynamic value to round up.
  */
 static inline unsigned long
-bfdev_roundup_pow2_dynamic(unsigned long val)
+bfdev_pow2_roundup_dynamic(unsigned long val)
 {
     return 1UL << bfdev_fls(val - 1);
 }
 
 /**
- * bfdev_rounddown_pow2_dynamic - round down to nearest power of two dynamically.
+ * bfdev_pow2_rounddown_dynamic - round down to nearest power of two dynamically.
  * @val: dynamic value to round up.
  */
 static inline unsigned long
-bfdev_rounddown_pow2_dynamic(unsigned long val)
+bfdev_pow2_rounddown_dynamic(unsigned long val)
 {
     return 1UL << (bfdev_fls(val) - 1);
 }
 
 /**
- * bfdev_check_pow2 - check if a value is a power of two.
+ * bfdev_pow2_check - check if a value is a power of two.
  * @val: the value to check.
  */
 static inline bool
-bfdev_check_pow2(unsigned long val)
+bfdev_pow2_check(unsigned long val)
 {
     return val != 0 && ((val & (val - 1)) == 0);
 }
@@ -145,24 +145,24 @@ bfdev_check_pow2(unsigned long val)
 )
 
 /**
- * bfdev_roundup_pow2 - round up to nearest power of two.
+ * bfdev_pow2_roundup - round up to nearest power of two.
  * @val: value to round up.
  */
-#define bfdev_roundup_pow2(val) (       \
+#define bfdev_pow2_roundup(val) (       \
     __builtin_constant_p(val) ?         \
     (((val) == 1) ? 1 : (1UL <<         \
     (bfdev_ilog2((val) - 1) + 1))) :    \
-    bfdev_roundup_pow2_dynamic(val)     \
+    bfdev_pow2_roundup_dynamic(val)     \
 )
 
 /**
- * bfdev_rounddown_pow2 - round down to nearest power of two.
+ * bfdev_pow2_rounddown - round down to nearest power of two.
  * @val: value to round down.
  */
-#define bfdev_rounddown_pow2(val) (     \
+#define bfdev_pow2_rounddown(val) (     \
     __builtin_constant_p(val) ?         \
     (1UL << bfdev_ilog2(val)) :         \
-    bfdev_rounddown_pow2_dynamic(val)   \
+    bfdev_pow2_rounddown_dynamic(val)   \
 )
 
 #endif /* _BFDEV_LOG2_H_ */
