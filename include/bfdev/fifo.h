@@ -200,7 +200,7 @@ struct bfdev_fifo {
  * bfdev_fifo_recsize - get the size of the record length fie.
  * @ptr: pointer of the fifo to get __recsi.
  */
-#define bfdev_fifo_recsize(ptr) (sizeof(*(ptr)->rectyp)
+#define bfdev_fifo_recsize(ptr) (sizeof(*(ptr)->rectyp))
 
 /**
  * bfdev_fifo_size - get the size of the element managed by the fifo.
@@ -292,9 +292,9 @@ struct bfdev_fifo {
 })
 
 /**
- * bfdev_fifo_peek - get an object from fifo.
- * @struct: the fifo to get object out.
- * @value: object to get.
+ * bfdev_fifo_peek - peek an object from fifo.
+ * @struct: the fifo to peek object out.
+ * @value: object to peek.
  */
 #define bfdev_fifo_peek(pfifo, value)  ({                       \
     typeof((pfifo) + 1) __tmp = (pfifo);                        \
