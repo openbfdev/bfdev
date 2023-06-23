@@ -2,7 +2,7 @@
 
 bfdev is a high-performance, aesthetically pleasing, and portable infrastructure provisioning library. Its goal is to provide a comprehensive and streamlined development environment.
 
-![logo](docs/logo.png)
+![logo](docs/images/logo.png)
 
 ## Continuous Integration Status
 | Status (master) | Status (devel)| Description|
