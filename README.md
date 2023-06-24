@@ -1,16 +1,17 @@
-#  BFDEV Introduce
+# BFDEV Introduce
 
 bfdev is a high-performance, aesthetically pleasing, and portable infrastructure provisioning library. Its goal is to provide a comprehensive and streamlined development environment.
 
 ![logo](docs/images/logo.png)
 
 ## Continuous Integration Status
-| Status (master) | Status (devel)| Description|
-|-------------|-------------|------------------|
-|  [![build status](https://github.com/openbfdev/bfdev/actions/workflows/ubuntu-gcc.yml/badge.svg?branch=master)](https://github.com/openbfdev/bfdev/actions/workflows/ubuntu-gcc.yml?query=branch%3Amain) | [![build status](https://github.com/openbfdev/bfdev/actions/workflows/ubuntu-gcc.yml/badge.svg?branch=devel)](https://github.com/openbfdev/bfdev/actions/workflows/ubuntu-gcc.yml?query=branch%3Amain) | Build default config on Ubuntu gcc |
-|  [![build status](https://github.com/openbfdev/bfdev/actions/workflows/ubuntu-clang.yml/badge.svg?branch=master)](https://github.com/openbfdev/bfdev/actions/workflows/ubuntu-clang.yml?query=branch%3Amain) | [![build status](https://github.com/openbfdev/bfdev/actions/workflows/ubuntu-clang.yml/badge.svg?branch=devel)](https://github.com/openbfdev/bfdev/actions/workflows/ubuntu-clang.yml?query=branch%3Amain) | Build default config on Ubuntu clang |
-|  [![build status](https://github.com/openbfdev/bfdev/actions/workflows/macos.yml/badge.svg?branch=master)](https://github.com/openbfdev/bfdev/actions/workflows/macos.yml?query=branch%3Amain) | [![build status](https://github.com/openbfdev/bfdev/actions/workflows/macos.yml/badge.svg?branch=devel)](https://github.com/openbfdev/bfdev/actions/workflows/macos.yml?query=branch%3Amain) | Build default config on Macos |
-|  [![build status](https://github.com/openbfdev/bfdev/actions/workflows/codeql.yml/badge.svg?branch=master)](https://github.com/openbfdev/bfdev/actions/workflows/codeql.yml?query=branch%3Amain) | [![build status](https://github.com/openbfdev/bfdev/actions/workflows/codeql.yml/badge.svg?branch=devel)](https://github.com/openbfdev/bfdev/actions/workflows/codeql.yml?query=branch%3Amain) | Code analyse on codeql |
+
+|                       Status (master)                        |                        Status (devel)                        |             Description              |
+| :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------: |
+| [![build status](https://github.com/openbfdev/bfdev/actions/workflows/ubuntu-gcc.yml/badge.svg?branch=master)](https://github.com/openbfdev/bfdev/actions/workflows/ubuntu-gcc.yml?query=branch%3Amain) | [![build status](https://github.com/openbfdev/bfdev/actions/workflows/ubuntu-gcc.yml/badge.svg?branch=devel)](https://github.com/openbfdev/bfdev/actions/workflows/ubuntu-gcc.yml?query=branch%3Amain) |  Build default config on Ubuntu gcc  |
+| [![build status](https://github.com/openbfdev/bfdev/actions/workflows/ubuntu-clang.yml/badge.svg?branch=master)](https://github.com/openbfdev/bfdev/actions/workflows/ubuntu-clang.yml?query=branch%3Amain) | [![build status](https://github.com/openbfdev/bfdev/actions/workflows/ubuntu-clang.yml/badge.svg?branch=devel)](https://github.com/openbfdev/bfdev/actions/workflows/ubuntu-clang.yml?query=branch%3Amain) | Build default config on Ubuntu clang |
+| [![build status](https://github.com/openbfdev/bfdev/actions/workflows/macos.yml/badge.svg?branch=master)](https://github.com/openbfdev/bfdev/actions/workflows/macos.yml?query=branch%3Amain) | [![build status](https://github.com/openbfdev/bfdev/actions/workflows/macos.yml/badge.svg?branch=devel)](https://github.com/openbfdev/bfdev/actions/workflows/macos.yml?query=branch%3Amain) |    Build default config on Macos     |
+| [![build status](https://github.com/openbfdev/bfdev/actions/workflows/codeql.yml/badge.svg?branch=master)](https://github.com/openbfdev/bfdev/actions/workflows/codeql.yml?query=branch%3Amain) | [![build status](https://github.com/openbfdev/bfdev/actions/workflows/codeql.yml/badge.svg?branch=devel)](https://github.com/openbfdev/bfdev/actions/workflows/codeql.yml?query=branch%3Amain) |        Code analyse on codeql        |
 
 ## Why Choose
 
@@ -21,6 +22,7 @@ bfdev is a high-performance, aesthetically pleasing, and portable infrastructure
 - Conforms to the GNUC standard, ensuring strong cross-platform compatibility.
 
 ### WARNING
+
 This project is not yet fully completed, so it is not recommended for use in a production environment.
 
 ## Directory Structure
@@ -36,15 +38,15 @@ This project is not yet fully completed, so it is not recommended for use in a p
 └── src
 ```
 
-|   Directory   |  Description              |
-|:-------------:|:-------------------------:|
-| arch          | ISA related code          |
-| cmake         | cmake configuration file  |
-| docs          | doc for guiding           |
-| exampes       | unit testing and case     |
-| include       | include path              |
-| scripts       | build scripts             |
-| src           | core code path            |
+| Directory |       Description        |
+| :-------: | :----------------------: |
+|   arch    |     ISA related code     |
+|   cmake   | cmake configuration file |
+|   docs    |     doc for guiding      |
+|  exampes  |  unit testing and case   |
+|  include  |       include path       |
+|  scripts  |      build scripts       |
+|    src    |      core code path      |
 
 ## Reference Path
 
@@ -78,3 +80,11 @@ graph LR
 ## Documentation Tutorial
 
 Quickly start, API manual, see [Bfdev Documentation Tutorial](https://bfdev.github.io/)
+
+## License
+
+This is free software: you can redistribute it and/or modify it under the terms of the latest GNU General Public License as published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program. If not, see http://www.gnu.org/licenses/.
