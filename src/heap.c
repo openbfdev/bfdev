@@ -72,9 +72,8 @@ bfdev_heap_erase(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
 {
     struct bfdev_heap_node *successor = node->parent;
     struct bfdev_heap_node *child1, *child2;
-    long result;
 
-    if (successor && (result = cmp(node, successor)) < 0)
+    if (successor && cmp(node, successor) < 0)
         bfdev_heap_fixup(root, node, cmp);
 
     else for (;;) {
