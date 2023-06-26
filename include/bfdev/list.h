@@ -109,8 +109,8 @@ bfdev_list_del(struct bfdev_list_head *node)
 #endif
 
     bfdev_list_deluf(node);
-    node->next = BFDEV_POISON_LIST1;
-    node->prev = BFDEV_POISON_LIST2;
+    node->next = (struct bfdev_list_head *)BFDEV_POISON_LIST1;
+    node->prev = (struct bfdev_list_head *)BFDEV_POISON_LIST2;
 }
 
 /**
