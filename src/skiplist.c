@@ -118,13 +118,13 @@ bfdev_skiplist_delete(struct bfdev_skip_head *head, void *key,
     bfdev_free(alloc, node);
 }
 
-export void *
+export struct bfdev_skip_node *
 bfdev_skiplist_find(struct bfdev_skip_head *head, void *key,
                     bfdev_skiplist_find_t find)
 {
     struct bfdev_skip_node *node;
     node = skipnode_find(head, key, find, NULL);
-    return node ? node->pdata : NULL;
+    return node;
 }
 
 static void

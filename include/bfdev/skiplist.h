@@ -31,112 +31,112 @@ struct bfdev_skip_head {
 
 extern int bfdev_skiplist_insert(struct bfdev_skip_head *head, void *data, bfdev_skiplist_cmp_t cmp);
 extern void bfdev_skiplist_delete(struct bfdev_skip_head *head, void *key, bfdev_skiplist_find_t find);
-extern void *bfdev_skiplist_find(struct bfdev_skip_head *head, void *key, bfdev_skiplist_find_t find);
+extern struct bfdev_skip_node *bfdev_skiplist_find(struct bfdev_skip_head *head, void *key, bfdev_skiplist_find_t find);
 
 extern void bfdev_skiplist_reset(struct bfdev_skip_head *head, bfdev_skiplist_release_t relse);
 extern void bfdev_skiplist_destroy(struct bfdev_skip_head *head, bfdev_skiplist_release_t relse);
 extern struct bfdev_skip_head *bfdev_skiplist_create(const struct bfdev_alloc *alloc, unsigned int levels);
 
 /**
- * bfdev_skip_for_each - iterate over list of given type.
+ * bfdev_skiplist_for_each - iterate over list of given type.
  * @pos: the type * to use as a loop cursor.
  * @head: the head for your list.
  */
-#define bfdev_skip_for_each(pos, head, level) \
+#define bfdev_skiplist_for_each(pos, head, level) \
     bfdev_list_for_each_entry(pos, &(head)->nodes[level], list[level])
 
 /**
- * bfdev_skip_for_each_reverse - iterate backwards over list of given type.
+ * bfdev_skiplist_for_each_reverse - iterate backwards over list of given type.
  * @pos: the type * to use as a loop cursor.
  * @head: the head for your list.
  */
-#define bfdev_skip_for_each_reverse(pos, head, level) \
+#define bfdev_skiplist_for_each_reverse(pos, head, level) \
     bfdev_list_for_each_entry_reverse(pos, &(head)->nodes[level], list[level])
 
 /**
- * bfdev_skip_for_each_from - iterate over list of given type from the current point.
+ * bfdev_skiplist_for_each_from - iterate over list of given type from the current point.
  * @pos: the type * to use as a loop cursor.
  * @head: the head for your list.
  */
-#define bfdev_skip_for_each_from(pos, head, level) \
+#define bfdev_skiplist_for_each_from(pos, head, level) \
     bfdev_list_for_each_entry_from(pos, &(head)->nodes[level], list[level])
 
 /**
- * bfdev_skip_for_each_reverse_from - iterate backwards over list of given type from the current point.
+ * bfdev_skiplist_for_each_reverse_from - iterate backwards over list of given type from the current point.
  * @pos: the type * to use as a loop cursor.
  * @head: the head for your list.
  */
-#define bfdev_skip_for_each_reverse_from(pos, head, level) \
+#define bfdev_skiplist_for_each_reverse_from(pos, head, level) \
     bfdev_list_for_each_entry_reverse_from(pos, &(head)->nodes[level], list[level])
 
 /**
- * bfdev_skip_for_each_continue - continue iteration over list of given type.
+ * bfdev_skiplist_for_each_continue - continue iteration over list of given type.
  * @pos: the type * to use as a loop cursor.
  * @head: the head for your list.
  */
-#define bfdev_skip_for_each_continue(pos, head, level) \
+#define bfdev_skiplist_for_each_continue(pos, head, level) \
     bfdev_list_for_each_entry_continue(pos, &(head)->nodes[level], list[level])
 
 /**
- * bfdev_skip_for_each_reverse_continue - iterate backwards from the given point.
+ * bfdev_skiplist_for_each_reverse_continue - iterate backwards from the given point.
  * @pos: the type * to use as a loop cursor.
  * @head: the head for your list.
  */
-#define bfdev_skip_for_each_reverse_continue(pos, head, level) \
+#define bfdev_skiplist_for_each_reverse_continue(pos, head, level) \
     bfdev_list_for_each_entry_reverse_continue(pos, &(head)->nodes[level], list[level])
 
 /**
- * bfdev_skip_for_each_safe - iterate over list of given type safe against removal of list entry.
+ * bfdev_skiplist_for_each_safe - iterate over list of given type safe against removal of list entry.
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
  * @head: the head for your list.
  */
-#define bfdev_skip_for_each_safe(pos, tmp, head, level) \
+#define bfdev_skiplist_for_each_safe(pos, tmp, head, level) \
     bfdev_list_for_each_entry_safe(pos, tmp, &(head)->nodes[level], list[level])
 
 /**
- * bfdev_skip_for_each_reverse_safe - iterate backwards over list safe against removal.
+ * bfdev_skiplist_for_each_reverse_safe - iterate backwards over list safe against removal.
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
  * @head: the head for your list.
  */
-#define bfdev_skip_for_each_reverse_safe(pos, tmp, head, level) \
+#define bfdev_skiplist_for_each_reverse_safe(pos, tmp, head, level) \
     bfdev_list_for_each_entry_reverse_safe(pos, tmp, &(head)->nodes[level], list[level])
 
 /**
- * bfdev_skip_for_each_from_safe - iterate over list from current point safe against removal.
+ * bfdev_skiplist_for_each_from_safe - iterate over list from current point safe against removal.
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
  * @head: the head for your list.
  */
-#define bfdev_skip_for_each_from_safe(pos, tmp, head, level) \
+#define bfdev_skiplist_for_each_from_safe(pos, tmp, head, level) \
     bfdev_list_for_each_entry_from_safe(pos, tmp, &(head)->nodes[level], list[level])
 
 /**
- * bfdev_skip_for_each_reverse_from_safe - iterate backwards over list from current point safe against removal.
+ * bfdev_skiplist_for_each_reverse_from_safe - iterate backwards over list from current point safe against removal.
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
  * @head: the head for your list.
  */
-#define bfdev_skip_for_each_reverse_from_safe(pos, tmp, head, level) \
+#define bfdev_skiplist_for_each_reverse_from_safe(pos, tmp, head, level) \
     bfdev_list_for_each_entry_reverse_from_safe(pos, tmp, &(head)->nodes[level], list[level])
 
 /**
- * bfdev_skip_for_each_continue_safe - continue list iteration safe against removal.
+ * bfdev_skiplist_for_each_continue_safe - continue list iteration safe against removal.
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
  * @head: the head for your list.
  */
-#define bfdev_skip_for_each_continue_safe(pos, tmp, head, level) \
+#define bfdev_skiplist_for_each_continue_safe(pos, tmp, head, level) \
     bfdev_list_for_each_entry_continue_safe(pos, tmp, &(head)->nodes[level], list[level])
 
 /**
- * bfdev_skip_for_each_reverse_continue_safe - continue backwards over list iteration safe against removal.
+ * bfdev_skiplist_for_each_reverse_continue_safe - continue backwards over list iteration safe against removal.
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
  * @head: the head for your list.
  */
-#define bfdev_skip_for_each_reverse_continue_safe(pos, tmp, head, level) \
+#define bfdev_skiplist_for_each_reverse_continue_safe(pos, tmp, head, level) \
     bfdev_list_for_each_entry_reverse_continue_safe(pos, tmp, &(head)->nodes[level], list[level])
 
 BFDEV_END_DECLS
