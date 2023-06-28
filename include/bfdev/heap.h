@@ -11,6 +11,8 @@
 #include <bfdev/poison.h>
 #include <bfdev/container.h>
 
+BFDEV_BEGIN_DECLS
+
 struct bfdev_heap_node {
     struct bfdev_heap_node *parent;
     struct bfdev_heap_node *left;
@@ -227,5 +229,7 @@ bfdev_heap_delete(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
     node->right = BFDEV_POISON_HPNODE2;
     node->parent = BFDEV_POISON_HPNODE3;
 }
+
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_HEAP_H_ */

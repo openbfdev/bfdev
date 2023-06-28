@@ -6,6 +6,8 @@
 #include <bfdev/stddef.h>
 #include <bfdev/bitops.h>
 
+BFDEV_BEGIN_DECLS
+
 #define BFDEV_TITER_BASE_DEFINE(TISTATIC, TINAME, TISTRUCT, TILEFT, TIRIGHT)    \
 TISTATIC TISTRUCT *TINAME##_left_far(const TISTRUCT *node)                      \
 {                                                                               \
@@ -227,5 +229,7 @@ TINAME##_next(const TIROOT *root, unsigned long *index)                         
                                                                                 \
     return node;                                                                \
 }
+
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_TITER_H_ */
