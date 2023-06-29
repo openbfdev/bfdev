@@ -457,13 +457,41 @@ bfdev_swahw64s(uint64_t *p)
  * swahw64s - longswap a 64-bit value in-place.
  * @p: pointer to a naturally-aligned 64-bit value.
  */
-static inline void bfdev_swahl64s(uint64_t *p)
+static inline void
+bfdev_swahl64s(uint64_t *p)
 {
 #ifdef bfdev_arch_swahw64s
     bfdev_arch_swahw64s(p);
 #else
     *p = bfdev_swahl64p(p);
 #endif
+}
+
+static inline void
+bfdev_swab16_array(uint16_t *buff, unsigned int count)
+{
+    while (count--) {
+        bfdev_swab16s(buff);
+        buff++;
+    }
+}
+
+static inline void
+bfdev_swab32_array(uint32_t *buff, unsigned int count)
+{
+    while (count--) {
+        bfdev_swab32s(buff);
+        buff++;
+    }
+}
+
+static inline void
+bfdev_swab64_array(uint64_t *buff, unsigned int count)
+{
+    while (count--) {
+        bfdev_swab64s(buff);
+        buff++;
+    }
 }
 
 BFDEV_END_DECLS
