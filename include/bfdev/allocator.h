@@ -13,6 +13,7 @@
 
 BFDEV_BEGIN_DECLS
 
+typedef struct bfdev_alloc bfdev_alloc_t;
 struct bfdev_alloc {
     void *(*malloc)(size_t size, void *pdata);
     void *(*realloc)(const void *block, size_t resize, void *pdata);
