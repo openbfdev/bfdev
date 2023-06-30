@@ -36,7 +36,7 @@ uint8_t bfdev_bin2bcd_dynamic(uint8_t bin)
 }
 
 /**
- * bcd2bin - convert bcd to bin.
+ * bfdev_bcd2bin - convert bcd to bin.
  * @bcd: the bcd to convert.
  */
 #define bfdev_bcd2bin(bcd) ({       \
@@ -47,8 +47,8 @@ uint8_t bfdev_bin2bcd_dynamic(uint8_t bin)
 })
 
 /**
- * bin2bcd - convert bin to bcd.
- * @bcd: the bin to convert.
+ * bfdev_bin2bcd - convert bin to bcd.
+ * @bin: the bin to convert.
  */
 #define bfdev_bin2bcd(bin) ({       \
     uint8_t __bin = (uint8_t)(bin); \
