@@ -11,11 +11,17 @@
 #include <bfdev/slist.h>
 #include <export.h>
 
+static bfdev_log_t log = {
+    .log_level = BFDEV_LOG_DEBUG,
+    .writer = bfdev_stderr_writer,
+    .pdata = NULL
+};
+
 export bool
 bfdev_slist_debug_add_check(struct bfdev_slist_head *node, struct bfdev_slist_head *new)
 {
     if (unlikely(new->next && new->next == node->next)) {
-        bfdev_log_err(
+        bfdev_log_err(&log,
             "bfdev_slist_add corruption (%p) new->next"
             " should not be next (%p)\n",
             new, node
@@ -30,7 +36,7 @@ export bool
 bfdev_slist_debug_del_check(struct bfdev_slist_head *node)
 {
     if (unlikely(node->next == BFDEV_POISON_SLIST)) {
-        bfdev_log_err(
+        bfdev_log_err(&log,
             "bfdev_slist_del corruption (%p) node->next"
             " should not be BFDEV_POISON_SLIST (%p)\n",
             node, BFDEV_POISON_SLIST

@@ -1,83 +1,111 @@
-/* SPDX-License-Identifier: GPL-2.0-or-later */
-/*
- * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
- */
-
-#include <bfdev.h>
+#include <bfdev/allocator.h>
 #include <bfdev/log.h>
-#include <export.h>
+#include <bfdev/errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <stdarg.h>
+#include <bfdev/scnprintf.h>
 
 static const unsigned int
 bfdev_level_color[] = {
-    [BFDEV_LEVEL_EMERG]     = BFDEV_COLR_RED,
-    [BFDEV_LEVEL_ALERT]     = BFDEV_COLR_DARK_MAGENTA,
-    [BFDEV_LEVEL_CRIT]      = BFDEV_COLR_MAGENTA,
-    [BFDEV_LEVEL_ERR]       = BFDEV_COLR_YELLOW,
-    [BFDEV_LEVEL_WARNING]   = BFDEV_COLR_BLUE,
-    [BFDEV_LEVEL_NOTICE]    = BFDEV_COLR_CYAN,
-    [BFDEV_LEVEL_INFO]      = BFDEV_COLR_GREEN,
-    [BFDEV_LEVEL_DEBUG]     = BFDEV_COLR_DARK_GRAY,
-    [BFDEV_LEVEL_DEFAULT]   = BFDEV_COLR_DEFAULT,
+    [BFDEV_LOG_EMERG]     = BFDEV_COLR_RED,
+    [BFDEV_LOG_ALERT]     = BFDEV_COLR_DARK_MAGENTA,
+    [BFDEV_LOG_CRIT]      = BFDEV_COLR_MAGENTA,
+    [BFDEV_LOG_ERR]       = BFDEV_COLR_YELLOW,
+    [BFDEV_LOG_WARNING]   = BFDEV_COLR_BLUE,
+    [BFDEV_LOG_NOTICE]    = BFDEV_COLR_CYAN,
+    [BFDEV_LOG_INFO]      = BFDEV_COLR_GREEN,
+    [BFDEV_LOG_DEBUG]     = BFDEV_COLR_DARK_GRAY,
+    [BFDEV_LOG_DEFAULT]   = BFDEV_COLR_DEFAULT,
 };
 
-static inline char
-log_get_level(const char *str)
-{
-    if (str[0] == BFDEV_SOH_ASCII && str[1])
-        return str[1];
-    return 0;
-}
+static char *bfdev_log_levels[] = {
+    "emerg",
+    "alert",
+    "crit",
+    "error",
+    "warn",
+    "notice",
+    "info",
+    "debug"
+};
 
-extern unsigned int
-bfdev_log_level(const char *str, const char **endptr)
-{
-    char value, klevel;
 
-    for (klevel = BFDEV_LEVEL_DEFAULT; *str; str += 2) {
-        value = log_get_level(str);
-        if (!value)
-            break;
-
-        switch (value) {
-            case '0' ... '9':
-                klevel = value - '0';
-                break;
-
-            default:
-                break;
-        }
+int bfdev_log_init(bfdev_log_t *log, unsigned log_level) {
+    if (log == NULL) {
+        return BFDEV_ENOMEM;
     }
 
-    if (*endptr)
-        *endptr = str;
-
-    return klevel;
+    log->log_level = log_level;
+    log->writer = bfdev_stderr_writer;
+    log->pdata = NULL;
+    return BFDEV_ENOERR;
 }
 
-export int
-bfdev_log_vprint(const char *fmt, va_list args)
-{
-    unsigned int level;
-    int length;
+int bfdev_log_init_writer(bfdev_log_t *log, bfdev_log_writer_pt writer, void *pdata) {
+    if (log == NULL) {
+        return BFDEV_ENOMEM;
+    }
 
-    level = bfdev_log_level(fmt, &fmt);
+    log->writer = writer;
+    log->pdata = pdata;
 
-    printf("\e[%dm", bfdev_level_color[level]);
-    length = vprintf(fmt, args);
-    printf("\e[0m");
-
-    return length;
+    return BFDEV_ENOERR;
 }
 
-export int
-bfdev_log_print(const char *fmt, ...)
-{
-    va_list para;
-    int length;
+void bfdev_log_level_print(unsigned level, bfdev_log_t *log, const char *fmt, ...) {
+    char       errstr[BFDEV_MAX_LOG_STR];
+    char *p, *last;
+    int len = 0;
+    va_list      args;
 
-    va_start(para,fmt);
-    length = bfdev_log_vprint(fmt, para);
-    va_end(para);
+    if (log == NULL) {
+        return;
+    }
 
-    return length;
+    p = errstr;
+    last = p + BFDEV_MAX_LOG_STR;
+
+    //TODO: support append user defined handler for meta data
+        //for exampel. user may want support time, pid
+    len = snprintf(p + len, last - p, "\e[%dm", bfdev_level_color[level]);
+    p+=len;
+
+
+    len = snprintf(p, last - p, "[%s] ", bfdev_log_levels[level]);
+    p+=len;
+
+    va_start(args, fmt);
+    len = bfdev_vscnprintf(p, last - p, fmt, args);
+    p+=len;
+    va_end(args);
+
+    len = snprintf(p, last - p, "\e[0m");
+    p+=len;
+
+    if (p > last - BFDEV_LINEFEED_SIZE) {
+        p = last - BFDEV_LINEFEED_SIZE;
+    }
+
+    bfdev_linefeed(p);
+
+    if (log->writer) {
+        return log->writer(log, level, errstr, p - errstr);
+    }
+
+    return bfdev_stderr_writer(log, level, errstr, p - errstr);
+}
+
+void bfdev_stderr_writer(bfdev_log_t *log, unsigned level, char *buf, size_t len) {
+    ssize_t n;
+    (void) level, (void)log;
+
+    n = write(STDERR_FILENO, buf, len);
+    if (n != len) {
+        perror("bfdev stderr write error");
+        return;
+    }
+    return;
 }

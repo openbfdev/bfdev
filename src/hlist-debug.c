@@ -10,13 +10,19 @@
 #include <bfdev/log.h>
 #include <bfdev/hlist.h>
 #include <export.h>
+static bfdev_log_t log = {
+    .log_level = BFDEV_LOG_DEBUG,
+    .writer = bfdev_stderr_writer,
+    .pdata = NULL
+};
+
 
 export bool
 bfdev_hlist_debug_head_add_check(struct bfdev_hlist_head *head,
                                  struct bfdev_hlist_node *new)
 {
     if (unlikely(head->node == new)) {
-        bfdev_log_err(
+        bfdev_log_err(&log,
             "bfdev_hlist_head_add corruption (%p) head->node"
             " should not be new (%p)\n", head, new
         );
@@ -31,7 +37,7 @@ bfdev_hlist_debug_next_add_check(struct bfdev_hlist_node *next,
                                  struct bfdev_hlist_node *new)
 {
     if (unlikely(next->next == new)) {
-        bfdev_log_err(
+        bfdev_log_err(&log,
             "bfdev_hlist_next_add corruption (%p) next->next"
             " should not be new (%p)\n",
             next, new
@@ -47,7 +53,7 @@ bfdev_hlist_debug_prev_add_check(struct bfdev_hlist_node *prev,
                                  struct bfdev_hlist_node *new)
 {
     if (unlikely(prev->pprev == &new->next)) {
-        bfdev_log_err(
+        bfdev_log_err(&log,
             "bfdev_hlist_prev_add corruption (%p) prev->pprev"
             " should not be new (%p)\n",
             prev, new
@@ -62,7 +68,7 @@ export bool
 bfdev_hlist_debug_del_check(struct bfdev_hlist_node *node)
 {
     if (unlikely(node->next == BFDEV_POISON_HLIST1)) {
-        bfdev_log_err(
+        bfdev_log_err(&log,
             "bfdev_hlist_del corruption (%p) node->next"
             " should not be BFDEV_POISON_HLIST1 (%p)\n",
             node, BFDEV_POISON_HLIST1
@@ -71,7 +77,7 @@ bfdev_hlist_debug_del_check(struct bfdev_hlist_node *node)
     }
 
     if (unlikely(node->pprev == BFDEV_POISON_HLIST2)) {
-        bfdev_log_err(
+        bfdev_log_err(&log,
             "bfdev_hlist_del corruption (%p) node->pprev"
             " should not be BFDEV_POISON_HLIST2 (%p)\n",
             node, BFDEV_POISON_HLIST2

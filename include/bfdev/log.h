@@ -1,176 +1,89 @@
-/* SPDX-License-Identifier: GPL-2.0-or-later */
-/*
- * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
- */
+#ifndef __LOG__H__
+#define __LOG__H__
 
-#ifndef _BFDEV_LOG_H_
-#define _BFDEV_LOG_H_
+#include <stddef.h>
+#include <bfdev/allocator.h>
+typedef struct bfdev_log_s bfdev_log_t;
 
-#include <bfdev/config.h>
-#include <bfdev/stdarg.h>
-#include <bfdev/level.h>
+#define BFDEV_LOG_EMERG           0
+#define BFDEV_LOG_ALERT           1
+#define BFDEV_LOG_CRIT            2
+#define BFDEV_LOG_ERR             3
+#define BFDEV_LOG_WARNING         4
+#define BFDEV_LOG_NOTICE          5
+#define BFDEV_LOG_INFO            6
+#define BFDEV_LOG_DEBUG           7
+#define BFDEV_LOG_DEFAULT         8
 
-BFDEV_BEGIN_DECLS
+#define BFDEV_COLR_DEFAULT          39
+#define BFDEV_COLR_BLACK            30
+#define BFDEV_COLR_DARK_RED         31
+#define BFDEV_COLR_DARK_GREEN       32
+#define BFDEV_COLR_DARK_YELLOW      33
+#define BFDEV_COLR_DARK_BLUE        34
+#define BFDEV_COLR_DARK_MAGENTA     35
+#define BFDEV_COLR_DARK_CYAN        36
+#define BFDEV_COLR_LIGHT_GRAY       37
+#define BFDEV_COLR_DARK_GRAY        90
+#define BFDEV_COLR_RED              91
+#define BFDEV_COLR_GREEN            92
+#define BFDEV_COLR_YELLOW           93
+#define BFDEV_COLR_BLUE             94
+#define BFDEV_COLR_MAGENTA          95
+#define BFDEV_COLR_CYAN             96
+#define BFDEV_COLR_WHITE            97
 
-extern unsigned int bfdev_log_level(const char *str, const char **endptr);
-extern __bfdev_printf(1, 0) int bfdev_log_vprint(const char *fmt, va_list args);
-extern __bfdev_printf(1, 2) int bfdev_log_print(const char *fmt, ...);
 
-/**
- * bfdev_log_fmt - used by the bfdev_log_*() macros to generate the printk format string
- * @fmt: format string passed from a bfdev_log_*() macro
- *
- * This macro can be used to generate a unified format string for bfdev_log_*()
- * macros. A common use is to prefix all bfdev_log_*() messages in a file with a common
- * string. For example, defining this at the top of a source file:
- *
- *        #define bfdev_log_fmt(fmt) KBUILD_MODNAME ": " fmt
- *
- * would prefix all bfdev_log_info, bfdev_log_emerg... messages in the file with the module
- * name.
- */
-#ifndef bfdev_log_fmt
-# define bfdev_log_fmt(fmt) fmt
-#endif
+#define BFDEV_MAX_LOG_STR 2048
 
-/*
- * Dummy printk for disabled debugging statements to use whilst maintaining
- * gcc's format checking.
- */
-# define bfdev_log_none(fmt, ...) ({            \
-    if (0)                              \
-        bfdev_log_print(fmt, ##__VA_ARGS__);     \
-    0;                                  \
-})
+// FIXME: configure it
+#define LF     (char) '\n'
 
-/**
- * bfdev_log_emerg - Print an emergency-level message
- * @fmt: format string
- * @...: arguments for the format string
- *
- * This macro expands to a printk with BFDEV_EMERG loglevel. It uses bfdev_log_fmt() to
- * generate the format string.
- */
-#if CONFIG_PRINTK_LOGLEVEL_MAX >= KLEVEL_EMERG
-# define bfdev_log_emerg(fmt, ...) \
-    bfdev_log_print(BFDEV_EMERG bfdev_log_fmt(fmt), ##__VA_ARGS__)
-#else
-# define bfdev_log_emerg(fmt, ...) \
-    bfdev_log_none(fmt, ##__VA_ARGS__)
-#endif
+#define BFDEV_LINEFEED_SIZE 1
+#define bfdev_linefeed(p)          *p++ = LF;
 
-/**
- * bfdev_log_alert - Print an alert-level message
- * @fmt: format string
- * @...: arguments for the format string
- *
- * This macro expands to a printk with BFDEV_ALERT loglevel. It uses bfdev_log_fmt() to
- * generate the format string.
- */
-#if CONFIG_PRINTK_LOGLEVEL_MAX >= KLEVEL_ALERT
-# define bfdev_log_alert(fmt, ...) \
-    bfdev_log_print(BFDEV_ALERT bfdev_log_fmt(fmt), ##__VA_ARGS__)
-#else
-# define bfdev_log_alert(fmt, ...) \
-    bfdev_log_none(fmt, ##__VA_ARGS__)
-#endif
+typedef void (*bfdev_log_writer_pt) (bfdev_log_t *log, unsigned level,
+    char *buf, size_t len);
 
-/**
- * bfdev_log_crit - Print a critical-level message
- * @fmt: format string
- * @...: arguments for the format string
- *
- * This macro expands to a printk with BFDEV_CRIT loglevel. It uses bfdev_log_fmt() to
- * generate the format string.
- */
-#if CONFIG_PRINTK_LOGLEVEL_MAX >= KLEVEL_CRIT
-# define bfdev_log_crit(fmt, ...) \
-    bfdev_log_print(BFDEV_CRIT bfdev_log_fmt(fmt), ##__VA_ARGS__)
-#else
-# define bfdev_log_crit(fmt, ...) \
-    bfdev_log_none(fmt, ##__VA_ARGS__)
-#endif
+struct bfdev_log_s {
+    unsigned log_level;
+    bfdev_log_writer_pt writer;
+    void *pdata;
+};
 
-/**
- * bfdev_log_err - Print an error-level message
- * @fmt: format string
- * @...: arguments for the format string
- *
- * This macro expands to a printk with BFDEV_ERR loglevel. It uses bfdev_log_fmt() to
- * generate the format string.
- */
-#if CONFIG_PRINTK_LOGLEVEL_MAX >= KLEVEL_ERR
-# define bfdev_log_err(fmt, ...) \
-    bfdev_log_print(BFDEV_ERR bfdev_log_fmt(fmt), ##__VA_ARGS__)
-#else
-# define bfdev_log_err(fmt, ...) \
-    bfdev_log_none(fmt, ##__VA_ARGS__)
-#endif
+#define bfdev_log(level, log, ...)                                        \
+    if ((log)->log_level >= level) bfdev_log_level_print(level, log, __VA_ARGS__)
 
-/**
- * bfdev_log_warn - Print a warning-level message
- * @fmt: format string
- * @...: arguments for the format string
- *
- * This macro expands to a printk with BFDEV_WARNING loglevel. It uses bfdev_log_fmt()
- * to generate the format string.
- */
-#if CONFIG_PRINTK_LOGLEVEL_MAX >= KLEVEL_WARNING
-# define bfdev_log_warn(fmt, ...) \
-    bfdev_log_print(BFDEV_WARNING bfdev_log_fmt(fmt), ##__VA_ARGS__)
-#else
-# define bfdev_log_warn(fmt, ...) \
-    bfdev_log_none(fmt, ##__VA_ARGS__)
-#endif
+#define bfdev_log_emerg(log, ...)                                        \
+    bfdev_log(BFDEV_LOG_EMERG, log, __VA_ARGS__)
 
-/**
- * bfdev_log_notice - Print a notice-level message
- * @fmt: format string
- * @...: arguments for the format string
- *
- * This macro expands to a printk with BFDEV_NOTICE loglevel. It uses bfdev_log_fmt() to
- * generate the format string.
- */
-#if CONFIG_PRINTK_LOGLEVEL_MAX >= KLEVEL_NOTICE
-# define bfdev_log_notice(fmt, ...) \
-    bfdev_log_print(BFDEV_NOTICE bfdev_log_fmt(fmt), ##__VA_ARGS__)
-#else
-# define bfdev_log_notice(fmt, ...) \
-    bfdev_log_none(fmt, ##__VA_ARGS__)
-#endif
+#define bfdev_log_alert(log, ...)                                        \
+    bfdev_log(BFDEV_LOG_ALERT, log, __VA_ARGS__)
 
-/**
- * bfdev_log_info - Print an info-level message
- * @fmt: format string
- * @...: arguments for the format string
- *
- * This macro expands to a printk with BFDEV_INFO loglevel. It uses bfdev_log_fmt() to
- * generate the format string.
- */
-#if CONFIG_PRINTK_LOGLEVEL_MAX >= KLEVEL_INFO
-# define bfdev_log_info(fmt, ...) \
-    bfdev_log_print(BFDEV_INFO bfdev_log_fmt(fmt), ##__VA_ARGS__)
-#else
-# define bfdev_log_info(fmt, ...) \
-    bfdev_log_none(fmt, ##__VA_ARGS__)
-#endif
+#define bfdev_log_crit(log, ...)                                        \
+    bfdev_log(BFDEV_LOG_CRIT, log, __VA_ARGS__)
 
-/**
- * bfdev_log_debug - Print an debug-level message
- * @fmt: format string
- * @...: arguments for the format string
- *
- * This macro expands to a printk with BFDEV_DEBUG loglevel. It uses bfdev_log_fmt() to
- * generate the format string.
- */
-#if CONFIG_PRINTK_LOGLEVEL_MAX >= KLEVEL_INFO
-# define bfdev_log_debug(fmt, ...) \
-    bfdev_log_print(BFDEV_DEBUG bfdev_log_fmt(fmt), ##__VA_ARGS__)
-#else
-# define bfdev_log_debug(fmt, ...) \
-    bfdev_log_none(fmt, ##__VA_ARGS__)
-#endif
+#define bfdev_log_err(log, ...)                                        \
+        bfdev_log(BFDEV_LOG_ERR, log, __VA_ARGS__)
 
-BFDEV_END_DECLS
+#define bfdev_log_warning(log, ...)                                        \
+    bfdev_log(BFDEV_LOG_WARNING, log, __VA_ARGS__)
 
-#endif /* _BFDEV_LOG_H_ */
+#define bfdev_log_notice(log, ...)                                        \
+    bfdev_log(BFDEV_LOG_NOTICE, log, __VA_ARGS__)
+
+#define bfdev_log_info(log, ...)                                        \
+    bfdev_log(BFDEV_LOG_INFO, log, __VA_ARGS__)
+
+#define bfdev_log_debug(log, ...)                                        \
+    bfdev_log(BFDEV_LOG_DEBUG, log, __VA_ARGS__)
+
+
+int bfdev_log_init(bfdev_log_t *log, unsigned level);
+void bfdev_stderr_writer(bfdev_log_t *log, unsigned level, char *buf, size_t len);
+void bfdev_log_level_print(unsigned level, bfdev_log_t *log, const char *fmt, ...);
+
+
+
+
+#endif  /*__LOG__H__*/
