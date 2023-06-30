@@ -122,6 +122,9 @@ BFDEV_BEGIN_DECLS
 #define BFDEV_EKEYREJECTED          129     /* Key was rejected by service */
 #define BFDEV_ERRNO_MAX             4096
 
+
+#define BFDEV_OK                    BFDEV_ENOERR  /* alias for  BFDEV_ENOERR*/
+
 BFDEV_END_DECLS
 
 #endif /* _BFDEV_ERRNO_H_ */
