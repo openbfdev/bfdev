@@ -45,10 +45,21 @@ typedef struct bfdev_log_s bfdev_log_t;
 typedef void (*bfdev_log_writer_pt) (bfdev_log_t *log, unsigned level,
     char *buf, size_t len);
 
+
+typedef int (*bfdev_log_meta_info_pt)(bfdev_log_t *log, unsigned level, char *buf, size_t len, void *udata);
+
+typedef struct bfdev_log_meta_info_s bfdev_log_meta_info_t;
 struct bfdev_log_s {
     unsigned log_level;
     bfdev_log_writer_pt writer;
     void *pdata;
+    bfdev_log_meta_info_t *minfo;
+};
+
+struct bfdev_log_meta_info_s {
+    bfdev_log_meta_info_pt handler;
+    void *data;
+    bfdev_log_meta_info_t *next;
 };
 
 #define bfdev_log(level, log, ...)                                        \
@@ -82,7 +93,7 @@ struct bfdev_log_s {
 int bfdev_log_init(bfdev_log_t *log, unsigned level);
 void bfdev_stderr_writer(bfdev_log_t *log, unsigned level, char *buf, size_t len);
 void bfdev_log_level_print(unsigned level, bfdev_log_t *log, const char *fmt, ...);
-
+int bfdev_log_meta_info_add(bfdev_log_t *log, bfdev_log_meta_info_t *minfo);
 
 
 

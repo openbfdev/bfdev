@@ -60,6 +60,7 @@ void bfdev_log_level_print(unsigned level, bfdev_log_t *log, const char *fmt, ..
     char *p, *last;
     int len = 0;
     va_list      args;
+    bfdev_log_meta_info_t *minfo;
 
     if (log == NULL) {
         return;
@@ -68,20 +69,25 @@ void bfdev_log_level_print(unsigned level, bfdev_log_t *log, const char *fmt, ..
     p = errstr;
     last = p + BFDEV_MAX_LOG_STR;
 
-    //TODO: support append user defined handler for meta data
-        //for exampel. user may want support time, pid
     len = snprintf(p + len, last - p, "\e[%dm", bfdev_level_color[level]);
     p+=len;
 
-
     len = snprintf(p, last - p, "[%s] ", bfdev_log_levels[level]);
     p+=len;
+
+    for (minfo = log->minfo; minfo; minfo = minfo->next) {
+        if (minfo->handler) {
+            len = minfo->handler(log, level, p, last - p, minfo->data);
+            p+=len;
+        }
+    }
 
     va_start(args, fmt);
     len = bfdev_vscnprintf(p, last - p, fmt, args);
     p+=len;
     va_end(args);
 
+    //TODO: use meta data heandler to replace it
     len = snprintf(p, last - p, "\e[0m");
     p+=len;
 
@@ -97,6 +103,18 @@ void bfdev_log_level_print(unsigned level, bfdev_log_t *log, const char *fmt, ..
 
     return bfdev_stderr_writer(log, level, errstr, p - errstr);
 }
+
+int bfdev_log_meta_info_add(bfdev_log_t *log, bfdev_log_meta_info_t *minfo) {
+    if (log == NULL || minfo == NULL) {
+        return BFDEV_ENOMEM;
+    }
+    
+    minfo->next = log->minfo;
+
+    log->minfo = minfo;
+
+    return BFDEV_ENOERR;
+} 
 
 void bfdev_stderr_writer(bfdev_log_t *log, unsigned level, char *buf, size_t len) {
     ssize_t n;
