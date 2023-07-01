@@ -6,7 +6,10 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdarg.h>
+#include <export.h>
 #include <bfdev/scnprintf.h>
+
+static int bfdev_log_append_level(bfdev_log_t *log, unsigned level, char *buf, size_t size, void *udata);
 
 static const unsigned int
 bfdev_level_color[] = {
@@ -32,19 +35,34 @@ static char *bfdev_log_levels[] = {
     "debug"
 };
 
+bfdev_log_meta_info_t minfo_level = {
+    .data = NULL,
+    .handler = bfdev_log_append_level,
+    .next = NULL
+};
 
-int bfdev_log_init(bfdev_log_t *log, unsigned log_level) {
+static int bfdev_log_append_level(bfdev_log_t *log, unsigned level, char *buf, size_t size, void *udata) {
+    (void)udata;
+    return snprintf(buf, size, "[%s] ", bfdev_log_levels[level]);
+}
+
+export int bfdev_log_init(bfdev_log_t *log, unsigned log_level) {
+    int rc;
     if (log == NULL) {
         return BFDEV_ENOMEM;
     }
 
     log->log_level = log_level;
-    log->writer = bfdev_stderr_writer;
-    log->pdata = NULL;
-    return BFDEV_ENOERR;
+
+    if ((rc = bfdev_log_init_writer(log, bfdev_stderr_writer, NULL)) != BFDEV_ENOERR) {
+        return rc;
+    }
+    
+    //default add minfo_level
+    return bfdev_log_meta_info_add(log, &minfo_level);
 }
 
-int bfdev_log_init_writer(bfdev_log_t *log, bfdev_log_writer_pt writer, void *pdata) {
+export int bfdev_log_init_writer(bfdev_log_t *log, bfdev_log_writer_pt writer, void *pdata) {
     if (log == NULL) {
         return BFDEV_ENOMEM;
     }
@@ -70,9 +88,6 @@ void bfdev_log_level_print(unsigned level, bfdev_log_t *log, const char *fmt, ..
     last = p + BFDEV_MAX_LOG_STR;
 
     len = snprintf(p + len, last - p, "\e[%dm", bfdev_level_color[level]);
-    p+=len;
-
-    len = snprintf(p, last - p, "[%s] ", bfdev_log_levels[level]);
     p+=len;
 
     for (minfo = log->minfo; minfo; minfo = minfo->next) {
@@ -104,7 +119,7 @@ void bfdev_log_level_print(unsigned level, bfdev_log_t *log, const char *fmt, ..
     return bfdev_stderr_writer(log, level, errstr, p - errstr);
 }
 
-int bfdev_log_meta_info_add(bfdev_log_t *log, bfdev_log_meta_info_t *minfo) {
+export int bfdev_log_meta_info_add(bfdev_log_t *log, bfdev_log_meta_info_t *minfo) {
     if (log == NULL || minfo == NULL) {
         return BFDEV_ENOMEM;
     }

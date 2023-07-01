@@ -4,6 +4,8 @@
 #include <sys/time.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <time.h>
+
 
 static pid_t bfdev_demo_pid;
 int log_append_time(bfdev_log_t *log, unsigned level, char *buf, size_t size, void *udata);
@@ -81,7 +83,7 @@ int	main(int argc, char **argv) {
     if (bfdev_log_meta_info_add(&log, &minfo_pid) != BFDEV_ENOERR) {
         return -1;
     }
-    
+
     bfdev_log(BFDEV_LOG_EMERG, &log, "hello world");
     bfdev_log(BFDEV_LOG_ALERT, &log, "hello world");
     bfdev_log(BFDEV_LOG_CRIT, &log, "hello world");
@@ -101,5 +103,5 @@ int	main(int argc, char **argv) {
     bfdev_log_info(&log, "hello world");
     bfdev_log_debug(&log, "hello world");
 
-
+    return 0;
 }

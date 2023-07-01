@@ -62,8 +62,11 @@ struct bfdev_log_meta_info_s {
     bfdev_log_meta_info_t *next;
 };
 
-#define bfdev_log(level, log, ...)                                        \
-    if ((log)->log_level >= level) bfdev_log_level_print(level, log, __VA_ARGS__)
+#define bfdev_log(level, log, ...)                                                      \
+    do {                                                                                \
+        unsigned _level = level;                                                        \
+        if ((log)->log_level >= _level) bfdev_log_level_print(_level, log, __VA_ARGS__); \
+    } while(0)
 
 #define bfdev_log_emerg(log, ...)                                        \
     bfdev_log(BFDEV_LOG_EMERG, log, __VA_ARGS__)
@@ -94,7 +97,7 @@ int bfdev_log_init(bfdev_log_t *log, unsigned level);
 void bfdev_stderr_writer(bfdev_log_t *log, unsigned level, char *buf, size_t len);
 void bfdev_log_level_print(unsigned level, bfdev_log_t *log, const char *fmt, ...);
 int bfdev_log_meta_info_add(bfdev_log_t *log, bfdev_log_meta_info_t *minfo);
-
-
+int bfdev_log_init_writer(bfdev_log_t *log, bfdev_log_writer_pt writer, void *pdata);
+extern bfdev_log_meta_info_t minfo_level;
 
 #endif  /*__LOG__H__*/
