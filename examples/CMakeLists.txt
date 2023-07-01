@@ -6,6 +6,7 @@
 add_subdirectory(fifo)
 add_subdirectory(heap)
 add_subdirectory(hlist)
+add_subdirectory(ilist)
 add_subdirectory(levenshtein)
 add_subdirectory(list)
 add_subdirectory(rbtree)
