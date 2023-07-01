@@ -57,6 +57,7 @@ option(ENABLE_UBSAN "Enable Undefined Behaviour Sanitizer" OFF)
 option(ENABLE_DBGLIST "Dynamic debug list" ON)
 option(ENABLE_DBGSLIST "Dynamic debug slist" ON)
 option(ENABLE_DBGHLIST "Dynamic debug hlist" ON)
+option(ENABLE_DBGILIST "Dynamic debug ilist" ON)
 option(ENABLE_DBGRBTREE "Dynamic debug rbtree" ON)
 
 if(ENABLE_DEVEL)
@@ -198,6 +199,10 @@ endif()
 
 if(ENABLE_DBGHLIST)
     set(BFDEV_DEBUG_HLIST ON)
+endif()
+
+if(ENABLE_DBGILIST)
+    set(BFDEV_DEBUG_ILIST ON)
 endif()
 
 if(ENABLE_DBGRBTREE)
