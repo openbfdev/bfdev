@@ -16,6 +16,12 @@
 
 BFDEV_BEGIN_DECLS
 
+extern char *
+bfdev_strdiff(const char *addr, int c);
+
+extern void *
+bfdev_memdiff(const void *addr, int c, size_t size);
+
 BFDEV_END_DECLS
 
 #endif /* _BFDEV_STRING_H_ */
