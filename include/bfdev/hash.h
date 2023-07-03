@@ -14,15 +14,15 @@ BFDEV_BEGIN_DECLS
 #define BFDEV_GOLDEN_RATIO_32 0x61c88647UL
 #define BFDEV_GOLDEN_RATIO_64 0x61c8864680b583ebULL
 
-#ifdef ARCH_HAS_HASH
-# include "asm/hash.h"
+#ifdef BFDEV_ARCH_HAS_HASH
+# include <asm/hash.h>
 #endif
 
-#ifndef ARCH_HAS_HASH32
+#ifndef BFDEV_ARCH_HAS_HASH32
 # define bfdev_hashv32 bfdev_hashv32_generic
 #endif
 
-#ifndef ARCH_HAS_HASH64
+#ifndef BFDEV_ARCH_HAS_HASH64
 # define bfdev_hashv64 bfdev_hashv64_generic
 #endif
 
@@ -63,8 +63,8 @@ uint64_t bfdev_hash64(uint64_t value, unsigned int bits)
 
 #if BFDEV_BITS_PER_LONG == 32
 # define BFDEV_GOLDEN_RATIO_LONG BFDEV_GOLDEN_RATIO_32
-# define hashvl(value) bfdev_hashv32(value)
-# define hashl(value, bits) bfdev_hash32(value, bits)
+# define bfdev_hashvl(value) bfdev_hashv32(value)
+# define bfdev_hashl(value, bits) bfdev_hash32(value, bits)
 #else /* BFDEV_BITS_PER_LONG == 64 */
 # define BFDEV_GOLDEN_RATIO_LONG BFDEV_GOLDEN_RATIO_64
 # define bfdev_hashvl(value) bfdev_hashv64(value)
