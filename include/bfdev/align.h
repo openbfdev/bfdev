@@ -34,6 +34,22 @@ BFDEV_BEGIN_DECLS
     (typeof(ptr))bfdev_align_high((uintptr_t)(ptr), align); \
 })
 
+#define bfdev_align_low_adj(size, align) ({ \
+    (size) = bfdev_align_low(size, align); \
+})
+
+#define bfdev_align_high_adj(size, align) ({ \
+    (size) = bfdev_align_high(size, align); \
+})
+
+#define bfdev_align_ptr_low_adj(ptr, align) ({ \
+    (ptr) = bfdev_align_ptr_low(ptr, align); \
+})
+
+#define bfdev_align_ptr_high_adj(ptr, align) ({ \
+    (ptr) = bfdev_align_ptr_high(ptr, align); \
+})
+
 #define bfdev_align_check(size, align) ( \
     !((size) & ((align) - 1)) \
 )
