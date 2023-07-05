@@ -41,7 +41,7 @@ extern bool bfdev_hlist_debug_del_check(struct bfdev_hlist_node *node);
 
 /**
  * bfdev_hlist_head_init - initialize a bfdev_hlist_head structure.
- * @head: list_head structure to be initialized.
+ * @head: hlist_head structure to be initialized.
  */
 static inline void
 bfdev_hlist_head_init(struct bfdev_hlist_head *head)
@@ -122,8 +122,8 @@ bfdev_hlist_prev_add(struct bfdev_hlist_node *node, struct bfdev_hlist_node *new
 }
 
 /**
- * bfdev_hlist_deluf - delete the specified bfdev_hlist_node from its list (unsafe).
- * @node: the element to delete from the list.
+ * bfdev_hlist_deluf - delete the specified bfdev_hlist_node from its hlist (unsafe).
+ * @node: the element to delete from the hlist.
  */
 static inline void
 bfdev_hlist_deluf(struct bfdev_hlist_node *node)
@@ -137,8 +137,8 @@ bfdev_hlist_deluf(struct bfdev_hlist_node *node)
 }
 
 /**
- * bfdev_hlist_del - delete the specified bfdev_hlist_node from its list.
- * @node: the element to delete from the list.
+ * bfdev_hlist_del - delete the specified bfdev_hlist_node from its hlist.
+ * @node: the element to delete from the hlist.
  */
 static inline void
 bfdev_hlist_del(struct bfdev_hlist_node *node)
@@ -158,7 +158,7 @@ bfdev_hlist_del(struct bfdev_hlist_node *node)
  * @head: hlist head to check.
  */
 static inline bool
-hlist_check_empty(const struct bfdev_hlist_head *head)
+bfdev_hlist_check_empty(const struct bfdev_hlist_head *head)
 {
     return !head->node;
 }
@@ -208,9 +208,9 @@ bfdev_hlist_check_unhashed(const struct bfdev_hlist_node *node)
 }
 
 /**
- * bfdev_hlist_head_replace - replace a list head with an external head.
- * @old: bfdev_hlist_head for old list.
- * @new: bfdev_hlist_head for new list.
+ * bfdev_hlist_head_replace - replace a hlist head with an external head.
+ * @old: bfdev_hlist_head for old hlist.
+ * @new: bfdev_hlist_head for new hlist.
  */
 static inline void
 bfdev_hlist_head_replace(struct bfdev_hlist_head *old, struct bfdev_hlist_head *new)
@@ -222,9 +222,9 @@ bfdev_hlist_head_replace(struct bfdev_hlist_head *old, struct bfdev_hlist_head *
 }
 
 /**
- * bfdev_hlist_replace - replace a list node with an external node.
- * @old: bfdev_hlist_head for old list.
- * @new: bfdev_hlist_head for new list.
+ * bfdev_hlist_replace - replace a hlist node with an external node.
+ * @old: bfdev_hlist_head for old hlist.
+ * @new: bfdev_hlist_head for new hlist.
  */
 static inline void
 bfdev_hlist_replace(struct bfdev_hlist_node *old, struct bfdev_hlist_node *new)
@@ -237,8 +237,8 @@ bfdev_hlist_replace(struct bfdev_hlist_node *old, struct bfdev_hlist_node *new)
 }
 
 /**
- * bfdev_hlist_del_init -  deletes entry from list and reinitialize it.
- * @node: the element to delete from the list.
+ * bfdev_hlist_del_init -  deletes entry from hlist and reinitialize it.
+ * @node: the element to delete from the hlist.
  */
 static inline void
 bfdev_hlist_del_init(struct bfdev_hlist_node *node)
@@ -251,22 +251,22 @@ bfdev_hlist_del_init(struct bfdev_hlist_node *node)
  * bfdev_hlist_entry - get the struct for this entry.
  * @ptr: the &struct bfdev_hlist_node pointer.
  * @type: the type of the struct this is embedded in.
- * @member: the name of the list_head within the struct.
+ * @member: the name of the hlist_head within the struct.
  */
 #define bfdev_hlist_entry(ptr, type, member) \
     container_of_safe(ptr, type, member)
 
 /**
- * bfdev_hlist_first_entry - get the first element from a list.
- * @ptr: the list head to take the element from.
+ * bfdev_hlist_first_entry - get the first element from a hlist.
+ * @ptr: the hlist head to take the element from.
  * @type: the type of the struct this is embedded in.
- * @member: the name of the list_head within the struct.
+ * @member: the name of the hlist_head within the struct.
  */
 #define bfdev_hlist_first_entry(ptr, type, member) \
     bfdev_hlist_entry((ptr)->node, type, member)
 
 /**
- * bfdev_hlist_next_entry - get the next element in list.
+ * bfdev_hlist_next_entry - get the next element in hlist.
  * @pos: the type * to cursor.
  * @member: the name of the bfdev_hlist_node within the struct.
  */
@@ -325,9 +325,9 @@ bfdev_hlist_del_init(struct bfdev_hlist_node *node)
          (pos) = (tmp), ((tmp) && ((tmp) = (tmp)->next)))
 
 /**
- * bfdev_hlist_for_each_entry	- iterate over list of given type.
+ * bfdev_hlist_for_each_entry	- iterate over hlist of given type.
  * @pos: the type * to use as a loop cursor.
- * @head: the head for your list.
+ * @head: the head for your hlist.
  * @member:	the name of the bfdev_hlist_node within the struct.
  */
 #define bfdev_hlist_for_each_entry(pos, head, member) \
