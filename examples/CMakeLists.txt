@@ -4,6 +4,7 @@
 #
 
 add_subdirectory(fifo)
+add_subdirectory(hashtbl)
 add_subdirectory(heap)
 add_subdirectory(hlist)
 add_subdirectory(ilist)
