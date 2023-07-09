@@ -16,12 +16,13 @@
 #include <bfdev/stdio.h>
 #include <bfdev/stdlib.h>
 #include <bfdev/string.h>
-#include <bfdev/allocator.h>
 
 #include <bfdev/align.h>
+#include <bfdev/allocator.h>
 #include <bfdev/const.h>
 #include <bfdev/container.h>
 #include <bfdev/macro.h>
+#include <bfdev/math.h>
 #include <bfdev/minmax.h>
 #include <bfdev/stringify.h>
 
