@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
 
     printf("/*\n");
     printf(" * Automatically generated file; DO NOT EDIT.\n");
-    printf(" * bfdev scipts/gen-" NAME_STRING "\n");
+    printf(" * bfdev scripts/gen-" NAME_STRING "\n");
     printf(" */\n\n");
 
     printf("/* The poly is 0x%" WIDE_STRING "." WIDE_STRING "llx */\n",
