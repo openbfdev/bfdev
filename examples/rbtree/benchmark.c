@@ -10,9 +10,9 @@
 #include <sys/times.h>
 #include <bfdev/rbtree.h>
 
-#define RB_DEBUG    0
-#define RB_CACHED   1
-#define TEST_LEN    1000000
+#define RB_DEBUG 0
+#define RB_CACHED 1
+#define TEST_LEN 1000000
 
 struct bench_node {
     struct bfdev_rb_node node;
@@ -88,9 +88,10 @@ int main(void)
     struct tms start_tms, stop_tms;
     clock_t start, stop;
     unsigned int count, ticks;
+    void *block;
 
-    node = malloc(sizeof(*node) * TEST_LEN);
-    if (!node) {
+    node = block = malloc(sizeof(*node) * TEST_LEN);
+    if (!block) {
         printf("Insufficient Memory!\n");
         return -ENOMEM;
     }
@@ -152,7 +153,7 @@ int main(void)
     time_dump(ticks, start, stop, &start_tms, &stop_tms);
 
     printf("Done.\n");
-    free(node);
+    free(block);
 
     return 0;
 }
