@@ -36,11 +36,13 @@ static void ringbuf_warnup(void)
 int main(void)
 {
     unsigned int count, index;
-    char ch;
+    char ch = 0;
 
     ringbuf_warnup();
     for (count = 0; count < TEST_LOOP; ++count) {
         bfdev_ringbuf_peek(&normal_bytetest, &ch);
+        if (!ch)
+            return 1;
         printf("%c", ch);
         index = count % TEST_SIZE;
         bfdev_ringbuf_put(&normal_bytetest, test_table[index]);
