@@ -8,9 +8,40 @@
 
 #include <bfdev/config.h>
 #include <bfdev/stdbool.h>
+#include <bfdev/math.h>
 #include <bfdev/asm/bitops.h>
 
 BFDEV_BEGIN_DECLS
+
+#define BFDEV_BITS_DIV_U8(nr)           ((nr) / BFDEV_BITS_PER_U8)
+#define BFDEV_BITS_DIV_U16(nr)          ((nr) / BFDEV_BITS_PER_U16)
+#define BFDEV_BITS_DIV_U32(nr)          ((nr) / BFDEV_BITS_PER_U32)
+#define BFDEV_BITS_DIV_U64(nr)          ((nr) / BFDEV_BITS_PER_U64)
+#define BFDEV_BITS_DIV_CHAR(nr)         ((nr) / BFDEV_BITS_PER_CHAR)
+#define BFDEV_BITS_DIV_SHORT(nr)        ((nr) / BFDEV_BITS_PER_SHORT)
+#define BFDEV_BITS_DIV_INT(nr)          ((nr) / BFDEV_BITS_PER_INT)
+#define BFDEV_BITS_DIV_LONG(nr)         ((nr) / BFDEV_BITS_PER_LONG)
+#define BFDEV_BITS_DIV_LONG_LONG(nr)    ((nr) / BFDEV_BITS_PER_LONG_LONG)
+
+#define BFDEV_BITS_MOD_U8(nr)           ((nr) % BFDEV_BITS_PER_U8)
+#define BFDEV_BITS_MOD_U16(nr)          ((nr) % BFDEV_BITS_PER_U16)
+#define BFDEV_BITS_MOD_U32(nr)          ((nr) % BFDEV_BITS_PER_U32)
+#define BFDEV_BITS_MOD_U64(nr)          ((nr) % BFDEV_BITS_PER_U64)
+#define BFDEV_BITS_MOD_CHAR(nr)         ((nr) % BFDEV_BITS_PER_CHAR)
+#define BFDEV_BITS_MOD_SHORT(nr)        ((nr) % BFDEV_BITS_PER_SHORT)
+#define BFDEV_BITS_MOD_INT(nr)          ((nr) % BFDEV_BITS_PER_INT)
+#define BFDEV_BITS_MOD_LONG(nr)         ((nr) % BFDEV_BITS_PER_LONG)
+#define BFDEV_BITS_MOD_LONG_LONG(nr)    ((nr) % BFDEV_BITS_PER_LONG_LONG)
+
+#define BFDEV_BITS_TO_U8(nr)            BFDEV_DIV_ROUND_UP(nr, BFDEV_BITS_PER_U8)
+#define BFDEV_BITS_TO_U16(nr)           BFDEV_DIV_ROUND_UP(nr, BFDEV_BITS_PER_U16)
+#define BFDEV_BITS_TO_U32(nr)           BFDEV_DIV_ROUND_UP(nr, BFDEV_BITS_PER_U32)
+#define BFDEV_BITS_TO_U64(nr)           BFDEV_DIV_ROUND_UP(nr, BFDEV_BITS_PER_U64)
+#define BFDEV_BITS_TO_CHAR(nr)          BFDEV_DIV_ROUND_UP(nr, BFDEV_BITS_PER_CHAR)
+#define BFDEV_BITS_TO_SHORT(nr)         BFDEV_DIV_ROUND_UP(nr, BFDEV_BITS_PER_SHORT)
+#define BFDEV_BITS_TO_INT(nr)           BFDEV_DIV_ROUND_UP(nr, BFDEV_BITS_PER_INT)
+#define BFDEV_BITS_TO_LONG(nr)          BFDEV_DIV_ROUND_UP(nr, BFDEV_BITS_PER_LONG)
+#define BFDEV_BITS_TO_LONG_LONG(nr)     BFDEV_DIV_ROUND_UP(nr, BFDEV_BITS_PER_LONG_LONG)
 
 #ifndef bfdev_bit_clr
 static __bfdev_always_inline void
