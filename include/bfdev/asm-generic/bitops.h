@@ -515,6 +515,62 @@ bfdev_arch_clz(unsigned long value)
 }
 #endif
 
+#ifndef bfdev_arch_ffns
+static __bfdev_always_inline unsigned int
+bfdev_arch_ffns(unsigned long word, unsigned int nr)
+{
+    unsigned int bit;
+
+    if (word == ULONG_MAX)
+        return nr;
+
+    while (word) {
+        bit = bfdev_arch_ffsuf(word);
+        if (!nr--)
+            return bit;
+        bfdev_arch_bit_clr(&word, bit);
+    }
+
+    return BFDEV_BITS_PER_LONG;
+}
+#endif
+
+#ifndef bfdev_arch_flns
+static __bfdev_always_inline unsigned int
+bfdev_arch_flns(unsigned long word, unsigned int nr)
+{
+    unsigned int bit;
+
+    if (word == ULONG_MAX)
+        return nr;
+
+    while (word) {
+        bit = bfdev_arch_flsuf(word);
+        if (!nr--)
+            return bit;
+        bfdev_arch_bit_clr(&word, bit);
+    }
+
+    return BFDEV_BITS_PER_LONG;
+}
+#endif
+
+#ifndef bfdev_arch_ffnz
+static __bfdev_always_inline unsigned int
+bfdev_arch_ffnz(unsigned long word, unsigned int nr)
+{
+    return bfdev_arch_ffns(~word, nr);
+}
+#endif
+
+#ifndef bfdev_arch_flnz
+static __bfdev_always_inline unsigned int
+bfdev_arch_flnz(unsigned long word, unsigned int nr)
+{
+    return bfdev_arch_flns(~word, nr);
+}
+#endif
+
 BFDEV_END_DECLS
 
 #endif /* _BFDEV_ASM_GENERIC_BITOPS_H_ */

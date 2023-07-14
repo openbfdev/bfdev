@@ -331,6 +331,38 @@ bfdev_clz(unsigned long value)
 }
 #endif
 
+#ifndef bfdev_ffns
+static __bfdev_always_inline unsigned int
+bfdev_ffns(unsigned long word, unsigned int nr)
+{
+    return bfdev_arch_ffns(word, nr);
+}
+#endif
+
+#ifndef bfdev_flns
+static __bfdev_always_inline unsigned int
+bfdev_flns(unsigned long word, unsigned int nr)
+{
+    return bfdev_arch_flns(word, nr);
+}
+#endif
+
+#ifndef bfdev_ffnz
+static __bfdev_always_inline unsigned int
+bfdev_ffnz(unsigned long word, unsigned int nr)
+{
+    return bfdev_arch_ffnz(word, nr);
+}
+#endif
+
+#ifndef bfdev_fznz
+static __bfdev_always_inline unsigned int
+bfdev_flnz(unsigned long word, unsigned int nr)
+{
+    return bfdev_arch_fznz(word, nr);
+}
+#endif
+
 #if BFDEV_BITS_PER_LONG == 32
 static __bfdev_always_inline unsigned int
 bfdev_ffsuf64(uint64_t value)
