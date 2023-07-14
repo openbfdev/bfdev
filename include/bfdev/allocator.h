@@ -38,6 +38,18 @@ bfdev_malloc_array(const struct bfdev_alloc *alloc,
 }
 
 /**
+ * bfdev_zalloc_array - zero allocate memory for an array.
+ * @nr: number of elements.
+ * @size: single element size.
+ */
+static __bfdev_always_inline __bfdev_malloc void *
+bfdev_zalloc_array(const struct bfdev_alloc *alloc,
+                   size_t nr, size_t size)
+{
+    return bfdev_zalloc(alloc, size * nr);
+}
+
+/**
  * bfdev_realloc_array - reallocate memory for an array.
  * @block: number of elements.
  * @nr: number of elements.
