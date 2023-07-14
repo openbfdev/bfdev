@@ -16,6 +16,11 @@ BFDEV_BEGIN_DECLS
 # define BFDEV_BITS_PER_LONG 64
 #endif /* __SIZEOF_POINTER__ == 8 */
 
+#define bfdev_const_small_nbits(nbits) ( \
+    __builtin_constant_p(nbits) && (nbits) <= \
+    BFDEV_BITS_PER_LONG && (nbits) > 0 \
+)
+
 BFDEV_END_DECLS
 
 #endif /* _BFDEV_BITSPERLONG_H_ */
