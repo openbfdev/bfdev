@@ -517,16 +517,16 @@ bfdev_arch_clz(unsigned long value)
 
 #ifndef bfdev_arch_ffns
 static __bfdev_always_inline unsigned int
-bfdev_arch_ffns(unsigned long word, unsigned int nr)
+bfdev_arch_ffnsp(unsigned long word, unsigned int *nr)
 {
     unsigned int bit;
 
     if (word == ULONG_MAX)
-        return nr;
+        return *nr;
 
     while (word) {
         bit = bfdev_arch_ffsuf(word);
-        if (!nr--)
+        if (!(*nr)--)
             return bit;
         bfdev_arch_bit_clr(&word, bit);
     }
@@ -537,16 +537,16 @@ bfdev_arch_ffns(unsigned long word, unsigned int nr)
 
 #ifndef bfdev_arch_flns
 static __bfdev_always_inline unsigned int
-bfdev_arch_flns(unsigned long word, unsigned int nr)
+bfdev_arch_flnsp(unsigned long word, unsigned int *nr)
 {
     unsigned int bit;
 
     if (word == ULONG_MAX)
-        return nr;
+        return *nr;
 
     while (word) {
         bit = bfdev_arch_flsuf(word);
-        if (!nr--)
+        if (!(*nr)--)
             return bit;
         bfdev_arch_bit_clr(&word, bit);
     }
@@ -557,17 +557,17 @@ bfdev_arch_flns(unsigned long word, unsigned int nr)
 
 #ifndef bfdev_arch_ffnz
 static __bfdev_always_inline unsigned int
-bfdev_arch_ffnz(unsigned long word, unsigned int nr)
+bfdev_arch_ffnzp(unsigned long word, unsigned int *nr)
 {
-    return bfdev_arch_ffns(~word, nr);
+    return bfdev_arch_ffnsp(~word, nr);
 }
 #endif
 
 #ifndef bfdev_arch_flnz
 static __bfdev_always_inline unsigned int
-bfdev_arch_flnz(unsigned long word, unsigned int nr)
+bfdev_arch_flnzp(unsigned long word, unsigned int *nr)
 {
-    return bfdev_arch_flns(~word, nr);
+    return bfdev_arch_flnsp(~word, nr);
 }
 #endif
 
