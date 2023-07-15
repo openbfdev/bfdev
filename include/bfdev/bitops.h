@@ -8,9 +8,40 @@
 
 #include <bfdev/config.h>
 #include <bfdev/stdbool.h>
+#include <bfdev/math.h>
 #include <bfdev/asm/bitops.h>
 
 BFDEV_BEGIN_DECLS
+
+#define BFDEV_BITS_DIV_U8(nr)           ((nr) / BFDEV_BITS_PER_U8)
+#define BFDEV_BITS_DIV_U16(nr)          ((nr) / BFDEV_BITS_PER_U16)
+#define BFDEV_BITS_DIV_U32(nr)          ((nr) / BFDEV_BITS_PER_U32)
+#define BFDEV_BITS_DIV_U64(nr)          ((nr) / BFDEV_BITS_PER_U64)
+#define BFDEV_BITS_DIV_CHAR(nr)         ((nr) / BFDEV_BITS_PER_CHAR)
+#define BFDEV_BITS_DIV_SHORT(nr)        ((nr) / BFDEV_BITS_PER_SHORT)
+#define BFDEV_BITS_DIV_INT(nr)          ((nr) / BFDEV_BITS_PER_INT)
+#define BFDEV_BITS_DIV_LONG(nr)         ((nr) / BFDEV_BITS_PER_LONG)
+#define BFDEV_BITS_DIV_LONG_LONG(nr)    ((nr) / BFDEV_BITS_PER_LONG_LONG)
+
+#define BFDEV_BITS_MOD_U8(nr)           ((nr) % BFDEV_BITS_PER_U8)
+#define BFDEV_BITS_MOD_U16(nr)          ((nr) % BFDEV_BITS_PER_U16)
+#define BFDEV_BITS_MOD_U32(nr)          ((nr) % BFDEV_BITS_PER_U32)
+#define BFDEV_BITS_MOD_U64(nr)          ((nr) % BFDEV_BITS_PER_U64)
+#define BFDEV_BITS_MOD_CHAR(nr)         ((nr) % BFDEV_BITS_PER_CHAR)
+#define BFDEV_BITS_MOD_SHORT(nr)        ((nr) % BFDEV_BITS_PER_SHORT)
+#define BFDEV_BITS_MOD_INT(nr)          ((nr) % BFDEV_BITS_PER_INT)
+#define BFDEV_BITS_MOD_LONG(nr)         ((nr) % BFDEV_BITS_PER_LONG)
+#define BFDEV_BITS_MOD_LONG_LONG(nr)    ((nr) % BFDEV_BITS_PER_LONG_LONG)
+
+#define BFDEV_BITS_TO_U8(nr)            BFDEV_DIV_ROUND_UP(nr, BFDEV_BITS_PER_U8)
+#define BFDEV_BITS_TO_U16(nr)           BFDEV_DIV_ROUND_UP(nr, BFDEV_BITS_PER_U16)
+#define BFDEV_BITS_TO_U32(nr)           BFDEV_DIV_ROUND_UP(nr, BFDEV_BITS_PER_U32)
+#define BFDEV_BITS_TO_U64(nr)           BFDEV_DIV_ROUND_UP(nr, BFDEV_BITS_PER_U64)
+#define BFDEV_BITS_TO_CHAR(nr)          BFDEV_DIV_ROUND_UP(nr, BFDEV_BITS_PER_CHAR)
+#define BFDEV_BITS_TO_SHORT(nr)         BFDEV_DIV_ROUND_UP(nr, BFDEV_BITS_PER_SHORT)
+#define BFDEV_BITS_TO_INT(nr)           BFDEV_DIV_ROUND_UP(nr, BFDEV_BITS_PER_INT)
+#define BFDEV_BITS_TO_LONG(nr)          BFDEV_DIV_ROUND_UP(nr, BFDEV_BITS_PER_LONG)
+#define BFDEV_BITS_TO_LONG_LONG(nr)     BFDEV_DIV_ROUND_UP(nr, BFDEV_BITS_PER_LONG_LONG)
 
 #ifndef bfdev_bit_clr
 static __bfdev_always_inline void
@@ -300,6 +331,70 @@ bfdev_clz(unsigned long value)
 }
 #endif
 
+#ifndef bfdev_ffns
+static __bfdev_always_inline unsigned int
+bfdev_ffnsp(unsigned long word, unsigned int *nr)
+{
+    return bfdev_arch_ffnsp(word, nr);
+}
+#endif
+
+#ifndef bfdev_flns
+static __bfdev_always_inline unsigned int
+bfdev_flnsp(unsigned long word, unsigned int *nr)
+{
+    return bfdev_arch_flnsp(word, nr);
+}
+#endif
+
+#ifndef bfdev_ffnz
+static __bfdev_always_inline unsigned int
+bfdev_ffnzp(unsigned long word, unsigned int *nr)
+{
+    return bfdev_arch_ffnzp(word, nr);
+}
+#endif
+
+#ifndef bfdev_fznz
+static __bfdev_always_inline unsigned int
+bfdev_flnzp(unsigned long word, unsigned int *nr)
+{
+    return bfdev_arch_flnzp(word, nr);
+}
+#endif
+
+#ifndef bfdev_ffns
+static __bfdev_always_inline unsigned int
+bfdev_ffns(unsigned long word, unsigned int nr)
+{
+    return bfdev_ffnsp(word, &nr);
+}
+#endif
+
+#ifndef bfdev_flns
+static __bfdev_always_inline unsigned int
+bfdev_flns(unsigned long word, unsigned int nr)
+{
+    return bfdev_flnsp(word, &nr);
+}
+#endif
+
+#ifndef bfdev_ffnz
+static __bfdev_always_inline unsigned int
+bfdev_ffnz(unsigned long word, unsigned int nr)
+{
+    return bfdev_ffnzp(word, &nr);
+}
+#endif
+
+#ifndef bfdev_fznz
+static __bfdev_always_inline unsigned int
+bfdev_flnz(unsigned long word, unsigned int nr)
+{
+    return bfdev_flnzp(word, &nr);
+}
+#endif
+
 #if BFDEV_BITS_PER_LONG == 32
 static __bfdev_always_inline unsigned int
 bfdev_ffsuf64(uint64_t value)
@@ -448,6 +543,114 @@ bfdev_clz64(uint64_t value)
 }
 #else
 # define bfdev_clz64 bfdev_clz
+#endif
+
+#if BFDEV_BITS_PER_LONG == 32
+static __bfdev_always_inline unsigned int
+bfdev_ffnsp64(uint64_t word, unsigned int *nr)
+{
+    uint32_t hi = word >> 32;
+    unsigned int bit;
+
+    bit = bfdev_ffns((uint32_t)word, nr);
+    if (bit < BFDEV_BITS_PER_LONG)
+        return bit;
+
+    return bfdev_ffns(hi, nr) + 32;
+}
+#else
+# define bfdev_ffnsp64 bfdev_ffnsp
+#endif
+
+#if BFDEV_BITS_PER_LONG == 32
+static __bfdev_always_inline unsigned int
+bfdev_flnsp64(uint64_t word, unsigned int *nr)
+{
+    uint32_t hi = word >> 32;
+    unsigned int bit;
+
+    bit = bfdev_flns(hi, nr);
+    if (bit < BFDEV_BITS_PER_LONG)
+        return bit + 32;
+
+    return bfdev_flns((uint32_t)word, nr);
+}
+#else
+# define bfdev_flnsp64 bfdev_flns
+#endif
+
+#if BFDEV_BITS_PER_LONG == 32
+static __bfdev_always_inline unsigned int
+bfdev_ffnzp64(uint64_t word, unsigned int *nr)
+{
+    uint32_t hi = word >> 32;
+    unsigned int bit;
+
+    bit = bfdev_ffnzp((uint32_t)word, nr);
+    if (bit < BFDEV_BITS_PER_LONG)
+        return bit;
+
+    return bfdev_ffnzp(hi, nr) + 32;
+}
+#else
+# define bfdev_ffnzp64 bfdev_ffnzp
+#endif
+
+#if BFDEV_BITS_PER_LONG == 32
+static __bfdev_always_inline unsigned int
+bfdev_flnzp64(uint64_t word, unsigned int *nr)
+{
+    uint32_t hi = word >> 32;
+    unsigned int bit;
+
+    bit = bfdev_flnzp(hi, nr);
+    if (bit < BFDEV_BITS_PER_LONG)
+        return bit + 32;
+
+    return bfdev_flnzp((uint32_t)word, nr);
+}
+#else
+# define bfdev_flnzp64 bfdev_flnzp
+#endif
+
+#if BFDEV_BITS_PER_LONG == 32
+static __bfdev_always_inline unsigned int
+bfdev_ffns64(uint64_t word, unsigned int nr)
+{
+    return bfdev_ffnsp64(word, &nr);
+}
+#else
+# define bfdev_ffns64 bfdev_ffns
+#endif
+
+#if BFDEV_BITS_PER_LONG == 32
+static __bfdev_always_inline unsigned int
+bfdev_flns64(uint64_t word, unsigned int nr)
+{
+    return bfdev_flnsp64(word, &nr);
+}
+#else
+# define bfdev_flns64 bfdev_flns
+#endif
+
+#if BFDEV_BITS_PER_LONG == 32
+static __bfdev_always_inline unsigned int
+bfdev_ffnz64(uint64_t word, unsigned int nr)
+{
+    return bfdev_ffnzp64(word, &nr);
+}
+#else
+# define bfdev_ffnz64 bfdev_ffnz
+#endif
+
+#if BFDEV_BITS_PER_LONG == 32
+static __bfdev_always_inline unsigned int
+bfdev_flnz64(uint64_t word, unsigned int nr)
+{
+    return bfdev_flnzp64(word, &nr);
+}
+#else
+# define bfdev_flnz64 bfdev_flnz
 #endif
 
 BFDEV_END_DECLS
