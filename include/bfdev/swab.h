@@ -194,6 +194,20 @@ uint64_t bfdev_fswahl64(uint64_t val)
 #endif
 
 /**
+ * swab - return a byteswapped long value.
+ * @x: value to byteswap.
+ */
+static __bfdev_always_inline
+unsigned long bfdev_swab(const unsigned long y)
+{
+#if BFDEV_BITS_PER_LONG == 32
+    return bfdev_swab32(y);
+#else /* BFDEV_BITS_PER_LONG == 64 */
+    return bfdev_swab64(y);
+#endif
+}
+
+/**
  * swahb32 - return a high and low byte-swapped 32-bit value.
  * @x: value to byteswap.
  */
@@ -398,6 +412,20 @@ bfdev_swab64s(uint64_t *p)
 }
 
 /**
+ * swabs - byteswap a long value in-place.
+ * @p: pointer to a naturally-aligned long value.
+ */
+static __bfdev_always_inline void
+bfdev_swabs(unsigned long *p)
+{
+#if BFDEV_BITS_PER_LONG == 32
+    bfdev_swab32s((uint32_t *)p);
+#else /* BFDEV_BITS_PER_LONG == 64 */
+    bfdev_swab64s((uint64_t *)p);
+#endif
+}
+
+/**
  * swahb32s - high and low byteswap a 32-bit value in-place.
  * @p: pointer to a naturally-aligned 32-bit value.
  */
@@ -492,6 +520,16 @@ bfdev_swab64_array(uint64_t *buff, unsigned int count)
         bfdev_swab64s(buff);
         buff++;
     }
+}
+
+static inline void
+bfdev_swab_array(unsigned long *buff, unsigned int count)
+{
+#if BFDEV_BITS_PER_LONG == 32
+    bfdev_swab32_array((uint32_t *)buff, count);
+#else /* BFDEV_BITS_PER_LONG == 64 */
+    bfdev_swab64_array((uint64_t *)buff, count);
+#endif
 }
 
 BFDEV_END_DECLS
