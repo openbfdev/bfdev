@@ -6,8 +6,6 @@
 #ifndef _BFDEV_CDEFS_H_
 #define _BFDEV_CDEFS_H_
 
-#include <bfdev/config.h>
-
 /*
  * GCC and clang have various useful declarations that can be made with
  * the '__attribute__' syntax.  All of the ways we use this do fine if
