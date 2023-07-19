@@ -552,11 +552,11 @@ bfdev_ffnsp64(uint64_t word, unsigned int *nr)
     uint32_t hi = word >> 32;
     unsigned int bit;
 
-    bit = bfdev_ffns((uint32_t)word, nr);
+    bit = bfdev_ffnsp((uint32_t)word, nr);
     if (bit < BFDEV_BITS_PER_LONG)
         return bit;
 
-    return bfdev_ffns(hi, nr) + 32;
+    return bfdev_ffnsp(hi, nr) + 32;
 }
 #else
 # define bfdev_ffnsp64 bfdev_ffnsp
@@ -569,11 +569,11 @@ bfdev_flnsp64(uint64_t word, unsigned int *nr)
     uint32_t hi = word >> 32;
     unsigned int bit;
 
-    bit = bfdev_flns(hi, nr);
+    bit = bfdev_flnsp(hi, nr);
     if (bit < BFDEV_BITS_PER_LONG)
         return bit + 32;
 
-    return bfdev_flns((uint32_t)word, nr);
+    return bfdev_flnsp((uint32_t)word, nr);
 }
 #else
 # define bfdev_flnsp64 bfdev_flns
