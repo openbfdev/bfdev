@@ -81,6 +81,28 @@ BFDEV_BEGIN_DECLS
 #define BFDEV_INT32_MIN     ((int32_t)(-BFDEV_INT32_MAX - 1))
 #define BFDEV_INT64_MIN     ((int64_t)(-BFDEV_INT64_MAX - 1))
 
+/* Maximum of unsigned pointer types */
+#define BFDEV_UINTPTR_MAX   ((uintptr_t)~0UL)
+#define BFDEV_UINTMAX_MAX   ((uintmax_t)~0ULL)
+#define BFDEV_SIZE_MAX      ((size_t)~0UL)
+
+/* Minimum of unsigned pointer types */
+#define BFDEV_UINTPTR_MIN   ((uintptr_t)0UL)
+#define BFDEV_UINTMAX_MIN   ((uintmax_t)0ULL)
+#define BFDEV_SIZE_MIN      ((size_t)0UL)
+
+/* Maximum of signed pointer types */
+#define BFDEV_INTPTR_MAX    ((intptr_t)(BFDEV_UINTPTR_MAX >> 1))
+#define BFDEV_PTRDIFF_MAX   ((ptrdiff_t)(BFDEV_UINTPTR_MAX >> 1))
+#define BFDEV_INTMAX_MAX    ((intmax_t)(BFDEV_UINTMAX_MAX >> 1))
+#define BFDEV_SSIZE_MAX     ((ssize_t)(BFDEV_SIZE_MAX >> 1))
+
+/* Minimum of signed pointer types */
+#define BFDEV_INTPTR_MIN    ((intptr_t)(-BFDEV_INTPTR_MAX - 1))
+#define BFDEV_PTRDIFF_MIN   ((ptrdiff_t)(-BFDEV_PTRDIFF_MAX - 1))
+#define BFDEV_INTMAX_MIN    ((intmax_t)(-BFDEV_INTMAX_MAX - 1))
+#define BFDEV_SSIZE_MIN     ((ssize_t)(-BFDEV_SSIZE_MAX - 1))
+
 BFDEV_END_DECLS
 
 #endif /* _BFDEV_LIMITS_H_ */
