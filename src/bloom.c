@@ -59,9 +59,9 @@ bfdev_bloom_create(const struct bfdev_alloc *alloc, unsigned int capacity,
     size_t size;
 
     bfdev_align_high_adj(capacity, BFDEV_BITS_PER_LONG);
-    size = BFDEV_BITS_WORD(capacity);
+    size = BFDEV_BITS_TO_LONG(capacity);
 
-    bloom = bfdev_zalloc(alloc, sizeof(*alloc) + size);
+    bloom = bfdev_zalloc(alloc, sizeof(*alloc) + sizeof(*bloom->bitmap) * size);
     if (unlikely(!bloom))
         return NULL;
 
