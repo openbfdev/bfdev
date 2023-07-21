@@ -15,11 +15,49 @@ BFDEV_BEGIN_DECLS
 # define BFDEV_MINPOOL_ALIGN 16
 #endif
 
+struct bfdev_minpool_head;
+struct bfdev_minpool_node;
+
+typedef struct bfdev_minpool_node *
+(*bfdev_find_t)(struct bfdev_minpool_head *head, size_t size);
+
 struct bfdev_minpool_head {
     struct bfdev_list_head block_list;
     struct bfdev_list_head free_list;
+    bfdev_find_t find;
     size_t avail;
 };
+
+struct bfdev_minpool_node {
+    struct bfdev_list_head block;
+    struct bfdev_list_head free;
+    size_t usize;
+    char data[0];
+};
+
+/**
+ * minpool_first_fit - Get first qualified node in mempool.
+ * @head: Minimum mempool to get node.
+ * @size: Node minimum size to get.
+ */
+extern struct bfdev_minpool_node *
+bfdev_minpool_first_fit(struct bfdev_minpool_head *head, size_t size);
+
+/**
+ * bfdev_minpool_best_fit - Get best qualified node in mempool.
+ * @head: Minimum mempool to get node.
+ * @size: Node minimum size to get.
+ */
+extern struct bfdev_minpool_node *
+bfdev_minpool_best_fit(struct bfdev_minpool_head *head, size_t size);
+
+/**
+ * bfdev_minpool_worst_fit - Get worst qualified node in mempool.
+ * @head: Minimum mempool to get node.
+ * @size: Node minimum size to get.
+ */
+extern struct bfdev_minpool_node *
+bfdev_minpool_worst_fit(struct bfdev_minpool_head *head, size_t size);
 
 /**
  * bfdev_minpool_alloc - Minimum mempool allocation.
@@ -53,7 +91,8 @@ bfdev_minpool_free(struct bfdev_minpool_head *head, void *block);
  * @size: Mempool array size.
  */
 extern void
-bfdev_minpool_setup(struct bfdev_minpool_head *head, void *array, size_t size);
+bfdev_minpool_setup(struct bfdev_minpool_head *head, bfdev_find_t find,
+                    void *array, size_t size);
 
 BFDEV_END_DECLS
 

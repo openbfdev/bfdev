@@ -8,13 +8,6 @@
 #include <bfdev/minpool.h>
 #include <export.h>
 
-struct bfdev_minpool_node {
-    struct bfdev_list_head block;
-    struct bfdev_list_head free;
-    size_t usize;
-    char data[0];
-};
-
 static __bfdev_always_inline bool
 minnode_get_used(struct bfdev_minpool_node *node)
 {
@@ -47,24 +40,6 @@ minnode_set(struct bfdev_minpool_node *node, size_t size, bool used)
     node->usize = (size & BFDEV_BIT_HIGH_MASK(1)) | used;
 }
 
-/**
- * bfdev_minpool_find - Get first qualified node in mempool.
- * @head: Minimum mempool to get node.
- * @size: Node minimum size to get.
- */
-static struct bfdev_minpool_node *
-minpool_find(struct bfdev_minpool_head *head, size_t size)
-{
-    struct bfdev_minpool_node *node;
-
-    bfdev_list_for_each_entry(node, &head->free_list, free) {
-        if (minnode_get_size(node) >= size)
-            return node;
-    }
-
-    return NULL;
-}
-
 static inline struct bfdev_minpool_node *
 minpool_check(void *block)
 {
@@ -76,6 +51,61 @@ minpool_check(void *block)
         return NULL;
 
     return node;
+}
+
+export struct bfdev_minpool_node *
+bfdev_minpool_first_fit(struct bfdev_minpool_head *head, size_t size)
+{
+    struct bfdev_minpool_node *node;
+
+    bfdev_list_for_each_entry(node, &head->free_list, free) {
+        if (minnode_get_size(node) >= size)
+            return node;
+    }
+
+    return NULL;
+}
+
+export struct bfdev_minpool_node *
+bfdev_minpool_best_fit(struct bfdev_minpool_head *head, size_t size)
+{
+    struct bfdev_minpool_node *best = NULL;
+    struct bfdev_minpool_node *node;
+    size_t walk, bsize = BFDEV_SIZE_MAX;
+
+    bfdev_list_for_each_entry(node, &head->free_list, free) {
+        if ((walk = minnode_get_size(node)) >= size) {
+            if (walk == size)
+                return node;
+            else if (walk >= bsize)
+                continue;
+            best = node;
+            bsize = walk;
+        }
+    }
+
+    return best;
+}
+
+export struct bfdev_minpool_node *
+bfdev_minpool_worst_fit(struct bfdev_minpool_head *head, size_t size)
+{
+    struct bfdev_minpool_node *best = NULL;
+    struct bfdev_minpool_node *node;
+    size_t walk, bsize = BFDEV_SIZE_MAX;
+
+    bfdev_list_for_each_entry(node, &head->free_list, free) {
+        if ((walk = minnode_get_size(node)) >= size) {
+            if (walk == head->avail)
+                return node;
+            else if (walk <= bsize)
+                continue;
+            best = node;
+            bsize = walk;
+        }
+    }
+
+    return best;
 }
 
 export void *
@@ -92,7 +122,7 @@ bfdev_minpool_alloc(struct bfdev_minpool_head *head, size_t size)
         return NULL;
 
     /* Get the free memory block */
-    node = minpool_find(head, size);
+    node = head->find(head, size);
     if (unlikely(!node))
         return NULL;
 
@@ -226,12 +256,14 @@ bfdev_minpool_realloc(struct bfdev_minpool_head *head, void *block, size_t resiz
 }
 
 export void
-bfdev_minpool_setup(struct bfdev_minpool_head *head, void *array, size_t size)
+bfdev_minpool_setup(struct bfdev_minpool_head *head, bfdev_find_t find,
+                    void *array, size_t size)
 {
     struct bfdev_minpool_node *node = array;
 
     bfdev_list_head_init(&head->block_list);
     bfdev_list_head_init(&head->free_list);
+    head->find = find;
 
     minnode_set_used(node, false);
     minnode_set_size(node, size - sizeof(*node));
