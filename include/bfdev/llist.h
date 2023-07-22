@@ -1,4 +1,8 @@
 /* SPDX-License-Identifier: GPL-2.0-or-later */
+/*
+ * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
+ */
+
 #ifndef _BFDEV_LLIST_H_
 #define _BFDEV_LLIST_H_
 
