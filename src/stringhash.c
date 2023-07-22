@@ -7,7 +7,7 @@
 #include <export.h>
 
 export unsigned long
-pjwhash(const char *str)
+bfdev_pjwhash(const char *str)
 {
     unsigned long value, hash = 0;
 
