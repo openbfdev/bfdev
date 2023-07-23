@@ -77,7 +77,7 @@ bfdev_bit_change(volatile unsigned long *addr, unsigned int bit, bool val)
 
 #ifndef bfdev_bit_test
 static __bfdev_always_inline bool
-bfdev_bit_test(volatile unsigned long *addr, unsigned int bit)
+bfdev_bit_test(const volatile unsigned long *addr, unsigned int bit)
 {
     return bfdev_arch_bit_test(addr, bit);
 }
