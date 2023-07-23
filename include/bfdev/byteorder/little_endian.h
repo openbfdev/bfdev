@@ -6,12 +6,15 @@
 #ifndef _BFDEV_BYTEORDER_LITTLE_ENDIAN_H_
 #define _BFDEV_BYTEORDER_LITTLE_ENDIAN_H_
 
-#ifndef __LITTLE_ENDIAN__
-# define __LITTLE_ENDIAN__
+#ifndef __BFDEV_LITTLE_ENDIAN__
+# define __BFDEV_LITTLE_ENDIAN__
 #endif
 
+#include <bfdev/config.h>
 #include <bfdev/stdint.h>
 #include <bfdev/swab.h>
+
+BFDEV_BEGIN_DECLS
 
 #define bfdev_htons_const(x) ((bfdev_be16)bfdev_swab16_const((x)))
 #define bfdev_htonl_const(x) ((bfdev_be32)bfdev_swab32_const((x)))
@@ -131,5 +134,7 @@ bfdev_be64_to_cpup(const bfdev_be64 *p)
 {
     return bfdev_swab64p((uint64_t *)p);
 }
+
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_BYTEORDER_LITTLE_ENDIAN_H_ */
