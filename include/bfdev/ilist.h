@@ -9,6 +9,8 @@
 #include <bfdev/config.h>
 #include <bfdev/list.h>
 
+BFDEV_BEGIN_DECLS
+
 struct bfdev_ilist_head {
     struct bfdev_list_head node_list;
 };
@@ -318,5 +320,7 @@ bfdev_ilist_node_empty(struct bfdev_ilist_node *inode)
  */
 #define bfdev_ilist_for_each_entry_reverse_continue_safe(pos, tmp, head, member) \
     bfdev_list_for_each_entry_reverse_continue_safe(pos, tmp, &(head)->node_list, member.node_list)
+
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_ILIST_H_ */

@@ -9,6 +9,8 @@
 #include <bfdev/config.h>
 #include <bfdev/asm/unaligned.h>
 
+BFDEV_BEGIN_DECLS
+
 #ifndef bfdev_unaligned_get_uint
 static __bfdev_always_inline unsigned int
 bfdev_unaligned_get_uint(const void *ptr)
@@ -184,5 +186,7 @@ bfdev_unaligned_set_be64(void *ptr, uint64_t val)
     bfdev_arch_unaligned_set_be64(ptr, val);
 }
 #endif
+
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_UNALIGNED_H_ */

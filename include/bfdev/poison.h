@@ -17,7 +17,6 @@ BFDEV_BEGIN_DECLS
 # define BFDEV_POISON_OFFSET 0
 #endif
 
-
 #define BFDEV_POISON_LIST1      ((void *) (BFDEV_POISON_OFFSET + 0x100))
 #define BFDEV_POISON_LIST2      ((void *) (BFDEV_POISON_OFFSET + 0x110))
 #define BFDEV_POISON_HLIST1     ((void *) (BFDEV_POISON_OFFSET + 0x120))

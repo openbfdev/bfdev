@@ -10,6 +10,8 @@
 #include <bfdev/bits.h>
 #include <bfdev/asm/byteorder.h>
 
+BFDEV_BEGIN_DECLS
+
 #define _bfdev_cpu_to_le_type(type)     bfdev_cpu_to_le##type
 #define bfdev_cpu_to_le_type(type)      _bfdev_cpu_to_le_type(type)
 #define _bfdev_cpu_to_be_type(type)     bfdev_cpu_to_be##type
@@ -38,5 +40,7 @@
 #define bfdev_be_int_to_cpu(val)        bfdev_be_type_to_cpu(BFDEV_BITS_PER_INT)(val)
 #define bfdev_be_long_to_cpu(val)       bfdev_be_type_to_cpu(BFDEV_BITS_PER_LONG)(val)
 #define bfdev_be_long_long_to_cpu(val)  bfdev_be_type_to_cpu(BFDEV_BITS_PER_LONG_LONG)(val)
+
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_BYTEORDER_H_ */

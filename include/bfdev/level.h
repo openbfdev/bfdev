@@ -6,6 +6,10 @@
 #ifndef _BFDEV_LEVEL_H_
 #define _BFDEV_LEVEL_H_
 
+#include <bfdev/compiler.h>
+
+BFDEV_BEGIN_DECLS
+
 /* ASCII Start Of Header */
 #define BFDEV_SOH           "\001"
 #define BFDEV_SOH_ASCII     '\001'
@@ -47,5 +51,7 @@
 #define BFDEV_COLR_MAGENTA          95
 #define BFDEV_COLR_CYAN             96
 #define BFDEV_COLR_WHITE            97
+
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_LEVEL_H_ */
