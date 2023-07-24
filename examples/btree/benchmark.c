@@ -11,7 +11,7 @@
 #include <sys/times.h>
 
 #define BTREE_DEBUG 0
-#define TEST_LEN 10000000
+#define TEST_LEN 1000000
 
 struct bench_node {
     unsigned int num;
