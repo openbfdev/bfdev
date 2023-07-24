@@ -12,21 +12,24 @@
 #define UINTPTR_PER_U32 BFDEV_DIV_ROUND_UP(BFDEV_BYTES_PER_U32, BFDEV_BYTES_PER_UINTPTR)
 #define UINTPTR_PER_U64 BFDEV_DIV_ROUND_UP(BFDEV_BYTES_PER_U64, BFDEV_BYTES_PER_UINTPTR)
 
-struct bfdev_btree_layout bfdev_btree_layout32 = {
+export struct bfdev_btree_layout
+bfdev_btree_layout32 = {
     .keylen = UINTPTR_PER_U32,
     .keynum = NODE_SIZE / sizeof(uintptr_t) / (UINTPTR_PER_U32 + 1),
     .ptrindex = UINTPTR_PER_U32 * (NODE_SIZE / sizeof(uintptr_t) / (UINTPTR_PER_U32 + 1)),
     .nodesize = NODE_SIZE,
 };
 
-struct bfdev_btree_layout bfdev_btree_layout64 = {
+export struct bfdev_btree_layout
+bfdev_btree_layout64 = {
     .keylen = UINTPTR_PER_U64,
     .keynum = NODE_SIZE / sizeof(uintptr_t) / (UINTPTR_PER_U64 + 1),
     .ptrindex = UINTPTR_PER_U64 * (NODE_SIZE / sizeof(uintptr_t) / (UINTPTR_PER_U64 + 1)),
     .nodesize = NODE_SIZE,
 };
 
-struct bfdev_btree_layout bfdev_btree_layoutptr = {
+export struct bfdev_btree_layout
+bfdev_btree_layoutptr = {
     .keylen = 1,
     .keynum = NODE_SIZE / sizeof(uintptr_t) / 2,
     .ptrindex = NODE_SIZE / sizeof(uintptr_t) / 2,
