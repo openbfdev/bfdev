@@ -154,7 +154,7 @@ bfdev_arch_bit_atomic_change(volatile unsigned long *addr, unsigned int bit, boo
 
 #ifndef bfdev_arch_bit_atomic_test
 static __bfdev_always_inline bool
-bfdev_arch_bit_atomic_test(volatile unsigned long *addr, unsigned int bit)
+bfdev_arch_bit_atomic_test(const volatile unsigned long *addr, unsigned int bit)
 {
     addr += BFDEV_BITS_WORD(bit);
     return !!(bfdev_arch_atomic_read((bfdev_atomic_t *)addr) & BFDEV_BIT(bit));
