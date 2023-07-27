@@ -9,6 +9,7 @@
 #include <bfdev/config.h>
 #include <bfdev/stdbool.h>
 #include <bfdev/math.h>
+#include <bfdev/bits.h>
 #include <bfdev/asm/bitops.h>
 
 BFDEV_BEGIN_DECLS
