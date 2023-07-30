@@ -224,12 +224,13 @@ configure_file(
     ${PROJECT_BINARY_DIR}/generated/bfdev/config.h
 )
 
-add_library(bfdev_shared SHARED ${BFDEV_LIBRARY})
+add_library(bfdev_object OBJECT ${BFDEV_LIBRARY})
 add_library(bfdev_static STATIC ${BFDEV_LIBRARY})
-add_library(bfdev ALIAS bfdev_static)
+add_library(bfdev_shared SHARED ${BFDEV_LIBRARY})
+add_library(bfdev ALIAS bfdev_object)
 
 add_dependencies(
-    bfdev_shared
+    bfdev_object
     gen-crc16
     gen-crc32
     gen-crc64
@@ -237,6 +238,13 @@ add_dependencies(
 
 add_dependencies(
     bfdev_static
+    gen-crc16
+    gen-crc32
+    gen-crc64
+)
+
+add_dependencies(
+    bfdev_shared
     gen-crc16
     gen-crc32
     gen-crc64
