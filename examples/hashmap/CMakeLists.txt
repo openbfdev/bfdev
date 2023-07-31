@@ -4,8 +4,13 @@
 #
 
 add_executable(hashmap-simple simple.c)
-target_link_libraries(hashmap-simple bfdev)
 add_test(hashmap-simple hashmap-simple)
+
+target_link_libraries(
+    hashmap-simple
+    -Wl,--whole-archive bfdev
+    -Wl,--no-whole-archive
+)
 
 if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
     install(FILES

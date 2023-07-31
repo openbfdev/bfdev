@@ -4,8 +4,13 @@
 #
 
 add_executable(log2-selftest selftest.c)
-target_link_libraries(log2-selftest bfdev)
 add_test(log2-selftest log2-selftest)
+
+target_link_libraries(
+    log2-selftest
+    -Wl,--whole-archive bfdev
+    -Wl,--no-whole-archive
+)
 
 if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
     install(FILES

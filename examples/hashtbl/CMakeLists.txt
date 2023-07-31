@@ -4,8 +4,13 @@
 #
 
 add_executable(hashtbl-simple simple.c)
-target_link_libraries(hashtbl-simple bfdev)
 add_test(hashtbl-simple hashtbl-simple)
+
+target_link_libraries(
+    hashtbl-simple
+    -Wl,--whole-archive bfdev
+    -Wl,--no-whole-archive
+)
 
 if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
     install(FILES

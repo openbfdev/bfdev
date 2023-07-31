@@ -4,8 +4,13 @@
 #
 
 add_executable(bloom-simple simple.c)
-target_link_libraries(bloom-simple bfdev)
 add_test(bloom-simple bloom-simple)
+
+target_link_libraries(
+    bloom-simple
+    -Wl,--whole-archive bfdev
+    -Wl,--no-whole-archive
+)
 
 if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
     install(FILES

@@ -4,8 +4,13 @@
 #
 
 add_executable(ringbuf-simple simple.c)
-target_link_libraries(ringbuf-simple bfdev)
 add_test(ringbuf-simple ringbuf-simple)
+
+target_link_libraries(
+    ringbuf-simple
+    -Wl,--whole-archive bfdev
+    -Wl,--no-whole-archive
+)
 
 if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
     install(FILES

@@ -4,12 +4,22 @@
 #
 
 add_executable(btree-benchmark benchmark.c)
-target_link_libraries(btree-benchmark bfdev)
 add_test(btree-benchmark btree-benchmark)
 
 add_executable(btree-selftest selftest.c)
-target_link_libraries(btree-selftest bfdev)
 add_test(btree-selftest btree-selftest)
+
+target_link_libraries(
+    btree-benchmark
+    -Wl,--whole-archive bfdev
+    -Wl,--no-whole-archive
+)
+
+target_link_libraries(
+    btree-selftest
+    -Wl,--whole-archive bfdev
+    -Wl,--no-whole-archive
+)
 
 if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
     install(FILES

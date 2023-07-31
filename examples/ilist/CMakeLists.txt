@@ -4,8 +4,13 @@
 #
 
 add_executable(ilist-selftest selftest.c)
-target_link_libraries(ilist-selftest bfdev)
 add_test(ilist-selftest ilist-selftest)
+
+target_link_libraries(
+    ilist-selftest
+    -Wl,--whole-archive bfdev
+    -Wl,--no-whole-archive
+)
 
 if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
     install(FILES

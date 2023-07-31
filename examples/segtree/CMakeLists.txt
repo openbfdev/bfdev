@@ -4,8 +4,13 @@
 #
 
 add_executable(segtree-selftest selftest.c)
-target_link_libraries(segtree-selftest bfdev)
 add_test(segtree-selftest segtree-selftest)
+
+target_link_libraries(
+    segtree-selftest
+    -Wl,--whole-archive bfdev
+    -Wl,--no-whole-archive
+)
 
 if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
     install(FILES

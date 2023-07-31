@@ -4,12 +4,22 @@
 #
 
 add_executable(fifo-selftest selftest.c)
-target_link_libraries(fifo-selftest bfdev)
 add_test(fifo-selftest fifo-selftest)
 
 add_executable(fifo-simple simple.c)
-target_link_libraries(fifo-simple bfdev)
 add_test(fifo-simple fifo-simple)
+
+target_link_libraries(
+    fifo-selftest
+    -Wl,--whole-archive bfdev
+    -Wl,--no-whole-archive
+)
+
+target_link_libraries(
+    fifo-simple
+    -Wl,--whole-archive bfdev
+    -Wl,--no-whole-archive
+)
 
 if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
     install(FILES

@@ -4,16 +4,31 @@
 #
 
 add_executable(rbtree-benchmark benchmark.c)
-target_link_libraries(rbtree-benchmark bfdev)
 add_test(rbtree-benchmark rbtree-benchmark)
 
 add_executable(rbtree-selftest selftest.c)
-target_link_libraries(rbtree-selftest bfdev)
 add_test(rbtree-selftest rbtree-selftest)
 
 add_executable(rbtree-simple simple.c)
-target_link_libraries(rbtree-simple bfdev)
 add_test(rbtree-simple rbtree-simple)
+
+target_link_libraries(
+    rbtree-benchmark
+    -Wl,--whole-archive bfdev
+    -Wl,--no-whole-archive
+)
+
+target_link_libraries(
+    rbtree-selftest
+    -Wl,--whole-archive bfdev
+    -Wl,--no-whole-archive
+)
+
+target_link_libraries(
+    rbtree-simple
+    -Wl,--whole-archive bfdev
+    -Wl,--no-whole-archive
+)
 
 if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
 install(FILES

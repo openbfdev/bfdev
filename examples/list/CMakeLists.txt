@@ -4,12 +4,22 @@
 #
 
 add_executable(list-benchmark benchmark.c)
-target_link_libraries(list-benchmark bfdev)
 add_test(list-benchmark list-benchmark)
 
 add_executable(list-selftest selftest.c)
-target_link_libraries(list-selftest bfdev)
 add_test(list-selftest list-selftest)
+
+target_link_libraries(
+    list-benchmark
+    -Wl,--whole-archive bfdev
+    -Wl,--no-whole-archive
+)
+
+target_link_libraries(
+    list-selftest
+    -Wl,--whole-archive bfdev
+    -Wl,--no-whole-archive
+)
 
 if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
     install(FILES

@@ -4,8 +4,13 @@
 #
 
 add_executable(levenshtein-simple simple.c)
-target_link_libraries(levenshtein-simple bfdev)
 add_test(levenshtein-simple levenshtein-simple)
+
+target_link_libraries(
+    levenshtein-simple
+    -Wl,--whole-archive bfdev
+    -Wl,--no-whole-archive
+)
 
 if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
     install(FILES
