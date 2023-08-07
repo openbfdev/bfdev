@@ -129,102 +129,41 @@ int bfdev_##name##_dynamic(int c)               \
               (unsigned char)c] & (bitflags));  \
 }
 
-BFDEV_CTYPE_DYNAMIC(isalnum,
-    BFDEV_CTYPE_UPPER | BFDEV_CTYPE_LOWER |
-    BFDEV_CTYPE_DIGIT
-)
-
-BFDEV_CTYPE_DYNAMIC(isalpha,
+#define BFDEV_CTYPE_ALPHA \
     BFDEV_CTYPE_UPPER | BFDEV_CTYPE_LOWER
-)
 
-BFDEV_CTYPE_DYNAMIC(isblank,
-    BFDEV_CTYPE_BLANK
-)
-
-BFDEV_CTYPE_DYNAMIC(iscntrl,
-    BFDEV_CTYPE_CNTRL
-)
-
-BFDEV_CTYPE_DYNAMIC(isdigit,
+#define BFDEV_CTYPE_ALNUM \
+    BFDEV_CTYPE_UPPER | BFDEV_CTYPE_LOWER | \
     BFDEV_CTYPE_DIGIT
-)
 
-BFDEV_CTYPE_DYNAMIC(isgraph,
-    BFDEV_CTYPE_PUNCT | BFDEV_CTYPE_UPPER |
+#define BFDEV_CTYPE_GRAPH \
+    BFDEV_CTYPE_PUNCT | BFDEV_CTYPE_UPPER | \
     BFDEV_CTYPE_LOWER | BFDEV_CTYPE_DIGIT
-)
 
-BFDEV_CTYPE_DYNAMIC(islower,
-    BFDEV_CTYPE_LOWER
-)
-
-BFDEV_CTYPE_DYNAMIC(isprint,
-    BFDEV_CTYPE_PUNCT | BFDEV_CTYPE_UPPER |
-    BFDEV_CTYPE_LOWER | BFDEV_CTYPE_DIGIT |
+#define BFDEV_CTYPE_PRINT \
+    BFDEV_CTYPE_PUNCT | BFDEV_CTYPE_UPPER | \
+    BFDEV_CTYPE_LOWER | BFDEV_CTYPE_DIGIT | \
     BFDEV_CTYPE_HDSPA
-)
 
-BFDEV_CTYPE_DYNAMIC(ispunct,
-    BFDEV_CTYPE_PUNCT
-)
+BFDEV_CTYPE_DYNAMIC(isupper,  BFDEV_CTYPE_UPPER)
+BFDEV_CTYPE_DYNAMIC(islower,  BFDEV_CTYPE_LOWER)
+BFDEV_CTYPE_DYNAMIC(iscntrl,  BFDEV_CTYPE_CNTRL)
+BFDEV_CTYPE_DYNAMIC(ispunct,  BFDEV_CTYPE_PUNCT)
+BFDEV_CTYPE_DYNAMIC(isblank,  BFDEV_CTYPE_BLANK)
+BFDEV_CTYPE_DYNAMIC(isdigit,  BFDEV_CTYPE_DIGIT)
+BFDEV_CTYPE_DYNAMIC(isxdigit, BFDEV_CTYPE_HEXDG)
+BFDEV_CTYPE_DYNAMIC(isspace,  BFDEV_CTYPE_SPACE)
+BFDEV_CTYPE_DYNAMIC(isascii,  BFDEV_CTYPE_ASCII)
+BFDEV_CTYPE_DYNAMIC(isalpha,  BFDEV_CTYPE_ALPHA)
+BFDEV_CTYPE_DYNAMIC(isalnum,  BFDEV_CTYPE_ALNUM)
+BFDEV_CTYPE_DYNAMIC(isgraph,  BFDEV_CTYPE_GRAPH)
+BFDEV_CTYPE_DYNAMIC(isprint,  BFDEV_CTYPE_PRINT)
 
-BFDEV_CTYPE_DYNAMIC(isspace,
-    BFDEV_CTYPE_SPACE
-)
-
-BFDEV_CTYPE_DYNAMIC(isupper,
-    BFDEV_CTYPE_UPPER
-)
-
-BFDEV_CTYPE_DYNAMIC(isxdigit,
-    BFDEV_CTYPE_DIGIT | BFDEV_CTYPE_HEXDG
-)
-
-BFDEV_CTYPE_DYNAMIC(isascii,
-    BFDEV_CTYPE_ASCII
-)
-
-#define bfdev_isalnum(c) ({         \
+#define bfdev_isupper(c) ({         \
     int __c = (int)(c);             \
     __builtin_constant_p(__c)       \
-    ? bfdev_isalnum_const(__c)      \
-    : bfdev_isalnum_dynamic(__c);   \
-})
-
-#define bfdev_isalpha(c) ({         \
-    int __c = (int)(c);             \
-    __builtin_constant_p(__c)       \
-    ? bfdev_isalpha_const(__c)      \
-    : bfdev_isalpha_dynamic(__c);   \
-})
-
-#define bfdev_isblank(c) ({         \
-    int __c = (int)(c);             \
-    __builtin_constant_p(__c)       \
-    ? bfdev_isblank_const(__c)      \
-    : bfdev_isblank_dynamic(__c);   \
-})
-
-#define bfdev_iscntrl(c) ({         \
-    int __c = (int)(c);             \
-    __builtin_constant_p(__c)       \
-    ? bfdev_iscntrl_const(__c)      \
-    : bfdev_iscntrl_dynamic(__c);   \
-})
-
-#define bfdev_isdigit(c) ({         \
-    int __c = (int)(c);             \
-    __builtin_constant_p(__c)       \
-    ? bfdev_isdigit_const(__c)      \
-    : bfdev_isdigit_dynamic(__c);   \
-})
-
-#define bfdev_isgraph(c) ({         \
-    int __c = (int)(c);             \
-    __builtin_constant_p(__c)       \
-    ? bfdev_isgraph_const(__c)      \
-    : bfdev_isgraph_dynamic(__c);   \
+    ? bfdev_isupper_const(__c)      \
+    : bfdev_isupper_dynamic(__c);   \
 })
 
 #define bfdev_islower(c) ({         \
@@ -234,11 +173,11 @@ BFDEV_CTYPE_DYNAMIC(isascii,
     : bfdev_islower_dynamic(__c);   \
 })
 
-#define bfdev_isprint(c) ({         \
+#define bfdev_iscntrl(c) ({         \
     int __c = (int)(c);             \
     __builtin_constant_p(__c)       \
-    ? bfdev_isprint_const(__c)      \
-    : bfdev_isprint_dynamic(__c);   \
+    ? bfdev_iscntrl_const(__c)      \
+    : bfdev_iscntrl_dynamic(__c);   \
 })
 
 #define bfdev_ispunct(c) ({         \
@@ -248,18 +187,18 @@ BFDEV_CTYPE_DYNAMIC(isascii,
     : bfdev_ispunct_dynamic(__c);   \
 })
 
-#define bfdev_isspace(c) ({         \
+#define bfdev_isblank(c) ({         \
     int __c = (int)(c);             \
     __builtin_constant_p(__c)       \
-    ? bfdev_isspace_const(__c)      \
-    : bfdev_isspace_dynamic(__c);   \
+    ? bfdev_isblank_const(__c)      \
+    : bfdev_isblank_dynamic(__c);   \
 })
 
-#define bfdev_isupper(c) ({         \
+#define bfdev_isdigit(c) ({         \
     int __c = (int)(c);             \
     __builtin_constant_p(__c)       \
-    ? bfdev_isupper_const(__c)      \
-    : bfdev_isupper_dynamic(__c);   \
+    ? bfdev_isdigit_const(__c)      \
+    : bfdev_isdigit_dynamic(__c);   \
 })
 
 #define bfdev_isxdigit(c) ({        \
@@ -269,11 +208,46 @@ BFDEV_CTYPE_DYNAMIC(isascii,
     : bfdev_isxdigit_dynamic(__c);  \
 })
 
+#define bfdev_isspace(c) ({         \
+    int __c = (int)(c);             \
+    __builtin_constant_p(__c)       \
+    ? bfdev_isspace_const(__c)      \
+    : bfdev_isspace_dynamic(__c);   \
+})
+
 #define bfdev_isascii(c) ({         \
     int __c = (int)(c);             \
     __builtin_constant_p(__c)       \
     ? bfdev_isascii_const(__c)      \
     : bfdev_isascii_dynamic(__c);   \
+})
+
+#define bfdev_isalpha(c) ({         \
+    int __c = (int)(c);             \
+    __builtin_constant_p(__c)       \
+    ? bfdev_isalpha_const(__c)      \
+    : bfdev_isalpha_dynamic(__c);   \
+})
+
+#define bfdev_isalnum(c) ({         \
+    int __c = (int)(c);             \
+    __builtin_constant_p(__c)       \
+    ? bfdev_isalnum_const(__c)      \
+    : bfdev_isalnum_dynamic(__c);   \
+})
+
+#define bfdev_isgraph(c) ({         \
+    int __c = (int)(c);             \
+    __builtin_constant_p(__c)       \
+    ? bfdev_isgraph_const(__c)      \
+    : bfdev_isgraph_dynamic(__c);   \
+})
+
+#define bfdev_isprint(c) ({         \
+    int __c = (int)(c);             \
+    __builtin_constant_p(__c)       \
+    ? bfdev_isprint_const(__c)      \
+    : bfdev_isprint_dynamic(__c);   \
 })
 
 static inline int
