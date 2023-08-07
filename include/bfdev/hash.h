@@ -15,7 +15,7 @@ BFDEV_BEGIN_DECLS
 #define BFDEV_GOLDEN_RATIO_64 0x61c8864680b583ebULL
 
 #ifdef BFDEV_ARCH_HAS_HASH
-# include <asm/hash.h>
+# include <bfdev/asm/hash.h>
 #endif
 
 #ifndef BFDEV_ARCH_HAS_HASH32

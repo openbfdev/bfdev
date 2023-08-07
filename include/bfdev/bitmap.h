@@ -1,12 +1,18 @@
 /* SPDX-License-Identifier: GPL-2.0-or-later */
-#ifndef _BITMAP_H_
-#define _BITMAP_H_
+/*
+ * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
+ */
+
+#ifndef _BFDEV_BITMAP_H_
+#define _BFDEV_BITMAP_H_
 
 #include <bfdev/config.h>
 #include <bfdev/bitops.h>
 #include <bfdev/string.h>
 #include <bfdev/allocator.h>
 #include <bfdev/bitwalk.h>
+
+BFDEV_BEGIN_DECLS
 
 #ifdef CONFIG_ARCH_LITTLE_ENDIAN
 # define BFDEV_BITMAP_MEM_ALIGNMENT BFDEV_BITS_PER_BYTE
@@ -199,4 +205,6 @@ bfdev_bitmap_zalloc(const struct bfdev_alloc *alloc, unsigned int bits);
 extern void
 bfdev_bitmap_free(const struct bfdev_alloc *alloc, const unsigned long *bitmap);
 
-#endif /* _BITMAP_H_ */
+BFDEV_END_DECLS
+
+#endif /* _BFDEV_BITMAP_H_ */
