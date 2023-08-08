@@ -9,12 +9,9 @@
 #include <stdio.h>
 #include <bfdev/stringify.h>
 
-#ifndef GENCRC_NAME
-# define GENCRC_NAME crc8
-# define GENCRC_TYPE uint8_t
-# define GENCRC_BITS 8
-# define GENCRC_WIDE 2
-# define GENCRC_BELE 0
+#if !defined(GENCRC_NAME) || !defined(GENCRC_TYPE) || \
+    !defined(GENCRC_BITS) || !defined(GENCRC_WIDE) || !defined(GENCRC_BELE)
+# error "Compilation parameters not defined"
 #endif
 
 #define NAME_STRING __stringify(GENCRC_NAME)
@@ -27,7 +24,7 @@
 
 #if GENCRC_BELE
 static void /* little endian */
-crc32_generic(unsigned int rows, GENCRC_TYPE poly,
+table_generic(unsigned int rows, GENCRC_TYPE poly,
               GENCRC_TYPE (*table)[CRC_TABLE_SIZE])
 {
     unsigned int count, index;
@@ -40,9 +37,9 @@ crc32_generic(unsigned int rows, GENCRC_TYPE poly,
             table[0][count + index] = crc ^ table[0][index];
     }
 
-    for (count = 0; count < CRC_TABLE_SIZE; count++) {
+    for (count = 0; count < CRC_TABLE_SIZE; ++count) {
         crc = table[0][count];
-        for (index = 1; index < rows; index++) {
+        for (index = 1; index < rows; ++index) {
             crc = table[0][crc & 0xff] ^ (crc >> 8);
             table[index][count] = crc;
         }
@@ -50,23 +47,23 @@ crc32_generic(unsigned int rows, GENCRC_TYPE poly,
 }
 #else
 static void /* big endian */
-crc32_generic(unsigned int rows, GENCRC_TYPE poly,
+table_generic(unsigned int rows, GENCRC_TYPE poly,
               GENCRC_TYPE (*table)[CRC_TABLE_SIZE])
 {
     unsigned int count, index;
-    GENCRC_TYPE crc = 1;
+    GENCRC_TYPE crc = 1ULL << (GENCRC_BITS - 1);
 
     table[0][0] = 0;
-    for (count = CRC_TABLE_SIZE >> 1; count; count >>= 1) {
+    for (count = 1; count < CRC_TABLE_SIZE; count <<= 1) {
         crc = (crc << 1) ^ ((crc & (1ULL << (GENCRC_BITS - 1))) ? poly : 0);
-        for (index = 0; index < CRC_TABLE_SIZE; index += 2 * count)
+        for (index = 0; index < count; ++index)
             table[0][count + index] = crc ^ table[0][index];
     }
 
-    for (count = 0; count < CRC_TABLE_SIZE; count++) {
+    for (count = 0; count < CRC_TABLE_SIZE; ++count) {
         crc = table[0][count];
-        for (index = 1; index < rows; index++) {
-            crc = table[0][(crc >> 24) & 0xff] ^ (crc << 8);
+        for (index = 1; index < rows; ++index) {
+            crc = table[0][(crc >> (GENCRC_BITS - 8)) & 0xff] ^ (crc << 8);
             table[index][count] = crc;
         }
     }
@@ -117,7 +114,7 @@ int main(int argc, char *argv[])
             (unsigned long long)poly);
     printf("static const " TYPE_STRING " %s[%d][%d] = {\n",
             argv[1], rows, CRC_TABLE_SIZE);
-    crc32_generic(rows, poly, table);
+    table_generic(rows, poly, table);
     table_dump(rows, trans, table);
     printf("};\n");
 

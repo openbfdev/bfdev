@@ -41,11 +41,7 @@ bfdev_crc4_inline(const uint8_t *src, size_t bits, uint8_t crc)
     unsigned int count;
     uint8_t value;
 
-    for (; bits >= 64; bits -= 64) {
-        crc = bfdev_crc4_byte(crc, *src++);
-        crc = bfdev_crc4_byte(crc, *src++);
-        crc = bfdev_crc4_byte(crc, *src++);
-        crc = bfdev_crc4_byte(crc, *src++);
+    for (; bits >= 32; bits -= 32) {
         crc = bfdev_crc4_byte(crc, *src++);
         crc = bfdev_crc4_byte(crc, *src++);
         crc = bfdev_crc4_byte(crc, *src++);

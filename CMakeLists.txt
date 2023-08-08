@@ -232,9 +232,13 @@ add_library(bfdev ALIAS bfdev_object)
 macro(bfdev_dependencies target)
     add_dependencies(
         ${target}
+        gen-crc8
         gen-crc16
+        gen-crc16be
         gen-crc32
+        gen-crc32be
         gen-crc64
+        gen-crc64be
     )
 endmacro()
 
@@ -247,16 +251,16 @@ if(ENABLE_EXAMPLES)
     add_subdirectory(examples)
 endif()
 
+set_target_properties(bfdev_static
+    PROPERTIES
+    OUTPUT_NAME bfdev
+    LINKER_LANGUAGE C
+)
+
 set_target_properties(bfdev_shared
     PROPERTIES VERSION 1.0 SOVERSION 1
     OUTPUT_NAME bfdev
     MACOSX_RPATH ON
-    LINKER_LANGUAGE C
-)
-
-set_target_properties(bfdev_static
-    PROPERTIES
-    OUTPUT_NAME bfdev
     LINKER_LANGUAGE C
 )
 
