@@ -27,4 +27,4 @@ extern uint64_t bfdev_crc_rocksoft(const uint8_t *src, size_t len, uint64_t crc)
 
 BFDEV_END_DECLS
 
-#endif /* _BFDEV_CRYPTO_CRC_H_ */
+#endif /* _BFDEV_CRC_H_ */
