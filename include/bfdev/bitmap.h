@@ -9,6 +9,8 @@
 #include <bfdev/config.h>
 #include <bfdev/bitops.h>
 #include <bfdev/string.h>
+#include <bfdev/limits.h>
+#include <bfdev/align.h>
 #include <bfdev/allocator.h>
 #include <bfdev/bitwalk.h>
 
@@ -43,7 +45,7 @@ bfdev_bitmap_empty(const unsigned long *src, unsigned int bits)
         return !(*src & BFDEV_BIT_LOW_MASK(bits));
     else if (__builtin_constant_p(bits & BFDEV_BITMAP_MEM_MASK) &&
              bfdev_align_check(bits, BFDEV_BITMAP_MEM_ALIGNMENT))
-        return !bfdev_memdiff(src, INT_MAX, bits / BFDEV_BITS_PER_BYTE);
+        return !bfdev_memdiff(src, BFDEV_UINT_MIN, bits / BFDEV_BITS_PER_BYTE);
     else
         return bfdev_find_first_bit(src, bits) >= bits;
 }
@@ -55,7 +57,7 @@ bfdev_bitmap_full(const unsigned long *src, unsigned int bits)
         return !(~(*src) & BFDEV_BIT_LOW_MASK(bits));
     else if (__builtin_constant_p(bits & BFDEV_BITMAP_MEM_MASK) &&
              bfdev_align_check(bits, BFDEV_BITMAP_MEM_ALIGNMENT))
-        return !bfdev_memdiff(src, INT_MAX, bits / BFDEV_BITS_PER_BYTE);
+        return !bfdev_memdiff(src, BFDEV_UINT_MAX, bits / BFDEV_BITS_PER_BYTE);
     else
         return bfdev_find_first_zero(src, bits) >= bits;
 }
