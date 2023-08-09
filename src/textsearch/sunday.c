@@ -33,6 +33,7 @@ sunday_pattern_len(struct bfdev_ts_context *tsc)
 static unsigned int
 sunday_find(struct bfdev_ts_context *tsc, struct bfdev_ts_state *tss)
 {
+    #define find_pattern() (icase ? toupper(text[shift + index]) : text[shift + index])
     bool icase = bfdev_ts_test_igcase(tsc);
     struct sunday_context *sctx = ts_to_sunday(tsc);
     unsigned int consumed = tss->offset;
@@ -46,8 +47,7 @@ sunday_find(struct bfdev_ts_context *tsc, struct bfdev_ts_state *tss)
 
         while (sctx->pattern_len + shift <= length) {
             for (index = 0; index < sctx->pattern_len; ++index) {
-                if (sctx->pattern[index] !=
-                    (icase ? toupper(text[shift + index]) : text[shift + index]))
+                if (sctx->pattern[index] != find_pattern())
                     break;
             }
 
@@ -65,15 +65,20 @@ sunday_find(struct bfdev_ts_context *tsc, struct bfdev_ts_state *tss)
 }
 
 static inline void
-compute_prefix(struct sunday_context *sctx)
+compute_prefix(struct sunday_context *sctx, unsigned int flags)
 {
     unsigned int index;
 
     for (index = 0; index < UINT8_MAX; ++index)
         sctx->shift_table[index] = sctx->pattern_len + 1;
 
-    for (index = 0; index < sctx->pattern_len; ++index)
+    for (index = 0; index < sctx->pattern_len; ++index) {
         sctx->shift_table[sctx->pattern[index]] = sctx->pattern_len - index;
+        if (flags & BFDEV_TS_IGCASE) {
+            sctx->shift_table[tolower(sctx->pattern[index])] =
+                sctx->pattern_len - index;
+        }
+    }
 }
 
 static struct bfdev_ts_context *
@@ -94,7 +99,7 @@ sunday_prepare(const struct bfdev_alloc *alloc, const void *pattern,
         memcpy(sctx->pattern, pattern, len);
     else for (index = 0; index < len; ++index)
         sctx->pattern[index] = toupper(((char *)pattern)[index]);
-    compute_prefix(sctx);
+    compute_prefix(sctx, flags);
 
     return &sctx->tsc;
 }

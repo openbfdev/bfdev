@@ -80,15 +80,20 @@ subpattern(const uint8_t *pattern, int index, int j, int g)
 }
 
 static inline void
-compute_prefix(struct bm_context *bctx)
+compute_prefix(struct bm_context *bctx, unsigned long flags)
 {
     int index, start, count;
 
     for (index = 0; index < UINT8_MAX; ++index)
         bctx->bad_shift[index] = bctx->pattern_len;
 
-    for (index = 0; index < bctx->pattern_len - 1; ++index)
+    for (index = 0; index < bctx->pattern_len - 1; ++index) {
         bctx->bad_shift[bctx->pattern[index]] = bctx->pattern_len - index - 1;
+		if (flags & BFDEV_TS_IGCASE) {
+            bctx->bad_shift[tolower(bctx->pattern[index])] =
+                bctx->pattern_len - index - 1;
+        }
+    }
 
     bctx->good_shift[0] = 1;
     for (index = 1; index < bctx->pattern_len; ++index)
@@ -124,7 +129,7 @@ bm_prepare(const struct bfdev_alloc *alloc, const void *pattern,
         memcpy(bctx->pattern, pattern, len);
     else for (index = 0; index < len; ++index)
         bctx->pattern[index] = toupper(((char *)pattern)[index]);
-    compute_prefix(bctx);
+    compute_prefix(bctx, flags);
 
     return &bctx->tsc;
 }
@@ -146,7 +151,7 @@ bm_algorithm = {
     .pattern_len = bm_pattern_len,
 };
 
-__bfdev_ctor __bfdev_used int
+static __bfdev_ctor int
 bm_init(void)
 {
     return bfdev_textsearch_register(&bm_algorithm);
