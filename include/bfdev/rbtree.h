@@ -3,8 +3,8 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
-#ifndef _RBTREE_H_
-#define _RBTREE_H_
+#ifndef _BFDEV_RBTREE_H_
+#define _BFDEV_RBTREE_H_
 
 #include <bfdev/config.h>
 #include <bfdev/stddef.h>
