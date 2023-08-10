@@ -15,6 +15,10 @@ BFDEV_BEGIN_DECLS
 extern const uint8_t bfdev_popcount_table[256];
 extern const uint8_t bfdev_popparity_table[256];
 
+/*
+ * Interface for known constant arguments
+ */
+
 static __bfdev_attribute_const __bfdev_always_inline
 unsigned int bfdev_popcount8_const(uint8_t value)
 {
@@ -95,6 +99,10 @@ bool bfdev_popparity64_const(uint64_t value)
     return (0x6996 >> value) & 1;
 }
 
+/*
+ * Interface for known dynamic arguments
+ */
+
 static inline __bfdev_attribute_const
 unsigned int bfdev_popcount8_dynamic(uint8_t value)
 {
@@ -155,6 +163,12 @@ bool bfdev_popparity64_dynamic(uint64_t value)
             bfdev_popparity32_dynamic(high)) & 1;
 }
 
+/**
+ * bfdev_popcount() - count the total number of bits set.
+ * @value: value to count.
+ *
+ * Returns the number of 1-bits in x.
+ */
 #define bfdev_popcount8(value) ({           \
     uint8_t __value = (value);              \
     __builtin_constant_p(__value)           \
@@ -183,6 +197,12 @@ bool bfdev_popparity64_dynamic(uint64_t value)
     : bfdev_popcount64_dynamic(__value);    \
 })
 
+/**
+ * bfdev_popparity() - count the parity of bits set.
+ * @value: value to parity.
+ *
+ * Returns the parity of x, i.e. the number of 1-bits in x modulo 2.
+ */
 #define bfdev_popparity8(value) ({          \
     uint8_t __value = (value);              \
     __builtin_constant_p(__value)           \
