@@ -14,6 +14,7 @@ include(CheckFunctionExists)
 include(CheckCSourceCompiles)
 
 set(BFDEV_ARCH dummy)
+set(BFDEV_NAME sirius)
 set(BFDEV_EXTREVERSION -devel)
 
 set(BFDEV_VERSION ${CMAKE_PROJECT_VERSION_MAJOR})
