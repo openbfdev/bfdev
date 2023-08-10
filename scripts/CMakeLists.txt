@@ -3,9 +3,13 @@
 # Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
 #
 
+add_executable(gen-crc8 gen-crc8.c)
 add_executable(gen-crc16 gen-crc16.c)
+add_executable(gen-crc16be gen-crc16be.c)
 add_executable(gen-crc32 gen-crc32.c)
+add_executable(gen-crc32be gen-crc32be.c)
 add_executable(gen-crc64 gen-crc64.c)
+add_executable(gen-crc64be gen-crc64be.c)
 
 macro(generate_crctbl proc path table rows poly trans)
     add_custom_command(
@@ -20,21 +24,55 @@ macro(generate_crctbl proc path table rows poly trans)
 endmacro()
 
 generate_crctbl(
+    gen-crc8 crc7-table.h
+    bfdev_crc7_table 8 0x12
+    ""
+)
+
+generate_crctbl(
+    gen-crc8 crc8-table.h
+    bfdev_crc8_table 8 0x07
+    ""
+)
+
+generate_crctbl(
     gen-crc16 crc16-table.h
-    bfdev_crc16_table 8 0xa001 ""
+    bfdev_crc16_table 8 0xa001
+    "bfdev_cpu_to_le16"
 )
 
 generate_crctbl(
     gen-crc16 crc-ccitt-table.h
-    bfdev_crc_ccitt_table 8 0x8408 ""
+    bfdev_crc_ccitt_table 8 0x8408
+    "bfdev_cpu_to_le16"
+)
+
+generate_crctbl(
+    gen-crc16be crc-itut-table.h
+    bfdev_crc_itut_table 8 0x1021
+    "bfdev_cpu_to_be16"
+)
+
+generate_crctbl(
+    gen-crc16be crc-t10dif-table.h
+    bfdev_crc_t10dif_table 8 0x8bb7
+    "bfdev_cpu_to_be16"
 )
 
 generate_crctbl(
     gen-crc32 crc32-table.h
-    bfdev_crc32_table 8 0xedb88320 ""
+    bfdev_crc32_table 8 0xedb88320
+    "bfdev_cpu_to_le32"
+)
+
+generate_crctbl(
+    gen-crc64be crc64-table.h
+    bfdev_crc64_table 8 0x42f0e1eba9ea3693
+    "bfdev_cpu_to_be64"
 )
 
 generate_crctbl(
     gen-crc64 crc-rocksoft-table.h
-    bfdev_crc_rocksoft_table 8 0x9a6c9329ac4bc9b5 ""
+    bfdev_crc_rocksoft_table 8 0x9a6c9329ac4bc9b5
+    "bfdev_cpu_to_le64"
 )

@@ -20,7 +20,6 @@ extern uint32_t bfdev_crc32(const uint8_t *src, size_t len, uint32_t crc);
 extern uint64_t bfdev_crc64(const uint8_t *src, size_t len, uint64_t crc);
 
 extern uint16_t bfdev_crc_ccitt(const uint8_t *src, size_t len, uint16_t crc);
-extern uint16_t bfdev_crc_ccittf(const uint8_t *src, size_t len, uint16_t crc);
 extern uint16_t bfdev_crc_itut(const uint8_t *src, size_t len, uint16_t crc);
 extern uint16_t bfdev_crc_t10dif(const uint8_t *src, size_t len, uint16_t crc);
 extern uint64_t bfdev_crc_rocksoft(const uint8_t *src, size_t len, uint64_t crc);
