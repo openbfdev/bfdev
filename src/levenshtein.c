@@ -56,8 +56,8 @@ bfdev_levenshtein_len(const struct bfdev_alloc *alloc,
                 row3[index1 + 1] = row3[index1] + d;
         }
 
-        swap(row1, row2);
-        swap(row2, row3);
+        bfdev_swap(row1, row2);
+        bfdev_swap(row2, row3);
     }
 
     distance = row2[len1];
