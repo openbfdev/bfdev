@@ -193,11 +193,12 @@ bfdev_hashmap_insert(struct bfdev_hashmap *hashmap, struct bfdev_hlist_node *nod
         if (old)
             *old = exist;
 
-        if ((strategy == BFDEV_HASHMAP_SET) ||
-            (strategy == BFDEV_HASHMAP_UPDATE))
-            bfdev_hlist_replace(exist, node);
-        else /* BFDEV_HASHMAP_ADD */
+        if (strategy == BFDEV_HASHMAP_ADD)
             return -BFDEV_EEXIST;
+
+        /* BFDEV_HASHMAP_{SET / UPDATE} */
+        bfdev_hlist_replace(exist, node);
+        return -BFDEV_ENOERR;
     }
 
     if (strategy == BFDEV_HASHMAP_UPDATE)
