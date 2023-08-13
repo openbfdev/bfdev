@@ -40,7 +40,7 @@ list_selftest(struct test_pdata *ldata)
 
     BFDEV_LIST_HEAD(test_head);
 
-    for (count = 0; count < ARRAY_SIZE(ldata->nodes); ++count) {
+    for (count = 0; count < BFDEV_ARRAY_SIZE(ldata->nodes); ++count) {
         if (count % 1)
             bfdev_list_add_prev(&test_head, &ldata->nodes[count].list);
         else
@@ -204,7 +204,7 @@ int main(void)
     if (!ldata)
         return -1;
 
-    for (count = 0; count < ARRAY_SIZE(ldata->nodes); ++count)
+    for (count = 0; count < BFDEV_ARRAY_SIZE(ldata->nodes); ++count)
         ldata->nodes[count].num = count;
 
     retval = list_selftest(ldata);

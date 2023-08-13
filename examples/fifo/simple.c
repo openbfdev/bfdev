@@ -14,7 +14,7 @@ static const char test_table[] = {
 };
 
 #define TEST_LOOP 64
-BFDEV_DEFINE_FIFO(normal_bytetest, char, ARRAY_SIZE(test_table));
+BFDEV_DEFINE_FIFO(normal_bytetest, char, BFDEV_ARRAY_SIZE(test_table));
 
 static void *fifo_production(void *unused)
 {
@@ -22,7 +22,7 @@ static void *fifo_production(void *unused)
     char ch;
 
     for (count = 0; count < TEST_LOOP; ++count) {
-        for (index = 0; index < ARRAY_SIZE(test_table); ++index) {
+        for (index = 0; index < BFDEV_ARRAY_SIZE(test_table); ++index) {
             while (bfdev_fifo_check_full(&normal_bytetest))
                 sched_yield();
             ch = test_table[index];

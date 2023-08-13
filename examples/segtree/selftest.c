@@ -101,7 +101,7 @@ int main(void)
     if (!sdata)
         return -1;
 
-    for (count = 0; count < ARRAY_SIZE(sdata->nodes); ++count) {
+    for (count = 0; count < BFDEV_ARRAY_SIZE(sdata->nodes); ++count) {
         sdata->queries[count] = rand();
         sdata->nodes[count].node.end = (random = rand());
         sdata->nodes[count].node.start = rand() % random;

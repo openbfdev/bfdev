@@ -30,7 +30,7 @@ static int bfdev_hlist_selftest(struct test_pdata *hdata)
 
     BFDEV_HLIST_HEAD(test_head);
 
-    for (count = 0; count < ARRAY_SIZE(hdata->nodes); ++count) {
+    for (count = 0; count < BFDEV_ARRAY_SIZE(hdata->nodes); ++count) {
         bfdev_hlist_head_add(&test_head, &hdata->nodes[count].list);
     }
 
@@ -119,7 +119,7 @@ int main(void)
     if ((retval = !hdata))
         return retval;
 
-    for (count = 0; count < ARRAY_SIZE(hdata->nodes); ++count)
+    for (count = 0; count < BFDEV_ARRAY_SIZE(hdata->nodes); ++count)
         hdata->nodes[count].num = TEST_LOOP - count - 1;
 
     retval = bfdev_hlist_selftest(hdata);

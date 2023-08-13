@@ -145,7 +145,7 @@ bfdev_errname_find(int error)
         return NULL;
 
     entry = bfdev_bsearch(
-        bfdev_errname_table, ARRAY_SIZE(bfdev_errname_table) - 1,
+        bfdev_errname_table, BFDEV_ARRAY_SIZE(bfdev_errname_table) - 1,
         sizeof(*entry), errname_search, (void *)(long)-error
     );
 

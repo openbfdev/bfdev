@@ -69,7 +69,7 @@ struct bfdev_ringbuf {
     .ringbuf = {                                            \
         .in = 0, .out = 0,                                  \
         .esize = sizeof(*(name).buff),                      \
-        .mask = ARRAY_SIZE((name).buff) - 1,                \
+        .mask = BFDEV_ARRAY_SIZE((name).buff) - 1,          \
         .data = (name).buff,                                \
     },                                                      \
 }
