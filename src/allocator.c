@@ -25,16 +25,25 @@ generic_free(const void *block)
     free((void *)block);
 }
 
+static inline const struct bfdev_alloc_ops *
+alloc_check(const struct bfdev_alloc *alloc)
+{
+    if (!alloc)
+        return NULL;
+    return alloc->ops;
+}
+
 export __bfdev_malloc void *
 bfdev_malloc(const struct bfdev_alloc *alloc, size_t size)
 {
+    const struct bfdev_alloc_ops *ops;
     void *pdata, *retval;
 
-    if (!alloc || !alloc->malloc)
+    if (!(ops = alloc_check(alloc)) || !ops->malloc)
         retval = generic_malloc(size);
     else {
         pdata = alloc->pdata;
-        retval = alloc->malloc(size, pdata);
+        retval = ops->malloc(size, pdata);
     }
 
     return retval;
@@ -43,13 +52,14 @@ bfdev_malloc(const struct bfdev_alloc *alloc, size_t size)
 export __bfdev_malloc void *
 bfdev_zalloc(const struct bfdev_alloc *alloc, size_t size)
 {
+    const struct bfdev_alloc_ops *ops;
     void *pdata, *retval;
 
-    if (!alloc || !alloc->malloc)
+    if (!(ops = alloc_check(alloc)) || !ops->malloc)
         retval = generic_malloc(size);
     else {
         pdata = alloc->pdata;
-        retval = alloc->malloc(size, pdata);
+        retval = ops->malloc(size, pdata);
     }
 
     if (likely(retval))
@@ -61,13 +71,14 @@ bfdev_zalloc(const struct bfdev_alloc *alloc, size_t size)
 export __bfdev_malloc void *
 bfdev_realloc(const struct bfdev_alloc *alloc, const void *block, size_t resize)
 {
+    const struct bfdev_alloc_ops *ops;
     void *pdata, *retval;
 
-    if (!alloc || !alloc->realloc)
+    if (!(ops = alloc_check(alloc)) || !ops->realloc)
         retval = generic_realloc(block, resize);
     else {
         pdata = alloc->pdata;
-        retval = alloc->realloc(block, resize, pdata);
+        retval = ops->realloc(block, resize, pdata);
     }
 
     return retval;
@@ -76,12 +87,13 @@ bfdev_realloc(const struct bfdev_alloc *alloc, const void *block, size_t resize)
 export void
 bfdev_free(const struct bfdev_alloc *alloc, const void *block)
 {
+    const struct bfdev_alloc_ops *ops;
     void *pdata;
 
-    if (!alloc || !alloc->free)
+    if (!(ops = alloc_check(alloc)) || !ops->free)
         generic_free(block);
     else {
         pdata = alloc->pdata;
-        alloc->free(block, pdata);
+        ops->free(block, pdata);
     }
 }
