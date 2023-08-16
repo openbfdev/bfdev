@@ -14,10 +14,14 @@
 BFDEV_BEGIN_DECLS
 
 struct bfdev_alloc {
+    const struct bfdev_alloc_ops *ops;
+    void *pdata;
+};
+
+struct bfdev_alloc_ops {
     void *(*malloc)(size_t size, void *pdata);
     void *(*realloc)(const void *block, size_t resize, void *pdata);
     void (*free)(const void *block, void *pdata);
-    void *pdata;
 };
 
 extern __bfdev_malloc void *bfdev_malloc(const struct bfdev_alloc *alloc, size_t size);
