@@ -6,7 +6,7 @@
 #ifndef _BFDEV_LEVEL_H_
 #define _BFDEV_LEVEL_H_
 
-#include <bfdev/compiler.h>
+#include <bfdev/config.h>
 
 BFDEV_BEGIN_DECLS
 
