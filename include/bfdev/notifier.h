@@ -8,6 +8,7 @@
 
 #include <bfdev/config.h>
 #include <bfdev/ilist.h>
+#include <bfdev/bits.h>
 
 BFDEV_BEGIN_DECLS
 
@@ -18,10 +19,15 @@ typedef bfdev_notifier_ret_t (*bfdev_notifier_entry_t)
 (struct bfdev_notifier_node *node, void *args);
 
 enum bfdev_notifier_ret {
-    NOTIFI_RET_DONE = 0,
-    NOTIFI_RET_WARN,
-    NOTIFI_RET_REMOVE,
-    NOTIFI_RET_STOP,
+    __BFDEV_NOTIFI_RET_DONE = 0,
+    __BFDEV_NOTIFI_RET_WARN,
+    __BFDEV_NOTIFI_RET_REMOVE,
+    __BFDEV_NOTIFI_RET_STOP,
+
+    BFDEV_NOTIFI_RET_DONE   = BFDEV_BIT(__BFDEV_NOTIFI_RET_DONE),
+    BFDEV_NOTIFI_RET_WARN   = BFDEV_BIT(__BFDEV_NOTIFI_RET_WARN),
+    BFDEV_NOTIFI_RET_REMOVE = BFDEV_BIT(__BFDEV_NOTIFI_RET_REMOVE),
+    BFDEV_NOTIFI_RET_STOP   = BFDEV_BIT(__BFDEV_NOTIFI_RET_STOP),
 };
 
 /**
