@@ -8,7 +8,8 @@
 #include <export.h>
 
 export bool
-bfdev_llist_split(struct bfdev_slist_head *head, struct bfdev_slist_head *node, struct bfdev_slist_head *end)
+bfdev_llist_split(struct bfdev_slist_head *head, struct bfdev_slist_head *node,
+                  struct bfdev_slist_head *end)
 {
     struct bfdev_slist_head *first;
 
