@@ -25,7 +25,7 @@ bfdev_notifier_call(struct bfdev_notifier_head *head, void *arg,
                     unsigned int call_num, unsigned int *called_num)
 {
     struct bfdev_notifier_node *node, *tmp;
-    bfdev_notifier_ret_t retval = NOTIFI_RET_DONE;
+    bfdev_notifier_ret_t retval = BFDEV_NOTIFI_RET_DONE;
 
     bfdev_ilist_for_each_entry_safe(node, tmp, &head->node, list) {
         if (!call_num--)
@@ -37,12 +37,12 @@ bfdev_notifier_call(struct bfdev_notifier_head *head, void *arg,
         if (called_num)
             (*called_num)++;
 
-        if (retval & NOTIFI_RET_REMOVE) {
+        if (retval & BFDEV_NOTIFI_RET_REMOVE) {
             bfdev_ilist_del(&head->node, &node->list);
-            retval &= ~NOTIFI_RET_REMOVE;
+            retval &= ~BFDEV_NOTIFI_RET_REMOVE;
         }
 
-        if (retval & NOTIFI_RET_STOP)
+        if (retval & BFDEV_NOTIFI_RET_STOP)
             break;
     }
 
