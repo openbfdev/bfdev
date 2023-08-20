@@ -10,7 +10,7 @@
 enum {
     TEST_IDLE = 0,
     TEST_CHECK,
-    TEST_ERROR,
+    TEST_EXIT,
     TEST_HSTATE,
     TEST_ISTATE,
     TEST_ASTATE,
@@ -52,6 +52,11 @@ test_state[] = {
             {
                 .cond = (void *)(intptr_t)'h',
                 .next = &test_state[TEST_HSTATE],
+                .guard = trans_guard,
+            },
+            {
+                .cond = (void *)(intptr_t)'e',
+                .next = &test_state[TEST_EXIT],
                 .guard = trans_guard,
             },
             { }, /* NULL */
@@ -131,27 +136,29 @@ test_state[] = {
         .enter = enter_print,
         .exit = exit_print,
     },
-    [TEST_ERROR] = {
-        .data = "error",
+    [TEST_EXIT] = {
+        .data = "exit",
         .enter = enter_print,
     },
 };
 
 BFDEV_DEFINE_FSM(test_fsm,
     &test_state[TEST_IDLE],
-    &test_state[TEST_ERROR]
+    &test_state[TEST_EXIT]
 );
 
 int main(void)
 {
-    int ch;
+    int ch, retval;
 
     while ((ch = getc(stdin)) != EOF) {
-        bfdev_fsm_handle(&test_fsm,
+        retval = bfdev_fsm_handle(&test_fsm,
             &(struct bfdev_fsm_event) {
                 .pdata = (void *)(intptr_t)ch,
             }
         );
+        if (retval)
+            break;
     }
 
     return 0;
