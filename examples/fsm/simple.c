@@ -1,0 +1,158 @@
+/* SPDX-License-Identifier: GPL-2.0-or-later */
+/*
+ * Copyright(c) 2023 Sanpe <sanpeqf@gmail.com>
+ */
+
+#include <stdio.h>
+#include <stdint.h>
+#include <bfdev/fsm.h>
+
+enum {
+    TEST_IDLE = 0,
+    TEST_CHECK,
+    TEST_ERROR,
+    TEST_HSTATE,
+    TEST_ISTATE,
+    TEST_ASTATE,
+};
+
+static int
+enter_print(struct bfdev_fsm_event *event, void *data)
+{
+   printf( "Enter: %s\n", (char *)data);
+   return 0;
+}
+
+static int
+exit_print(struct bfdev_fsm_event *event, void *data)
+{
+   printf( "Exit: %s\n", (char *)data);
+   return 0;
+}
+
+static long
+trans_guard(struct bfdev_fsm_event *event, const void *cond)
+{
+    return event->pdata - cond;
+}
+
+static int
+trans_active(struct bfdev_fsm_event *event, void *data,
+             void *curr, void *next)
+{
+    return printf("Active: %s\n", (char *)data);
+}
+
+static struct bfdev_fsm_state
+test_state[] = {
+    [TEST_IDLE] = {
+        .parent = &test_state[TEST_CHECK],
+        .data = "idle",
+        .trans = (struct bfdev_fsm_transition[]) {
+            {
+                .cond = (void *)(intptr_t)'h',
+                .next = &test_state[TEST_HSTATE],
+                .guard = trans_guard,
+            },
+            { }, /* NULL */
+        },
+        .enter = enter_print,
+        .exit = exit_print,
+    },
+    [TEST_HSTATE] = {
+        .parent = &test_state[TEST_CHECK],
+        .data = "h-state",
+        .trans = (struct bfdev_fsm_transition[]) {
+            {
+                .cond = (void *)(intptr_t)'i',
+                .next = &test_state[TEST_ISTATE],
+                .guard = trans_guard,
+            },
+            {
+                .cond = (void *)(intptr_t)'a',
+                .next = &test_state[TEST_ASTATE],
+                .guard = trans_guard,
+            },
+            { }, /* NULL */
+        },
+        .enter = enter_print,
+        .exit = exit_print,
+    },
+    [TEST_ISTATE] = {
+        .parent = &test_state[TEST_CHECK],
+        .data = "i-state",
+        .trans = (struct bfdev_fsm_transition[]) {
+            {
+                .cond = (void *)(intptr_t)'\n',
+                .next = &test_state[TEST_IDLE],
+                .guard = trans_guard,
+                .action = trans_active,
+                .data = "hello",
+            },
+            { }, /* NULL */
+        },
+        .enter = enter_print,
+        .exit = exit_print,
+    },
+    [TEST_ASTATE] = {
+        .parent = &test_state[TEST_CHECK],
+        .data = "a-state",
+        .trans = (struct bfdev_fsm_transition[]) {
+            {
+                .cond = (void *)(intptr_t)'\n',
+                .next = &test_state[TEST_IDLE],
+                .guard = trans_guard,
+                .action = trans_active,
+                .data = "haha",
+            },
+            { }, /* NULL */
+        },
+        .enter = enter_print,
+        .exit = exit_print,
+    },
+    [TEST_CHECK] = {
+        .entry = &test_state[TEST_IDLE],
+        .data = "check",
+        .trans = (struct bfdev_fsm_transition[]) {
+            {
+                .cond = (void *)(intptr_t)'!',
+                .next = &test_state[TEST_IDLE],
+                .guard = trans_guard,
+                .action = trans_active,
+                .data = "reset",
+            },
+            {
+                .next = &test_state[TEST_IDLE],
+                .action = trans_active,
+                .data = "ignore",
+            },
+            { }, /* NULL */
+        },
+        .enter = enter_print,
+        .exit = exit_print,
+    },
+    [TEST_ERROR] = {
+        .data = "error",
+        .enter = enter_print,
+    },
+};
+
+BFDEV_DEFINE_FSM(test_fsm,
+    &test_state[TEST_IDLE],
+    &test_state[TEST_ERROR]
+);
+
+int main(void)
+{
+    int ch;
+
+    while ((ch = getc(stdin)) != EOF) {
+        bfdev_fsm_handle(&test_fsm,
+            &(struct bfdev_fsm_event) {
+                .pdata = (void *)(intptr_t)ch,
+            }
+        );
+    }
+
+    return 0;
+}
