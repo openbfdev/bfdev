@@ -6,6 +6,7 @@
 add_subdirectory(bloom)
 add_subdirectory(btree)
 add_subdirectory(fifo)
+add_subdirectory(fsm)
 add_subdirectory(guards)
 add_subdirectory(hashmap)
 add_subdirectory(hashtbl)
