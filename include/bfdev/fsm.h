@@ -12,6 +12,10 @@
 
 BFDEV_BEGIN_DECLS
 
+#ifndef BFDEV_FSM_STACK
+# define BFDEV_FSM_STACK 32
+#endif
+
 struct bfdev_fsm_event;
 struct bfdev_fsm_state;
 
