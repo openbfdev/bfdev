@@ -3,6 +3,7 @@
 # Copyright(c) 2023 ffashion <helloworldffashion@gmail.com>
 #
 
+add_subdirectory(array)
 add_subdirectory(bloom)
 add_subdirectory(btree)
 add_subdirectory(fifo)
