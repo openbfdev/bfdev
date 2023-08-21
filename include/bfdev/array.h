@@ -44,7 +44,10 @@ bfdev_array_reset(struct bfdev_array *array)
 }
 
 extern void *
-bfdev_array_push(struct bfdev_array *array, unsigned num);
+bfdev_array_push(struct bfdev_array *array, unsigned int num);
+
+extern void *
+bfdev_array_pop(struct bfdev_array *array, unsigned int num);
 
 extern void
 bfdev_array_release(struct bfdev_array *array);

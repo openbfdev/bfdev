@@ -33,6 +33,16 @@ bfdev_array_push(struct bfdev_array *array, unsigned int num)
     return data;
 }
 
+export void *
+bfdev_array_pop(struct bfdev_array *array, unsigned int num)
+{
+    if (!num || array->index < num)
+        return NULL;
+
+    array->index -= num;
+    return array->data + array->cells * array->index;
+}
+
 extern void
 bfdev_array_release(struct bfdev_array *array)
 {
