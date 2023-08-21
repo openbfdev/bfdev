@@ -20,7 +20,10 @@ fsm_find_transition(struct bfdev_fsm_state *state, struct bfdev_fsm_event *event
     struct bfdev_fsm_transition *find;
     unsigned int count;
 
-    for (count = 0; state->trans[count].next; ++count) {
+    if (!state->trans)
+        return NULL;
+
+    for (count = 0; state->trans[count].next || state->trans[count].stack; ++count) {
         find = &state->trans[count];
 
         if (find->type != event->type)
@@ -44,6 +47,8 @@ bfdev_fsm_handle(struct bfdev_fsm *fsm, struct bfdev_fsm_event *event)
 
     do {
         struct bfdev_fsm_transition *tran;
+        struct bfdev_fsm_state **pstate;
+        int retval;
 
         tran = fsm_find_transition(next, event);
         if (!tran) {
@@ -51,22 +56,45 @@ bfdev_fsm_handle(struct bfdev_fsm *fsm, struct bfdev_fsm_event *event)
             continue;
         }
 
-        next = tran->next;
-        while (next->entry)
-            next = next->entry;
+        if ((next = tran->next)) {
+            while (next->entry)
+                next = next->entry;
+        } else {
+            pstate = bfdev_array_pop(&fsm->stack, -tran->stack);
+            next = *pstate;
+        }
 
         if (next != curr) {
-            if (curr->exit)
-                curr->exit(event, curr->data);
+            if (curr->exit) {
+                retval = curr->exit(event, curr->data);
+                if (unlikely(retval))
+                    return retval;
+            }
 
-            if (tran->action)
-                tran->action(event, tran->data, curr, next);
+            if (tran->action) {
+                retval = tran->action(event, tran->data, curr, next);
+                if (unlikely(retval))
+                    return retval;
+            }
 
-            if (next->enter)
-                curr->enter(event, next->data);
+            if (next->enter) {
+                retval = curr->enter(event, next->data);
+                if (unlikely(retval))
+                    return retval;
+            }
+        }
+
+        if (tran->stack > 0) {
+            pstate = bfdev_array_push(&fsm->stack, 1);
+            if (unlikely(!pstate))
+                return -BFDEV_ENOMEM;
+            *pstate = curr;
         }
 
         fsm_push_state(fsm, next);
+        if (tran->cross)
+            continue;
+
         if (unlikely(curr == next))
             return -BFDEV_EDEADLK;
 

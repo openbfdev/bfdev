@@ -13,6 +13,7 @@ enum {
     TEST_EXIT,
     TEST_HSTATE,
     TEST_ISTATE,
+    TEST_STACK,
     TEST_ASTATE,
 };
 
@@ -40,7 +41,8 @@ static int
 trans_active(struct bfdev_fsm_event *event, void *data,
              void *curr, void *next)
 {
-    return printf("Active: %s\n", (char *)data);
+    printf("Active: %s\n", (char *)data);
+    return 0;
 }
 
 static struct bfdev_fsm_state
@@ -94,6 +96,12 @@ test_state[] = {
                 .action = trans_active,
                 .data = "hello",
             },
+            {
+                .cond = (void *)(intptr_t)'.',
+                .next = &test_state[TEST_STACK],
+                .guard = trans_guard,
+                .stack = +1,
+            },
             { }, /* NULL */
         },
         .enter = enter_print,
@@ -109,6 +117,27 @@ test_state[] = {
                 .guard = trans_guard,
                 .action = trans_active,
                 .data = "haha",
+            },
+            {
+                .cond = (void *)(intptr_t)'.',
+                .next = &test_state[TEST_STACK],
+                .guard = trans_guard,
+                .stack = +1,
+            },
+            { }, /* NULL */
+        },
+        .enter = enter_print,
+        .exit = exit_print,
+    },
+    [TEST_STACK] = {
+        .parent = &test_state[TEST_CHECK],
+        .data = "stack",
+        .trans = (struct bfdev_fsm_transition[]) {
+            {
+                .action = trans_active,
+                .data = "state pop",
+                .cross = true,
+                .stack = -1,
             },
             { }, /* NULL */
         },
@@ -142,7 +171,7 @@ test_state[] = {
     },
 };
 
-BFDEV_DEFINE_FSM(test_fsm,
+BFDEV_DEFINE_FSM(test_fsm, NULL,
     &test_state[TEST_IDLE],
     &test_state[TEST_EXIT]
 );
