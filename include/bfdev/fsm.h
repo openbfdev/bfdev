@@ -8,13 +8,11 @@
 
 #include <bfdev/config.h>
 #include <bfdev/stddef.h>
+#include <bfdev/stdbool.h>
 #include <bfdev/macro.h>
+#include <bfdev/array.h>
 
 BFDEV_BEGIN_DECLS
-
-#ifndef BFDEV_FSM_STACK
-# define BFDEV_FSM_STACK 32
-#endif
 
 struct bfdev_fsm_event;
 struct bfdev_fsm_state;
@@ -37,6 +35,8 @@ struct bfdev_fsm_transition {
     unsigned int type;
     const void *cond;
     struct bfdev_fsm_state *next;
+    bool cross;
+    int stack;
 
     bfdev_fsm_guard_t guard;
     bfdev_fsm_active_t action;
@@ -57,22 +57,29 @@ struct bfdev_fsm {
     struct bfdev_fsm_state *state[2];
     struct bfdev_fsm_state *error;
     unsigned int count;
+
+    struct bfdev_array stack;
+    unsigned int sindex;
 };
 
-#define BFDEV_FSM_STATIC(INIT, ERROR) \
-    {.state = {(INIT)}, .error = (ERROR)}
+#define BFDEV_FSM_STATIC(ALLOC, INIT, ERROR) {  \
+    .state = {(INIT)}, .error = (ERROR),        \
+    .stack = BFDEV_ARRAY_STATIC(                \
+        ALLOC, sizeof(struct bfdev_fsm_state *) \
+    ),                                          \
+}
 
-#define BFDEV_FSM_INIT(init, error) \
-    (struct bfdev_fsm) BFDEV_FSM_STATIC(init, error)
+#define BFDEV_FSM_INIT(alloc, init, error) \
+    (struct bfdev_fsm) BFDEV_FSM_STATIC(alloc, init, error)
 
-#define BFDEV_DEFINE_FSM(name, init, error) \
-    struct bfdev_fsm name = BFDEV_FSM_INIT(init, error)
+#define BFDEV_DEFINE_FSM(name, alloc, init, error) \
+    struct bfdev_fsm name = BFDEV_FSM_INIT(alloc, init, error)
 
 static inline void
-bfdev_fsm_init(struct bfdev_fsm *fsm, struct bfdev_fsm_state *init,
-               struct bfdev_fsm_state *error)
+bfdev_fsm_init(struct bfdev_fsm *fsm, const struct bfdev_alloc *alloc,
+               struct bfdev_fsm_state *init, struct bfdev_fsm_state *error)
 {
-    *fsm = BFDEV_FSM_INIT(init, error);
+    *fsm = BFDEV_FSM_INIT(alloc, init, error);
 }
 
 static inline struct bfdev_fsm_state *
