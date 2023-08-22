@@ -26,6 +26,13 @@ typedef int (*bfdev_fsm_event_t)
 typedef int (*bfdev_fsm_active_t)
 (struct bfdev_fsm_event *event, void *data, void *curr, void *next);
 
+enum bfdev_fsm_retval {
+    BFDEV_FSM_CHANGED = 0,
+    BFDEV_FSM_NOCHANGE,
+    BFDEV_FSM_SELFLOOP,
+    BFDEV_FSM_FINISH,
+};
+
 struct bfdev_fsm_event {
     unsigned int type;
     void *pdata;
@@ -34,6 +41,7 @@ struct bfdev_fsm_event {
 struct bfdev_fsm_transition {
     unsigned int type;
     const void *cond;
+
     struct bfdev_fsm_state *next;
     bool cross;
     int stack;
