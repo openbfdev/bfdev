@@ -43,6 +43,12 @@ bfdev_array_reset(struct bfdev_array *array)
     array->index = 0;
 }
 
+static inline size_t
+bfdev_array_size(struct bfdev_array *array)
+{
+    return array->cells * array->index;
+}
+
 extern void *
 bfdev_array_push(struct bfdev_array *array, unsigned int num);
 
