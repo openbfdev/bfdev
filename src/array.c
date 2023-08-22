@@ -17,7 +17,7 @@ bfdev_array_push(struct bfdev_array *array, unsigned int num)
 
     nalloc = array->index + num;
     if (nalloc > array->capacity) {
-        nalloc <<= 1;
+        nalloc = bfdev_max(nalloc << 1, BFDEV_ARRAY_MSIZE);
 
         data = bfdev_realloc(alloc, array->data, nalloc * array->cells);
         if (unlikely(!data))

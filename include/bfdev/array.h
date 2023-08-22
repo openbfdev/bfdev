@@ -13,6 +13,10 @@
 
 BFDEV_BEGIN_DECLS
 
+#ifndef BFDEV_ARRAY_MSIZE
+# define BFDEV_ARRAY_MSIZE 32
+#endif
+
 struct bfdev_array {
     const struct bfdev_alloc *alloc;
     unsigned int capacity;
