@@ -107,6 +107,9 @@ bfdev_fsm_curr(struct bfdev_fsm *fsm)
 }
 
 extern int
+bfdev_fsm_error(struct bfdev_fsm *fsm, struct bfdev_fsm_event *event);
+
+extern int
 bfdev_fsm_handle(struct bfdev_fsm *fsm, struct bfdev_fsm_event *event);
 
 BFDEV_END_DECLS

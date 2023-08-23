@@ -33,8 +33,8 @@ fsm_find_transition(const struct bfdev_fsm_state *state, struct bfdev_fsm_event 
     return NULL;
 }
 
-static int
-fsm_error(struct bfdev_fsm *fsm, struct bfdev_fsm_event *event)
+export int
+bfdev_fsm_error(struct bfdev_fsm *fsm, struct bfdev_fsm_event *event)
 {
     const struct bfdev_fsm_state *error = fsm->error;
     int retval = 0;
@@ -72,7 +72,7 @@ bfdev_fsm_handle(struct bfdev_fsm *fsm, struct bfdev_fsm_event *event)
         }
 
         if (unlikely(!next)) {
-            retval = fsm_error(fsm, event);
+            retval = bfdev_fsm_error(fsm, event);
             return retval ?: -BFDEV_ENOENT;
         }
 
