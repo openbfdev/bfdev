@@ -42,7 +42,7 @@ struct bfdev_fsm_transition {
     unsigned int type;
     const void *cond;
 
-    struct bfdev_fsm_state *next;
+    const struct bfdev_fsm_state *next;
     bool cross;
     int stack;
 
@@ -56,16 +56,16 @@ struct bfdev_fsm_state {
     bfdev_fsm_event_t exit;
     void *data;
 
-    struct bfdev_fsm_transition *trans;
+    const struct bfdev_fsm_transition *trans;
     unsigned int tnum;
 
-    struct bfdev_fsm_state *parent;
-    struct bfdev_fsm_state *entry;
+    const struct bfdev_fsm_state *parent;
+    const struct bfdev_fsm_state *entry;
 };
 
 struct bfdev_fsm {
-    struct bfdev_fsm_state *state[2];
-    struct bfdev_fsm_state *error;
+    const struct bfdev_fsm_state *state[2];
+    const struct bfdev_fsm_state *error;
     unsigned int count;
 
     struct bfdev_array stack;
@@ -87,19 +87,19 @@ struct bfdev_fsm {
 
 static inline void
 bfdev_fsm_init(struct bfdev_fsm *fsm, const struct bfdev_alloc *alloc,
-               struct bfdev_fsm_state *init, struct bfdev_fsm_state *error)
+               const struct bfdev_fsm_state *init, const struct bfdev_fsm_state *error)
 {
     *fsm = BFDEV_FSM_INIT(alloc, init, error);
 }
 
-static inline struct bfdev_fsm_state *
-bfdev_fsm_prev(struct bfdev_fsm *fsm)
+static inline const struct bfdev_fsm_state *
+bfdev_fsm_prev(const struct bfdev_fsm *fsm)
 {
     unsigned int count = fsm->count - 1;
     return fsm->state[count & (BFDEV_ARRAY_SIZE(fsm->state) - 1)];
 }
 
-static inline struct bfdev_fsm_state *
+static inline const struct bfdev_fsm_state *
 bfdev_fsm_curr(struct bfdev_fsm *fsm)
 {
     unsigned int count = fsm->count - 0;
