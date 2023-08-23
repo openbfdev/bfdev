@@ -50,6 +50,7 @@ test_state[] = {
     [TEST_IDLE] = {
         .parent = &test_state[TEST_CHECK],
         .data = "idle",
+        .tnum = 2,
         .trans = (struct bfdev_fsm_transition[]) {
             {
                 .cond = (void *)(intptr_t)'h',
@@ -61,7 +62,6 @@ test_state[] = {
                 .next = &test_state[TEST_EXIT],
                 .guard = trans_guard,
             },
-            { }, /* NULL */
         },
         .enter = enter_print,
         .exit = exit_print,
@@ -69,6 +69,7 @@ test_state[] = {
     [TEST_HSTATE] = {
         .parent = &test_state[TEST_CHECK],
         .data = "h-state",
+        .tnum = 2,
         .trans = (struct bfdev_fsm_transition[]) {
             {
                 .cond = (void *)(intptr_t)'i',
@@ -80,7 +81,6 @@ test_state[] = {
                 .next = &test_state[TEST_ASTATE],
                 .guard = trans_guard,
             },
-            { }, /* NULL */
         },
         .enter = enter_print,
         .exit = exit_print,
@@ -88,6 +88,7 @@ test_state[] = {
     [TEST_ISTATE] = {
         .parent = &test_state[TEST_CHECK],
         .data = "i-state",
+        .tnum = 2,
         .trans = (struct bfdev_fsm_transition[]) {
             {
                 .cond = (void *)(intptr_t)'\n',
@@ -102,7 +103,6 @@ test_state[] = {
                 .guard = trans_guard,
                 .stack = +1,
             },
-            { }, /* NULL */
         },
         .enter = enter_print,
         .exit = exit_print,
@@ -110,6 +110,7 @@ test_state[] = {
     [TEST_ASTATE] = {
         .parent = &test_state[TEST_CHECK],
         .data = "a-state",
+        .tnum = 2,
         .trans = (struct bfdev_fsm_transition[]) {
             {
                 .cond = (void *)(intptr_t)'\n',
@@ -124,7 +125,6 @@ test_state[] = {
                 .guard = trans_guard,
                 .stack = +1,
             },
-            { }, /* NULL */
         },
         .enter = enter_print,
         .exit = exit_print,
@@ -132,6 +132,7 @@ test_state[] = {
     [TEST_STACK] = {
         .parent = &test_state[TEST_CHECK],
         .data = "stack",
+        .tnum = 1,
         .trans = (struct bfdev_fsm_transition[]) {
             {
                 .action = trans_active,
@@ -139,7 +140,6 @@ test_state[] = {
                 .cross = true,
                 .stack = -1,
             },
-            { }, /* NULL */
         },
         .enter = enter_print,
         .exit = exit_print,
@@ -147,6 +147,7 @@ test_state[] = {
     [TEST_CHECK] = {
         .entry = &test_state[TEST_IDLE],
         .data = "check",
+        .tnum = 2,
         .trans = (struct bfdev_fsm_transition[]) {
             {
                 .cond = (void *)(intptr_t)'!',
@@ -160,7 +161,6 @@ test_state[] = {
                 .action = trans_active,
                 .data = "ignore",
             },
-            { }, /* NULL */
         },
         .enter = enter_print,
         .exit = exit_print,

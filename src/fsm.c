@@ -14,24 +14,13 @@ fsm_push_state(struct bfdev_fsm *fsm, struct bfdev_fsm_state *state)
     fsm->state[count & (BFDEV_ARRAY_SIZE(fsm->state) - 1)] = state;
 }
 
-static inline bool
-fsm_trans_exist(struct bfdev_fsm_state *state, unsigned int index)
-{
-    if (state->trans[index].next)
-        return true;
-    return state->trans[index].stack < 0;
-}
-
 static struct bfdev_fsm_transition *
 fsm_find_transition(struct bfdev_fsm_state *state, struct bfdev_fsm_event *event)
 {
     struct bfdev_fsm_transition *find;
     unsigned int count;
 
-    if (!state->trans)
-        return NULL;
-
-    for (count = 0; fsm_trans_exist(state, count); ++count) {
+    for (count = 0; count < state->tnum; ++count) {
         find = &state->trans[count];
 
         if (find->type != event->type)
@@ -42,6 +31,19 @@ fsm_find_transition(struct bfdev_fsm_state *state, struct bfdev_fsm_event *event
     }
 
     return NULL;
+}
+
+static int
+fsm_error(struct bfdev_fsm *fsm, struct bfdev_fsm_event *event)
+{
+    struct bfdev_fsm_state *error = fsm->error;
+    int retval = 0;
+
+    fsm_push_state(fsm, error);
+    if (error && error->enter)
+        retval = error->enter(event, error->data);
+
+    return retval;
 }
 
 export int
@@ -64,13 +66,15 @@ bfdev_fsm_handle(struct bfdev_fsm *fsm, struct bfdev_fsm_event *event)
             continue;
         }
 
-        if (!(next = tran->next)) {
+        if (!(next = tran->next) && tran->stack < 0) {
             pstate = bfdev_array_pop(&fsm->stack, -tran->stack);
             next = *pstate;
         }
 
-        if (unlikely(!next))
-            next = fsm->error;
+        if (unlikely(!next)) {
+            retval = fsm_error(fsm, event);
+            return retval ?: -BFDEV_ENOENT;
+        }
 
         while (next->entry)
             next = next->entry;
@@ -88,7 +92,7 @@ bfdev_fsm_handle(struct bfdev_fsm *fsm, struct bfdev_fsm_event *event)
         }
 
         if (next != curr && next->enter) {
-            retval = curr->enter(event, next->data);
+            retval = next->enter(event, next->data);
             if (unlikely(retval))
                 return retval;
         }
@@ -110,7 +114,7 @@ bfdev_fsm_handle(struct bfdev_fsm *fsm, struct bfdev_fsm_event *event)
         if (unlikely(curr == next))
             return BFDEV_FSM_SELFLOOP;
 
-        if (!fsm_trans_exist(next, 0))
+        if (!next->tnum)
             return BFDEV_FSM_FINISH;
 
         return BFDEV_FSM_CHANGED;
