@@ -57,6 +57,8 @@ struct bfdev_fsm_state {
     void *data;
 
     struct bfdev_fsm_transition *trans;
+    unsigned int tnum;
+
     struct bfdev_fsm_state *parent;
     struct bfdev_fsm_state *entry;
 };
