@@ -43,7 +43,7 @@ bfdev_array_pop(struct bfdev_array *array, unsigned int num)
     return array->data + array->cells * array->index;
 }
 
-extern void
+export void
 bfdev_array_release(struct bfdev_array *array)
 {
     const struct bfdev_alloc *alloc = array->alloc;
