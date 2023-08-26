@@ -14,7 +14,7 @@ radix_depth_shift(unsigned int level)
 }
 
 static __bfdev_always_inline unsigned int
-radix_depth_index(unsigned int level, unsigned int offset)
+radix_depth_index(unsigned int level, uintptr_t offset)
 {
     return offset >> radix_depth_shift(level) & BFDEV_RADIX_ARY_MASK;
 }
