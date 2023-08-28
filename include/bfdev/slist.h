@@ -51,7 +51,7 @@ static inline void
 bfdev_slist_add(struct bfdev_slist_head *node, struct bfdev_slist_head *new)
 {
 #ifdef BFDEV_DEBUG_SLIST
-    if (unlikely(!bfdev_slist_debug_add_check(node, new)))
+    if (bfdev_unlikely(!bfdev_slist_debug_add_check(node, new)))
         return;
 #endif
 
@@ -70,7 +70,7 @@ bfdev_slist_del(struct bfdev_slist_head *head, struct bfdev_slist_head *node)
     struct bfdev_slist_head *walk = head;
 
 #ifdef BFDEV_DEBUG_SLIST
-    if (unlikely(!bfdev_slist_debug_del_check(node)))
+    if (bfdev_unlikely(!bfdev_slist_debug_del_check(node)))
         return;
 #endif
 

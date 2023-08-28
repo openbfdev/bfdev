@@ -67,11 +67,11 @@ int main(void)
     int retval;
 
     test = malloc(sizeof(struct skiplist_test));
-    if (unlikely(!test))
+    if (!test)
         return -BFDEV_ENOMEM;
 
     test->head = bfdev_skiplist_create(NULL, TEST_LEVEL);
-    if (unlikely(!test->head)) {
+    if (!test->head) {
         free(test);
         return -BFDEV_ENOMEM;
     }

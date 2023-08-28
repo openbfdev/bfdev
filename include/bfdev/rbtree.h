@@ -472,7 +472,7 @@ static inline void
 bfdev_rb_link(struct bfdev_rb_node *parent, struct bfdev_rb_node **link, struct bfdev_rb_node *node)
 {
 #ifdef BFDEV_DEBUG_RBTREE
-    if (unlikely(!bfdev_rb_debug_link_check(parent, link, node)))
+    if (bfdev_unlikely(!bfdev_rb_debug_link_check(parent, link, node)))
         return;
 #endif
 
@@ -543,7 +543,7 @@ bfdev_rb_delete(struct bfdev_rb_root *root, struct bfdev_rb_node *node)
     struct bfdev_rb_node *rebalance;
 
 #ifdef BFDEV_DEBUG_RBTREE
-    if (unlikely(!bfdev_rb_debug_delete_check(node)))
+    if (bfdev_unlikely(!bfdev_rb_debug_delete_check(node)))
         return;
 #endif
 
@@ -623,7 +623,7 @@ bfdev_rb_delete_augmented(struct bfdev_rb_root *root, struct bfdev_rb_node *node
     struct bfdev_rb_node *rebalance;
 
 #ifdef BFDEV_DEBUG_RBTREE
-    if (unlikely(!bfdev_rb_debug_delete_check(node)))
+    if (bfdev_unlikely(!bfdev_rb_debug_delete_check(node)))
         return;
 #endif
 

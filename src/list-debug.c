@@ -15,7 +15,7 @@ export bool
 bfdev_list_debug_add_check(struct bfdev_list_head *prev, struct bfdev_list_head *next,
                      struct bfdev_list_head *new)
 {
-    if (unlikely(prev->next != next)) {
+    if (bfdev_unlikely(prev->next != next)) {
         bfdev_log_err(
             "list_add corruption (%p) prev->next"
             " should be next (%p), but was (%p)\n",
@@ -24,7 +24,7 @@ bfdev_list_debug_add_check(struct bfdev_list_head *prev, struct bfdev_list_head 
         return false;
     }
 
-    if (unlikely(next->prev != prev)) {
+    if (bfdev_unlikely(next->prev != prev)) {
         bfdev_log_err(
             "list_add corruption (%p) next->prev"
             " should be prev (%p), but was (%p)\n",
@@ -33,7 +33,7 @@ bfdev_list_debug_add_check(struct bfdev_list_head *prev, struct bfdev_list_head 
         return false;
     }
 
-    if (unlikely(new == prev || new == next)) {
+    if (bfdev_unlikely(new == prev || new == next)) {
         bfdev_log_err(
             "list_add corruption double add:"
             " new=(%p), prev=(%p), next=(%p)\n",
@@ -48,7 +48,7 @@ bfdev_list_debug_add_check(struct bfdev_list_head *prev, struct bfdev_list_head 
 export bool
 bfdev_list_debug_del_check(struct bfdev_list_head *node)
 {
-    if (unlikely(node->next == BFDEV_POISON_LIST1)) {
+    if (bfdev_unlikely(node->next == BFDEV_POISON_LIST1)) {
         bfdev_log_err(
             "list_del corruption (%p) node->next"
             " should not be BFDEV_POISON_LIST1 (%p)\n",
@@ -57,7 +57,7 @@ bfdev_list_debug_del_check(struct bfdev_list_head *node)
         return false;
     }
 
-    if (unlikely(node->prev == BFDEV_POISON_LIST2)) {
+    if (bfdev_unlikely(node->prev == BFDEV_POISON_LIST2)) {
         bfdev_log_err(
             "list_del corruption (%p) node->prev"
             " should not be BFDEV_POISON_LIST2 (%p)\n",

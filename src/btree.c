@@ -63,7 +63,7 @@ bnode_alloc(struct bfdev_btree_root *root)
     struct bfdev_btree_node *node;
 
     node = root->alloc(root);
-    if (likely(node))
+    if (bfdev_likely(node))
         memset(node, 0, layout->nodesize);
 
     return node;
@@ -242,10 +242,10 @@ btree_extend(struct bfdev_btree_root *root)
     unsigned int index;
 
     node = bnode_alloc(root);
-    if (unlikely(!node))
+    if (bfdev_unlikely(!node))
         return -BFDEV_ENOMEM;
 
-    if (likely(root->node)) {
+    if (bfdev_likely(root->node)) {
         index = bnode_fill_index(root, root->node, 0);
         bnode_set_key(root, node, 0, bnode_get_key(root, root->node, index - 1));
         bnode_set_value(root, node, 0, root->node);
@@ -303,13 +303,13 @@ insert_level(struct bfdev_btree_root *root, unsigned int level,
             break;
 
         new = bnode_alloc(root);
-        if (unlikely(!new))
+        if (bfdev_unlikely(!new))
             return -BFDEV_ENOMEM;
 
         halfkey = bnode_get_key(root, node, fill / 2 - 1);
         retval = insert_level(root, level + 1, halfkey, new);
 
-        if (unlikely(retval)) {
+        if (bfdev_unlikely(retval)) {
             bnode_free(root, new);
             return retval;
         }

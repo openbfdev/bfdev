@@ -60,7 +60,7 @@ BFDEV_IS_ERR(const void *ptr)
 static inline bool
 BFDEV_IS_INVAL(const void *ptr)
 {
-    return unlikely(!ptr) || BFDEV_IS_ERR(ptr);
+    return bfdev_unlikely(!ptr) || BFDEV_IS_ERR(ptr);
 }
 
 /**
@@ -70,7 +70,7 @@ BFDEV_IS_INVAL(const void *ptr)
 static inline int
 BFDEV_PTR_ERR_ZERO(const void *ptr)
 {
-    if (unlikely(BFDEV_IS_ERR(ptr)))
+    if (bfdev_unlikely(BFDEV_IS_ERR(ptr)))
         return BFDEV_PTR_ERR(ptr);
     return -BFDEV_ENOERR;
 }
@@ -82,7 +82,7 @@ BFDEV_PTR_ERR_ZERO(const void *ptr)
 static inline int
 BFDEV_PTR_INVAL_ZERO(const void *ptr)
 {
-    if (unlikely(BFDEV_IS_INVAL(ptr)))
+    if (bfdev_unlikely(BFDEV_IS_INVAL(ptr)))
         return BFDEV_PTR_INVAL(ptr);
     return -BFDEV_ENOERR;
 }

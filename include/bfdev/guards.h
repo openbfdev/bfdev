@@ -7,7 +7,7 @@
 #define _BFDEV_GUARDS_H_
 
 #include <bfdev/config.h>
-#include <bfdev/attributes.h>
+#include <bfdev/stddef.h>
 
 BFDEV_BEGIN_DECLS
 

@@ -7,31 +7,28 @@
 #define _BFDEV_COMPILER_H_
 
 #include <bfdev/config.h>
+#include <bfdev/compiler/types.h>
 
 BFDEV_BEGIN_DECLS
 
-#ifndef likely
-# define likely(x) __builtin_expect(!!(x), 1)
-# define unlikely(x) __builtin_expect(!!(x), 0)
-# define likely_notrace(x) __builtin_expect(!!(x), 1)
-# define unlikely_notrace(x) __builtin_expect(!!(x), 0)
+#ifndef bfdev_likely
+# define bfdev_likely(x) __builtin_expect(!!(x), 1)
+# define bfdev_unlikely(x) __builtin_expect(!!(x), 0)
+# define bfdev_likely_notrace(x) __builtin_expect(!!(x), 1)
+# define bfdev_unlikely_notrace(x) __builtin_expect(!!(x), 0)
 #endif
 
 /*
  * Optimization barrier
  * The "volatile" is due to gcc bugs
  */
-#ifndef barrier
-# define barrier() __asm__ __volatile__("": : :"memory")
+#ifndef bfdev_barrier
+# define bfdev_barrier() __asm__ __volatile__("": : :"memory")
 #endif
 
-/* Indirect macros required for expanded argument pasting, eg. __LINE__. */
-#define ___PASTE(a,b) a##b
-#define __PASTE(a,b) ___PASTE(a,b)
-
 /* Not-quite-unique ID. */
-#ifndef __UNIQUE_ID
-# define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __LINE__)
+#ifndef __BFDEV_UNIQUE_ID
+# define __BFDEV_UNIQUE_ID(prefix) __BFDEV_PASTE(__BFDEV_PASTE(__UNIQUE_ID_, prefix), __LINE__)
 #endif
 
 BFDEV_END_DECLS

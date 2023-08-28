@@ -69,7 +69,7 @@ static inline void
 bfdev_hlist_head_add(struct bfdev_hlist_head *head, struct bfdev_hlist_node *new)
 {
 #ifdef BFDEV_DEBUG_HLIST
-    if (unlikely(!bfdev_hlist_debug_head_add_check(head, new)))
+    if (bfdev_unlikely(!bfdev_hlist_debug_head_add_check(head, new)))
         return;
 #endif
 
@@ -90,7 +90,7 @@ static inline void
 bfdev_hlist_next_add(struct bfdev_hlist_node *node, struct bfdev_hlist_node *new)
 {
 #ifdef BFDEV_DEBUG_HLIST
-    if (unlikely(!bfdev_hlist_debug_next_add_check(node, new)))
+    if (bfdev_unlikely(!bfdev_hlist_debug_next_add_check(node, new)))
         return;
 #endif
 
@@ -111,7 +111,7 @@ static inline void
 bfdev_hlist_prev_add(struct bfdev_hlist_node *node, struct bfdev_hlist_node *new)
 {
 #ifdef BFDEV_DEBUG_HLIST
-    if (unlikely(!bfdev_hlist_debug_prev_add_check(node, new)))
+    if (bfdev_unlikely(!bfdev_hlist_debug_prev_add_check(node, new)))
         return;
 #endif
 
@@ -144,7 +144,7 @@ static inline void
 bfdev_hlist_del(struct bfdev_hlist_node *node)
 {
 #ifdef BFDEV_DEBUG_HLIST
-    if (unlikely(!bfdev_hlist_debug_del_check(node)))
+    if (bfdev_unlikely(!bfdev_hlist_debug_del_check(node)))
         return;
 #endif
 

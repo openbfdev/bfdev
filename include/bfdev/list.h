@@ -42,7 +42,7 @@ bfdev_list_insert(struct bfdev_list_head *prev, struct bfdev_list_head *next,
                   struct bfdev_list_head *newh)
 {
 #ifdef BFDEV_DEBUG_LIST
-    if (unlikely(!bfdev_list_debug_add_check(prev, next, newh)))
+    if (bfdev_unlikely(!bfdev_list_debug_add_check(prev, next, newh)))
         return;
 #endif
 
@@ -104,7 +104,7 @@ static inline void
 bfdev_list_del(struct bfdev_list_head *node)
 {
 #ifdef BFDEV_DEBUG_LIST
-    if (unlikely(!bfdev_list_debug_del_check(node)))
+    if (bfdev_unlikely(!bfdev_list_debug_del_check(node)))
         return;
 #endif
 

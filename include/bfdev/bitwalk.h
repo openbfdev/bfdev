@@ -115,7 +115,7 @@ bfdev_find_next_bit(const unsigned long *addr, unsigned int bits, unsigned int o
     if (bfdev_const_small_nbits(bits)) {
         unsigned long val;
 
-        if (unlikely(offset >= bits))
+        if (bfdev_unlikely(offset >= bits))
             return bits;
 
         val = *addr & BFDEV_BIT_RANGE(bits - 1, offset);
@@ -133,7 +133,7 @@ bfdev_find_prev_bit(const unsigned long *addr, unsigned int bits, unsigned int o
     if (bfdev_const_small_nbits(bits)) {
         unsigned long val;
 
-        if (unlikely(offset >= bits))
+        if (bfdev_unlikely(offset >= bits))
             return bits;
 
         val = *addr & BFDEV_BIT_RANGE(bits - 1, offset);
@@ -151,7 +151,7 @@ bfdev_find_next_zero(const unsigned long *addr, unsigned int bits, unsigned int 
     if (bfdev_const_small_nbits(bits)) {
         unsigned long val;
 
-        if (unlikely(offset >= bits))
+        if (bfdev_unlikely(offset >= bits))
             return bits;
 
         val = *addr | ~BFDEV_BIT_RANGE(bits - 1, offset);
@@ -169,7 +169,7 @@ bfdev_find_prev_zero(const unsigned long *addr, unsigned int bits, unsigned int 
     if (bfdev_const_small_nbits(bits)) {
         unsigned long val;
 
-        if (unlikely(offset >= bits))
+        if (bfdev_unlikely(offset >= bits))
             return bits;
 
         val = *addr | ~BFDEV_BIT_RANGE(bits - 1, offset);
@@ -188,7 +188,7 @@ bfdev_find_next_and_bit(const unsigned long *addr1, const unsigned long *addr2,
     if (bfdev_const_small_nbits(bits)) {
         unsigned long val;
 
-        if (unlikely(offset >= bits))
+        if (bfdev_unlikely(offset >= bits))
             return bits;
 
         val = *addr1 & *addr2 & BFDEV_BIT_RANGE(bits - 1, offset);
@@ -207,7 +207,7 @@ bfdev_find_prev_and_bit(const unsigned long *addr1, const unsigned long *addr2,
     if (bfdev_const_small_nbits(bits)) {
         unsigned long val;
 
-        if (unlikely(offset >= bits))
+        if (bfdev_unlikely(offset >= bits))
             return bits;
 
         val = *addr1 & *addr2 & BFDEV_BIT_RANGE(bits - 1, offset);

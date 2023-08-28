@@ -42,7 +42,7 @@ sunday_find(struct bfdev_ts_context *tsc, struct bfdev_ts_state *tss)
 
     for (;;) {
         length = tsc->next_block(tsc, tss, consumed, (const void **)&text);
-        if (unlikely(!length))
+        if (bfdev_unlikely(!length))
             return UINT_MAX;
 
         while (sctx->pattern_len + shift <= length) {
@@ -51,7 +51,7 @@ sunday_find(struct bfdev_ts_context *tsc, struct bfdev_ts_state *tss)
                     break;
             }
 
-            if (unlikely(index == sctx->pattern_len))
+            if (bfdev_unlikely(index == sctx->pattern_len))
                 return consumed + shift;
 
             if (sctx->pattern_len >= length)

@@ -30,7 +30,7 @@ skipnode_find(struct bfdev_skip_head *head, const void *key,
     struct bfdev_skip_node *walk;
     long retval;
 
-    if (unlikely(!level))
+    if (bfdev_unlikely(!level))
         return NULL;
 
     list = &head->nodes[level - 1];
@@ -72,7 +72,7 @@ bfdev_skiplist_insert(struct bfdev_skip_head *head, void *data,
     bfdev_max_adj(head->curr, level);
 
     node = bfdev_malloc(alloc, sizeof(*node) + sizeof(*node->list) * level);
-    if (unlikely(!node))
+    if (bfdev_unlikely(!node))
         return -BFDEV_ENOMEM;
 
     node->pdata = data;
@@ -106,7 +106,7 @@ bfdev_skiplist_delete(struct bfdev_skip_head *head, void *key,
     unsigned int level;
 
     node = skipnode_find(head, key, find, &level);
-    if (unlikely(!node))
+    if (bfdev_unlikely(!node))
         return;
 
     while (level--) {
@@ -171,11 +171,11 @@ bfdev_skiplist_create(const struct bfdev_alloc *alloc,
     struct bfdev_skip_head *head;
     unsigned int count;
 
-    if (unlikely(!levels))
+    if (bfdev_unlikely(!levels))
         return NULL;
 
     head = bfdev_malloc(alloc, sizeof(*head) + sizeof(*head->nodes) * levels);
-    if (unlikely(!head))
+    if (bfdev_unlikely(!head))
         return NULL;
 
     for (count = 0; count < levels; ++count)

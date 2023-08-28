@@ -13,14 +13,14 @@ bfdev_allocpool_alloc(struct bfdev_allocpool *pool, size_t size, size_t align)
     uintptr_t offset;
     void *retval;
 
-    if (unlikely(!size))
+    if (bfdev_unlikely(!size))
         return NULL;
 
     align = bfdev_align_high(align ?: 1, sizeof(retval));
     retval = bfdev_align_ptr_high(pool->block + pool->last, align);
     offset = (retval - pool->block) + size;
 
-    if (unlikely(offset > pool->size))
+    if (bfdev_unlikely(offset > pool->size))
         return NULL;
 
     pool->last = offset;

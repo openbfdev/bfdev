@@ -3,8 +3,8 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
-#ifndef _BFDEV_ATTRIBUTES_H_
-#define _BFDEV_ATTRIBUTES_H_
+#ifndef _BFDEV_COMPILER_ATTRIBUTES_H_
+#define _BFDEV_COMPILER_ATTRIBUTES_H_
 
 #include <bfdev/config.h>
 
@@ -324,4 +324,4 @@ BFDEV_BEGIN_DECLS
 
 BFDEV_END_DECLS
 
-#endif /* _BFDEV_ATTRIBUTES_H_ */
+#endif /* _BFDEV_COMPILER_ATTRIBUTES_H_ */

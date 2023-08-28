@@ -141,7 +141,7 @@ bfdev_errname_find(int error)
 {
     struct bfdev_errname *entry;
 
-    if (unlikely(error > 0))
+    if (bfdev_unlikely(error > 0))
         return NULL;
 
     entry = bfdev_bsearch(

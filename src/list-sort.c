@@ -64,7 +64,7 @@ bfdev_list_finish(bfdev_list_cmp_t cmp, void *data, struct bfdev_list_head *head
 
     tail->next = b;
     do {
-        if (unlikely(!++count))
+        if (bfdev_unlikely(!++count))
             cmp(b, b, data);
         b->prev = tail;
         tail = b;
@@ -81,7 +81,7 @@ bfdev_list_qsort(struct bfdev_list_head *head, bfdev_list_cmp_t cmp, void *data)
     struct bfdev_list_head *pending = NULL, *node = head->next;
     unsigned int count = 0;
 
-    if (unlikely(node == head->prev))
+    if (bfdev_unlikely(node == head->prev))
         return;
 
     head->prev->next = NULL;
@@ -93,7 +93,7 @@ bfdev_list_qsort(struct bfdev_list_head *head, bfdev_list_cmp_t cmp, void *data)
         for (bits = count; bits & 1; bits >>= 1)
             tail = &(*tail)->prev;
 
-        if (likely(bits)) {
+        if (bfdev_likely(bits)) {
             struct bfdev_list_head *b = *tail, *a = b->prev;
             b = bfdev_list_merge(cmp, data, a, b);
             b->prev = a->prev;
