@@ -18,14 +18,14 @@ bfdev_levenshtein_len(const struct bfdev_alloc *alloc,
     unsigned int distance, *cache;
     size_t index1, index2;
 
-    if (unlikely(!len1))
+    if (bfdev_unlikely(!len1))
         return len2 * a;
 
-    if (unlikely(!len2))
+    if (bfdev_unlikely(!len2))
         return len1 * a;
 
     cache = bfdev_malloc(alloc, BFDEV_BYTES_PER_INT * (len1 + 1) * 3);
-    if (unlikely(!cache))
+    if (bfdev_unlikely(!cache))
         return UINT_MAX;
 
     row1 = cache;

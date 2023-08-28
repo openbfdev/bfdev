@@ -194,7 +194,7 @@ bfdev_heap_parent(struct bfdev_heap_root *root, struct bfdev_heap_node **parentp
     struct bfdev_heap_node **link;
 
     link = &root->node;
-    if (unlikely(!*link)) {
+    if (bfdev_unlikely(!*link)) {
         *parentp = NULL;
         return link;
     }

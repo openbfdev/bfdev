@@ -52,7 +52,7 @@ bfdev_fsm_handle(struct bfdev_fsm *fsm, struct bfdev_fsm_event *event)
     const struct bfdev_fsm_state *curr = bfdev_fsm_curr(fsm);
     const struct bfdev_fsm_state *next;
 
-    if (unlikely(!curr))
+    if (bfdev_unlikely(!curr))
         return -BFDEV_EINVAL;
 
     for (next = curr; next; curr = next) {
@@ -71,7 +71,7 @@ bfdev_fsm_handle(struct bfdev_fsm *fsm, struct bfdev_fsm_event *event)
             next = *pstate;
         }
 
-        if (unlikely(!next)) {
+        if (bfdev_unlikely(!next)) {
             retval = bfdev_fsm_error(fsm, event);
             return retval ?: -BFDEV_ENOENT;
         }
@@ -81,24 +81,24 @@ bfdev_fsm_handle(struct bfdev_fsm *fsm, struct bfdev_fsm_event *event)
 
         if (curr != next && tran->stack <= 0 && curr->exit) {
             retval = curr->exit(event, curr->data);
-            if (unlikely(retval))
+            if (bfdev_unlikely(retval))
                 return retval;
         }
 
         if (tran->action) {
             retval = tran->action(event, tran->data, curr->data, next->data);
-            if (unlikely(retval))
+            if (bfdev_unlikely(retval))
                 return retval;
         }
 
         if (curr != next && tran->stack >= 0 && next->enter) {
             retval = next->enter(event, next->data);
-            if (unlikely(retval))
+            if (bfdev_unlikely(retval))
                 return retval;
         }
 
         fsm_push_state(fsm, next);
-        if (unlikely(next == fsm->error))
+        if (bfdev_unlikely(next == fsm->error))
             return -BFDEV_EFAULT;
 
         if (curr == next)
@@ -109,7 +109,7 @@ bfdev_fsm_handle(struct bfdev_fsm *fsm, struct bfdev_fsm_event *event)
 
         if (tran->stack > 0) {
             pstate = bfdev_array_push(&fsm->stack, 1);
-            if (unlikely(!pstate))
+            if (bfdev_unlikely(!pstate))
                 return -BFDEV_ENOMEM;
             *pstate = curr;
         }

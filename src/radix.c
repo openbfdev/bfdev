@@ -44,7 +44,7 @@ bfdev_radix_root_find(struct bfdev_radix_root *root, uintptr_t offset)
     uintptr_t index;
 
     node = radix_parent(root, offset, &index);
-    if (unlikely(!node))
+    if (bfdev_unlikely(!node))
         return NULL;
 
     return &node->block[index];
@@ -65,7 +65,7 @@ radix_extend(struct bfdev_radix_root *root, uintptr_t offset)
             break;
 
         successor = bfdev_zalloc(alloc, sizeof(*successor));
-        if (unlikely(!successor))
+        if (bfdev_unlikely(!successor))
             return NULL;
 
         if (node) {
@@ -110,7 +110,7 @@ bfdev_radix_root_alloc(struct bfdev_radix_root *root, uintptr_t offset)
     unsigned int level;
 
     node = radix_extend(root, offset);
-    if (unlikely(!node))
+    if (bfdev_unlikely(!node))
         return NULL;
 
     for (level = root->level; level--;) {
@@ -121,7 +121,7 @@ bfdev_radix_root_alloc(struct bfdev_radix_root *root, uintptr_t offset)
 
         if (!*slot) {
             new = bfdev_zalloc(alloc, sizeof(*new));
-            if (unlikely(!new))
+            if (bfdev_unlikely(!new))
                 return NULL;
 
             *slot = new;
@@ -145,7 +145,7 @@ bfdev_radix_root_free(struct bfdev_radix_root *root, uintptr_t offset)
     uintptr_t index;
 
     node = radix_parent(root, offset, &index);
-    if (unlikely(!node))
+    if (bfdev_unlikely(!node))
         return -BFDEV_ENOENT;
 
     bfdev_bit_clr(node->bitmap, index);

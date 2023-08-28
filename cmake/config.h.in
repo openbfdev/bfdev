@@ -9,7 +9,6 @@
 
 #include <bfdev/cdefs.h>
 #include <bfdev/compiler.h>
-#include <bfdev/attributes.h>
 
 #define BFDEV_VERSION_MAJOR ${CMAKE_PROJECT_VERSION_MAJOR}
 #define BFDEV_VERSION_MINOR ${CMAKE_PROJECT_VERSION_MINOR}

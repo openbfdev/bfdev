@@ -163,7 +163,7 @@ static inline void bfdev_heap_link(struct bfdev_heap_root *root, struct bfdev_he
                              struct bfdev_heap_node **link, struct bfdev_heap_node *node)
 {
 #ifdef BFDEV_DEBUG_HEAP
-    if (unlikely(!bfdev_heap_debug_link_check(parent, link, node)))
+    if (bfdev_unlikely(!bfdev_heap_debug_link_check(parent, link, node)))
         return;
 #endif
 
@@ -218,7 +218,7 @@ bfdev_heap_delete(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
     struct bfdev_heap_node *rebalance;
 
 #ifdef BFDEV_DEBUG_HEAP
-    if (unlikely(!bfdev_heap_debug_delete_check(node)))
+    if (bfdev_unlikely(!bfdev_heap_debug_delete_check(node)))
         return;
 #endif
 

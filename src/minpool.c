@@ -47,7 +47,7 @@ minpool_check(void *block)
 
     /* Check whether it's a legal node */
     node = container_of(block, struct bfdev_minpool_node, data);
-    if (unlikely(!bfdev_list_check_empty(&node->free)))
+    if (bfdev_unlikely(!bfdev_list_check_empty(&node->free)))
         return NULL;
 
     return node;
@@ -114,16 +114,16 @@ bfdev_minpool_alloc(struct bfdev_minpool_head *head, size_t size)
     struct bfdev_minpool_node *node;
     size_t fsize;
 
-    if (unlikely(!size))
+    if (bfdev_unlikely(!size))
         return NULL;
 
     bfdev_align_high_adj(size, BFDEV_MINPOOL_ALIGN);
-    if (unlikely(size > head->avail))
+    if (bfdev_unlikely(size > head->avail))
         return NULL;
 
     /* Get the free memory block */
     node = head->find(head, size);
-    if (unlikely(!node))
+    if (bfdev_unlikely(!node))
         return NULL;
 
     fsize = minnode_get_size(node);
@@ -157,11 +157,11 @@ bfdev_minpool_free(struct bfdev_minpool_head *head, void *block)
     struct bfdev_minpool_node *other, *node;
     size_t fsize;
 
-    if (unlikely(!block))
+    if (bfdev_unlikely(!block))
         return;
 
     node = minpool_check(block);
-    if (unlikely(!node))
+    if (bfdev_unlikely(!node))
         return;
 
     /* Set node freed */
@@ -198,20 +198,20 @@ bfdev_minpool_realloc(struct bfdev_minpool_head *head, void *block, size_t resiz
     struct bfdev_minpool_node *node, *expand;
     size_t origin, exsize, fsize;
 
-    if (unlikely(!block))
+    if (bfdev_unlikely(!block))
         return bfdev_minpool_alloc(head, resize);
 
-    if (unlikely(!resize)) {
+    if (bfdev_unlikely(!resize)) {
         bfdev_minpool_free(head, block);
         return NULL;
     }
 
     node = minpool_check(block);
-    if (unlikely(!node))
+    if (bfdev_unlikely(!node))
         return NULL;
 
     bfdev_align_high_adj(resize, BFDEV_MINPOOL_ALIGN);
-    if (unlikely(resize > head->avail))
+    if (bfdev_unlikely(resize > head->avail))
         return NULL;
 
     origin = minnode_get_size(node);
@@ -224,7 +224,7 @@ bfdev_minpool_realloc(struct bfdev_minpool_head *head, void *block, size_t resiz
         void *newblk;
 
         newblk = bfdev_minpool_alloc(head, resize);
-        if (unlikely(!newblk))
+        if (bfdev_unlikely(!newblk))
             return NULL;
 
         memcpy(newblk, block, origin);

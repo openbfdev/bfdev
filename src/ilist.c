@@ -16,7 +16,7 @@ static inline bool
 ilist_integrity_check(struct bfdev_list_head *head, struct bfdev_list_head *prev,
                       struct bfdev_list_head *next)
 {
-    if (unlikely(prev->next != next)) {
+    if (bfdev_unlikely(prev->next != next)) {
         bfdev_log_err(
             "ilist corruption head (%p) (%p) prev->next"
             " should be next (%p), but was (%p)\n",
@@ -25,7 +25,7 @@ ilist_integrity_check(struct bfdev_list_head *head, struct bfdev_list_head *prev
         return false;
     }
 
-    if (unlikely(next->prev != prev)) {
+    if (bfdev_unlikely(next->prev != prev)) {
         bfdev_log_err(
             "ilist corruption head (%p) (%p) next->prev"
             " should be prev (%p), but was (%p)\n",
@@ -79,7 +79,7 @@ bfdev_ilist_add(struct bfdev_ilist_head *ihead, struct bfdev_ilist_node *inode,
     struct bfdev_list_head *next = &ihead->node_list;
 
 #ifdef BFDEV_DEBUG_ILIST
-    if (unlikely(!ilist_head_check(ihead)))
+    if (bfdev_unlikely(!ilist_head_check(ihead)))
         return;
 #endif
 
@@ -126,7 +126,7 @@ bfdev_ilist_del(struct bfdev_ilist_head *ihead, struct bfdev_ilist_node *inode)
     struct bfdev_ilist_node *next;
 
 #ifdef BFDEV_DEBUG_ILIST
-    if (unlikely(!ilist_head_check(ihead)))
+    if (bfdev_unlikely(!ilist_head_check(ihead)))
         return;
 #endif
 

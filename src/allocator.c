@@ -62,7 +62,7 @@ bfdev_zalloc(const struct bfdev_alloc *alloc, size_t size)
         retval = ops->malloc(size, pdata);
     }
 
-    if (likely(retval))
+    if (bfdev_likely(retval))
         memset(retval, 0, size);
 
     return retval;

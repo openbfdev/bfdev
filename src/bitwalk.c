@@ -108,7 +108,7 @@ bfdev_comp_find_next_bit(const unsigned long *addr1, const unsigned long *addr2,
 {
     unsigned long value, mask;
 
-    if (unlikely(start >= bits))
+    if (bfdev_unlikely(start >= bits))
         return bits;
 
     value = addr1[BFDEV_BITS_DIV_LONG(start)];
@@ -147,7 +147,7 @@ bfdev_comp_find_prev_bit(const unsigned long *addr1, const unsigned long *addr2,
 {
     unsigned long value, mask;
 
-    if (unlikely(start >= bits))
+    if (bfdev_unlikely(start >= bits))
         return bits;
 
     value = addr1[BFDEV_BITS_DIV_LONG(start)];

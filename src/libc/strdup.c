@@ -14,13 +14,13 @@ bfdev_strdup(const struct bfdev_alloc *alloc,
     size_t length;
     char *dump;
 
-    if (unlikely(!string))
+    if (bfdev_unlikely(!string))
         return NULL;
 
     length = strlen(string);
     dump = bfdev_malloc(alloc, length + 1);
 
-    if (likely(dump))
+    if (bfdev_likely(dump))
         strcpy(dump, string);
 
     return dump;
@@ -33,13 +33,13 @@ bfdev_strndup(const struct bfdev_alloc *alloc,
     size_t length;
     char *dump;
 
-    if (unlikely(!string))
+    if (bfdev_unlikely(!string))
         return NULL;
 
     length = strnlen(string, len);
     dump = bfdev_malloc(alloc, length + 1);
 
-    if (likely(dump))
+    if (bfdev_likely(dump))
         strncpy(dump, string, len);
 
     return dump;

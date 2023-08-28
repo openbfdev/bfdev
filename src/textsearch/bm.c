@@ -43,7 +43,7 @@ bm_find(struct bfdev_ts_context *tsc, struct bfdev_ts_state *tss)
 
     for (;;) {
         length = tsc->next_block(tsc, tss, consumed, (const void **)&text);
-        if (unlikely(!length))
+        if (bfdev_unlikely(!length))
             return UINT_MAX;
 
         while (shift < length) {
@@ -52,7 +52,7 @@ bm_find(struct bfdev_ts_context *tsc, struct bfdev_ts_state *tss)
                     break;
             }
 
-            if (unlikely(index == bctx->pattern_len))
+            if (bfdev_unlikely(index == bctx->pattern_len))
                 return consumed + shift - bctx->pattern_len + 1;
 
             bad_shift = shift - index + bctx->bad_shift[text[shift - index]];
@@ -118,7 +118,7 @@ bm_prepare(const struct bfdev_alloc *alloc, const void *pattern,
     unsigned int index;
 
     bctx = bfdev_malloc(alloc, sizeof(*bctx) + gsize + len);
-    if (unlikely(!bctx))
+    if (bfdev_unlikely(!bctx))
         return NULL;
 
     bctx->tsc.flags = flags;

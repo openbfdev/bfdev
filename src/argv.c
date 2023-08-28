@@ -42,7 +42,7 @@ bfdev_argv_split(const struct bfdev_alloc *alloc, const char *args,
     count = (argc + 1) * sizeof(*argv);
 
     argv = bfdev_malloc(alloc, count + strlen(args) + 1);
-    if (unlikely(!argv))
+    if (bfdev_unlikely(!argv))
         return NULL;
 
     block = (void *)argv + count;

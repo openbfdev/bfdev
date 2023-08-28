@@ -74,7 +74,7 @@ bfdev_bloom_create(const struct bfdev_alloc *alloc, unsigned int capacity,
     size = BFDEV_BITS_DIV_LONG(capacity);
 
     bloom = bfdev_zalloc(alloc, sizeof(*bloom) + sizeof(*bloom->bitmap) * size);
-    if (unlikely(!bloom))
+    if (bfdev_unlikely(!bloom))
         return NULL;
 
     bloom->capacity = capacity;

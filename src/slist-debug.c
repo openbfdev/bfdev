@@ -14,7 +14,7 @@
 export bool
 bfdev_slist_debug_add_check(struct bfdev_slist_head *node, struct bfdev_slist_head *new)
 {
-    if (unlikely(new->next && new->next == node->next)) {
+    if (bfdev_unlikely(new->next && new->next == node->next)) {
         bfdev_log_err(
             "bfdev_slist_add corruption (%p) new->next"
             " should not be next (%p)\n",
@@ -29,7 +29,7 @@ bfdev_slist_debug_add_check(struct bfdev_slist_head *node, struct bfdev_slist_he
 export bool
 bfdev_slist_debug_del_check(struct bfdev_slist_head *node)
 {
-    if (unlikely(node->next == BFDEV_POISON_SLIST)) {
+    if (bfdev_unlikely(node->next == BFDEV_POISON_SLIST)) {
         bfdev_log_err(
             "bfdev_slist_del corruption (%p) node->next"
             " should not be BFDEV_POISON_SLIST (%p)\n",

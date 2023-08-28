@@ -13,7 +13,7 @@ linear_next(struct bfdev_ts_context *tsc, struct bfdev_ts_state *tss,
 {
     struct bfdev_ts_linear *linear = tss->pdata;
 
-	if (likely(consumed < linear->len)) {
+	if (bfdev_likely(consumed < linear->len)) {
 		*dest = linear->data + consumed;
 		return linear->len - consumed;
 	}

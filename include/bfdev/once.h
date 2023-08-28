@@ -16,19 +16,19 @@ BFDEV_BEGIN_DECLS
     bool ___cond = !!(condition);                   \
     bool __retval = false;                          \
                                                     \
-    if (unlikely(___cond && !__already)) {          \
+    if (bfdev_unlikely(___cond && !__already)) {          \
         __already = true;                           \
         __retval = true;                            \
     }                                               \
                                                     \
-    unlikely(__retval);                             \
+    bfdev_unlikely(__retval);                             \
 })
 
 #define BFDEV_DO_ONCE_ON(condition, func, ...) ({   \
     bool __cond = !!(condition);                    \
     if (BFDEV_DO_ONCE_DONE(__cond))                 \
         func(__VA_ARGS__);                          \
-    unlikely(__cond);                               \
+    bfdev_unlikely(__cond);                               \
 })
 
 #define BFDEV_DO_ONCE(func, ...) \

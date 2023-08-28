@@ -129,7 +129,7 @@ bfdev_rb_fixup_augmented(struct bfdev_rb_root *root, struct bfdev_rb_node *node,
          * are no longer violating 4).
          */
 
-        if (unlikely(!parent)) {
+        if (bfdev_unlikely(!parent)) {
             node->color = BFDEV_RB_BLACK;
             break;
         }
@@ -608,7 +608,7 @@ bfdev_rb_find_last(struct bfdev_rb_root *root, const void *key, bfdev_rb_find_t 
     long ret;
 
     *linkp = &root->node;
-    if (unlikely(!**linkp)) {
+    if (bfdev_unlikely(!**linkp)) {
         *parentp = NULL;
         return NULL;
     }
@@ -648,7 +648,7 @@ bfdev_rb_parent(struct bfdev_rb_root *root, struct bfdev_rb_node **parentp,
         leftmost = &leftmost_none;
 
     link = &root->node;
-    if (unlikely(!*link)) {
+    if (bfdev_unlikely(!*link)) {
         *parentp = NULL;
         return link;
     }
@@ -686,7 +686,7 @@ bfdev_rb_parent_conflict(struct bfdev_rb_root *root, struct bfdev_rb_node **pare
         leftmost = &leftmost_none;
 
     link = &root->node;
-    if (unlikely(!*link)) {
+    if (bfdev_unlikely(!*link)) {
         *parentp = NULL;
         return link;
     }

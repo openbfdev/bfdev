@@ -42,7 +42,7 @@ kmp_find(struct bfdev_ts_context *tsc, struct bfdev_ts_state *tss)
 
     for (;;) {
         length = tsc->next_block(tsc, tss, consumed, (const void **)&text);
-        if (unlikely(!length))
+        if (bfdev_unlikely(!length))
             return UINT_MAX;
 
         for (index = 0; index < length; ++index) {
@@ -52,7 +52,7 @@ kmp_find(struct bfdev_ts_context *tsc, struct bfdev_ts_state *tss)
             if (kctx->pattern[match] == find_pattern())
                 match++;
 
-            if (unlikely(match == kctx->pattern_len)) {
+            if (bfdev_unlikely(match == kctx->pattern_len)) {
                 tss->offset = consumed + index + 1;
                 return tss->offset - kctx->pattern_len;
             }
@@ -87,7 +87,7 @@ kmp_prepare(const struct bfdev_alloc *alloc, const void *pattern,
     unsigned int index;
 
     kctx = bfdev_zalloc(alloc, sizeof(*kctx) + prefix_size + len);
-    if (unlikely(!kctx))
+    if (bfdev_unlikely(!kctx))
         return NULL;
 
     kctx->tsc.flags = flags;
