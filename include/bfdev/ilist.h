@@ -103,7 +103,7 @@ bfdev_ilist_node_empty(struct bfdev_ilist_node *inode)
  * @member: the name of the bfdev_ilist_head within the struct.
  */
 #define bfdev_ilist_entry(ptr, type, member) \
-    container_of(ptr, type, member)
+    bfdev_container_of(ptr, type, member)
 
 /**
  * bfdev_ilist_for_each - iterate over a list.

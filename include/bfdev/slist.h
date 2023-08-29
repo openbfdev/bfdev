@@ -151,7 +151,7 @@ bfdev_slist_replace(struct bfdev_slist_head *head, struct bfdev_slist_head *old,
  * @member: the name of the list_head within the struct.
  */
 #define bfdev_slist_entry(ptr, type, member) \
-    container_of_safe(ptr, type, member)
+    bfdev_container_of_safe(ptr, type, member)
 
 /**
  * bfdev_slist_first_entry - get the first element from a slist.

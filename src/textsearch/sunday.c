@@ -14,7 +14,7 @@ struct sunday_context {
 };
 
 #define ts_to_sunday(ptr) \
-    container_of(ptr, struct sunday_context, tsc)
+    bfdev_container_of(ptr, struct sunday_context, tsc)
 
 static const void *
 sunday_pattern_get(struct bfdev_ts_context *tsc)

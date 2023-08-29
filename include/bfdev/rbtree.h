@@ -78,7 +78,7 @@ struct bfdev_rb_callbacks {
  * @member: the name of the bfdev_rb_node within the struct.
  */
 #define bfdev_rb_entry(ptr, type, member) \
-    container_of(ptr, type, member)
+    bfdev_container_of(ptr, type, member)
 
 /**
  * bfdev_rb_entry_safe - get the struct for this entry or null.
@@ -87,7 +87,7 @@ struct bfdev_rb_callbacks {
  * @member: the name of the bfdev_rb_node within the struct.
  */
 #define bfdev_rb_entry_safe(ptr, type, member) \
-    container_of_safe(ptr, type, member)
+    bfdev_container_of_safe(ptr, type, member)
 
 #ifdef BFDEV_DEBUG_RBTREE
 extern bool bfdev_rb_debug_link_check(struct bfdev_rb_node *parent, struct bfdev_rb_node **link, struct bfdev_rb_node *node);

@@ -46,7 +46,7 @@ minpool_check(void *block)
     struct bfdev_minpool_node *node;
 
     /* Check whether it's a legal node */
-    node = container_of(block, struct bfdev_minpool_node, data);
+    node = bfdev_container_of(block, struct bfdev_minpool_node, data);
     if (bfdev_unlikely(!bfdev_list_check_empty(&node->free)))
         return NULL;
 
