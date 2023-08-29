@@ -15,7 +15,7 @@ struct test_node {
 };
 
 #define node_to_test(ptr) \
-    container_of(ptr, struct test_node, node)
+    bfdev_container_of(ptr, struct test_node, node)
 
 static inline unsigned long
 hashmap_hash_key(const void *key, void *pdata)

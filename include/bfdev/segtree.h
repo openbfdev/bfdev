@@ -24,7 +24,7 @@ struct bfdev_segtree_node {
  * @member: the name of the bfdev_segtree_node within the struct.
  */
 #define	bfdev_segtree_entry(ptr, type, member) \
-    container_of(ptr, type, member)
+    bfdev_container_of(ptr, type, member)
 
 /**
  * bfdev_segtree_entry_safe - get the struct for this entry or null.
@@ -33,7 +33,7 @@ struct bfdev_segtree_node {
  * @member: the name of the bfdev_segtree_node within the struct.
  */
 #define bfdev_segtree_entry_safe(ptr, type, member) \
-    container_of_safe(ptr, type, member)
+    bfdev_container_of_safe(ptr, type, member)
 
 extern void bfdev_segtree_insert(struct bfdev_rb_root_cached *root, struct bfdev_segtree_node *node);
 extern void bfdev_segtree_delete(struct bfdev_rb_root_cached *root, struct bfdev_segtree_node *node);

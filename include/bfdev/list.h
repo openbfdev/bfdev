@@ -323,7 +323,7 @@ bfdev_list_splice_tail_init(struct bfdev_list_head *head, struct bfdev_list_head
  * @member: the name of the list head within the struct.
  */
 #define bfdev_list_entry(ptr, type, member) \
-    container_of(ptr, type, member)
+    bfdev_container_of(ptr, type, member)
 
 /**
  * bfdev_list_entry_check_head - test if the entry points to the head of the list.

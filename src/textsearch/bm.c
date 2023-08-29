@@ -15,7 +15,7 @@ struct bm_context {
 };
 
 #define ts_to_bm(ptr) \
-    container_of(ptr, struct bm_context, tsc)
+    bfdev_container_of(ptr, struct bm_context, tsc)
 
 static const void *
 bm_pattern_get(struct bfdev_ts_context *tsc)

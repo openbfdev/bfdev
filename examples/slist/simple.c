@@ -17,7 +17,7 @@ struct list_simple {
 };
 
 #define list_to_simple(node) \
-    container_of(node, struct list_simple, slist)
+    bfdev_container_of(node, struct list_simple, slist)
 
 int main(void)
 {

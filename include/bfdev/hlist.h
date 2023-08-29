@@ -254,7 +254,7 @@ bfdev_hlist_del_init(struct bfdev_hlist_node *node)
  * @member: the name of the hlist_head within the struct.
  */
 #define bfdev_hlist_entry(ptr, type, member) \
-    container_of_safe(ptr, type, member)
+    bfdev_container_of_safe(ptr, type, member)
 
 /**
  * bfdev_hlist_first_entry - get the first element from a hlist.

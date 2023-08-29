@@ -14,7 +14,7 @@ struct kmp_context {
 };
 
 #define ts_to_kmp(ptr) \
-    container_of(ptr, struct kmp_context, tsc)
+    bfdev_container_of(ptr, struct kmp_context, tsc)
 
 static const void *
 kmp_pattern_get(struct bfdev_ts_context *tsc)

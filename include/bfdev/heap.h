@@ -58,7 +58,7 @@ struct bfdev_heap_root {
  * @member: the name of the bfdev_heap_node within the struct.
  */
 #define	bfdev_heap_entry(ptr, type, member) \
-    container_of(ptr, type, member)
+    bfdev_container_of(ptr, type, member)
 
 /**
  * bfdev_heap_entry_safe - get the struct for this entry or null.
@@ -67,7 +67,7 @@ struct bfdev_heap_root {
  * @member: the name of the bfdev_heap_node within the struct.
  */
 #define bfdev_heap_entry_safe(ptr, type, member) \
-    container_of_safe(ptr, type, member)
+    bfdev_container_of_safe(ptr, type, member)
 
 #ifdef BFDEV_DEBUG_HEAP
 extern bool bfdev_heap_debug_link_check(struct bfdev_heap_node *parent, struct bfdev_heap_node **link, struct bfdev_heap_node *node);
