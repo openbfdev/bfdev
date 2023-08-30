@@ -25,6 +25,8 @@ bfdev is a high-performance, aesthetically pleasing, and portable infrastructure
 
 This project is not yet fully completed, so it is not recommended for use in a production environment.
 
+View supported components: [Docs](docs/components.md)
+
 ## Directory Structure
 
 ```
