@@ -12,7 +12,7 @@ export void *
 bfdev_array_push(struct bfdev_array *array, unsigned int num)
 {
     const struct bfdev_alloc *alloc = array->alloc;
-    unsigned int nalloc;
+    unsigned int nalloc, index;
     void *data;
 
     nalloc = array->index + num;
@@ -27,20 +27,24 @@ bfdev_array_push(struct bfdev_array *array, unsigned int num)
         array->capacity = nalloc;
     }
 
-    data = array->data + array->cells * array->index;
+    index = array->index;
     array->index += num;
 
-    return data;
+    return bfdev_array_data(array, index);
 }
 
 export void *
 bfdev_array_pop(struct bfdev_array *array, unsigned int num)
 {
+    unsigned int index;
+
     if (!num || array->index < num)
         return NULL;
 
-    array->index -= num;
-    return array->data + array->cells * array->index;
+    index = array->index - num;
+    array->index = index;
+
+    return bfdev_array_data(array, index);
 }
 
 export void

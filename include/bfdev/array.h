@@ -9,6 +9,7 @@
 
 #include <bfdev/config.h>
 #include <bfdev/stddef.h>
+#include <bfdev/stdint.h>
 #include <bfdev/allocator.h>
 
 BFDEV_BEGIN_DECLS
@@ -51,6 +52,18 @@ static inline size_t
 bfdev_array_size(struct bfdev_array *array)
 {
     return array->cells * array->index;
+}
+
+static inline uintptr_t
+bfdev_array_index(struct bfdev_array *array, unsigned int index)
+{
+    return array->cells * index;
+}
+
+static inline void *
+bfdev_array_data(struct bfdev_array *array, unsigned int index)
+{
+    return array->data + bfdev_array_index(array, index);
 }
 
 extern void *
