@@ -3,13 +3,19 @@
 # Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
 #
 
-add_executable(gen-crc8 gen-crc8.c)
-add_executable(gen-crc16 gen-crc16.c)
-add_executable(gen-crc16be gen-crc16be.c)
-add_executable(gen-crc32 gen-crc32.c)
-add_executable(gen-crc32be gen-crc32be.c)
-add_executable(gen-crc64 gen-crc64.c)
-add_executable(gen-crc64be gen-crc64be.c)
+set(HOST_C_FLAGS
+    ${HOST_C_FLAGS}
+    -I ${PROJECT_SOURCE_DIR}/include
+    -I ${PROJECT_BINARY_DIR}/generated
+)
+
+host_target(gen-crc8 gen-crc8.c)
+host_target(gen-crc16 gen-crc16.c)
+host_target(gen-crc16be gen-crc16be.c)
+host_target(gen-crc32 gen-crc32.c)
+host_target(gen-crc32be gen-crc32be.c)
+host_target(gen-crc64 gen-crc64.c)
+host_target(gen-crc64be gen-crc64be.c)
 
 macro(generate_crctbl proc path table rows poly trans)
     add_custom_command(
