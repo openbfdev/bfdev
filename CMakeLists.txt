@@ -43,6 +43,7 @@ set(BFDEV_ARCH_HEADER_PATH ${BFDEV_ARCH_PATH}/include)
 set(BFDEV_ARCH_SOURCE_PATH ${BFDEV_ARCH_PATH}/src)
 
 include(scripts/asm-generic.cmake)
+include(scripts/hostrule.cmake)
 include(scripts/commit.cmake)
 
 commit_hash(BFDEV_COMMITID)
@@ -225,11 +226,6 @@ configure_file(
     ${PROJECT_BINARY_DIR}/generated/bfdev/config.h
 )
 
-add_library(bfdev_object OBJECT ${BFDEV_LIBRARY})
-add_library(bfdev_static STATIC ${BFDEV_LIBRARY})
-add_library(bfdev_shared SHARED ${BFDEV_LIBRARY})
-add_library(bfdev ALIAS bfdev_object)
-
 macro(bfdev_dependencies target)
     add_dependencies(
         ${target}
@@ -243,29 +239,35 @@ macro(bfdev_dependencies target)
     )
 endmacro()
 
+add_library(bfdev_object OBJECT ${BFDEV_LIBRARY})
 bfdev_dependencies(bfdev_object)
-bfdev_dependencies(bfdev_static)
-bfdev_dependencies(bfdev_shared)
+add_library(bfdev ALIAS bfdev_object)
 
 if(ENABLE_EXAMPLES)
     enable_testing()
     add_subdirectory(examples)
 endif()
 
-set_target_properties(bfdev_static
-    PROPERTIES
-    OUTPUT_NAME bfdev
-    LINKER_LANGUAGE C
-)
-
-set_target_properties(bfdev_shared
-    PROPERTIES VERSION 1.0 SOVERSION 1
-    OUTPUT_NAME bfdev
-    MACOSX_RPATH ON
-    LINKER_LANGUAGE C
-)
-
 if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
+    add_library(bfdev_static STATIC ${BFDEV_LIBRARY})
+    add_library(bfdev_shared SHARED ${BFDEV_LIBRARY})
+
+    bfdev_dependencies(bfdev_static)
+    bfdev_dependencies(bfdev_shared)
+
+    set_target_properties(bfdev_static
+        PROPERTIES
+        OUTPUT_NAME bfdev
+        LINKER_LANGUAGE C
+    )
+
+    set_target_properties(bfdev_shared
+        PROPERTIES VERSION 1.0 SOVERSION 1
+        OUTPUT_NAME bfdev
+        MACOSX_RPATH ON
+        LINKER_LANGUAGE C
+    )
+
     install(DIRECTORY
         ${BFDEV_HEADER_PATH}/bfdev
         ${BFDEV_GENERATED_PATH}/bfdev
