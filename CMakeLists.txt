@@ -40,7 +40,6 @@ set(BFDEV_GENERATED_PATH ${PROJECT_BINARY_DIR}/generated)
 
 set(BFDEV_ARCH_PATH ${PROJECT_SOURCE_DIR}/arch/${BFDEV_ARCH})
 set(BFDEV_ARCH_HEADER_PATH ${BFDEV_ARCH_PATH}/include)
-set(BFDEV_ARCH_SOURCE_PATH ${BFDEV_ARCH_PATH}/src)
 
 include(scripts/asm-generic.cmake)
 include(scripts/hostrule.cmake)
@@ -133,13 +132,8 @@ file(GLOB BFDEV_GENERATED_HEADER
     ${BFDEV_GENERATED_PATH}/*.h
 )
 
-file(GLOB_RECURSE BFDEV_SOURCE
-    ${BFDEV_SOURCE_PATH}/*.c
-)
-
-file(GLOB_RECURSE BFDEV_ARCH_SOURCE
-    ${BFDEV_ARCH_SOURCE_PATH}/*.c
-)
+include(${BFDEV_SOURCE_PATH}/build.cmake)
+include(${BFDEV_ARCH_PATH}/build.cmake)
 
 add_definitions(
     " -std=gnu17"
