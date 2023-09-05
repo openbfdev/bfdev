@@ -48,6 +48,12 @@ bfdev_array_reset(struct bfdev_array *array)
     array->index = 0;
 }
 
+static inline unsigned int
+bfdev_array_index(struct bfdev_array *array)
+{
+    return array->index;
+}
+
 static inline size_t
 bfdev_array_size(struct bfdev_array *array)
 {
@@ -55,7 +61,7 @@ bfdev_array_size(struct bfdev_array *array)
 }
 
 static inline uintptr_t
-bfdev_array_index(struct bfdev_array *array, unsigned int index)
+bfdev_array_offset(struct bfdev_array *array, unsigned int index)
 {
     return array->cells * index;
 }
@@ -63,7 +69,9 @@ bfdev_array_index(struct bfdev_array *array, unsigned int index)
 static inline void *
 bfdev_array_data(struct bfdev_array *array, unsigned int index)
 {
-    return array->data + bfdev_array_index(array, index);
+    if (bfdev_unlikely(index >= array->index))
+        return NULL;
+    return array->data + bfdev_array_offset(array, index);
 }
 
 extern void *
