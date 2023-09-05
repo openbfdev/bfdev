@@ -38,9 +38,6 @@ bfdev_array_pop(struct bfdev_array *array, unsigned int num)
 {
     unsigned int index;
 
-    if (!num || array->index < num)
-        return NULL;
-
     index = array->index - num;
     array->index = index;
 
