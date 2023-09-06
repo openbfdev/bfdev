@@ -38,7 +38,7 @@ int main(void)
     for (count = 0; count < TEST_LOOP; ++count)
         data[count] = rand();
 
-    retval = bfdev_radix_charge(&bench_root, TEST_LOOP);
+    retval = bfdev_radix_charge(&bench_root, 0, TEST_LOOP);
     if (retval) {
         printf("Insufficient Memory!\n");
         return retval;
