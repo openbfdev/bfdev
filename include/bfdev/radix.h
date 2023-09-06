@@ -79,54 +79,63 @@ bfdev_radix_offset(uintptr_t index, size_t cells)
 #define bfdev_radix_to_offset(radix, index) \
     bfdev_radix_offset(index, bfdev_radix_cells(radix))
 
-#define bfdev_radix_find(radix, index) ({       \
-    struct bfdev_radix_root *__root;            \
-    __root = &(radix)->tree;                    \
-    bfdev_radix_cast(radix) (                   \
-        bfdev_radix_root_find(__root,           \
-            bfdev_radix_to_offset(radix, index) \
-        )                                       \
-    );                                          \
+#define bfdev_radix_find(radix, index) ({           \
+    struct bfdev_radix_root *__root;                \
+    __root = &(radix)->tree;                        \
+    bfdev_radix_cast(radix) (                       \
+        bfdev_radix_root_find(__root,               \
+            bfdev_radix_to_offset(radix, index)     \
+        )                                           \
+    );                                              \
 })
 
-#define bfdev_radix_alloc(radix, index) ({      \
-    struct bfdev_radix_root *__root;            \
-    __root = &(radix)->tree;                    \
-    bfdev_radix_cast(radix) (                   \
-        bfdev_radix_root_alloc(__root,          \
-            bfdev_radix_to_offset(radix, index) \
-        )                                       \
-    );                                          \
+#define bfdev_radix_alloc(radix, index) ({          \
+    struct bfdev_radix_root *__root;                \
+    __root = &(radix)->tree;                        \
+    bfdev_radix_cast(radix) (                       \
+        bfdev_radix_root_alloc(__root,              \
+            bfdev_radix_to_offset(radix, index)     \
+        )                                           \
+    );                                              \
 })
 
-#define bfdev_radix_free(radix, index) ({       \
-    struct bfdev_radix_root *__root;            \
-    __root = &(radix)->tree;                    \
-    bfdev_radix_root_free(__root,               \
-        bfdev_radix_to_offset(radix, index)     \
-    );                                          \
+#define bfdev_radix_free(radix, index) ({           \
+    struct bfdev_radix_root *__root;                \
+    __root = &(radix)->tree;                        \
+    bfdev_radix_root_free(__root,                   \
+        bfdev_radix_to_offset(radix, index)         \
+    );                                              \
 })
 
-#define bfdev_radix_charge(radix, size) ({      \
-    struct bfdev_radix_root *__root;            \
-    __root = &(radix)->tree;                    \
-    bfdev_radix_root_charge(__root,             \
-        bfdev_radix_to_offset(radix, size)      \
-    );                                          \
+#define bfdev_radix_charge(radix, index, size) ({   \
+    struct bfdev_radix_root *__root;                \
+    __root = &(radix)->tree;                        \
+    bfdev_radix_root_charge(__root,                 \
+        bfdev_radix_to_offset(radix, index),        \
+        bfdev_radix_to_offset(radix, size)          \
+    );                                              \
 })
 
-#define bfdev_radix_destory(radix) ({           \
-    struct bfdev_radix_root *__root;            \
-    __root = &(radix)->tree;                    \
-    bfdev_radix_root_destory(__root);           \
+#define bfdev_radix_destory(radix) ({               \
+    struct bfdev_radix_root *__root;                \
+    __root = &(radix)->tree;                        \
+    bfdev_radix_root_destory(__root);               \
 })
 
-extern void *bfdev_radix_root_find(struct bfdev_radix_root *root, uintptr_t offset);
-extern void *bfdev_radix_root_alloc(struct bfdev_radix_root *root, uintptr_t offset);
-extern int bfdev_radix_root_free(struct bfdev_radix_root *root, uintptr_t offset);
+extern void *
+bfdev_radix_root_find(struct bfdev_radix_root *root, uintptr_t offset);
 
-extern int bfdev_radix_root_charge(struct bfdev_radix_root *root, size_t size);
-extern void bfdev_radix_root_destory(struct bfdev_radix_root *root);
+extern void *
+bfdev_radix_root_alloc(struct bfdev_radix_root *root, uintptr_t offset);
+
+extern int
+bfdev_radix_root_free(struct bfdev_radix_root *root, uintptr_t offset);
+
+extern int
+bfdev_radix_root_charge(struct bfdev_radix_root *root, uintptr_t offset, size_t size);
+
+extern void
+bfdev_radix_root_destory(struct bfdev_radix_root *root);
 
 BFDEV_END_DECLS
 

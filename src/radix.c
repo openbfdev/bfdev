@@ -5,6 +5,7 @@
 
 #include <bfdev.h>
 #include <bfdev/radix.h>
+#include <bfdev/overflow.h>
 #include <export.h>
 
 static __bfdev_always_inline unsigned int
@@ -174,13 +175,21 @@ bfdev_radix_root_free(struct bfdev_radix_root *root, uintptr_t offset)
 }
 
 export int
-bfdev_radix_root_charge(struct bfdev_radix_root *root, size_t size)
+bfdev_radix_root_charge(struct bfdev_radix_root *root,
+                        uintptr_t offset, size_t size)
 {
-    uintptr_t offset;
+    uintptr_t end;
+    bool retval;
 
-	for (offset = 0; offset < size; offset += BFDEV_RADIX_BLOCK) {
+    retval = bfdev_overflow_check_add(offset, size, &end);
+    if (bfdev_unlikely(retval))
+        return -BFDEV_EOVERFLOW;
+
+    while (offset < end) {
 		if (!bfdev_radix_root_alloc(root, offset))
 			return -BFDEV_ENOMEM;
+
+        offset += BFDEV_RADIX_BLOCK;
     }
 
     return -BFDEV_ENOERR;
