@@ -8,6 +8,7 @@
 #define _BFDEV_CONFIG_H_
 
 #include <bfdev/cdefs.h>
+#include <bfdev/stringify.h>
 #include <bfdev/compiler.h>
 
 #define BFDEV_VERSION_MAJOR ${CMAKE_PROJECT_VERSION_MAJOR}
