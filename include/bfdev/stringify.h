@@ -16,8 +16,8 @@ BFDEV_BEGIN_DECLS
  * converts to "bar".
  */
 
-#define ___stringify(x...) #x
-#define __stringify(x...) ___stringify(x)
+#define ___bfdev_stringify(x...) #x
+#define __bfdev_stringify(x...) ___bfdev_stringify(x)
 
 BFDEV_END_DECLS
 
