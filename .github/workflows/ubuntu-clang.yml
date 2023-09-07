@@ -27,8 +27,8 @@ jobs:
             cmake -B ${{github.workspace}}/build \
                   -D CMAKE_INSTALL_PREFIX=${{github.workspace}}/build/install \
                   -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
-                  -D ENABLE_DEVEL=ON \
-                  -D CMAKE_C_COMPILER=/usr/bin/clang
+                  -D CMAKE_C_COMPILER=/usr/bin/clang \
+                  -D BFDEV_DEVEL=ON
       - name: make
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
       - name: install

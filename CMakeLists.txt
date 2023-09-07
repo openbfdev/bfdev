@@ -48,27 +48,27 @@ include(scripts/commit.cmake)
 commit_hash(BFDEV_COMMITID)
 commit_branch(BFDEV_BRANCH)
 
-option(ENABLE_DEVEL "Enable development mode" OFF)
-option(ENABLE_EXAMPLES "Build examples" OFF)
-option(ENABLE_DOCUMENT "Build document" OFF)
-option(ENABLE_STRICT "Enable strict compilation" ON)
-option(ENABLE_ASAN "Enable Address Sanitizer" OFF)
-option(ENABLE_UBSAN "Enable Undefined Behaviour Sanitizer" OFF)
+option(BFDEV_DEVEL "Enable development mode" OFF)
+option(BFDEV_EXAMPLES "Build examples" OFF)
+option(BFDEV_DOCUMENT "Build document" OFF)
+option(BFDEV_STRICT "Enable strict compilation" ON)
+option(BFDEV_ASAN "Enable Address Sanitizer" OFF)
+option(BFDEV_UBSAN "Enable Undefined Behaviour Sanitizer" OFF)
 
-option(ENABLE_DBGLIST "Dynamic debug list" ON)
-option(ENABLE_DBGSLIST "Dynamic debug slist" ON)
-option(ENABLE_DBGHLIST "Dynamic debug hlist" ON)
-option(ENABLE_DBGILIST "Dynamic debug ilist" ON)
-option(ENABLE_DBGRBTREE "Dynamic debug rbtree" ON)
+option(BFDEV_DBGLIST "Dynamic debug list" ON)
+option(BFDEV_DBGSLIST "Dynamic debug slist" ON)
+option(BFDEV_DBGHLIST "Dynamic debug hlist" ON)
+option(BFDEV_DBGILIST "Dynamic debug ilist" ON)
+option(BFDEV_DBGRBTREE "Dynamic debug rbtree" ON)
 
-if(ENABLE_DEVEL)
-    set(ENABLE_EXAMPLES ON)
-    set(ENABLE_DOCUMENT ON)
-    set(ENABLE_ASAN ON)
-    set(ENABLE_UBSAN ON)
+if(BFDEV_DEVEL)
+    set(BFDEV_EXAMPLES ON)
+    set(BFDEV_DOCUMENT ON)
+    set(BFDEV_ASAN ON)
+    set(BFDEV_UBSAN ON)
 endif()
 
-if(ENABLE_DOCUMENT)
+if(BFDEV_DOCUMENT)
     find_package(Doxygen REQUIRED)
     find_package(Sphinx REQUIRED breathe)
 
@@ -147,14 +147,14 @@ add_definitions(
     " -fvisibility=hidden"
 )
 
-if(ENABLE_STRICT)
+if(BFDEV_STRICT)
     set(CMAKE_C_FLAGS
         "${CMAKE_C_FLAGS} \
          -Werror"
     )
 endif()
 
-if(ENABLE_ASAN)
+if(BFDEV_ASAN)
     set(CMAKE_C_FLAGS
         "${CMAKE_C_FLAGS} \
          -fsanitize=address \
@@ -171,7 +171,7 @@ if(ENABLE_ASAN)
     endif()
 endif()
 
-if(ENABLE_UBSAN)
+if(BFDEV_UBSAN)
     set(CMAKE_C_FLAGS
         "${CMAKE_C_FLAGS} \
          -fsanitize=alignment \
@@ -185,23 +185,23 @@ if(ENABLE_UBSAN)
     )
 endif()
 
-if(ENABLE_DBGLIST)
+if(BFDEV_DBGLIST)
     set(BFDEV_DEBUG_LIST ON)
 endif()
 
-if(ENABLE_DBGSLIST)
+if(BFDEV_DBGSLIST)
     set(BFDEV_DEBUG_SLIST ON)
 endif()
 
-if(ENABLE_DBGHLIST)
+if(BFDEV_DBGHLIST)
     set(BFDEV_DEBUG_HLIST ON)
 endif()
 
-if(ENABLE_DBGILIST)
+if(BFDEV_DBGILIST)
     set(BFDEV_DEBUG_ILIST ON)
 endif()
 
-if(ENABLE_DBGRBTREE)
+if(BFDEV_DBGRBTREE)
     set(BFDEV_DEBUG_RBTREE ON)
 endif()
 
@@ -237,7 +237,7 @@ add_library(bfdev_object OBJECT ${BFDEV_LIBRARY})
 bfdev_dependencies(bfdev_object)
 add_library(bfdev ALIAS bfdev_object)
 
-if(ENABLE_EXAMPLES)
+if(BFDEV_EXAMPLES)
     enable_testing()
     add_subdirectory(examples)
 endif()
