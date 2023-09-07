@@ -14,9 +14,9 @@
 # error "Compilation parameters not defined"
 #endif
 
-#define NAME_STRING __stringify(GENCRC_NAME)
-#define TYPE_STRING __stringify(GENCRC_TYPE)
-#define WIDE_STRING __stringify(GENCRC_WIDE)
+#define NAME_STRING __bfdev_stringify(GENCRC_NAME)
+#define TYPE_STRING __bfdev_stringify(GENCRC_TYPE)
+#define WIDE_STRING __bfdev_stringify(GENCRC_WIDE)
 
 #define CRC_TABLE_BITS 8
 #define CRC_TABLE_SIZE (1U << CRC_TABLE_BITS)
