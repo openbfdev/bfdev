@@ -19,9 +19,7 @@ jobs:
       - name: install dependencies
         run: |
           sudo apt update
-          sudo apt install \
-              cmake make gcc python3 pip doxygen
-          pip install sphinx breathe
+          sudo apt install cmake make clang
       - name: configure cmake
         run: |
             cmake -B ${{github.workspace}}/build \
