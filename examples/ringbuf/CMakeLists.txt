@@ -4,7 +4,7 @@
 #
 
 add_executable(ringbuf-simple simple.c)
-target_link_libraries(ringbuf-simple bfdev)
+target_link_libraries(ringbuf-simple bfdev pthread)
 add_test(ringbuf-simple ringbuf-simple)
 
 if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
