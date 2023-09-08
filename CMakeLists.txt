@@ -50,7 +50,6 @@ commit_branch(BFDEV_BRANCH)
 
 option(BFDEV_DEVEL "Enable development mode" OFF)
 option(BFDEV_EXAMPLES "Build examples" OFF)
-option(BFDEV_DOCUMENT "Build document" OFF)
 option(BFDEV_STRICT "Enable strict compilation" ON)
 option(BFDEV_ASAN "Enable Address Sanitizer" OFF)
 option(BFDEV_UBSAN "Enable Undefined Behaviour Sanitizer" OFF)
@@ -63,46 +62,8 @@ option(BFDEV_DBGRBTREE "Dynamic debug rbtree" ON)
 
 if(BFDEV_DEVEL)
     set(BFDEV_EXAMPLES ON)
-    set(BFDEV_DOCUMENT ON)
     set(BFDEV_ASAN ON)
     set(BFDEV_UBSAN ON)
-endif()
-
-if(BFDEV_DOCUMENT)
-    find_package(Doxygen REQUIRED)
-    find_package(Sphinx REQUIRED breathe)
-
-    set(DOXYGEN_GENERATE_HTML NO)
-    set(DOXYGEN_GENERATE_XML YES)
-    doxygen_add_docs(doxygen_docs ${PROJECT_SOURCE_DIR})
-
-    sphinx_add_docs(
-        htmldocs
-        BREATHE_PROJECTS doxygen_docs
-        BUILDER html
-        SOURCE_DIRECTORY docs
-    )
-
-    sphinx_add_docs(
-        latexdocs
-        BREATHE_PROJECTS doxygen_docs
-        BUILDER latex
-        SOURCE_DIRECTORY docs
-    )
-
-    sphinx_add_docs(
-        epubdocs
-        BREATHE_PROJECTS doxygen_docs
-        BUILDER epub
-        SOURCE_DIRECTORY docs
-    )
-
-    sphinx_add_docs(
-        xmldocs
-        BREATHE_PROJECTS doxygen_docs
-        BUILDER xml
-        SOURCE_DIRECTORY docs
-    )
 endif()
 
 asm_generic(
