@@ -4,6 +4,7 @@
 
 - array
 - bloom
+- btree
 - fifo
 - hashmap
 - hashtbl
@@ -12,6 +13,7 @@
 - ilist
 - list
 - llist
+- lru
 - radix
 - rbtree
 - ringbuf
@@ -36,12 +38,16 @@
 - bitmap
 - bitops
 - bitrev
+- bitwalk
 - popcount
 
 ## Architecture
 
 - atomic
+- byteorder
 - cmpxchg
+- overflow
+- swab
 - unaligned
 
 ## Memory Allocator
@@ -58,9 +64,20 @@
 - snprintf
 - textsearch
 
+## Mathematics
+
+- align
+- log2
+- math
+- minmax
+- uplower
+
 ## Miscellaneous
 
+- action
 - callback
+- container
 - guards
+- log
 - notifier
 - once
