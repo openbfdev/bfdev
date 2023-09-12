@@ -12,7 +12,7 @@
 #include <export.h>
 
 export bool
-bfdev_rb_debug_link_check(struct bfdev_rb_node *parent, struct bfdev_rb_node **link,
+bfdev_rb_check_link(struct bfdev_rb_node *parent, struct bfdev_rb_node **link,
                           struct bfdev_rb_node *node)
 {
     if (bfdev_unlikely(*link == node)) {
@@ -28,7 +28,7 @@ bfdev_rb_debug_link_check(struct bfdev_rb_node *parent, struct bfdev_rb_node **l
 }
 
 export bool
-bfdev_rb_debug_delete_check(struct bfdev_rb_node *node)
+bfdev_rb_check_delete(struct bfdev_rb_node *node)
 {
     if (bfdev_unlikely(node->left == BFDEV_POISON_RBNODE1)) {
         bfdev_log_err(
