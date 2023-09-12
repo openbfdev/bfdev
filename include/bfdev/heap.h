@@ -70,8 +70,8 @@ struct bfdev_heap_root {
     bfdev_container_of_safe(ptr, type, member)
 
 #ifdef BFDEV_DEBUG_HEAP
-extern bool bfdev_heap_debug_link_check(struct bfdev_heap_node *parent, struct bfdev_heap_node **link, struct bfdev_heap_node *node);
-extern bool bfdev_heap_debug_delete_check(struct bfdev_heap_node *node);
+extern bool bfdev_heap_check_link(struct bfdev_heap_node *parent, struct bfdev_heap_node **link, struct bfdev_heap_node *node);
+extern bool bfdev_heap_check_delete(struct bfdev_heap_node *node);
 #endif
 
 typedef long (*bfdev_heap_cmp_t)(const struct bfdev_heap_node *nodea, const struct bfdev_heap_node *nodeb);
@@ -163,7 +163,7 @@ static inline void bfdev_heap_link(struct bfdev_heap_root *root, struct bfdev_he
                              struct bfdev_heap_node **link, struct bfdev_heap_node *node)
 {
 #ifdef BFDEV_DEBUG_HEAP
-    if (bfdev_unlikely(!bfdev_heap_debug_link_check(parent, link, node)))
+    if (bfdev_unlikely(!bfdev_heap_check_link(parent, link, node)))
         return;
 #endif
 
@@ -218,7 +218,7 @@ bfdev_heap_delete(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
     struct bfdev_heap_node *rebalance;
 
 #ifdef BFDEV_DEBUG_HEAP
-    if (bfdev_unlikely(!bfdev_heap_debug_delete_check(node)))
+    if (bfdev_unlikely(!bfdev_heap_check_delete(node)))
         return;
 #endif
 

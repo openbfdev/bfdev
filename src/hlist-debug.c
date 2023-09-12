@@ -12,7 +12,7 @@
 #include <export.h>
 
 export bool
-bfdev_hlist_debug_head_add_check(struct bfdev_hlist_head *head,
+bfdev_hlist_check_head_add(struct bfdev_hlist_head *head,
                                  struct bfdev_hlist_node *new)
 {
     if (bfdev_unlikely(head->node == new)) {
@@ -27,7 +27,7 @@ bfdev_hlist_debug_head_add_check(struct bfdev_hlist_head *head,
 }
 
 export bool
-bfdev_hlist_debug_next_add_check(struct bfdev_hlist_node *next,
+bfdev_hlist_check_next_add(struct bfdev_hlist_node *next,
                                  struct bfdev_hlist_node *new)
 {
     if (bfdev_unlikely(next->next == new)) {
@@ -43,7 +43,7 @@ bfdev_hlist_debug_next_add_check(struct bfdev_hlist_node *next,
 }
 
 export bool
-bfdev_hlist_debug_prev_add_check(struct bfdev_hlist_node *prev,
+bfdev_hlist_check_prev_add(struct bfdev_hlist_node *prev,
                                  struct bfdev_hlist_node *new)
 {
     if (bfdev_unlikely(prev->pprev == &new->next)) {
@@ -59,7 +59,7 @@ bfdev_hlist_debug_prev_add_check(struct bfdev_hlist_node *prev,
 }
 
 export bool
-bfdev_hlist_debug_del_check(struct bfdev_hlist_node *node)
+bfdev_hlist_check_del(struct bfdev_hlist_node *node)
 {
     if (bfdev_unlikely(node->next == BFDEV_POISON_HLIST1)) {
         bfdev_log_err(

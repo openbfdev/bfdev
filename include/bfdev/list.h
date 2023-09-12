@@ -33,23 +33,23 @@ extern void bfdev_list_qsort(struct bfdev_list_head *head, bfdev_list_cmp_t cmp,
 extern void bfdev_list_bsort(struct bfdev_list_head *head, bfdev_list_cmp_t cmp, void *data);
 
 #ifdef BFDEV_DEBUG_LIST
-extern bool bfdev_list_debug_add_check(struct bfdev_list_head *prev, struct bfdev_list_head *next, struct bfdev_list_head *newh);
-extern bool bfdev_list_debug_del_check(struct bfdev_list_head *node);
+extern bool bfdev_list_check_add(struct bfdev_list_head *prev, struct bfdev_list_head *next, struct bfdev_list_head *node);
+extern bool bfdev_list_check_del(struct bfdev_list_head *node);
 #endif
 
 static inline void
 bfdev_list_insert(struct bfdev_list_head *prev, struct bfdev_list_head *next,
-                  struct bfdev_list_head *newh)
+                  struct bfdev_list_head *node)
 {
 #ifdef BFDEV_DEBUG_LIST
-    if (bfdev_unlikely(!bfdev_list_debug_add_check(prev, next, newh)))
+    if (bfdev_unlikely(!bfdev_list_check_add(prev, next, node)))
         return;
 #endif
 
-    prev->next = newh;
-    next->prev = newh;
-    newh->prev = prev;
-    newh->next = next;
+    prev->next = node;
+    next->prev = node;
+    node->prev = prev;
+    node->next = next;
 }
 
 /**
@@ -66,23 +66,23 @@ bfdev_list_head_init(struct bfdev_list_head *head)
 /**
  * bfdev_list_add - add a new node next old node.
  * @node: list head to add it next.
- * @new: new entry to be added.
+ * @newn: new entry to be added.
  */
 static inline void
-bfdev_list_add(struct bfdev_list_head *node, struct bfdev_list_head *newh)
+bfdev_list_add(struct bfdev_list_head *node, struct bfdev_list_head *newn)
 {
-    bfdev_list_insert(node, node->next, newh);
+    bfdev_list_insert(node, node->next, newn);
 }
 
 /**
  * bfdev_list_add_prev - add a new node after old node.
  * @node: list head to add it prev.
- * @new: new entry to be added.
+ * @newn: new entry to be added.
  */
 static inline void
-bfdev_list_add_prev(struct bfdev_list_head *node, struct bfdev_list_head *newh)
+bfdev_list_add_prev(struct bfdev_list_head *node, struct bfdev_list_head *newn)
 {
-    bfdev_list_insert(node->prev, node, newh);
+    bfdev_list_insert(node->prev, node, newn);
 }
 
 /**
@@ -104,7 +104,7 @@ static inline void
 bfdev_list_del(struct bfdev_list_head *node)
 {
 #ifdef BFDEV_DEBUG_LIST
-    if (bfdev_unlikely(!bfdev_list_debug_del_check(node)))
+    if (bfdev_unlikely(!bfdev_list_check_del(node)))
         return;
 #endif
 
@@ -211,16 +211,16 @@ bfdev_list_splice_prev(struct bfdev_list_head *head, struct bfdev_list_head *lis
 
 /**
  * bfdev_list_replace - replace a list node with an external node.
- * @old: the element to be replaced.
- * @new: the new element to insert.
+ * @oldn: the element to be replaced.
+ * @newn: the new element to insert.
  */
 static inline void
-bfdev_list_replace(struct bfdev_list_head *old, struct bfdev_list_head *newh)
+bfdev_list_replace(struct bfdev_list_head *oldn, struct bfdev_list_head *newn)
 {
-    newh->prev = old->prev;
-    newh->next = old->next;
-    newh->prev->next = newh;
-    newh->next->prev = newh;
+    newn->prev = oldn->prev;
+    newn->next = oldn->next;
+    newn->prev->next = newn;
+    newn->next->prev = newn;
 }
 
 /**
@@ -278,14 +278,14 @@ bfdev_list_del_init(struct bfdev_list_head *node)
 
 /**
  * bfdev_list_replace_init - replace old entry by new one and initialize the old one.
- * @old: the element to be replaced.
- * @new: the new element to insert.
+ * @oldn: the element to be replaced.
+ * @newn: the new element to insert.
  */
 static inline void
-bfdev_list_replace_init(struct bfdev_list_head *old, struct bfdev_list_head *newh)
+bfdev_list_replace_init(struct bfdev_list_head *oldn, struct bfdev_list_head *newn)
 {
-    bfdev_list_replace(old, newh);
-    bfdev_list_head_init(old);
+    bfdev_list_replace(oldn, newn);
+    bfdev_list_head_init(oldn);
 }
 
 /**
