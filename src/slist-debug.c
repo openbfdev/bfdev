@@ -12,13 +12,13 @@
 #include <export.h>
 
 export bool
-bfdev_slist_check_add(struct bfdev_slist_head *node, struct bfdev_slist_head *new)
+bfdev_slist_check_add(struct bfdev_slist_head *node, struct bfdev_slist_head *newn)
 {
-    if (bfdev_unlikely(new->next && new->next == node->next)) {
+    if (bfdev_unlikely(newn->next && newn->next == node->next)) {
         bfdev_log_err(
-            "bfdev_slist_add corruption (%p) new->next"
+            "bfdev_slist_add corruption (%p) newn->next"
             " should not be next (%p)\n",
-            new, node
+            newn, node
         );
         return false;
     }

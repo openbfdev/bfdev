@@ -13,7 +13,7 @@
 
 export bool
 bfdev_list_check_add(struct bfdev_list_head *prev, struct bfdev_list_head *next,
-                     struct bfdev_list_head *new)
+                     struct bfdev_list_head *newn)
 {
     if (bfdev_unlikely(prev->next != next)) {
         bfdev_log_err(
@@ -33,11 +33,11 @@ bfdev_list_check_add(struct bfdev_list_head *prev, struct bfdev_list_head *next,
         return false;
     }
 
-    if (bfdev_unlikely(new == prev || new == next)) {
+    if (bfdev_unlikely(newn == prev || newn == next)) {
         bfdev_log_err(
             "list_add corruption double add:"
-            " new=(%p), prev=(%p), next=(%p)\n",
-            new, prev, next
+            " newn=(%p), prev=(%p), next=(%p)\n",
+            newn, prev, next
         );
         return false;
     }

@@ -115,18 +115,18 @@ bfdev_radix_root_alloc(struct bfdev_radix_root *root, uintptr_t offset)
         return NULL;
 
     for (level = root->level; level--;) {
-	    struct bfdev_radix_node **slot, *new;
+	    struct bfdev_radix_node **slot, *newn;
 
         slot = &node->child[radix_depth_index(level, offset)];
         offset &= BFDEV_BIT_LOW_MASK(radix_depth_shift(level));
 
         if (!*slot) {
-            new = bfdev_zalloc(alloc, sizeof(*new));
-            if (bfdev_unlikely(!new))
+            newn = bfdev_zalloc(alloc, sizeof(*newn));
+            if (bfdev_unlikely(!newn))
                 return NULL;
 
-            *slot = new;
-            new->parent = node;
+            *slot = newn;
+            newn->parent = node;
             node->refcount++;
         }
 

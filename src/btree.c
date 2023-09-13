@@ -275,7 +275,7 @@ insert_level(struct bfdev_btree_root *root, unsigned int level,
              uintptr_t *key, void *value)
 {
     struct bfdev_btree_layout *layout = root->layout;
-    struct bfdev_btree_node *node, *new;
+    struct bfdev_btree_node *node, *newn;
     unsigned int index, fill, count;
     uintptr_t *halfkey;
     int retval;
@@ -302,30 +302,30 @@ insert_level(struct bfdev_btree_root *root, unsigned int level,
         if (fill != layout->keynum)
             break;
 
-        new = bnode_alloc(root);
-        if (bfdev_unlikely(!new))
+        newn = bnode_alloc(root);
+        if (bfdev_unlikely(!newn))
             return -BFDEV_ENOMEM;
 
         halfkey = bnode_get_key(root, node, fill / 2 - 1);
-        retval = insert_level(root, level + 1, halfkey, new);
+        retval = insert_level(root, level + 1, halfkey, newn);
 
         if (bfdev_unlikely(retval)) {
-            bnode_free(root, new);
+            bnode_free(root, newn);
             return retval;
         }
 
         /* split node entry */
         for (count = 0; count < fill / 2; ++count) {
-            bnode_set_key(root, new, count, bnode_get_key(root, node, count));
-            bnode_set_value(root, new, count, bnode_get_value(root, node, count));
+            bnode_set_key(root, newn, count, bnode_get_key(root, node, count));
+            bnode_set_value(root, newn, count, bnode_get_value(root, node, count));
             bnode_set_key(root, node, count, bnode_get_key(root, node, count + fill / 2));
             bnode_set_value(root, node, count, bnode_get_value(root, node, count + fill / 2));
             bnode_clear_index(root, node, count + fill / 2);
         }
 
         if (fill & 1) {
-            bnode_set_key(root, new, count, bnode_get_key(root, node, fill - 1));
-            bnode_set_value(root, new, count, bnode_get_value(root, node, fill - 1));
+            bnode_set_key(root, newn, count, bnode_get_key(root, node, fill - 1));
+            bnode_set_value(root, newn, count, bnode_get_value(root, node, fill - 1));
             bnode_clear_index(root, node, fill - 1);
         }
     }
