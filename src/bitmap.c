@@ -121,14 +121,14 @@ bfdev_bitmap_comp_complement(unsigned long *dest, const unsigned long *src,
 }
 
 export void
-bfdev_bitmap_comp_replace(unsigned long *bitmap, const unsigned long *old,
-                          const unsigned long *new, const unsigned long *mask,
+bfdev_bitmap_comp_replace(unsigned long *bitmap, const unsigned long *oldp,
+                          const unsigned long *newp, const unsigned long *mask,
                           unsigned int bits)
 {
     unsigned int index, len = BFDEV_BITS_TO_LONG(bits);
 
     for (index = 0; index < len; ++index)
-        bitmap[index] = (old[index] & ~mask[index]) | (old[index] & mask[index]);
+        bitmap[index] = (oldp[index] & ~mask[index]) | (newp[index] & mask[index]);
 }
 
 export void

@@ -923,17 +923,17 @@ bfdev_rb_cached_delete_augmented(struct bfdev_rb_root_cached *cached, struct bfd
 /**
  * bfdev_rb_cached_replace - replace old cached node by new cached one.
  * @root: rbtree root of node.
- * @old: node to be replaced.
- * @new: new node to insert.
+ * @oldn: node to be replaced.
+ * @newn: new node to insert.
  */
 static inline void
-bfdev_rb_cached_replace(struct bfdev_rb_root_cached *cached, struct bfdev_rb_node *old,
-                        struct bfdev_rb_node *new)
+bfdev_rb_cached_replace(struct bfdev_rb_root_cached *cached, struct bfdev_rb_node *oldn,
+                        struct bfdev_rb_node *newn)
 {
-    if (cached->leftmost == old)
-        cached->leftmost = new;
+    if (cached->leftmost == oldn)
+        cached->leftmost = newn;
 
-    bfdev_rb_replace(&cached->root, old, new);
+    bfdev_rb_replace(&cached->root, oldn, newn);
 }
 
 #define BFDEV_RB_DECLARE_CALLBACKS(RBSTATIC, RBNAME, RBSTRUCT, RBFIELD, RBAUGMENTED, RBCOMPUTE)     \

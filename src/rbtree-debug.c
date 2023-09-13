@@ -13,7 +13,7 @@
 
 export bool
 bfdev_rb_check_link(struct bfdev_rb_node *parent, struct bfdev_rb_node **link,
-                          struct bfdev_rb_node *node)
+                    struct bfdev_rb_node *node)
 {
     if (bfdev_unlikely(*link == node)) {
         bfdev_log_err(

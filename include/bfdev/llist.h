@@ -35,7 +35,7 @@ bfdev_llist_del(struct bfdev_slist_head *head);
 /**
  * bfdev_llist_add() - add a new entry.
  * @head: the head for your lock-less list.
- * @new: new entry to be added.
+ * @node: new entry to be added.
  *
  * Return whether list is empty before adding.
  */

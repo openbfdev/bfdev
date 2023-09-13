@@ -13,12 +13,12 @@
 
 export bool
 bfdev_hlist_check_head_add(struct bfdev_hlist_head *head,
-                                 struct bfdev_hlist_node *new)
+                           struct bfdev_hlist_node *newn)
 {
-    if (bfdev_unlikely(head->node == new)) {
+    if (bfdev_unlikely(head->node == newn)) {
         bfdev_log_err(
             "bfdev_hlist_head_add corruption (%p) head->node"
-            " should not be new (%p)\n", head, new
+            " should not be new (%p)\n", head, newn
         );
         return false;
     }
@@ -28,13 +28,13 @@ bfdev_hlist_check_head_add(struct bfdev_hlist_head *head,
 
 export bool
 bfdev_hlist_check_next_add(struct bfdev_hlist_node *next,
-                                 struct bfdev_hlist_node *new)
+                           struct bfdev_hlist_node *newn)
 {
-    if (bfdev_unlikely(next->next == new)) {
+    if (bfdev_unlikely(next->next == newn)) {
         bfdev_log_err(
             "bfdev_hlist_next_add corruption (%p) next->next"
             " should not be new (%p)\n",
-            next, new
+            next, newn
         );
         return false;
     }
@@ -44,13 +44,13 @@ bfdev_hlist_check_next_add(struct bfdev_hlist_node *next,
 
 export bool
 bfdev_hlist_check_prev_add(struct bfdev_hlist_node *prev,
-                                 struct bfdev_hlist_node *new)
+                           struct bfdev_hlist_node *newn)
 {
-    if (bfdev_unlikely(prev->pprev == &new->next)) {
+    if (bfdev_unlikely(prev->pprev == &newn->next)) {
         bfdev_log_err(
             "bfdev_hlist_prev_add corruption (%p) prev->pprev"
             " should not be new (%p)\n",
-            prev, new
+            prev, newn
         );
         return false;
     }

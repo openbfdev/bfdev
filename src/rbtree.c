@@ -12,43 +12,43 @@
  * child_change - replace old child by new one.
  * @root: rbtree root of node.
  * @parent: parent to change child.
- * @old: node to be replaced.
- * @new: new node to insert.
+ * @oldn: node to be replaced.
+ * @newn: new node to insert.
  */
 static __bfdev_always_inline void
 child_change(struct bfdev_rb_root *root, struct bfdev_rb_node *parent,
-             struct bfdev_rb_node *old, struct bfdev_rb_node *new)
+             struct bfdev_rb_node *oldn, struct bfdev_rb_node *newn)
 {
     if (!parent)
-        root->node = new;
-    else if (parent->left == old)
-        parent->left = new;
+        root->node = newn;
+    else if (parent->left == oldn)
+        parent->left = newn;
     else
-        parent->right = new;
+        parent->right = newn;
 }
 
 /**
  * rotate_set - replace old child by new one.
  * @root: rbtree root of node.
  * @node: parent to change child.
- * @new: node to be replaced.
+ * @newn: node to be replaced.
  * @child: managed child node.
  * @color: color after rotation.
  * @ccolor: color of child.
  * @callbacks: augmented callback function.
  */
 static __bfdev_always_inline void
-rotate_set(struct bfdev_rb_root *root, struct bfdev_rb_node *node, struct bfdev_rb_node *new,
+rotate_set(struct bfdev_rb_root *root, struct bfdev_rb_node *node, struct bfdev_rb_node *newn,
            struct bfdev_rb_node *child, unsigned int color, unsigned int ccolor,
            const struct bfdev_rb_callbacks *callbacks)
 {
     struct bfdev_rb_node *parent = node->parent;
 
-    new->parent = node->parent;
-    node->parent = new;
+    newn->parent = node->parent;
+    node->parent = newn;
 
     if (color != BFDEV_RB_NSET) {
-        new->color = node->color;
+        newn->color = node->color;
         node->color = color;
     }
 
@@ -58,8 +58,8 @@ rotate_set(struct bfdev_rb_root *root, struct bfdev_rb_node *node, struct bfdev_
         child->parent = node;
     }
 
-    child_change(root, parent, node, new);
-    callbacks->rotate(node, new);
+    child_change(root, parent, node, newn);
+    callbacks->rotate(node, newn);
 }
 
 /**
@@ -548,22 +548,23 @@ bfdev_rb_remove(struct bfdev_rb_root *root, struct bfdev_rb_node *node)
 /**
  * rb_replace - replace old node by new one.
  * @root: rbtree root of node.
- * @old: node to be replaced.
- * @new: new node to insert.
+ * @oldn: node to be replaced.
+ * @newn: new node to insert.
  */
 export void
-bfdev_rb_replace(struct bfdev_rb_root *root, struct bfdev_rb_node *old, struct bfdev_rb_node *new)
+bfdev_rb_replace(struct bfdev_rb_root *root, struct bfdev_rb_node *oldn,
+                 struct bfdev_rb_node *newn)
 {
-    struct bfdev_rb_node *parent = old->parent;
+    struct bfdev_rb_node *parent = oldn->parent;
 
-    *new = *old;
+    *newn = *oldn;
 
-    if (old->left)
-        old->left->parent = new;
-    if (old->right)
-        old->right->parent = new;
+    if (oldn->left)
+        oldn->left->parent = newn;
+    if (oldn->right)
+        oldn->right->parent = newn;
 
-    child_change(root, parent, old, new);
+    child_change(root, parent, oldn, newn);
 }
 
 /**
@@ -573,7 +574,8 @@ bfdev_rb_replace(struct bfdev_rb_root *root, struct bfdev_rb_node *old, struct b
  * @cmp: operator defining the node order.
  */
 export struct bfdev_rb_node *
-bfdev_rb_find(const struct bfdev_rb_root *root, const void *key, bfdev_rb_find_t cmp)
+bfdev_rb_find(const struct bfdev_rb_root *root, const void *key,
+              bfdev_rb_find_t cmp)
 {
     struct bfdev_rb_node *node = root->node;
     long ret;

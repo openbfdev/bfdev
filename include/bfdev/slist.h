@@ -28,7 +28,7 @@ struct bfdev_slist_head {
     struct bfdev_slist_head name = BFDEV_SLIST_HEAD_INIT
 
 #ifdef BFDEV_DEBUG_SLIST
-extern bool bfdev_slist_check_add(struct bfdev_slist_head *node, struct bfdev_slist_head *new);
+extern bool bfdev_slist_check_add(struct bfdev_slist_head *node, struct bfdev_slist_head *newn);
 extern bool bfdev_slist_check_del(struct bfdev_slist_head *node);
 #endif
 
@@ -45,18 +45,18 @@ bfdev_slist_head_init(struct bfdev_slist_head *head)
 /**
  * bfdev_slist_add - add a new node next old node.
  * @node: list head to add it next.
- * @new: new entry to be added.
+ * @newn: new entry to be added.
  */
 static inline void
-bfdev_slist_add(struct bfdev_slist_head *node, struct bfdev_slist_head *new)
+bfdev_slist_add(struct bfdev_slist_head *node, struct bfdev_slist_head *newn)
 {
 #ifdef BFDEV_DEBUG_SLIST
-    if (bfdev_unlikely(!bfdev_slist_check_add(node, new)))
+    if (bfdev_unlikely(!bfdev_slist_check_add(node, newn)))
         return;
 #endif
 
-    new->next = node->next;
-    node->next = new;
+    newn->next = node->next;
+    node->next = newn;
 }
 
 /**
@@ -128,20 +128,20 @@ bfdev_slist_check_another(const struct bfdev_slist_head *head,
 /**
  * bfdev_slist_replace - replace a linked slist node with an external node.
  * @head: the head of the slist.
- * @old: the element to be replaced.
- * @new: the new element to insert.
+ * @oldn: the element to be replaced.
+ * @newn: the new element to insert.
  */
 static inline void
-bfdev_slist_replace(struct bfdev_slist_head *head, struct bfdev_slist_head *old,
-                    struct bfdev_slist_head *new)
+bfdev_slist_replace(struct bfdev_slist_head *head, struct bfdev_slist_head *oldn,
+                    struct bfdev_slist_head *newn)
 {
     struct bfdev_slist_head *walk = head;
 
-    while (walk->next != old)
+    while (walk->next != oldn)
         walk = walk->next;
 
-    walk->next = new;
-    new->next = old->next;
+    walk->next = newn;
+    newn->next = oldn->next;
 }
 
 /**

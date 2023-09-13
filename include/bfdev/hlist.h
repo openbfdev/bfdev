@@ -33,9 +33,9 @@ struct bfdev_hlist_head {
     struct bfdev_hlist_head name = BFDEV_HLIST_HEAD_INIT
 
 #ifdef BFDEV_DEBUG_HLIST
-extern bool bfdev_hlist_check_head_add(struct bfdev_hlist_head *head, struct bfdev_hlist_node *new);
-extern bool bfdev_hlist_check_next_add(struct bfdev_hlist_node *next, struct bfdev_hlist_node *new);
-extern bool bfdev_hlist_check_prev_add(struct bfdev_hlist_node *prev, struct bfdev_hlist_node *new);
+extern bool bfdev_hlist_check_head_add(struct bfdev_hlist_head *head, struct bfdev_hlist_node *newn);
+extern bool bfdev_hlist_check_next_add(struct bfdev_hlist_node *next, struct bfdev_hlist_node *newn);
+extern bool bfdev_hlist_check_prev_add(struct bfdev_hlist_node *prev, struct bfdev_hlist_node *newn);
 extern bool bfdev_hlist_check_del(struct bfdev_hlist_node *node);
 #endif
 
@@ -63,62 +63,62 @@ bfdev_hlist_node_init(struct bfdev_hlist_node *node)
 /**
  * bfdev_hlist_head_add - add a new entry at the beginning of the hlist.
  * @head: hlist head to add it after.
- * @new: new entry to be added.
+ * @newn: new entry to be added.
  */
 static inline void
-bfdev_hlist_head_add(struct bfdev_hlist_head *head, struct bfdev_hlist_node *new)
+bfdev_hlist_head_add(struct bfdev_hlist_head *head, struct bfdev_hlist_node *newn)
 {
 #ifdef BFDEV_DEBUG_HLIST
-    if (bfdev_unlikely(!bfdev_hlist_check_head_add(head, new)))
+    if (bfdev_unlikely(!bfdev_hlist_check_head_add(head, newn)))
         return;
 #endif
 
-    new->next = head->node;
-    new->pprev = &head->node;
+    newn->next = head->node;
+    newn->pprev = &head->node;
 
     if (head->node)
-        head->node->pprev = &new->next;
-    head->node = new;
+        head->node->pprev = &newn->next;
+    head->node = newn;
 }
 
 /**
  * bfdev_hlist_next_add - add a new entry before the one specified.
  * @node: hlist node to add it after, which must be non-NULL.
- * @new: new entry to be added.
+ * @newn: new entry to be added.
  */
 static inline void
-bfdev_hlist_next_add(struct bfdev_hlist_node *node, struct bfdev_hlist_node *new)
+bfdev_hlist_next_add(struct bfdev_hlist_node *node, struct bfdev_hlist_node *newn)
 {
 #ifdef BFDEV_DEBUG_HLIST
-    if (bfdev_unlikely(!bfdev_hlist_check_next_add(node, new)))
+    if (bfdev_unlikely(!bfdev_hlist_check_next_add(node, newn)))
         return;
 #endif
 
-    new->pprev = &node->next;
-    new->next = node->next;
+    newn->pprev = &node->next;
+    newn->next = node->next;
 
-    if (new->next)
-        new->next->pprev = &node->next;
-    node->next = new;
+    if (newn->next)
+        newn->next->pprev = &node->next;
+    node->next = newn;
 }
 
 /**
  * bfdev_hlist_prev_add - add a new entry before the one specified.
  * @node: hlist node to add it before, which must be non-NULL.
- * @new: new entry to be added.
+ * @newn: new entry to be added.
  */
 static inline void
-bfdev_hlist_prev_add(struct bfdev_hlist_node *node, struct bfdev_hlist_node *new)
+bfdev_hlist_prev_add(struct bfdev_hlist_node *node, struct bfdev_hlist_node *newn)
 {
 #ifdef BFDEV_DEBUG_HLIST
-    if (bfdev_unlikely(!bfdev_hlist_check_prev_add(node, new)))
+    if (bfdev_unlikely(!bfdev_hlist_check_prev_add(node, newn)))
         return;
 #endif
 
-    new->pprev = node->pprev;
-    new->next = node;
+    newn->pprev = node->pprev;
+    newn->next = node;
     node->pprev = &node->next;
-    *node->pprev = new;
+    *node->pprev = newn;
 }
 
 /**
@@ -209,31 +209,31 @@ bfdev_hlist_check_unhashed(const struct bfdev_hlist_node *node)
 
 /**
  * bfdev_hlist_head_replace - replace a hlist head with an external head.
- * @old: bfdev_hlist_head for old hlist.
- * @new: bfdev_hlist_head for new hlist.
+ * @oldn: bfdev_hlist_head for old hlist.
+ * @newn: bfdev_hlist_head for new hlist.
  */
 static inline void
-bfdev_hlist_head_replace(struct bfdev_hlist_head *old, struct bfdev_hlist_head *new)
+bfdev_hlist_head_replace(struct bfdev_hlist_head *oldn, struct bfdev_hlist_head *newn)
 {
-    new->node = old->node;
-    old->node = NULL;
-    if (new->node)
-        new->node->pprev = &new->node;
+    newn->node = oldn->node;
+    oldn->node = NULL;
+    if (newn->node)
+        newn->node->pprev = &newn->node;
 }
 
 /**
  * bfdev_hlist_replace - replace a hlist node with an external node.
  * @old: bfdev_hlist_head for old hlist.
- * @new: bfdev_hlist_head for new hlist.
+ * @newn: bfdev_hlist_head for new hlist.
  */
 static inline void
-bfdev_hlist_replace(struct bfdev_hlist_node *old, struct bfdev_hlist_node *new)
+bfdev_hlist_replace(struct bfdev_hlist_node *oldn, struct bfdev_hlist_node *newn)
 {
-    new->next = old->next;
-    new->pprev = old->pprev;
-    if (new->next)
-        new->next->pprev = &new->next;
-    *new->pprev = new;
+    newn->next = oldn->next;
+    newn->pprev = oldn->pprev;
+    if (newn->next)
+        newn->next->pprev = &newn->next;
+    *newn->pprev = newn;
 }
 
 /**
