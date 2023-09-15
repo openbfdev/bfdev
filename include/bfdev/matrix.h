@@ -14,7 +14,7 @@ BFDEV_BEGIN_DECLS
 struct bfdev_matrix {
     unsigned int row;
     unsigned int col;
-    long *values;
+    long values[];
 };
 
 extern struct bfdev_matrix *
@@ -34,7 +34,7 @@ bfdev_matrix_copy(const struct bfdev_alloc *alloc,
                   const struct bfdev_matrix *var);
 
 extern struct bfdev_matrix *
-bfdev_matrix_create(const struct bfdev_alloc *alloc, long *values,
+bfdev_matrix_create(const struct bfdev_alloc *alloc,
                     unsigned int row, unsigned int col);
 
 extern void
