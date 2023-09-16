@@ -3,7 +3,7 @@
  * Copyright(c) 2021 John Sanpe <sanpeqf@gmail.com>
  */
 
-#define MODULE_NAME "notifier"
+#define MODULE_NAME "bfdev-notifier"
 #define bfdev_log_fmt(fmt) MODULE_NAME ": " fmt
 
 #include <bfdev.h>

@@ -3,7 +3,7 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
-#define MODULE_NAME "rbtree-debug"
+#define MODULE_NAME "bfdev-rbtree"
 #define bfdev_log_fmt(fmt) MODULE_NAME ": " fmt
 
 #include <bfdev.h>
