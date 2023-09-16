@@ -3,7 +3,7 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
-#define MODULE_NAME "slist-debug"
+#define MODULE_NAME "bfdev-slist"
 #define bfdev_log_fmt(fmt) MODULE_NAME ": " fmt
 
 #include <bfdev.h>
