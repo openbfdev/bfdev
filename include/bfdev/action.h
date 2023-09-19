@@ -34,8 +34,8 @@ struct bfdev_action {
 /**
  * bfdev_action_init - initialize action.
  * @action: the action pointer.
- * @func:
- * @data:
+ * @func: function to callback.
+ * @data: callback data of @func.
  */
 static inline void
 bfdev_action_init(struct bfdev_action *action,
