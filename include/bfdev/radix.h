@@ -7,7 +7,7 @@
 #define _BFDEV_RADIX_H_
 
 #include <bfdev/config.h>
-#include <bfdev/stdint.h>
+#include <bfdev/types.h>
 #include <bfdev/allocator.h>
 #include <bfdev/log2.h>
 #include <bfdev/bitmap.h>

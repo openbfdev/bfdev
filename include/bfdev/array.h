@@ -8,8 +8,8 @@
 #define _BFDEV_ARRAY_H_
 
 #include <bfdev/config.h>
+#include <bfdev/types.h>
 #include <bfdev/stddef.h>
-#include <bfdev/stdint.h>
 #include <bfdev/allocator.h>
 
 BFDEV_BEGIN_DECLS

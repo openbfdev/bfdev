@@ -11,7 +11,7 @@
 #endif
 
 #include <bfdev/config.h>
-#include <bfdev/stdint.h>
+#include <bfdev/types.h>
 #include <bfdev/swab.h>
 
 BFDEV_BEGIN_DECLS

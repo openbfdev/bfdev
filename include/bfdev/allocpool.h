@@ -7,8 +7,8 @@
 #define _BFDEV_ALLOCPOOL_H_
 
 #include <bfdev/config.h>
+#include <bfdev/types.h>
 #include <bfdev/stddef.h>
-#include <bfdev/stdint.h>
 
 BFDEV_BEGIN_DECLS
 
