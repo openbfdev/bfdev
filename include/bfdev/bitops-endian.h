@@ -7,7 +7,7 @@
 #define _BFDEV_BITOPS_ENDIAN_H_
 
 #include <bfdev/config.h>
-#include <bfdev/stdint.h>
+#include <bfdev/types.h>
 #include <bfdev/bitops.h>
 #include <bfdev/byteorder.h>
 

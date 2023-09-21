@@ -7,8 +7,8 @@
 #define _BFDEV_ERRPTR_H_
 
 #include <bfdev/config.h>
+#include <bfdev/types.h>
 #include <bfdev/stddef.h>
-#include <bfdev/stdint.h>
 #include <bfdev/errno.h>
 
 BFDEV_BEGIN_DECLS

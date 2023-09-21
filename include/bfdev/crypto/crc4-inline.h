@@ -7,7 +7,7 @@
 #define _BFDEV_CRYPTO_CRC4_INLINE_H_
 
 #include <bfdev/config.h>
-#include <bfdev/stdint.h>
+#include <bfdev/types.h>
 #include <bfdev/stddef.h>
 #include <bfdev/minmax.h>
 #include <bfdev/bits.h>

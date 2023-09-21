@@ -7,7 +7,7 @@
 #define _BFDEV_PRANDOM_H_
 
 #include <bfdev/config.h>
-#include <bfdev/stdint.h>
+#include <bfdev/types.h>
 #include <bfdev/stddef.h>
 #include <bfdev/bits.h>
 

@@ -7,12 +7,12 @@
 #define _BFDEV_H_
 
 #include <bfdev/config.h>
+#include <bfdev/types.h>
 #include <bfdev/errno.h>
 #include <bfdev/limits.h>
 #include <bfdev/stdarg.h>
 #include <bfdev/stdbool.h>
 #include <bfdev/stddef.h>
-#include <bfdev/stdint.h>
 #include <bfdev/stdio.h>
 #include <bfdev/stdlib.h>
 #include <bfdev/string.h>

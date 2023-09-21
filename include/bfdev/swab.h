@@ -7,7 +7,7 @@
 #define _BFDEV_SWAB_H_
 
 #include <bfdev/config.h>
-#include <bfdev/stdint.h>
+#include <bfdev/types.h>
 #include <bfdev/asm/swab.h>
 
 BFDEV_BEGIN_DECLS

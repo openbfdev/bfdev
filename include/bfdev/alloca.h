@@ -7,7 +7,7 @@
 #define _BFDEV_ALLOCA_H_
 
 #include <bfdev/config.h>
-#include <bfdev/stdint.h>
+#include <bfdev/types.h>
 
 BFDEV_BEGIN_DECLS
 
