@@ -59,6 +59,7 @@ option(BFDEV_DBGSLIST "Dynamic debug slist" ON)
 option(BFDEV_DBGHLIST "Dynamic debug hlist" ON)
 option(BFDEV_DBGILIST "Dynamic debug ilist" ON)
 option(BFDEV_DBGRBTREE "Dynamic debug rbtree" ON)
+option(BFDEV_DBGHEAP "Dynamic debug rbtree" ON)
 
 if(BFDEV_DEVEL)
     set(BFDEV_EXAMPLES ON)
@@ -164,6 +165,10 @@ endif()
 
 if(BFDEV_DBGRBTREE)
     set(BFDEV_DEBUG_RBTREE ON)
+endif()
+
+if(BFDEV_DBGHEAP)
+    set(BFDEV_DEBUG_HEAP ON)
 endif()
 
 set(BFDEV_LIBRARY

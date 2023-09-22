@@ -8,6 +8,7 @@
 
 #include <bfdev/config.h>
 #include <bfdev/stddef.h>
+#include <bfdev/stdbool.h>
 #include <bfdev/poison.h>
 #include <bfdev/container.h>
 
@@ -70,19 +71,68 @@ struct bfdev_heap_root {
     bfdev_container_of_safe(ptr, type, member)
 
 #ifdef BFDEV_DEBUG_HEAP
-extern bool bfdev_heap_check_link(struct bfdev_heap_node *parent, struct bfdev_heap_node **link, struct bfdev_heap_node *node);
-extern bool bfdev_heap_check_delete(struct bfdev_heap_node *node);
+extern bool
+bfdev_heap_check_link(struct bfdev_heap_node *parent, struct bfdev_heap_node **link,
+                      struct bfdev_heap_node *node);
+
+extern bool
+bfdev_heap_check_delete(struct bfdev_heap_node *node);
 #endif
 
-typedef long (*bfdev_heap_cmp_t)(const struct bfdev_heap_node *nodea, const struct bfdev_heap_node *nodeb);
-extern void bfdev_heap_fixup(struct bfdev_heap_root *root, struct bfdev_heap_node *node, bfdev_heap_cmp_t cmp);
-extern void bfdev_heap_erase(struct bfdev_heap_root *root, struct bfdev_heap_node *node, bfdev_heap_cmp_t cmp);
-extern struct bfdev_heap_node *bfdev_heap_remove(struct bfdev_heap_root *root, struct bfdev_heap_node *node);
-extern struct bfdev_heap_node **bfdev_heap_parent(struct bfdev_heap_root *root, struct bfdev_heap_node **parentp, struct bfdev_heap_node *node);
-extern struct bfdev_heap_node *bfdev_heap_find(struct bfdev_heap_root *root, unsigned int index);
+typedef long (*bfdev_heap_cmp_t)
+(const struct bfdev_heap_node *nodea, const struct bfdev_heap_node *nodeb);
 
-extern struct bfdev_heap_node *bfdev_heap_first(const struct bfdev_heap_root *root, unsigned long *index);
-extern struct bfdev_heap_node *bfdev_heap_next(const struct bfdev_heap_root *root, unsigned long *index);
+/**
+ * bfdev_heap_fixup - balance after insert node.
+ * @root: heap root of node.
+ * @node: new inserted node.
+ * @cmp: operator defining the node order.
+ */
+extern void
+bfdev_heap_fixup(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
+                 bfdev_heap_cmp_t cmp);
+
+/**
+ * bfdev_heap_erase - balance after remove node.
+ * @root: heap root of node.
+ * @node: removed node.
+ * @cmp: operator defining the node order.
+ */
+extern void
+bfdev_heap_erase(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
+                 bfdev_heap_cmp_t cmp);
+
+/**
+ * bfdev_heap_remove - remove node form heap.
+ * @root: heap root of node.
+ * @node: node to remove.
+ */
+extern struct bfdev_heap_node *
+bfdev_heap_remove(struct bfdev_heap_root *root, struct bfdev_heap_node *node);
+
+/**
+ * bfdev_heap_parent - find the parent node.
+ * @root: heap tree want to search.
+ * @parentp: pointer used to modify the parent node pointer.
+ * @node: new node to insert.
+ */
+extern struct bfdev_heap_node **
+bfdev_heap_parent(struct bfdev_heap_root *root, struct bfdev_heap_node **parentp,
+                  struct bfdev_heap_node *node);
+
+/**
+ * bfdev_heap_find - find @index in tree @root.
+ * @root: heap tree want to search.
+ * @index: index of node.
+ */
+extern struct bfdev_heap_node *
+bfdev_heap_find(struct bfdev_heap_root *root, unsigned int index);
+
+extern struct bfdev_heap_node *
+bfdev_heap_first(const struct bfdev_heap_root *root, unsigned long *index);
+
+extern struct bfdev_heap_node *
+bfdev_heap_next(const struct bfdev_heap_root *root, unsigned long *index);
 
 /**
  * bfdev_heap_first_entry - get the preorder first element from a heaptree.

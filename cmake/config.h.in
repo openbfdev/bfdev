@@ -29,5 +29,6 @@
 #cmakedefine BFDEV_DEBUG_HLIST
 #cmakedefine BFDEV_DEBUG_ILIST
 #cmakedefine BFDEV_DEBUG_RBTREE
+#cmakedefine BFDEV_DEBUG_HEAP
 
 #endif /*_BFDEV_CONFIG_H_*/
