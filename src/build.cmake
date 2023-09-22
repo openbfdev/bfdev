@@ -70,6 +70,13 @@ if(BFDEV_DBGRBTREE)
     )
 endif()
 
+if(BFDEV_DBGHEAP)
+    set(BFDEV_SOURCE
+        ${BFDEV_SOURCE}
+        ${CMAKE_CURRENT_LIST_DIR}/heap-debug.c
+    )
+endif()
+
 include(${CMAKE_CURRENT_LIST_DIR}/crypto/build.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/libc/build.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/textsearch/build.cmake)

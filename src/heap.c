@@ -41,12 +41,6 @@ parent_swap(struct bfdev_heap_root *root, struct bfdev_heap_node *parent,
     parent->parent = node;
 }
 
-/**
- * bfdev_heap_fixup - balance after insert node.
- * @root: heap root of node.
- * @node: new inserted node.
- * @cmp: operator defining the node order.
- */
 export void
 bfdev_heap_fixup(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
                  bfdev_heap_cmp_t cmp)
@@ -60,12 +54,6 @@ bfdev_heap_fixup(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
     }
 }
 
-/**
- * bfdev_heap_erase - balance after remove node.
- * @root: heap root of node.
- * @node: removed node.
- * @cmp: operator defining the node order.
- */
 export void
 bfdev_heap_erase(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
                  bfdev_heap_cmp_t cmp)
@@ -99,11 +87,6 @@ bfdev_heap_erase(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
     }
 }
 
-/**
- * bfdev_heap_remove - remove node form heap.
- * @root: heap root of node.
- * @node: node to remove.
- */
 export struct bfdev_heap_node *
 bfdev_heap_remove(struct bfdev_heap_root *root, struct bfdev_heap_node *node)
 {
@@ -180,12 +163,6 @@ finish:
     return successor;
 }
 
-/**
- * bfdev_heap_parent - find the parent node.
- * @root: heap tree want to search.
- * @parentp: pointer used to modify the parent node pointer.
- * @node: new node to insert.
- */
 export struct bfdev_heap_node **
 bfdev_heap_parent(struct bfdev_heap_root *root, struct bfdev_heap_node **parentp,
                   struct bfdev_heap_node *node)
@@ -210,11 +187,6 @@ bfdev_heap_parent(struct bfdev_heap_root *root, struct bfdev_heap_node **parentp
     return link;
 }
 
-/**
- * bfdev_heap_find - find @index in tree @root.
- * @root: heap tree want to search.
- * @index: index of node.
- */
 export struct bfdev_heap_node *
 bfdev_heap_find(struct bfdev_heap_root *root, unsigned int index)
 {
