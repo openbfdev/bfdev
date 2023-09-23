@@ -14,9 +14,13 @@
 static long
 notifier_chain_cmp(struct bfdev_ilist_node *nodea, struct bfdev_ilist_node *nodeb, const void *pdata)
 {
-    struct bfdev_notifier_node *nnodea = bfdev_ilist_to_notifier(nodea);
-    struct bfdev_notifier_node *nnodeb = bfdev_ilist_to_notifier(nodeb);
-    if (nnodea->priority == nnodeb->priority) return 0;
+    struct bfdev_notifier_node *nnodea, *nnodeb;
+
+    nnodea = bfdev_ilist_to_notifier(nodea);
+    nnodeb = bfdev_ilist_to_notifier(nodeb);
+    if (nnodea->priority == nnodeb->priority)
+        return 0;
+
     return nnodea->priority < nnodeb->priority ? -1 : 1;
 }
 
