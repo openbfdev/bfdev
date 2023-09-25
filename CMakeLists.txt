@@ -59,7 +59,7 @@ option(BFDEV_DBGSLIST "Dynamic debug slist" ON)
 option(BFDEV_DBGHLIST "Dynamic debug hlist" ON)
 option(BFDEV_DBGILIST "Dynamic debug ilist" ON)
 option(BFDEV_DBGRBTREE "Dynamic debug rbtree" ON)
-option(BFDEV_DBGHEAP "Dynamic debug rbtree" ON)
+option(BFDEV_DBGHEAP "Dynamic debug heap" ON)
 
 if(BFDEV_DEVEL)
     set(BFDEV_EXAMPLES ON)
@@ -74,9 +74,10 @@ asm_generic(
     ${BFDEV_HEADER_PATH}/bfdev/asm-generic
 )
 
-include_directories(${PROJECT_SOURCE_DIR}/include)
-include_directories(${PROJECT_BINARY_DIR}/generated)
-add_subdirectory(scripts)
+configure_file(
+    ${CMAKE_MODULE_PATH}/config.h.in
+    ${PROJECT_BINARY_DIR}/generated/bfdev/config.h
+)
 
 file(GLOB BFDEV_HEADER
     ${BFDEV_HEADER_PATH}/bfdev/*.h
@@ -93,9 +94,6 @@ file(GLOB BFDEV_ARCH_ASM_HEADER
 file(GLOB BFDEV_GENERATED_HEADER
     ${BFDEV_GENERATED_PATH}/*.h
 )
-
-include(${BFDEV_SOURCE_PATH}/build.cmake)
-include(${BFDEV_ARCH_PATH}/build.cmake)
 
 add_definitions(
     " -std=gnu17"
@@ -171,6 +169,12 @@ if(BFDEV_DBGHEAP)
     set(BFDEV_DEBUG_HEAP ON)
 endif()
 
+include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${PROJECT_BINARY_DIR}/generated)
+
+add_subdirectory(${PROJECT_SOURCE_DIR}/scripts)
+include(${PROJECT_SOURCE_DIR}/build.cmake)
+
 set(BFDEV_LIBRARY
     ${BFDEV_HEADER}
     ${BFDEV_ASM_HEADER}
@@ -179,11 +183,6 @@ set(BFDEV_LIBRARY
     ${BFDEV_INCLUDE}
     ${BFDEV_SOURCE}
     ${BFDEV_ARCH_SOURCE}
-)
-
-configure_file(
-    ${CMAKE_MODULE_PATH}/config.h.in
-    ${PROJECT_BINARY_DIR}/generated/bfdev/config.h
 )
 
 macro(bfdev_dependencies target)
@@ -217,29 +216,27 @@ if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
 
     set_target_properties(bfdev_static
         PROPERTIES
-        OUTPUT_NAME bfdev
+        OUTPUT_NAME ${CMAKE_PROJECT_NAME}
         LINKER_LANGUAGE C
     )
 
     set_target_properties(bfdev_shared
         PROPERTIES VERSION 1.0 SOVERSION 1
-        OUTPUT_NAME bfdev
-        MACOSX_RPATH ON
+        OUTPUT_NAME ${CMAKE_PROJECT_NAME}
         LINKER_LANGUAGE C
+        MACOSX_RPATH ON
     )
 
     install(DIRECTORY
         ${BFDEV_HEADER_PATH}/bfdev
         ${BFDEV_GENERATED_PATH}/bfdev
         ${BFDEV_ARCH_HEADER_PATH}/bfdev
-        DESTINATION
-        "${CMAKE_INSTALL_INCLUDEDIR}"
+        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
     )
 
     install(DIRECTORY
         ${BFDEV_DOCUMENT_PATH}
-        DESTINATION
-        "${CMAKE_INSTALL_DOCDIR}"
+        DESTINATION "${CMAKE_INSTALL_DOCDIR}"
     )
 
     install(TARGETS
