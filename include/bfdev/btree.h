@@ -148,9 +148,9 @@ extern void *bfdev_btree_prev(struct bfdev_btree_root *root, uintptr_t *key);
  * @tval: another value to use as temporary storage.
  */
 #define bfdev_btree_for_each_safe(root, key, value, tkey, tval) \
-    for (value = bfdev_btree_first(root, key),                  \
-         bfdev_btree_key_copy(root, tkey, key),                 \
-         tval = bfdev_btree_next(root, tkey); value;            \
+    for ((void)((value = bfdev_btree_first(root, key)) &&       \
+         (bfdev_btree_key_copy(root, tkey, key),                \
+          tval = bfdev_btree_next(root, tkey))); value;         \
          bfdev_btree_key_copy(root, key, tkey),                 \
          value = tval, tval = bfdev_btree_next(root, tkey))
 
@@ -163,9 +163,9 @@ extern void *bfdev_btree_prev(struct bfdev_btree_root *root, uintptr_t *key);
  * @tval: another value to use as temporary storage.
  */
 #define bfdev_btree_for_each_reverse_safe(root, key, value, tkey, tval) \
-    for (value = bfdev_btree_last(root, key),                           \
-         bfdev_btree_key_copy(root, tkey, key),                         \
-         tval = bfdev_btree_prev(root, tkey); value;                    \
+    for ((void)((value = bfdev_btree_last(root, key)) &&                \
+         (bfdev_btree_key_copy(root, tkey, key),                        \
+          tval = bfdev_btree_prev(root, tkey))); value;                 \
          bfdev_btree_key_copy(root, key, tkey),                         \
          value = tval, tval = bfdev_btree_prev(root, tkey))
 
@@ -206,9 +206,9 @@ extern void *bfdev_btree_prev(struct bfdev_btree_root *root, uintptr_t *key);
  * @tval: another value to use as temporary storage.
  */
 #define bfdev_btree_for_each_continue_safe(root, key, value, tkey, tval)    \
-    for (value = bfdev_btree_next(root, key),                               \
-         bfdev_btree_key_copy(root, tkey, key),                             \
-         tval = bfdev_btree_next(root, tkey); value;                        \
+    for ((void)((value = bfdev_btree_next(root, key)) &&                    \
+         (bfdev_btree_key_copy(root, tkey, key),                            \
+          tval = bfdev_btree_next(root, tkey))); value;                     \
          bfdev_btree_key_copy(root, key, tkey),                             \
          value = tval, tval = bfdev_btree_next(root, tkey))
 
@@ -221,9 +221,9 @@ extern void *bfdev_btree_prev(struct bfdev_btree_root *root, uintptr_t *key);
  * @tval: another value to use as temporary storage.
  */
 #define bfdev_btree_for_each_reverse_continue_safe(root, key, value, tkey, tval)    \
-    for (value = bfdev_btree_prev(root, key),                                       \
-         bfdev_btree_key_copy(root, tkey, key),                                     \
-         tval = bfdev_btree_prev(root, tkey); value;                                \
+    for ((void)((value = bfdev_btree_prev(root, key)) &&                            \
+         (bfdev_btree_key_copy(root, tkey, key),                                    \
+          tval = bfdev_btree_prev(root, tkey))); value;                             \
          bfdev_btree_key_copy(root, key, tkey),                                     \
          value = tval, tval = bfdev_btree_prev(root, tkey))
 
