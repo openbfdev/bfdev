@@ -90,53 +90,193 @@ struct bfdev_rb_callbacks {
     bfdev_container_of_safe(ptr, type, member)
 
 #ifdef BFDEV_DEBUG_RBTREE
-extern bool bfdev_rb_check_link(struct bfdev_rb_node *parent, struct bfdev_rb_node **link, struct bfdev_rb_node *node);
-extern bool bfdev_rb_check_delete(struct bfdev_rb_node *node);
+extern bool
+bfdev_rb_check_link(struct bfdev_rb_node *parent, struct bfdev_rb_node **link,
+                    struct bfdev_rb_node *node);
+
+extern bool
+bfdev_rb_check_delete(struct bfdev_rb_node *node);
 #endif
 
-typedef long (*bfdev_rb_find_t)(const struct bfdev_rb_node *node, const void *key);
-typedef long (*bfdev_rb_cmp_t)(const struct bfdev_rb_node *nodea, const struct bfdev_rb_node *nodeb);
+typedef long (*bfdev_rb_find_t)
+(const struct bfdev_rb_node *node, const void *key);
 
-extern void bfdev_rb_fixup_augmented(struct bfdev_rb_root *root, struct bfdev_rb_node *node, const struct bfdev_rb_callbacks *callbacks);
-extern void bfdev_rb_erase_augmented(struct bfdev_rb_root *root, struct bfdev_rb_node *parent, const struct bfdev_rb_callbacks *callbacks);
-extern struct bfdev_rb_node *bfdev_rb_remove_augmented(struct bfdev_rb_root *root, struct bfdev_rb_node *node, const struct bfdev_rb_callbacks *callbacks);
-extern void bfdev_rb_fixup(struct bfdev_rb_root *root, struct bfdev_rb_node *node);
-extern void bfdev_rb_erase(struct bfdev_rb_root *root, struct bfdev_rb_node *parent);
-extern struct bfdev_rb_node *bfdev_rb_remove(struct bfdev_rb_root *root, struct bfdev_rb_node *node);
+typedef long (*bfdev_rb_cmp_t)
+(const struct bfdev_rb_node *nodea, const struct bfdev_rb_node *nodeb);
 
-extern void bfdev_rb_replace(struct bfdev_rb_root *root, struct bfdev_rb_node *old, struct bfdev_rb_node *new);
-extern struct bfdev_rb_node *bfdev_rb_find(const struct bfdev_rb_root *root, const void *key, bfdev_rb_find_t cmp);
-extern struct bfdev_rb_node *bfdev_rb_find_last(struct bfdev_rb_root *root, const void *key, bfdev_rb_find_t cmp, struct bfdev_rb_node **parentp, struct bfdev_rb_node ***linkp);
-extern struct bfdev_rb_node **bfdev_rb_parent(struct bfdev_rb_root *root, struct bfdev_rb_node **parentp, struct bfdev_rb_node *node, bfdev_rb_cmp_t cmp, bool *leftmost);
-extern struct bfdev_rb_node **bfdev_rb_parent_conflict(struct bfdev_rb_root *root, struct bfdev_rb_node **parentp, struct bfdev_rb_node *node, bfdev_rb_cmp_t cmp, bool *leftmost);
+/**
+ * bfdev_rb_fixup_augmented() - augmented balance after insert node.
+ * @root: rbtree root of node.
+ * @node: new inserted node.
+ * @callbacks: augmented callback function.
+ */
+extern void
+bfdev_rb_fixup_augmented(struct bfdev_rb_root *root, struct bfdev_rb_node *node,
+                         const struct bfdev_rb_callbacks *callbacks);
 
-#define bfdev_rb_cached_erase_augmented(cached, parent, callbacks) bfdev_rb_erase_augmented(&(cached)->root, parent, callbacks)
-#define bfdev_rb_cached_remove_augmentebfdev_rb_pre_nextd(cached, node, callbacks) bfdev_rb_remove_augmented(&(cached)->root, node, callbacks)
-#define bfdev_rb_cached_erase(cached, parent) bfdev_rb_erase(&(cached)->root, parent)
-#define bfdev_rb_cached_remove(cached, node) bfdev_rb_remove(&(cached)->root, node)
-#define bfdev_rb_cached_find(cached, key, cmp) bfdev_rb_find(&(cached)->root, key, cmp)
-#define bfdev_rb_cached_find_last(cached, key, cmp, parentp, linkp) bfdev_rb_find_last(&(cached)->root, key, cmp, parentp, linkp)
-#define bfdev_rb_cached_parent(cached, parentp, node, cmp, leftmost) bfdev_rb_parent(&(cached)->root, parentp, node, cmp, leftmost)
-#define bfdev_rb_cached_parent_conflict(cached, parentp, node, cmp, leftmost) bfdev_rb_parent_conflict(&(cached)->root, parentp, node, cmp, leftmost)
+/**
+ * bfdev_rb_erase_augmented() - augmented balance after remove node.
+ * @root: rbtree root of node.
+ * @parent: parent of removed node.
+ * @callbacks: augmented callback function.
+ */
+extern void
+bfdev_rb_erase_augmented(struct bfdev_rb_root *root, struct bfdev_rb_node *parent,
+                         const struct bfdev_rb_callbacks *callbacks);
 
-extern struct bfdev_rb_node *bfdev_rb_left_far(const struct bfdev_rb_node *node);
-extern struct bfdev_rb_node *bfdev_rb_right_far(const struct bfdev_rb_node *node);
-extern struct bfdev_rb_node *bfdev_rb_left_deep(const struct bfdev_rb_node *node);
-extern struct bfdev_rb_node *bfdev_rb_right_deep(const struct bfdev_rb_node *node);
+/**
+ * bfdev_rb_remove_augmented() - augmented remove node form rbtree.
+ * @root: rbtree root of node.
+ * @node: node to remove.
+ * @callbacks: augmented callback function.
+ */
+extern struct bfdev_rb_node *
+bfdev_rb_remove_augmented(struct bfdev_rb_root *root, struct bfdev_rb_node *node,
+                          const struct bfdev_rb_callbacks *callbacks);
+
+/**
+ * bfdev_rb_fixup() - balance after insert node.
+ * @root: rbtree root of node.
+ * @node: new inserted node.
+ */
+extern void
+bfdev_rb_fixup(struct bfdev_rb_root *root, struct bfdev_rb_node *node);
+
+/**
+ * bfdev_rb_erase() - balance after remove node.
+ * @root: rbtree root of node.
+ * @parent: parent of removed node.
+ */
+extern void
+bfdev_rb_erase(struct bfdev_rb_root *root, struct bfdev_rb_node *parent);
+
+/**
+ * bfdev_rb_remove() - remove node form rbtree.
+ * @root: rbtree root of node.
+ * @node: node to remove.
+ */
+extern struct bfdev_rb_node *
+bfdev_rb_remove(struct bfdev_rb_root *root, struct bfdev_rb_node *node);
+
+/**
+ * bfdev_rb_replace() - replace old node by new one.
+ * @root: rbtree root of node.
+ * @oldn: node to be replaced.
+ * @newn: new node to insert.
+ */
+extern void
+bfdev_rb_replace(struct bfdev_rb_root *root, struct bfdev_rb_node *old,
+                 struct bfdev_rb_node *new);
+
+/**
+ * bfdev_rb_find() - find @key in tree @root.
+ * @root: rbtree want to search.
+ * @key: key to match.
+ * @cmp: operator defining the node order.
+ */
+extern struct bfdev_rb_node *
+bfdev_rb_find(const struct bfdev_rb_root *root, const void *key,
+              bfdev_rb_find_t cmp);
+
+/**
+ * bfdev_rb_find_last() - find @key in tree @root and return parent.
+ * @root: rbtree want to search.
+ * @key: key to match.
+ * @cmp: operator defining the node order.
+ * @parentp: pointer used to modify the parent node pointer.
+ * @linkp: pointer used to modify the point to pointer to child node.
+ */
+extern struct bfdev_rb_node *
+bfdev_rb_find_last(struct bfdev_rb_root *root, const void *key, bfdev_rb_find_t cmp,
+                   struct bfdev_rb_node **parentp, struct bfdev_rb_node ***linkp);
+
+/**
+ * bfdev_rb_parent() - find the parent node.
+ * @root: rbtree want to search.
+ * @parentp: pointer used to modify the parent node pointer.
+ * @node: new node to insert.
+ * @cmp: operator defining the node order.
+ * @leftmost: return whether it is the leftmost node.
+ */
+extern struct bfdev_rb_node **
+bfdev_rb_parent(struct bfdev_rb_root *root, struct bfdev_rb_node **parentp,
+                struct bfdev_rb_node *node, bfdev_rb_cmp_t cmp, bool *leftmost);
+
+/**
+ * bfdev_rb_parent_conflict() - find the parent node or conflict.
+ * @root: rbtree want to search.
+ * @parentp: pointer used to modify the parent node pointer.
+ * @node: new node to insert.
+ * @cmp: operator defining the node order.
+ * @leftmost: return whether it is the leftmost node.
+ */
+extern struct bfdev_rb_node **
+bfdev_rb_parent_conflict(struct bfdev_rb_root *root, struct bfdev_rb_node **parentp,
+                         struct bfdev_rb_node *node, bfdev_rb_cmp_t cmp, bool *leftmost);
+
+#define bfdev_rb_cached_erase_augmented(cached, parent, callbacks) \
+    bfdev_rb_erase_augmented(&(cached)->root, parent, callbacks)
+
+#define bfdev_rb_cached_remove_augmentebfdev_rb_pre_nextd(cached, node, callbacks) \
+    bfdev_rb_remove_augmented(&(cached)->root, node, callbacks)
+
+#define bfdev_rb_cached_erase(cached, parent) \
+    bfdev_rb_erase(&(cached)->root, parent)
+
+#define bfdev_rb_cached_remove(cached, node) \
+    bfdev_rb_remove(&(cached)->root, node)
+
+#define bfdev_rb_cached_find(cached, key, cmp) \
+    bfdev_rb_find(&(cached)->root, key, cmp)
+
+#define bfdev_rb_cached_find_last(cached, key, cmp, parentp, linkp) \
+    bfdev_rb_find_last(&(cached)->root, key, cmp, parentp, linkp)
+
+#define bfdev_rb_cached_parent(cached, parentp, node, cmp, leftmost) \
+    bfdev_rb_parent(&(cached)->root, parentp, node, cmp, leftmost)
+
+#define bfdev_rb_cached_parent_conflict(cached, parentp, node, cmp, leftmost) \
+    bfdev_rb_parent_conflict(&(cached)->root, parentp, node, cmp, leftmost)
+
+/* Base iteration - basic iteration helper */
+extern struct bfdev_rb_node *
+bfdev_rb_left_far(const struct bfdev_rb_node *node);
+
+extern struct bfdev_rb_node *
+bfdev_rb_right_far(const struct bfdev_rb_node *node);
+
+extern struct bfdev_rb_node *
+bfdev_rb_left_deep(const struct bfdev_rb_node *node);
+
+extern struct bfdev_rb_node *
+bfdev_rb_right_deep(const struct bfdev_rb_node *node);
 
 /* Inorder iteration (Sequential) - find logical next and previous nodes */
-extern struct bfdev_rb_node *bfdev_rb_first(const struct bfdev_rb_root *root);
-extern struct bfdev_rb_node *bfdev_rb_last(const struct bfdev_rb_root *root);
-extern struct bfdev_rb_node *bfdev_rb_prev(const struct bfdev_rb_node *node);
-extern struct bfdev_rb_node *bfdev_rb_next(const struct bfdev_rb_node *node);
+extern struct bfdev_rb_node *
+bfdev_rb_first(const struct bfdev_rb_root *root);
+
+extern struct bfdev_rb_node *
+bfdev_rb_last(const struct bfdev_rb_root *root);
+
+extern struct bfdev_rb_node *
+bfdev_rb_prev(const struct bfdev_rb_node *node);
+
+extern struct bfdev_rb_node *
+bfdev_rb_next(const struct bfdev_rb_node *node);
 
 /* Preorder iteration (Root-first) - always access the left node first */
-extern struct bfdev_rb_node *bfdev_rb_pre_first(const struct bfdev_rb_root *root);
-extern struct bfdev_rb_node *bfdev_rb_pre_next(const struct bfdev_rb_node *node);
+extern struct bfdev_rb_node *
+bfdev_rb_pre_first(const struct bfdev_rb_root *root);
+
+extern struct bfdev_rb_node *
+bfdev_rb_pre_next(const struct bfdev_rb_node *node);
 
 /* Postorder iteration (Depth-first) - always visit the parent after its children */
-extern struct bfdev_rb_node *bfdev_rb_post_first(const struct bfdev_rb_root *root);
-extern struct bfdev_rb_node *bfdev_rb_post_next(const struct bfdev_rb_node *node);
+extern struct bfdev_rb_node *
+bfdev_rb_post_first(const struct bfdev_rb_root *root);
+
+extern struct bfdev_rb_node *
+bfdev_rb_post_next(const struct bfdev_rb_node *node);
 
 /**
  * bfdev_rb_first_entry - get the first element from a rbtree.

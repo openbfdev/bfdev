@@ -108,12 +108,6 @@ right_rotate(struct bfdev_rb_root *root, struct bfdev_rb_node *node,
     return child;
 }
 
-/**
- * bfdev_rb_fixup_augmented - augmented balance after insert node.
- * @root: rbtree root of node.
- * @node: new inserted node.
- * @callbacks: augmented callback function.
- */
 export void
 bfdev_rb_fixup_augmented(struct bfdev_rb_root *root, struct bfdev_rb_node *node,
                          const struct bfdev_rb_callbacks *callbacks)
@@ -224,12 +218,6 @@ bfdev_rb_fixup_augmented(struct bfdev_rb_root *root, struct bfdev_rb_node *node,
     }
 }
 
-/**
- * bfdev_rb_erase_augmented - augmented balance after remove node.
- * @root: rbtree root of node.
- * @parent: parent of removed node.
- * @callbacks: augmented callback function.
- */
 export void
 bfdev_rb_erase_augmented(struct bfdev_rb_root *root, struct bfdev_rb_node *parent,
                          const struct bfdev_rb_callbacks *callbacks)
@@ -379,12 +367,6 @@ bfdev_rb_erase_augmented(struct bfdev_rb_root *root, struct bfdev_rb_node *paren
     }
 }
 
-/**
- * rb_remove_augmented - augmented remove node form rbtree.
- * @root: rbtree root of node.
- * @node: node to remove.
- * @callbacks: augmented callback function.
- */
 export struct bfdev_rb_node *
 bfdev_rb_remove_augmented(struct bfdev_rb_root *root, struct bfdev_rb_node *node,
                           const struct bfdev_rb_callbacks *callbacks)
@@ -512,45 +494,24 @@ static const struct bfdev_rb_callbacks dummy_callbacks = {
     .propagate = bfdev_dummy_noop,
 };
 
-/**
- * rb_fixup - balance after insert node.
- * @root: rbtree root of node.
- * @node: new inserted node.
- */
 export void
 bfdev_rb_fixup(struct bfdev_rb_root *root, struct bfdev_rb_node *node)
 {
     bfdev_rb_fixup_augmented(root, node, &dummy_callbacks);
 }
 
-/**
- * rb_erase - balance after remove node.
- * @root: rbtree root of node.
- * @parent: parent of removed node.
- */
 export void
 bfdev_rb_erase(struct bfdev_rb_root *root, struct bfdev_rb_node *parent)
 {
     bfdev_rb_erase_augmented(root, parent, &dummy_callbacks);
 }
 
-/**
- * rb_remove - remove node form rbtree.
- * @root: rbtree root of node.
- * @node: node to remove.
- */
 export struct bfdev_rb_node *
 bfdev_rb_remove(struct bfdev_rb_root *root, struct bfdev_rb_node *node)
 {
     return bfdev_rb_remove_augmented(root, node, &dummy_callbacks);
 }
 
-/**
- * rb_replace - replace old node by new one.
- * @root: rbtree root of node.
- * @oldn: node to be replaced.
- * @newn: new node to insert.
- */
 export void
 bfdev_rb_replace(struct bfdev_rb_root *root, struct bfdev_rb_node *oldn,
                  struct bfdev_rb_node *newn)
@@ -567,12 +528,6 @@ bfdev_rb_replace(struct bfdev_rb_root *root, struct bfdev_rb_node *oldn,
     child_change(root, parent, oldn, newn);
 }
 
-/**
- * rb_find - find @key in tree @root.
- * @root: rbtree want to search.
- * @key: key to match.
- * @cmp: operator defining the node order.
- */
 export struct bfdev_rb_node *
 bfdev_rb_find(const struct bfdev_rb_root *root, const void *key,
               bfdev_rb_find_t cmp)
@@ -595,14 +550,6 @@ bfdev_rb_find(const struct bfdev_rb_root *root, const void *key,
     return NULL;
 }
 
-/**
- * rb_find_last - find @key in tree @root and return parent.
- * @root: rbtree want to search.
- * @key: key to match.
- * @cmp: operator defining the node order.
- * @parentp: pointer used to modify the parent node pointer.
- * @linkp: pointer used to modify the point to pointer to child node.
- */
 export struct bfdev_rb_node *
 bfdev_rb_find_last(struct bfdev_rb_root *root, const void *key, bfdev_rb_find_t cmp,
                    struct bfdev_rb_node **parentp, struct bfdev_rb_node ***linkp)
@@ -630,14 +577,6 @@ bfdev_rb_find_last(struct bfdev_rb_root *root, const void *key, bfdev_rb_find_t 
     return NULL;
 }
 
-/**
- * rb_parent - find the parent node.
- * @root: rbtree want to search.
- * @parentp: pointer used to modify the parent node pointer.
- * @node: new node to insert.
- * @cmp: operator defining the node order.
- * @leftmost: return whether it is the leftmost node.
- */
 export struct bfdev_rb_node **
 bfdev_rb_parent(struct bfdev_rb_root *root, struct bfdev_rb_node **parentp,
                 struct bfdev_rb_node *node, bfdev_rb_cmp_t cmp, bool *leftmost)
@@ -668,14 +607,6 @@ bfdev_rb_parent(struct bfdev_rb_root *root, struct bfdev_rb_node **parentp,
     return link;
 }
 
-/**
- * rb_parent_conflict - find the parent node or conflict.
- * @root: rbtree want to search.
- * @parentp: pointer used to modify the parent node pointer.
- * @node: new node to insert.
- * @cmp: operator defining the node order.
- * @leftmost: return whether it is the leftmost node.
- */
 export struct bfdev_rb_node **
 bfdev_rb_parent_conflict(struct bfdev_rb_root *root, struct bfdev_rb_node **parentp,
                          struct bfdev_rb_node *node, bfdev_rb_cmp_t cmp, bool *leftmost)
