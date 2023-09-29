@@ -18,13 +18,26 @@ struct bfdev_prandom_state {
     uint32_t s3, s4;
 };
 
+/* Tausworthe generators */
 #define BFDEV_TAUSWORTHE(seed, a, b, c, d) (    \
     (((seed) & (c)) << (d)) ^                   \
     ((((seed) << (a)) ^ (seed)) >> (b))         \
 )
 
-extern uint32_t bfdev_prandom_value(struct bfdev_prandom_state *pstate);
-extern void bfdev_prandom_seed(struct bfdev_prandom_state *pstate, uint64_t seed);
+/**
+ * bfdev_prandom_seed() - set seed for prandom_state.
+ * @state: pointer to state structure to receive the seed.
+ * @seed: arbitrary 64-bit value to use as a seed.
+ */
+extern void
+bfdev_prandom_seed(struct bfdev_prandom_state *pstate, uint64_t seed);
+
+/**
+ * bfdev_prandom_value() - seeded pseudo-random number generator.
+ * @state: pointer to state structure holding seeded state.
+ */
+extern uint32_t
+bfdev_prandom_value(struct bfdev_prandom_state *pstate);
 
 static inline uint64_t
 bfdev_prandom_u64(struct bfdev_prandom_state *pstate)
