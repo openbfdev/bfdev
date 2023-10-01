@@ -213,3 +213,9 @@ BFDEV_TITER_LEVELORDER_DEFINE(
     struct bfdev_heap_root, node,
     struct bfdev_heap_node, left, right
 )
+
+BFDEV_TITER_POSTORDER_DEFINE(
+    export, bfdev_heap_post, bfdev_heap,
+    struct bfdev_heap_root, node,
+    struct bfdev_heap_node, parent, left, right
+)
