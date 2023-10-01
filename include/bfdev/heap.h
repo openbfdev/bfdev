@@ -128,15 +128,23 @@ bfdev_heap_parent(struct bfdev_heap_root *root, struct bfdev_heap_node **parentp
 extern struct bfdev_heap_node *
 bfdev_heap_find(struct bfdev_heap_root *root, unsigned int index);
 
+/* Level iteration (Sequential) - access in level sequence */
 extern struct bfdev_heap_node *
 bfdev_heap_first(const struct bfdev_heap_root *root, unsigned long *index);
 
 extern struct bfdev_heap_node *
 bfdev_heap_next(const struct bfdev_heap_root *root, unsigned long *index);
 
+/* Postorder iteration (Depth-first) - always visit the parent after its children */
+extern struct bfdev_heap_node *
+bfdev_heap_post_first(const struct bfdev_heap_root *root);
+
+extern struct bfdev_heap_node *
+bfdev_heap_post_next(const struct bfdev_heap_node *node);
+
 /**
- * bfdev_heap_first_entry - get the preorder first element from a heaptree.
- * @ptr: the heaptree root to take the element from.
+ * bfdev_heap_first_entry - get the preorder first element from a heap.
+ * @ptr: the heap root to take the element from.
  * @type: the type of the struct this is embedded in.
  * @member: the name of the bfdev_heap_node within the struct.
  */
@@ -144,7 +152,7 @@ bfdev_heap_next(const struct bfdev_heap_root *root, unsigned long *index);
     bfdev_heap_entry_safe(bfdev_heap_first(root, index), type, member)
 
 /**
- * bfdev_heap_next_entry - get the preorder next element in heaptree.
+ * bfdev_heap_next_entry - get the preorder next element in heap.
  * @pos: the type * to cursor.
  * @member: the name of the bfdev_heap_node within the struct.
  */
@@ -152,23 +160,23 @@ bfdev_heap_next(const struct bfdev_heap_root *root, unsigned long *index);
     bfdev_heap_entry_safe(bfdev_heap_next(root, index), type, member)
 
 /**
- * bfdev_heap_for_each - preorder iterate over a heaptree.
+ * bfdev_heap_for_each - preorder iterate over a heap.
  * @pos: the &struct bfdev_heap_node to use as a loop cursor.
- * @root: the root for your heaptree.
+ * @root: the root for your heap.
  */
 #define bfdev_heap_for_each(pos, index, root) \
     for (pos = bfdev_heap_first(root, index); \
          pos; pos = bfdev_heap_next(root, index))
 
 /**
- * bfdev_heap_for_each_from - preorder iterate over a heaptree from the current point.
+ * bfdev_heap_for_each_from - preorder iterate over a heap from the current point.
  * @pos: the &struct bfdev_heap_node to use as a loop cursor.
  */
 #define bfdev_heap_for_each_from(pos, index, root) \
     for (; pos; pos = bfdev_heap_next(root, index))
 
 /**
- * bfdev_heap_for_each_continue - continue preorder iteration over a heaptree.
+ * bfdev_heap_for_each_continue - continue preorder iteration over a heap.
  * @pos: the &struct bfdev_heap_node to use as a loop cursor.
  */
 #define bfdev_heap_for_each_continue(pos, index, root) \
@@ -176,9 +184,9 @@ bfdev_heap_next(const struct bfdev_heap_root *root, unsigned long *index);
          pos; pos = bfdev_heap_next(root, index))
 
 /**
- * bfdev_heap_for_each_entry - preorder iterate over heaptree of given type.
+ * bfdev_heap_for_each_entry - preorder iterate over heap of given type.
  * @pos: the type * to use as a loop cursor.
- * @root: the root for your heaptree.
+ * @root: the root for your heap.
  * @member: the name of the bfdev_heap_node within the struct.
  */
 #define bfdev_heap_for_each_entry(pos, index, root, member) \
@@ -186,7 +194,7 @@ bfdev_heap_next(const struct bfdev_heap_root *root, unsigned long *index);
          pos; pos = bfdev_heap_next_entry(root, index, typeof(*pos), member))
 
 /**
- * bfdev_heap_for_each_entry_from - preorder iterate over heaptree of given type from the current point.
+ * bfdev_heap_for_each_entry_from - preorder iterate over heap of given type from the current point.
  * @pos: the type * to use as a loop cursor.
  * @member: the name of the bfdev_heap_node within the struct.
  */
@@ -194,7 +202,7 @@ bfdev_heap_next(const struct bfdev_heap_root *root, unsigned long *index);
     for (; pos; pos = bfdev_heap_next_entry(root, index, typeof(*pos), member))
 
 /**
- * bfdev_heap_for_each_entry_continue - continue preorder iteration over heaptree of given type.
+ * bfdev_heap_for_each_entry_continue - continue preorder iteration over heap of given type.
  * @pos: the type * to use as a loop cursor.
  * @member: the name of the bfdev_heap_node within the struct.
  */
@@ -203,8 +211,134 @@ bfdev_heap_next(const struct bfdev_heap_root *root, unsigned long *index);
          pos; pos = bfdev_heap_next_entry(root, index, typeof(*pos), member))
 
 /**
+ * bfdev_heap_post_first_entry - get the postorder first element from a heap.
+ * @ptr: the heap root to take the element from.
+ * @type: the type of the struct this is embedded in.
+ * @member: the name of the bfdev_heap_node within the struct.
+ */
+#define bfdev_heap_post_first_entry(ptr, type, member) \
+    bfdev_heap_entry_safe(bfdev_heap_post_first(ptr), type, member)
+
+/**
+ * bfdev_heap_post_next_entry - get the postorder next element in heap.
+ * @pos: the type * to cursor.
+ * @member: the name of the bfdev_heap_node within the struct.
+ */
+#define bfdev_heap_post_next_entry(pos, member) \
+    bfdev_heap_entry_safe(bfdev_heap_post_next(&(pos)->member), typeof(*(pos)), member)
+
+/**
+ * bfdev_heap_post_for_each - postorder iterate over a heap.
+ * @pos: the &struct bfdev_heap_node to use as a loop cursor.
+ * @root: the root for your heap.
+ */
+#define bfdev_heap_post_for_each(pos, root) \
+    for (pos = bfdev_heap_post_first(root); pos; pos = bfdev_heap_post_next(pos))
+
+/**
+ * bfdev_heap_post_for_each_from - postorder iterate over a heap from the current point.
+ * @pos: the &struct bfdev_heap_node to use as a loop cursor.
+ */
+#define bfdev_heap_post_for_each_from(pos) \
+    for (; pos; pos = bfdev_heap_post_next(pos))
+
+/**
+ * bfdev_heap_post_for_each_continue - continue postorder iteration over a heap.
+ * @pos: the &struct bfdev_heap_node to use as a loop cursor.
+ */
+#define bfdev_heap_post_for_each_continue(pos) \
+    for (pos = bfdev_heap_post_next(pos); pos; pos = bfdev_heap_post_next(pos))
+
+/**
+ * bfdev_heap_post_for_each_safe - postorder iterate over a heap safe against removal of heap entry.
+ * @pos: the &struct bfdev_heap_node to use as a loop cursor.
+ * @tmp: another bfdev_heap_node to use as temporary storage.
+ * @root: the root for your heap.
+ */
+#define bfdev_heap_post_for_each_safe(pos, tmp, root) \
+    for (pos = bfdev_heap_post_first(root); pos && \
+        ({tmp = bfdev_heap_post_next(pos); 1; }); pos = tmp)
+
+/**
+ * bfdev_heap_post_for_each_safe_from - postorder iterate over a heap safe against removal of heap entry from the current point.
+ * @pos: the &struct bfdev_heap_node to use as a loop cursor.
+ * @tmp: another bfdev_heap_node to use as temporary storage.
+ */
+#define bfdev_heap_post_for_each_safe_from(pos, tmp) \
+    for (; pos && ({tmp = bfdev_heap_post_next(pos); 1; }); pos = tmp)
+
+/**
+ * bfdev_heap_post_for_each_safe_continue - continue heap postorder iteration safe against removal.
+ * @pos: the &struct bfdev_heap_node to use as a loop cursor.
+ * @tmp: another bfdev_heap_node to use as temporary storage.
+ */
+#define bfdev_heap_post_for_each_safe_continue(pos, tmp) \
+    for (pos = bfdev_heap_post_next(pos); pos && \
+        ({tmp = bfdev_heap_post_next(pos); 1; }); pos = tmp)
+
+/**
+ * bfdev_heap_post_for_each_entry - postorder iterate over heap of given type.
+ * @pos: the type * to use as a loop cursor.
+ * @root: the root for your heap.
+ * @member: the name of the bfdev_heap_node within the struct.
+ */
+#define bfdev_heap_post_for_each_entry(pos, root, member) \
+    for (pos = bfdev_heap_post_first_entry(root, typeof(*pos), member); \
+         pos; pos = bfdev_heap_post_next_entry(pos, member))
+
+/**
+ * bfdev_heap_post_for_each_entry_from - postorder iterate over heap of given type from the current point.
+ * @pos: the type * to use as a loop cursor.
+ * @member: the name of the bfdev_heap_node within the struct.
+ */
+#define bfdev_heap_post_for_each_entry_from(pos, member) \
+    for (; pos; pos = bfdev_heap_post_next_entry(pos, member))
+
+/**
+ * bfdev_heap_post_for_each_entry_continue - continue postorder iteration over heap of given type.
+ * @pos: the type * to use as a loop cursor.
+ * @member: the name of the bfdev_heap_node within the struct.
+ */
+#define bfdev_heap_post_for_each_entry_continue(pos, member) \
+    for (pos = bfdev_heap_post_next_entry(pos, member); \
+         pos; pos = bfdev_heap_post_next_entry(pos, member))
+
+/**
+ * bfdev_heap_post_for_each_entry_safe - postorder iterate over heap of given type safe against removal of heap entry.
+ * @pos: the type * to use as a loop cursor.
+ * @tmp: another type * to use as temporary storage.
+ * @root: the root for your heap.
+ * @member: the name of the bfdev_heap_node within the struct.
+ */
+#define bfdev_heap_post_for_each_entry_safe(pos, tmp, root, member) \
+    for (pos = bfdev_heap_post_first_entry(root, typeof(*pos), member); \
+         pos && ({ tmp = bfdev_heap_post_next_entry(pos, member); \
+         1; }); pos = tmp)
+
+/**
+ * bfdev_heap_post_for_each_entry_from_safe - postorder iterate over heap from current point safe against removal.
+ * @pos: the type * to use as a loop cursor.
+ * @tmp: another type * to use as temporary storage.
+ * @member: the name of the bfdev_heap_node within the struct.
+ */
+#define bfdev_heap_post_for_each_entry_from_safe(pos, tmp, member) \
+    for (; pos && ({ tmp = bfdev_heap_post_next_entry(pos, member); \
+         1; }); pos = tmp)
+
+/**
+ * bfdev_heap_post_for_each_entry_continue_safe - continue postorder heap iteration safe against removal.
+ * @pos: the type * to use as a loop cursor.
+ * @tmp: another type * to use as temporary storage.
+ * @member: the name of the bfdev_heap_node within the struct.
+ */
+#define bfdev_heap_post_for_each_entry_continue_safe(pos, tmp, member) \
+    for (pos = bfdev_heap_post_next_entry(pos, member); \
+         pos && ({ tmp = bfdev_heap_post_next_entry(pos, member); \
+         1; }); pos = tmp)
+
+/**
  * bfdev_heap_link - link node to parent.
- * @root: heaptree root of node.
+ * @root: heap root of node.
  * @parent: point to parent node.
  * @link: point to pointer to child node.
  * @node: new node to link.
@@ -225,8 +359,8 @@ static inline void bfdev_heap_link(struct bfdev_heap_root *root, struct bfdev_he
 }
 
 /**
- * bfdev_heap_insert_node - link node to parent and fixup heaptree.
- * @root: heaptree root of node.
+ * bfdev_heap_insert_node - link node to parent and fixup heap.
+ * @root: heap root of node.
  * @parent: parent node of node.
  * @link: point to pointer to child node.
  * @node: new node to link.
@@ -242,7 +376,7 @@ bfdev_heap_insert_node(struct bfdev_heap_root *root, struct bfdev_heap_node *par
 
 /**
  * bfdev_heap_insert - find the parent node and insert new node.
- * @root: heaptree root of node.
+ * @root: heap root of node.
  * @node: new node to insert.
  * @cmp: operator defining the node order.
  */
@@ -257,8 +391,8 @@ bfdev_heap_insert(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
 }
 
 /**
- * bfdev_heap_delete - delete node and fixup heaptree.
- * @root: heaptree root of node.
+ * bfdev_heap_delete - delete node and fixup heap.
+ * @root: heap root of node.
  * @node: node to delete.
  */
 static inline void
