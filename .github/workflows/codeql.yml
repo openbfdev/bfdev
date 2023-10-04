@@ -1,6 +1,8 @@
 name: analyse on codeql
 
 on:
+  repository_dispatch:
+  workflow_dispatch:
   push:
   pull_request:
   schedule:
