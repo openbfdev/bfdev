@@ -1,6 +1,10 @@
 name: build default on macos
 
-on: [push, pull_request]
+on:
+  repository_dispatch:
+  workflow_dispatch:
+  push:
+  pull_request:
 
 env:
   BUILD_TYPE: Release
