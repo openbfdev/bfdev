@@ -43,6 +43,7 @@ set(BFDEV_ARCH_HEADER_PATH ${BFDEV_ARCH_PATH}/include)
 
 include(scripts/asm-generic.cmake)
 include(scripts/hostrule.cmake)
+include(scripts/packed-header.cmake)
 include(scripts/commit.cmake)
 
 commit_hash(BFDEV_COMMITID)
@@ -72,6 +73,13 @@ asm_generic(
     ${BFDEV_GENERATED_PATH}/bfdev/asm
     ${BFDEV_ARCH_HEADER_PATH}/bfdev/asm
     ${BFDEV_HEADER_PATH}/bfdev/asm-generic
+)
+
+packed_header(
+    bfdev/
+    _BFDEV_H_
+    ${BFDEV_GENERATED_PATH}/bfdev.h
+    ${BFDEV_HEADER_PATH}/bfdev
 )
 
 configure_file(
@@ -225,6 +233,11 @@ if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
         OUTPUT_NAME ${CMAKE_PROJECT_NAME}
         LINKER_LANGUAGE C
         MACOSX_RPATH ON
+    )
+
+    install(FILES
+        ${BFDEV_GENERATED_PATH}/bfdev.h
+        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
     )
 
     install(DIRECTORY

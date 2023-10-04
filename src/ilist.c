@@ -6,7 +6,7 @@
 #define MODULE_NAME "bfdev-ilist"
 #define bfdev_log_fmt(fmt) MODULE_NAME ": " fmt
 
-#include <bfdev.h>
+#include <base.h>
 #include <bfdev/ilist.h>
 #include <bfdev/log.h>
 #include <export.h>
