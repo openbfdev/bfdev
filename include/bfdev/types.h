@@ -39,6 +39,16 @@ typedef long bfdev_atomic_t;
 #define BFDEV_BYTES_PER_UINTMAX     sizeof(uintmax_t)
 #define BFDEV_BYTES_PER_UINTPTR     sizeof(uintptr_t)
 
+/* Generic callback functions */
+#define BFDEV_CALLBACK_CMP(name, type) \
+    typedef long (*name)(type va, type vb, void *pdata)
+
+#define BFDEV_CALLBACK_FIND(name, type) \
+    typedef long (*name)(type key, void *pdata)
+
+#define BFDEV_CALLBACK_FREE(name) \
+    typedef void (*name)(void *pdata)
+
 BFDEV_END_DECLS
 
 #endif /* _BFDEV_TYPES_H_ */

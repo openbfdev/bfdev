@@ -12,18 +12,21 @@
 
 BFDEV_BEGIN_DECLS
 
-typedef long (*bfdev_bsearch_cmp_t)(const void *key, void *pdata);
+BFDEV_CALLBACK_FIND(
+    bfdev_bsearch_find_t,
+    const void *
+);
 
 static inline void *
 bfdev_bsearch_inline(const void *base, size_t num, size_t esize,
-                     bfdev_bsearch_cmp_t cmp, void *pdata)
+                     bfdev_bsearch_find_t find, void *pdata)
 {
     const void *pivot;
     long result;
 
     while (num) {
         pivot = base + (num >> 1) * esize;
-        result = cmp(pivot, pdata);
+        result = find(pivot, pdata);
 
         if (!result)
             return (void *)pivot;
@@ -39,8 +42,9 @@ bfdev_bsearch_inline(const void *base, size_t num, size_t esize,
     return NULL;
 }
 
-extern void *bfdev_bsearch(const void *base, size_t num, size_t esize,
-                           bfdev_bsearch_cmp_t cmp, void *pdata);
+extern void *
+bfdev_bsearch(const void *base, size_t num, size_t esize,
+              bfdev_bsearch_find_t find, void *pdata);
 
 BFDEV_END_DECLS
 
