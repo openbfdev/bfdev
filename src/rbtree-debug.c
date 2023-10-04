@@ -6,7 +6,7 @@
 #define MODULE_NAME "bfdev-rbtree"
 #define bfdev_log_fmt(fmt) MODULE_NAME ": " fmt
 
-#include <bfdev.h>
+#include <base.h>
 #include <bfdev/log.h>
 #include <bfdev/rbtree.h>
 #include <export.h>

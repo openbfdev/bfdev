@@ -3,7 +3,7 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
-#include <bfdev.h>
+#include <base.h>
 #include <bfdev/ctype.h>
 #include <bfdev/ascii.h>
 #include <export.h>

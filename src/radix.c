@@ -3,7 +3,7 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
-#include <bfdev.h>
+#include <base.h>
 #include <bfdev/radix.h>
 #include <bfdev/overflow.h>
 #include <export.h>

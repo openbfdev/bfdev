@@ -3,8 +3,8 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
-#ifndef _BFDEV_H_
-#define _BFDEV_H_
+#ifndef _BASE_H_
+#define _BASE_H_
 
 #include <bfdev/config.h>
 #include <bfdev/types.h>
@@ -27,4 +27,4 @@
 #include <bfdev/minmax.h>
 #include <bfdev/stringify.h>
 
-#endif /* _BFDEV_H_ */
+#endif /* _BASE_H_ */

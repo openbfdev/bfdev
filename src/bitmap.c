@@ -3,7 +3,7 @@
  * Copyright(c) 2021 John Sanpe <sanpeqf@gmail.com>
  */
 
-#include <bfdev.h>
+#include <base.h>
 #include <bfdev/bitmap.h>
 #include <export.h>
 
