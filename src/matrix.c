@@ -61,6 +61,7 @@ bfdev_matrix_mul(const struct bfdev_alloc *alloc,
     const long (*adb)[vb->col] = (void *)vb->values;
     long (*adr)[vb->col] = (void *)result->values;
 
+    /* Reordering optimize */
     for (row = 0; row < va->row; ++row) {
         for (col = 0; col < va->col; ++col) {
             value = ada[row][col];
