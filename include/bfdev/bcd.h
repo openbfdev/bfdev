@@ -12,6 +12,10 @@
 
 BFDEV_BEGIN_DECLS
 
+/*
+ * Interface for known constant arguments
+ */
+
 #define bfdev_bcd2bin_const(bcd) ( \
     ((bcd) & 0x0f) + ((bcd) >> 4) * 10 \
 )
@@ -20,8 +24,15 @@ BFDEV_BEGIN_DECLS
     (((bin) / 10) << 4) + (bin) % 10 \
 )
 
-extern const uint8_t bfdev_bcd2bin_table[256];
-extern const uint8_t bfdev_bin2bcd_table[256];
+/*
+ * Interface for known dynamic arguments
+ */
+
+extern const uint8_t
+bfdev_bcd2bin_table[256];
+
+extern const uint8_t
+bfdev_bin2bcd_table[256];
 
 static __bfdev_attribute_const inline
 uint8_t bfdev_bcd2bin_dynamic(uint8_t bcd)

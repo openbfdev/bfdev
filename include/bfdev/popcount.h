@@ -12,9 +12,6 @@
 
 BFDEV_BEGIN_DECLS
 
-extern const uint8_t bfdev_popcount_table[256];
-extern const uint8_t bfdev_popparity_table[256];
-
 /*
  * Interface for known constant arguments
  */
@@ -102,6 +99,12 @@ bool bfdev_popparity64_const(uint64_t value)
 /*
  * Interface for known dynamic arguments
  */
+
+extern const uint8_t
+bfdev_popcount_table[256];
+
+extern const uint8_t
+bfdev_popparity_table[256];
 
 static inline __bfdev_attribute_const
 unsigned int bfdev_popcount8_dynamic(uint8_t value)
