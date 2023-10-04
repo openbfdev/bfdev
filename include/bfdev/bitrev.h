@@ -11,6 +11,10 @@
 
 BFDEV_BEGIN_DECLS
 
+/*
+ * Interface for known constant arguments
+ */
+
 #define bfdev_bitrev8_const(value) (                \
     (((uint8_t)(value) & (uint8_t)0x01UL) << 7) |   \
     (((uint8_t)(value) & (uint8_t)0x02UL) << 5) |   \
@@ -139,26 +143,35 @@ BFDEV_BEGIN_DECLS
     (((uint64_t)(value) & (uint64_t)0x4000000000000000ULL) >> 61) | \
     (((uint64_t)(value) & (uint64_t)0x8000000000000000ULL) >> 63))
 
-extern uint8_t bfdev_bitrev_byte_table[256];
+/*
+ * Interface for known dynamic arguments
+ */
 
-static inline uint8_t bfdev_bitrev8_dynamic(uint8_t value)
+extern uint8_t
+bfdev_bitrev_byte_table[256];
+
+static inline uint8_t
+bfdev_bitrev8_dynamic(uint8_t value)
 {
     return bfdev_bitrev_byte_table[value];
 }
 
-static inline uint16_t bfdev_bitrev16_dynamic(uint16_t value)
+static inline uint16_t
+bfdev_bitrev16_dynamic(uint16_t value)
 {
     return ((uint16_t)bfdev_bitrev8_dynamic(value & 0xff) << 8) |
             bfdev_bitrev8_dynamic(value >> 8);
 }
 
-static inline uint32_t bfdev_bitrev32_dynamic(uint32_t value)
+static inline uint32_t
+bfdev_bitrev32_dynamic(uint32_t value)
 {
     return ((uint32_t)bfdev_bitrev16_dynamic(value & 0xffff) << 16) |
             bfdev_bitrev16_dynamic(value >> 16);
 }
 
-static inline uint64_t bfdev_bitrev64_dynamic(uint64_t value)
+static inline uint64_t
+bfdev_bitrev64_dynamic(uint64_t value)
 {
     return ((uint64_t)bfdev_bitrev32_dynamic(value & 0xffffffff) << 32) |
             bfdev_bitrev32_dynamic(value >> 32);
