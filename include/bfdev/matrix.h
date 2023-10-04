@@ -17,26 +17,54 @@ struct bfdev_matrix {
     long values[];
 };
 
+/**
+ * bfdev_matrix_add() - adding two matrices.
+ * @va: first addend matrix.
+ * @vb: second addend matrix.
+ */
 extern struct bfdev_matrix *
 bfdev_matrix_add(const struct bfdev_alloc *alloc, const struct bfdev_matrix *va,
                  const struct bfdev_matrix *vb);
 
+/**
+ * bfdev_matrix_sub() - subtracting two matrices.
+ * @va: minuend; matrix to subtract from.
+ * @vb: subtrahend; matrix to subtract from @va.
+ */
 extern struct bfdev_matrix *
 bfdev_matrix_sub(const struct bfdev_alloc *alloc, const struct bfdev_matrix *va,
                  const struct bfdev_matrix *vb);
 
+/**
+ * bfdev_matrix_mul() - multiplying two matrices.
+ * @va: first factor matrix.
+ * @vb: second factor matrix.
+ */
 extern struct bfdev_matrix *
 bfdev_matrix_mul(const struct bfdev_alloc *alloc, const struct bfdev_matrix *va,
                  const struct bfdev_matrix *vb);
 
+/**
+ * bfdev_matrix_copy() - copy a new matrix.
+ * @var: variables to copy.
+ */
 extern struct bfdev_matrix *
 bfdev_matrix_copy(const struct bfdev_alloc *alloc,
                   const struct bfdev_matrix *var);
 
+/**
+ * bfdev_matrix_create() - create a new matrix.
+ * @row: number of rows in the matrix.
+ * @col: number of columns in the matrix.
+ */
 extern struct bfdev_matrix *
 bfdev_matrix_create(const struct bfdev_alloc *alloc,
                     unsigned int row, unsigned int col);
 
+/**
+ * bfdev_matrix_destory() - destory a matrix.
+ * @var: variables to destory.
+ */
 extern void
 bfdev_matrix_destory(const struct bfdev_alloc *alloc,
                      const struct bfdev_matrix *var);
