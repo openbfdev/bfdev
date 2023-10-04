@@ -14,7 +14,7 @@ BFDEV_BEGIN_DECLS
 
 #ifndef bfdev_arch_unaligned_get_type
 # define bfdev_arch_unaligned_get_type(type, ptr) ({            \
-    const struct { type val; } __packed                         \
+    const struct { type val; } __bfdev_packed                   \
     *_pptr = (typeof(_pptr))(ptr);                              \
     _pptr->val;                                                 \
 })
@@ -22,7 +22,7 @@ BFDEV_BEGIN_DECLS
 
 #ifndef bfdev_arch_unaligned_set_type
 # define bfdev_arch_unaligned_set_type(type, ptr, value) ({     \
-    struct { type val; } __packed                               \
+    struct { type val; } __bfdev_packed                         \
     *_pptr = (typeof(_pptr))(ptr);                              \
     _pptr->val = (value);                                       \
 })
