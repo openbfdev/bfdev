@@ -4,6 +4,7 @@
 #
 
 add_subdirectory(array)
+add_subdirectory(base32)
 add_subdirectory(bfdev)
 add_subdirectory(bloom)
 add_subdirectory(btree)
