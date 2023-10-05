@@ -125,9 +125,7 @@ base32_decode(uint8_t *buff, const uint8_t *data, size_t size)
     uint8_t decode;
 
     while (size--) {
-        if ((*data < '2') || (*data > 'Z'))
-            return -BFDEV_EINVAL;
-        else if (*data == '=')
+        if (*data == '=')
             break;
 
         decode = base32_decode_table[*data++];
