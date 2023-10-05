@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <unistd.h>
 #include <sys/times.h>
 #include <bfdev/radix.h>
@@ -35,6 +36,7 @@ int main(void)
         return 1;
     }
 
+    srand(time(NULL));
     for (count = 0; count < TEST_LOOP; ++count)
         data[count] = rand();
 

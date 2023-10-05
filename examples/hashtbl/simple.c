@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <bfdev/hashtbl.h>
 
 #define TEST_SIZE 16
@@ -27,6 +28,7 @@ int main(void)
         return 1;
 
     printf("hashtbl 'bfdev_hashtbl_add':\n");
+    srand(time(NULL));
     for (count = 0; count < TEST_LOOP; ++count) {
         value = (unsigned int)rand();
         nodes[count].value = value;

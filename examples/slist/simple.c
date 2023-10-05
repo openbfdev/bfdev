@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <bfdev/slist.h>
 
 #define TEST_LEN 100
@@ -17,7 +18,7 @@ struct list_simple {
 };
 
 #define list_to_simple(node) \
-    bfdev_container_of(node, struct list_simple, slist)
+    bfdev_slist_entry(node, struct list_simple, slist)
 
 int main(void)
 {
@@ -26,11 +27,12 @@ int main(void)
     int ret = 0;
 
     printf("Generate %d Node:\n", TEST_LEN);
+    srand(time(NULL));
     for (count = 0; count < TEST_LEN; ++count) {
         node = malloc(sizeof(*node));
         if ((ret = !node)) {
             printf("insufficient memory\n");
-            goto error;
+            return 1;
         }
 
         node->num = count;
@@ -42,7 +44,6 @@ int main(void)
         printf("\t%04u: 0x%016lx\n", node->num, node->data);
 
     printf("Deletion All Node...\n");
-error:
     bfdev_slist_for_each_entry_safe(node, tmp, &demo_list, list) {
         bfdev_slist_del(&demo_list, &node->list);
         free(node);

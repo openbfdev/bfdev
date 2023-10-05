@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <bfdev/heap.h>
 #include <bfdev/log.h>
 
@@ -222,6 +223,7 @@ int main(void)
     if (!rdata)
         return 1;
 
+    srand(time(NULL));
     for (count = 0; count < TEST_LOOP; ++count)
         rdata->nodes[count].num = rand();
 

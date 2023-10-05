@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <unistd.h>
 #include <sys/times.h>
 #include <bfdev/list.h>
@@ -58,12 +59,13 @@ int main(void)
     ticks = sysconf(_SC_CLK_TCK);
 
     printf("Generate %d Node:\n", TEST_LEN);
+    srand(time(NULL));
     start = times(&start_tms);
     for (count = 0; count < TEST_LEN; ++count) {
         node = malloc(sizeof(*node));
         if ((ret = !node)) {
             printf("insufficient memory\n");
-            goto error;
+            return 1;
         }
 
         node->num = count;
@@ -89,7 +91,6 @@ int main(void)
     time_dump(ticks, start, stop, &start_tms, &stop_tms);
 
     printf("Deletion All Node...\n");
-error:
     bfdev_list_for_each_entry_safe(node, tmp, &demo_list, list)
         free(node);
 

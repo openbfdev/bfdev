@@ -5,8 +5,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <unistd.h>
-#include <errno.h>
 #include <sys/times.h>
 #include <bfdev/rbtree.h>
 
@@ -93,10 +93,11 @@ int main(void)
     node = block = malloc(sizeof(*node) * TEST_LEN);
     if (!block) {
         printf("Insufficient Memory!\n");
-        return -ENOMEM;
+        return 1;
     }
 
     printf("Generate %u Node:\n", TEST_LEN);
+    srand(time(NULL));
     for (count = 0; count < TEST_LEN; ++count) {
         node[count].data = ((unsigned long)rand() << 32) | rand();
 #if RB_DEBUG

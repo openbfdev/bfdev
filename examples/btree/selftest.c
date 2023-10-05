@@ -3,11 +3,12 @@
  * Copyright(c) 2022 John Sanpe <sanpeqf@gmail.com>
  */
 
-#include <bfdev/btree.h>
-#include <bfdev/list.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <string.h>
+#include <bfdev/btree.h>
+#include <bfdev/list.h>
 
 #define TEST_LOOP 100
 
@@ -65,6 +66,7 @@ test_testing(struct test_node *nodes)
         test_clash, test_remove, NULL
     );
 
+    srand(time(NULL));
     for (count = 0; count < TEST_LOOP; ++count) {
         bfdev_list_head_init(&nodes[count].list);
         nodes[count].key = (uintptr_t)rand();
@@ -164,7 +166,7 @@ int main(void)
 
     bdata = malloc(sizeof(*bdata) * TEST_LOOP);
     if (!bdata)
-        return -1;
+        return 1;
 
     retval = test_testing(bdata);
     free(bdata);

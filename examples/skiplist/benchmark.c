@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <time.h>
 #include <unistd.h>
 #include <sys/times.h>
 #include <bfdev/skiplist.h>
@@ -59,13 +60,14 @@ int main(void)
         return 1;
 
     printf("Insert %u Node:\n", TEST_LEN);
+    srand(time(NULL));
     start = times(&start_tms);
     for (count = 0; count < TEST_LEN; ++count) {
         value = ((unsigned long)rand() << 32) | rand();
         record[count] = value;
         retval = bfdev_skiplist_insert(head, (void *)value, skiplist_bench_cmp);
         if (retval)
-            goto error;
+            return 1;
     }
     stop = times(&stop_tms);
     time_dump(ticks, start, stop, &start_tms, &stop_tms);
@@ -76,13 +78,13 @@ int main(void)
         value = record[(unsigned long)rand() % TEST_LEN];
         node = bfdev_skiplist_find(head, (void *)value, skiplist_bench_find);
         if (!node)
-            goto error;
+            return 1;
     }
     stop = times(&stop_tms);
     time_dump(ticks, start, stop, &start_tms, &stop_tms);
 
-error:
     bfdev_skiplist_destroy(head, NULL);
     free(record);
+
     return retval;
 }
