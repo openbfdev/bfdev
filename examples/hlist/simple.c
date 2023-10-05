@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <bfdev/hlist.h>
 
 #define TEST_LEN 100
@@ -26,11 +27,12 @@ int main(void)
     int ret = 0;
 
     printf("Generate %d Node:\n", TEST_LEN);
+    srand(time(NULL));
     for (count = 0; count < TEST_LEN; ++count) {
         node = malloc(sizeof(*node));
         if ((ret = !node)) {
             printf("insufficient memory\n");
-            goto error;
+            return 1;
         }
 
         node->num = count;
@@ -42,7 +44,6 @@ int main(void)
         printf("\t%04u: 0x%016lx\n", node->num, node->data);
 
     printf("Deletion All Node...\n");
-error:
     bfdev_hlist_for_each_entry_safe(node, tmp, &demo_list, list) {
         bfdev_hlist_del(&node->list);
         free(node);

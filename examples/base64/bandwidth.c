@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <sys/time.h>
 #include <bfdev/base64.h>
 #include <bfdev/crc.h>
@@ -35,6 +36,7 @@ int main(int argc, char const *argv[])
     if (!dbuff)
         return 1;
 
+    srand(time(NULL));
     for (index = 0; index < TEST_SIZE; ++index)
         dbuff[index] = (uint8_t)rand();
 

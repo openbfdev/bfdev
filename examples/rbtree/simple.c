@@ -5,7 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <bfdev/errno.h>
+#include <time.h>
 #include <bfdev/rbtree.h>
 
 #define TEST_LEN 10
@@ -31,11 +31,12 @@ int main(void)
     struct simple_node *node, *tmp;
     unsigned int count;
 
+    srand(time(NULL));
     for (count = 0; count < TEST_LEN; ++count) {
         node = malloc(sizeof(*node));
         if (!node) {
             printf("Abort.\n");
-            return -BFDEV_ENOMEM;
+            return 1;
         }
 
         node->data = ((unsigned long)rand() << 32) | rand();

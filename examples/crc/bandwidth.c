@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <sys/time.h>
 #include <bfdev/crc.h>
 #include <bfdev/bits.h>
@@ -43,6 +44,7 @@ int main(int argc, char const *argv[])
     if (!buff)
         return 1;
 
+    srand(time(NULL));
     for (index = 0; index < TEST_SIZE; ++index)
         buff[index] = (uint8_t)rand();
 

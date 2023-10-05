@@ -5,7 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <time.h>
 #include <unistd.h>
 #include <bfdev/heap.h>
 #include <sys/times.h>
@@ -80,6 +80,7 @@ int main(void)
     }
 
     printf("Generate %u node:\n", TEST_LEN);
+    srand(time(NULL));
     for (count = 0; count < TEST_LEN; ++count) {
         bnode[count].num = count + 1;
         bnode[count].data = rand();

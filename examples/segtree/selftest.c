@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <bfdev/macro.h>
 #include <bfdev/segtree.h>
 
@@ -101,6 +102,7 @@ int main(void)
     if (!sdata)
         return -1;
 
+    srand(time(NULL));
     for (count = 0; count < BFDEV_ARRAY_SIZE(sdata->nodes); ++count) {
         sdata->queries[count] = rand();
         sdata->nodes[count].node.end = (random = rand());

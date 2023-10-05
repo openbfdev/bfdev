@@ -3,12 +3,12 @@
  * Copyright(c) 2021 John Sanpe <sanpeqf@gmail.com>
  */
 
-#include <bfdev/btree.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <time.h>
 #include <unistd.h>
 #include <sys/times.h>
+#include <bfdev/btree.h>
 
 #define BTREE_DEBUG 0
 #define TEST_LEN 1000000
@@ -57,6 +57,7 @@ int main(void)
     }
 
     printf("Generate %u Node:\n", TEST_LEN);
+    srand(time(NULL));
     for (count = 0; count < TEST_LEN; ++count) {
         node[count].num = count + 1;
         node[count].data = ((unsigned long)rand() << 32) | rand();
