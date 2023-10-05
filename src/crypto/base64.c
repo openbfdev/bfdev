@@ -94,12 +94,12 @@ base64_decode(uint8_t *buff, const uint8_t *data, size_t size)
     uint8_t decode;
 
     while (size--) {
-        if (*data == '=')
-            break;
-
         decode = base64_decode_table[*data++];
-        if (decode == 0xff)
+        if (decode == 0xff) {
+            if (*data == '=')
+                break;
             return -BFDEV_EINVAL;
+        }
 
         switch (bstate++ & 0x3) {
             case 0:
