@@ -11,7 +11,7 @@ if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
     install(FILES
         bandwidth.c
         DESTINATION
-        ${CMAKE_INSTALL_DOCDIR}/examples/bfdev
+        ${CMAKE_INSTALL_DOCDIR}/examples/base32
     )
 
     install(TARGETS
