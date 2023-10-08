@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <time.h>
 #include <unistd.h>
 #include <sys/times.h>
@@ -15,7 +16,7 @@
 
 struct bench_node {
     unsigned int num;
-    unsigned long data;
+    uintptr_t data;
 };
 
 #if BTREE_DEBUG
@@ -60,7 +61,7 @@ int main(void)
     srand(time(NULL));
     for (count = 0; count < TEST_LEN; ++count) {
         node[count].num = count + 1;
-        node[count].data = ((unsigned long)rand() << 32) | rand();
+        node[count].data = ((uint64_t)rand() << 32) | rand();
 #if BTREE_DEBUG
         printf("\t%08d: 0x%016lx\n", node->num, node->data);
 #endif

@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <time.h>
 #include <unistd.h>
 #include <sys/times.h>
@@ -99,7 +100,7 @@ int main(void)
     printf("Generate %u Node:\n", TEST_LEN);
     srand(time(NULL));
     for (count = 0; count < TEST_LEN; ++count) {
-        node[count].data = ((unsigned long)rand() << 32) | rand();
+        node[count].data = ((uint64_t)rand() << 32) | rand();
 #if RB_DEBUG
         node[count].num = count + 1;
         printf("\t%08d: 0x%016lx\n", node->num, node->data);

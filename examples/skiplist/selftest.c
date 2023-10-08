@@ -38,7 +38,7 @@ static int skiplist_test_testing(struct skiplist_test *test)
         retval = bfdev_skiplist_insert(test->head,
                  (void *)test->values[count], skiplist_test_cmp);
         printf("skiplist insert test%02d: %#010lx ret %d\n",
-               count, test->values[count], retval);
+               count, (unsigned long)test->values[count], retval);
         if (retval)
             return retval;
     }
@@ -47,7 +47,7 @@ static int skiplist_test_testing(struct skiplist_test *test)
         value = (uintptr_t)bfdev_skiplist_find(test->head,
                 (void *)test->values[count], skiplist_test_cmp);
         printf("skiplist find test%02d: %#010lx ret %#010lx\n",
-               count, test->values[count], value);
+               count, (unsigned long)test->values[count], (unsigned long)value);
         if (!value)
             return -BFDEV_ENOENT;
     }
