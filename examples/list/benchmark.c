@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <time.h>
 #include <unistd.h>
 #include <sys/times.h>
@@ -69,7 +70,7 @@ int main(void)
         }
 
         node->num = count;
-        node->data = ((unsigned long)rand() << 32) | rand();
+        node->data = ((uint64_t)rand() << 32) | rand();
         node_dump(node);
 
         bfdev_list_add(&demo_list, &node->list);

@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <time.h>
 #include <bfdev/hlist.h>
 
@@ -36,7 +37,7 @@ int main(void)
         }
 
         node->num = count;
-        node->data = ((unsigned long)rand() << 32) | rand();
+        node->data = ((uint64_t)rand() << 32) | rand();
         bfdev_hlist_head_add(&demo_list, &node->list);
     }
 

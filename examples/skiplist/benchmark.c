@@ -63,7 +63,7 @@ int main(void)
     srand(time(NULL));
     start = times(&start_tms);
     for (count = 0; count < TEST_LEN; ++count) {
-        value = ((unsigned long)rand() << 32) | rand();
+        value = ((uint64_t)rand() << 32) | rand();
         record[count] = value;
         retval = bfdev_skiplist_insert(head, (void *)value, skiplist_bench_cmp);
         if (retval)
