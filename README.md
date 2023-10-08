@@ -81,7 +81,7 @@ graph LR
 
 ## Documentation Tutorial
 
-Quickly start, API manual, see [Bfdev Documentation Tutorial](https://bfdev.github.io/)
+Quickly start, API manual, see [Bfdev Documentation Tutorial](https://openbfdev.github.io/bfdev-docs)
 
 ## License
 
