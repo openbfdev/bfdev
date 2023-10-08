@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <time.h>
 #include <bfdev/hashmap.h>
 
@@ -70,7 +71,7 @@ int main(void)
     printf("hashmap 'bfdev_hashmap_add':\n");
     srand(time(NULL));
     for (count = 0; count < TEST_LOOP; ++count) {
-        value = ((unsigned long)rand() << 32) | rand();
+        value = ((uint64_t)rand() << 32) | rand();
         nodes[count].value = value;
 
         printf("\ttest %02u: value %lu\n", count, value);

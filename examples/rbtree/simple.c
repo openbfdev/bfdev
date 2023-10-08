@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <time.h>
 #include <bfdev/rbtree.h>
 
@@ -39,7 +40,7 @@ int main(void)
             return 1;
         }
 
-        node->data = ((unsigned long)rand() << 32) | rand();
+        node->data = ((uint64_t)rand() << 32) | rand();
         bfdev_rb_insert(&simple_root, &node->node, demo_cmp);
     }
 
