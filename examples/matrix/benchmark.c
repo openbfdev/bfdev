@@ -48,9 +48,9 @@ int main(int argc, char const *argv[])
         return 1;
 
     srand(time(NULL));
-    for (count = 0; count < TEST_SIZE * TEST_SIZE; ++count) {
-        vara->values[count] = (uint64_t)rand() << 32 | rand();
-        varb->values[count] = (uint64_t)rand() << 32 | rand();
+    for (count = 0; count < TEST_SIZE; ++count) {
+        vara->values[count] = (uint32_t)rand();
+        varb->values[count] = (uint32_t)rand();
     }
 
     GENERIC_MATRIX_BENCHMARK(bfdev_matrix_add, "adding")
