@@ -125,8 +125,6 @@ bfdev_errname_table[] = {
     ERRNAME(EKEYEXPIRED, "Key has expired"),
     ERRNAME(EKEYREVOKED, "Key has been revoked"),
     ERRNAME(EKEYREJECTED, "Key was rejected by service"),
-
-    { }, /* NULL */
 };
 
 static long
@@ -158,8 +156,11 @@ bfdev_errname(int error, const char **infop)
     struct bfdev_errname *entry;
 
     entry = bfdev_errname_find(error);
-    if (entry && infop)
+    if (bfdev_unlikely(!entry))
+        return NULL;
+
+    if (infop)
         *infop = entry->info;
 
-    return entry ? entry->name : NULL;
+    return entry->name;
 }
