@@ -7,13 +7,6 @@
 #include <bfdev/scnprintf.h>
 #include <export.h>
 
-/**
- * bfdev_vscnprintf() - format a string and place it in a buffer.
- * @buf: The buffer to place the result into.
- * @size: The size of the buffer, including the trailing null space.
- * @fmt: The format string to use.
- * @...: Arguments for the format string.
- */
 export int
 bfdev_vscnprintf(char *buf, size_t size, const char *fmt, va_list args)
 {
@@ -29,13 +22,6 @@ bfdev_vscnprintf(char *buf, size_t size, const char *fmt, va_list args)
     return 0;
 }
 
-/**
- * bfdev_scnprintf() - format a string and place it in a buffer.
- * @buf: The buffer to place the result into.
- * @size: The size of the buffer, including the trailing null space.
- * @fmt: The format string to use.
- * @...: Arguments for the format string.
- */
 export int
 bfdev_scnprintf(char *buf, size_t size, const char *fmt, ...)
 {
