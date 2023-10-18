@@ -13,10 +13,17 @@
 
 BFDEV_BEGIN_DECLS
 
-extern void bfdev_ascii85_encode(void *buff, const void *data, size_t size);
-extern int bfdev_ascii85_decode(void *buff, const void *data, size_t size);
-extern size_t bfdev_ascii85_encode_length(const void *data, size_t size);
-extern size_t bfdev_ascii85_decode_length(const void *data, size_t size);
+extern void
+bfdev_ascii85_encode(void *buff, const void *data, size_t size);
+
+extern int
+bfdev_ascii85_decode(void *buff, const void *data, size_t size);
+
+extern size_t
+bfdev_ascii85_encode_length(const void *data, size_t size);
+
+extern size_t
+bfdev_ascii85_decode_length(const void *data, size_t size);
 
 BFDEV_END_DECLS
 
