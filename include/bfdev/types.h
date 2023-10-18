@@ -8,6 +8,7 @@
 
 #include <bfdev/config.h>
 #include <bfdev/stdint.h>
+#include <bfdev/stddef.h>
 
 BFDEV_BEGIN_DECLS
 

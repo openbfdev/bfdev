@@ -7,6 +7,7 @@
 #define _BFDEV_BASE32_H_
 
 #include <bfdev/config.h>
+#include <bfdev/types.h>
 #include <bfdev/errno.h>
 #include <bfdev/math.h>
 
@@ -24,8 +25,11 @@ bfdev_base32_decode_length(size_t size)
     return BFDEV_DIV_ROUND_UP(size, 8) * 5;
 }
 
-extern void bfdev_base32_encode(void *buff, const void *data, size_t size);
-extern int bfdev_base32_decode(void *buff, const void *data, size_t size);
+extern void
+bfdev_base32_encode(void *buff, const void *data, size_t size);
+
+extern int
+bfdev_base32_decode(void *buff, const void *data, size_t size);
 
 BFDEV_END_DECLS
 
