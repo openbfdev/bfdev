@@ -87,6 +87,17 @@ configure_file(
     ${PROJECT_BINARY_DIR}/generated/bfdev/config.h
 )
 
+# cmake configuire part
+
+set(BFDEV_CONFIG_IN ${CMAKE_MODULE_PATH}/bfdev-config.cmake.in)
+set(BFDEV_CONF_OUT  ${PROJECT_BINARY_DIR}/generated/bfdev/bfdev-config.cmake)
+configure_file(
+    ${BFDEV_CONFIG_IN}
+    ${BFDEV_CONF_OUT}
+)
+
+
+
 file(GLOB BFDEV_HEADER
     ${BFDEV_HEADER_PATH}/bfdev/*.h
 )
@@ -238,6 +249,11 @@ if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
     install(FILES
         ${BFDEV_GENERATED_PATH}/bfdev.h
         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+    )
+
+    install(FILES
+        ${BFDEV_CONF_OUT}
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/bfdev/
     )
 
     install(DIRECTORY

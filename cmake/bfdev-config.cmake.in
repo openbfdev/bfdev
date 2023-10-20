@@ -1,0 +1,13 @@
+@PACKAGE_INIT@
+
+#version
+set(BFDEV_VERSION "@BFDEV_VERSION@")
+
+#inlcue
+set(BFDEV_INCLUDE_DIR "@CMAKE_INSTALL_PREFIX@/include")
+
+#lib
+set(BFDEV_LIBRARY_DIR "@CMAKE_INSTALL_PREFIX@/lib")
+
+#found
+set(BFDEV_FOUND true)
