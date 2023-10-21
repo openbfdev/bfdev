@@ -40,6 +40,7 @@ set(BFDEV_GENERATED_PATH ${PROJECT_BINARY_DIR}/generated)
 
 set(BFDEV_ARCH_PATH ${PROJECT_SOURCE_DIR}/arch/${BFDEV_ARCH})
 set(BFDEV_ARCH_HEADER_PATH ${BFDEV_ARCH_PATH}/include)
+set(BFDEV_CONFIGURE ${BFDEV_GENERATED_PATH}/bfdev-config.cmake)
 
 include(scripts/asm-generic.cmake)
 include(scripts/hostrule.cmake)
@@ -88,8 +89,8 @@ configure_file(
 )
 
 configure_file(
-    ${BFDEV_MODULE_PATH}/bfdev.cmake.in
-    ${BFDEV_GENERATED_PATH}/bfdev/bfdev.cmake
+    ${BFDEV_MODULE_PATH}/bfdev-config.cmake.in
+    ${BFDEV_CONFIGURE}
 )
 
 file(GLOB BFDEV_HEADER
@@ -242,24 +243,24 @@ if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
 
     install(FILES
         ${BFDEV_GENERATED_PATH}/bfdev.h
-        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     )
 
     install(FILES
-        ${BFDEV_CONF_OUT}
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/bfdev/
+        ${BFDEV_CONFIGURE}
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/bfdev
     )
 
     install(DIRECTORY
         ${BFDEV_HEADER_PATH}/bfdev
         ${BFDEV_GENERATED_PATH}/bfdev
         ${BFDEV_ARCH_HEADER_PATH}/bfdev
-        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     )
 
     install(DIRECTORY
         ${BFDEV_DOCUMENT_PATH}
-        DESTINATION "${CMAKE_INSTALL_DOCDIR}"
+        DESTINATION ${CMAKE_INSTALL_DOCDIR}
     )
 
     install(TARGETS
