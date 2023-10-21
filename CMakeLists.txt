@@ -32,7 +32,7 @@ if(BFDEV_EXTREVERSION)
     string(APPEND BFDEV_VERSION ${BFDEV_EXTREVERSION})
 endif()
 
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+set(BFDEV_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 set(BFDEV_HEADER_PATH ${PROJECT_SOURCE_DIR}/include)
 set(BFDEV_SOURCE_PATH ${PROJECT_SOURCE_DIR}/src)
 set(BFDEV_DOCUMENT_PATH ${PROJECT_SOURCE_DIR}/docs)
@@ -83,8 +83,13 @@ packed_header(
 )
 
 configure_file(
-    ${CMAKE_MODULE_PATH}/config.h.in
-    ${PROJECT_BINARY_DIR}/generated/bfdev/config.h
+    ${BFDEV_MODULE_PATH}/config.h.in
+    ${BFDEV_GENERATED_PATH}/bfdev/config.h
+)
+
+configure_file(
+    ${BFDEV_MODULE_PATH}/bfdev.cmake.in
+    ${BFDEV_GENERATED_PATH}/bfdev/bfdev.cmake
 )
 
 file(GLOB BFDEV_HEADER
@@ -238,6 +243,11 @@ if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
     install(FILES
         ${BFDEV_GENERATED_PATH}/bfdev.h
         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+    )
+
+    install(FILES
+        ${BFDEV_CONF_OUT}
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/bfdev/
     )
 
     install(DIRECTORY
