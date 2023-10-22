@@ -8,7 +8,7 @@
 #include <export.h>
 
 export uint8_t
-bfdev_crc4(const uint8_t *src, size_t len, uint8_t crc)
+bfdev_crc4(const void *data, size_t len, uint8_t crc)
 {
-    return bfdev_crc4_inline(src, len, crc);
+    return bfdev_crc4_inline(data, len, crc);
 }

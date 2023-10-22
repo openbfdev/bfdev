@@ -8,7 +8,7 @@
 #include <export.h>
 
 export uint64_t
-bfdev_crc_rocksoft(const uint8_t *src, size_t len, uint64_t crc)
+bfdev_crc_rocksoft(const void *data, size_t len, uint64_t crc)
 {
-    return bfdev_crc_rocksoft_inline(src, len, crc);
+    return bfdev_crc_rocksoft_inline(data, len, crc);
 }
