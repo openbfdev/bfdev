@@ -8,7 +8,7 @@
 #include <export.h>
 
 export uint16_t
-bfdev_crc_ccitt(const uint8_t *src, size_t len, uint16_t crc)
+bfdev_crc_ccitt(const void *data, size_t len, uint16_t crc)
 {
-    return bfdev_crc_ccitt_inline(src, len, crc);
+    return bfdev_crc_ccitt_inline(data, len, crc);
 }
