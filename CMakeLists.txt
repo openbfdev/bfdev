@@ -247,6 +247,13 @@ if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
     )
 
     install(FILES
+        ${CMAKE_SOURCE_DIR}/README.md
+        ${CMAKE_SOURCE_DIR}/AUTHORS
+        ${CMAKE_SOURCE_DIR}/COPYING
+        DESTINATION ${CMAKE_INSTALL_DOCDIR}
+    )
+
+    install(FILES
         ${BFDEV_CONFIGURE}
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/bfdev
     )
