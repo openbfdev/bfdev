@@ -5,7 +5,7 @@
 #
 
 cmake_minimum_required(VERSION 3.9)
-project(bfdev VERSION "1.0" LANGUAGES C)
+project(bfdev VERSION 1.0 LANGUAGES C)
 
 include(GNUInstallDirs)
 include(CheckIncludeFiles)
@@ -15,18 +15,9 @@ include(CheckCSourceCompiles)
 
 set(BFDEV_ARCH dummy)
 set(BFDEV_NAME sirius)
+
 set(BFDEV_EXTREVERSION -devel)
-
-set(BFDEV_VERSION ${CMAKE_PROJECT_VERSION_MAJOR})
-string(APPEND BFDEV_VERSION . ${CMAKE_PROJECT_VERSION_MINOR})
-
-if(CMAKE_PROJECT_VERSION_PATCH)
-    string(APPEND BFDEV_VERSION . ${CMAKE_PROJECT_VERSION_PATCH})
-endif()
-
-if(CMAKE_PROJECT_VERSION_TWEAK)
-    string(APPEND BFDEV_VERSION . ${CMAKE_PROJECT_VERSION_TWEAK})
-endif()
+set(BFDEV_VERSION ${PROJECT_VERSION})
 
 if(BFDEV_EXTREVERSION)
     string(APPEND BFDEV_VERSION ${BFDEV_EXTREVERSION})
@@ -109,16 +100,16 @@ file(GLOB BFDEV_GENERATED_HEADER
     ${BFDEV_GENERATED_PATH}/*.h
 )
 
-add_definitions(
-    " -std=gnu17"
-    " -Wall"
-    " -Wextra"
-    " -Wno-override-init"
-    " -Wno-unused-parameter"
-    " -Wno-sign-compare"
-    " -Wno-pointer-sign"
-    " -Wno-null-pointer-arithmetic"
-    " -fvisibility=hidden"
+add_compile_options(
+    -std=gnu17
+    -Wall
+    -Wextra
+    -Wno-override-init
+    -Wno-unused-parameter
+    -Wno-sign-compare
+    -Wno-pointer-sign
+    -Wno-null-pointer-arithmetic
+    -fvisibility=hidden
 )
 
 if(BFDEV_STRICT)
@@ -230,13 +221,15 @@ if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
 
     set_target_properties(bfdev_static
         PROPERTIES
-        OUTPUT_NAME ${CMAKE_PROJECT_NAME}
+        OUTPUT_NAME ${PROJECT_NAME}
         LINKER_LANGUAGE C
     )
 
     set_target_properties(bfdev_shared
-        PROPERTIES VERSION 1.0 SOVERSION 1
-        OUTPUT_NAME ${CMAKE_PROJECT_NAME}
+        PROPERTIES
+        OUTPUT_NAME ${PROJECT_NAME}
+        VERSION ${PROJECT_VERSION}
+        SOVERSION ${PROJECT_VERSION_MAJOR}
         LINKER_LANGUAGE C
         MACOSX_RPATH ON
     )
