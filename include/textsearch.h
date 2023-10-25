@@ -3,8 +3,8 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
-#ifndef _TEXTSEARCH_H_
-#define _TEXTSEARCH_H_
+#ifndef _LOCAL_TEXTSEARCH_H_
+#define _LOCAL_TEXTSEARCH_H_
 
 #include <bfdev/config.h>
 #include <bfdev/textsearch.h>
@@ -19,4 +19,4 @@ bfdev_textsearch_unregister(struct bfdev_ts_algorithm *algo);
 
 BFDEV_END_DECLS
 
-#endif /* _TEXTSEARCH_H_ */
+#endif /* _LOCAL_TEXTSEARCH_H_ */

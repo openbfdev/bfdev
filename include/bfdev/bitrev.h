@@ -147,7 +147,7 @@ BFDEV_BEGIN_DECLS
  * Interface for known dynamic arguments
  */
 
-extern uint8_t
+extern const uint8_t
 bfdev_bitrev_byte_table[256];
 
 static inline uint8_t

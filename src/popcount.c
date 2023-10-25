@@ -6,7 +6,8 @@
 #include <bfdev/popcount.h>
 #include <export.h>
 
-export const uint8_t bfdev_popcount_table[256] = {
+export const uint8_t
+bfdev_popcount_table[256] = {
     [0x00] = 0, [0x01] = 1, [0x02] = 1, [0x03] = 2,
     [0x04] = 1, [0x05] = 2, [0x06] = 2, [0x07] = 3,
     [0x08] = 1, [0x09] = 2, [0x0a] = 2, [0x0b] = 3,

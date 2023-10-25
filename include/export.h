@@ -3,8 +3,8 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
-#ifndef _EXPORT_H_
-#define _EXPORT_H_
+#ifndef _LOCAL_EXPORT_H_
+#define _LOCAL_EXPORT_H_
 
 #include <bfdev/config.h>
 
@@ -14,4 +14,4 @@
 #undef export
 # define export __bfdev_visibility("default")
 
-#endif /* _EXPORT_H_ */
+#endif /* _LOCAL_EXPORT_H_ */
