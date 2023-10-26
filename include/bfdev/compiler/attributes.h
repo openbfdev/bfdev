@@ -15,21 +15,10 @@ BFDEV_BEGIN_DECLS
  * map to compiler attribute(s), unless one of the compilers does not support
  * the attribute. In that case, __has_attribute is used to check for support
  * and the reason is stated in its comment ("Optional: ...").
- *
- * Any other "attributes" (i.e. those that depend on a configuration option,
- * on a compiler, on an architecture, on plugins, on other attributes...)
- * should be defined elsewhere (e.g. compiler_types.h or compiler-*.h).
- * The intention is to keep this file as simple as possible, as well as
- * compiler- and version-agnostic (e.g. avoiding GCC_VERSION checks).
- *
- * This file is meant to be sorted (by actual attribute name,
- * not by #define identifier). Use the __attribute__((__name__)) syntax
- * (i.e. with underscores) to avoid future collisions with other macros.
- * Provide links to the documentation of each supported compiler, if it exists.
  */
 
 /*
- * __has_attribute is supported on gcc >= 5, clang >= 2.9 and icc >= 17.
+ * __has_attribute is supported on gcc >= 5, clang >= 2.9.
  * In the meantime, to support gcc < 5, we implement __has_attribute
  * by hand.
  */
@@ -48,14 +37,14 @@ BFDEV_BEGIN_DECLS
 #endif
 
 /*
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-alias-function-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-alias-function-attribute
  */
 #define __bfdev_alias(symbol) __attribute__((__alias__(symbol)))
 
 /*
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-aligned-function-attribute
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Type-Attributes.html#index-aligned-type-attribute
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html#index-aligned-variable-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-aligned-function-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Type-Attributes.html#index-aligned-type-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html#index-aligned-variable-attribute
  */
 #define __bfdev_aligned(x) __attribute__((__aligned__(x)))
 #define __bfdev_aligned_largest __attribute__((__aligned__))
@@ -66,25 +55,13 @@ BFDEV_BEGIN_DECLS
  * to its docs (and also "warning: always_inline function might not be
  * inlinable [-Wattributes]" is emitted).
  *
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-always_005finline-function-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-always_005finline-function-attribute
  * clang: mentioned
  */
 #define __bfdev_always_inline inline __attribute__((__always_inline__))
 
 /*
- * The second argument is optional (default 0), so we use a variadic macro
- * to make the shorthand.
- *
- * Beware: Do not apply this to functions which may return
- * ERR_PTRs. Also, it is probably unwise to apply it to functions
- * returning extra information in the low bits (but in that case the
- * compiler should see some alignment anyway, when the return value is
- * massaged by 'flags = ptr & 3; ptr &= ~3;').
- *
- * Optional: only supported since gcc >= 4.9
- * Optional: not supported by icc
- *
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-assume_005faligned-function-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-assume_005faligned-function-attribute
  * clang: https://clang.llvm.org/docs/AttributeReference.html#assume-aligned
  */
 #if __has_attribute(__assume_aligned__)
@@ -94,13 +71,13 @@ BFDEV_BEGIN_DECLS
 #endif
 
 /*
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-cold-function-attribute
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Label-Attributes.html#index-cold-label-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-cold-function-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Label-Attributes.html#index-cold-label-attribute
  */
 #define __bfdev_cold __attribute__((__cold__))
 
 /*
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html#index-cleanup-variable-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html#index-cleanup-variable-attribute
  * clang: https://clang.llvm.org/docs/AttributeReference.html#cleanup
  */
 #define __bfdev_cleanup(func) __attribute__((__cleanup__(func)))
@@ -108,16 +85,15 @@ BFDEV_BEGIN_DECLS
 /*
  * Note the long name.
  *
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-const-function-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-const-function-attribute
  */
 #define __bfdev_attribute_const __attribute__((__const__))
 
 /*
  * Optional: only supported since gcc >= 9
  * Optional: not supported by clang
- * Optional: not supported by icc
  *
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-copy-function-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-copy-function-attribute
  */
 #if __has_attribute(__copy__)
 # define __bfdev_copy(symbol) __attribute__((__copy__(symbol)))
@@ -126,23 +102,23 @@ BFDEV_BEGIN_DECLS
 #endif
 
 /*
- * Don't. Just don't. See commit 771c035372a0 ("deprecate the '__deprecated'
- * attribute warnings entirely and for good") for more information.
+ * Optional: only supported since gcc >= 14
+ * Optional: only supported since clang >= 18
  *
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-deprecated-function-attribute
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Type-Attributes.html#index-deprecated-type-attribute
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html#index-deprecated-variable-attribute
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Enumerator-Attributes.html#index-deprecated-enumerator-attribute
- * clang: https://clang.llvm.org/docs/AttributeReference.html#deprecated
+ * gcc: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
+ * clang: https://reviews.llvm.org/D148381
  */
-#define __bfdev_deprecated
+#if __has_attribute(__counted_by__)
+# define __bfdev_counted_by(member) __attribute__((__counted_by__(member)))
+#else
+# define __bfdev_counted_by(member)
+#endif
 
 /*
  * Optional: only supported since gcc >= 5.1
  * Optional: not supported by clang
- * Optional: not supported by icc
  *
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Type-Attributes.html#index-designated_005finit-type-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Type-Attributes.html#index-designated_005finit-type-attribute
  */
 #if __has_attribute(__designated_init__)
 # define __bfdev_designated_init __attribute__((__designated_init__))
@@ -153,7 +129,7 @@ BFDEV_BEGIN_DECLS
 /*
  * Optional: not supported by clang
  *
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-externally_005fvisible-function-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-externally_005fvisible-function-attribute
  */
 #if __has_attribute(__externally_visible__)
 # define __bfdev_visible __attribute__((__externally_visible__))
@@ -162,39 +138,39 @@ BFDEV_BEGIN_DECLS
 #endif
 
 /*
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-format-function-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-format-function-attribute
  * clang: https://clang.llvm.org/docs/AttributeReference.html#format
  */
 #define __bfdev_printf(a, b) __attribute__((__format__(printf, a, b)))
 #define __bfdev_scanf(a, b) __attribute__((__format__(scanf, a, b)))
 
 /*
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-nonnull-function-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-nonnull-function-attribute
  * clang: https://clang.llvm.org/docs/AttributeReference.html#nonnull
  */
 #define __bfdev_nonnull(nr, ...) __attribute__((__nonnull__(nr, ##__VA_ARGS__)))
 
 /*
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-gnu_005finline-function-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-gnu_005finline-function-attribute
  * clang: https://clang.llvm.org/docs/AttributeReference.html#gnu-inline
  */
 #define __bfdev_gnu_inline __attribute__((__gnu_inline__))
 
 /*
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-malloc-function-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-malloc-function-attribute
  */
 #define __bfdev_malloc __attribute__((__malloc__))
 
 /*
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Type-Attributes.html#index-mode-type-attribute
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html#index-mode-variable-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Type-Attributes.html#index-mode-type-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html#index-mode-variable-attribute
  */
 #define __bfdev_mode(x) __attribute__((__mode__(x)))
 
 /*
  * Optional: only supported since gcc >= 7
  *
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/x86-Function-Attributes.html#index-no_005fcaller_005fsaved_005fregisters-function-attribute_002c-x86
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/x86-Function-Attributes.html#index-no_005fcaller_005fsaved_005fregisters-function-attribute_002c-x86
  * clang: https://clang.llvm.org/docs/AttributeReference.html#no-caller-saved-registers
  */
 #if __has_attribute(__no_caller_saved_registers__)
@@ -206,7 +182,7 @@ BFDEV_BEGIN_DECLS
 /*
  * Optional: not supported by clang
  *
- *  gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-noclone-function-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-noclone-function-attribute
  */
 #if __has_attribute(__noclone__)
 # define __bfdev_noclone __attribute__((__noclone__))
@@ -222,7 +198,7 @@ BFDEV_BEGIN_DECLS
  *   goto <label>;
  *   return [expression];
  *
- *  gcc: https://gcc.gnu.org/onlinedocs/gcc/Statement-Attributes.html#Statement-Attributes
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Statement-Attributes.html#Statement-Attributes
  */
 #if __has_attribute(__fallthrough__)
 # define bfdev_fallthrough __attribute__((__fallthrough__))
@@ -233,7 +209,7 @@ BFDEV_BEGIN_DECLS
 /*
  * Note the missing underscores.
  *
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-noinline-function-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-noinline-function-attribute
  * clang: mentioned
  */
 #define __bfdev_noinline __attribute__((__noinline__))
@@ -241,9 +217,8 @@ BFDEV_BEGIN_DECLS
 /*
  * Optional: only supported since gcc >= 8
  * Optional: not supported by clang
- * Optional: not supported by icc
  *
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html#index-nonstring-variable-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html#index-nonstring-variable-attribute
  */
 #if __has_attribute(__nonstring__)
 # define __bfdev_nonstring __attribute__((__nonstring__))
@@ -252,7 +227,7 @@ BFDEV_BEGIN_DECLS
 #endif
 
 /*
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-functions-that-return-more-than-once
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-functions-that-return-more-than-once
  */
 #if __has_attribute(__returns_twice__)
 # define __bfdev_returns_twice __attribute__((__returns_twice__))
@@ -261,70 +236,70 @@ BFDEV_BEGIN_DECLS
 #endif
 
 /*
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-noreturn-function-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-noreturn-function-attribute
  * clang: https://clang.llvm.org/docs/AttributeReference.html#noreturn
  * clang: https://clang.llvm.org/docs/AttributeReference.html#id1
  */
 #define __bfdev_noreturn __attribute__((__noreturn__))
 
 /*
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Type-Attributes.html#index-packed-type-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Type-Attributes.html#index-packed-type-attribute
  * clang: https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html#index-packed-variable-attribute
  */
 #define __bfdev_packed __attribute__((__packed__))
 
 /*
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-pure-function-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-pure-function-attribute
  */
 #define __bfdev_pure __attribute__((__pure__))
 
 /*
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-section-function-attribute
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html#index-section-variable-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-section-function-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html#index-section-variable-attribute
  * clang: https://clang.llvm.org/docs/AttributeReference.html#section-declspec-allocate
  */
 #define __bfdev_section(section) __attribute__((__section__(section)))
 
 /*
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-unused-function-attribute
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Type-Attributes.html#index-unused-type-attribute
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html#index-unused-variable-attribute
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Label-Attributes.html#index-unused-label-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-unused-function-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Type-Attributes.html#index-unused-type-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html#index-unused-variable-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Label-Attributes.html#index-unused-label-attribute
  * clang: https://clang.llvm.org/docs/AttributeReference.html#maybe-unused-unused
  */
 #define __bfdev_always_unused __attribute__((__unused__))
 #define __bfdev_maybe_unused __attribute__((__unused__))
 
 /*
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-used-function-attribute
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html#index-used-variable-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-used-function-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html#index-used-variable-attribute
  */
 #define __bfdev_used __attribute__((__used__))
 
 /*
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-warn_005funused_005fresult-function-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-warn_005funused_005fresult-function-attribute
  * clang: https://clang.llvm.org/docs/AttributeReference.html#nodiscard-warn-unused-result
  */
 #define __bfdev_must_check __attribute__((__warn_unused_result__))
 
 /*
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-weak-function-attribute
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html#index-weak-variable-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-weak-function-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html#index-weak-variable-attribute
  */
 #define __bfdev_weak __attribute__((__weak__))
 
 /*
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-visibility-function-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-visibility-function-attribute
  */
 #define __bfdev_visibility(mode) __attribute__((visibility(mode)))
 
 /*
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-constructor-function-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-constructor-function-attribute
  */
 #define __bfdev_ctor __attribute__((constructor))
 
 /*
- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-destructor-function-attribute
+ * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-destructor-function-attribute
  */
 #define __bfdev_dtor __attribute__((destructor))
 
