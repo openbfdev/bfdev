@@ -74,7 +74,8 @@ bfdev_popcount_table[256] = {
     [0xfc] = 6, [0xfd] = 7, [0xfe] = 7, [0xff] = 8,
 };
 
-export const uint8_t bfdev_popparity_table[256] = {
+export const uint8_t
+bfdev_popparity_table[256] = {
     [0x00] = 0, [0x01] = 1, [0x02] = 1, [0x03] = 0,
     [0x04] = 1, [0x05] = 0, [0x06] = 0, [0x07] = 1,
     [0x08] = 1, [0x09] = 0, [0x0a] = 0, [0x0b] = 1,
