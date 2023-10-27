@@ -9,7 +9,7 @@
 #include <export.h>
 
 #define ERRNAME(errnum, infos) { \
-    BFDEV_##errnum, #errnum, infos \
+    BFDEV_##errnum, "-" #errnum, infos \
 }
 
 export const struct bfdev_errname
@@ -141,12 +141,12 @@ bfdev_errname_find(int error)
 {
     struct bfdev_errname *entry;
 
-    if (bfdev_unlikely(error > 0))
-        return NULL;
+    if (error < 0)
+        error = -error;
 
     entry = bfdev_bsearch(
         bfdev_errname_table, BFDEV_ARRAY_SIZE(bfdev_errname_table) - 1,
-        sizeof(*entry), errname_search, (void *)(long)-error
+        sizeof(*entry), errname_search, (void *)(intptr_t)(error)
     );
 
     return entry;
@@ -156,10 +156,15 @@ export const char *
 bfdev_errname(int error, const char **infop)
 {
     struct bfdev_errname *entry;
+    const char *name;
 
     entry = bfdev_errname_find(error);
-    if (entry && infop)
-        *infop = entry->info;
+    if (bfdev_unlikely(!entry))
+        return NULL;
 
-    return entry ? entry->name : NULL;
+    if (infop)
+        *infop = entry->info;
+    name = entry->name;
+
+    return error > 0 ? name + 1 : name;
 }

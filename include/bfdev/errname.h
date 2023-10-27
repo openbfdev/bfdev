@@ -18,9 +18,22 @@ struct bfdev_errname {
     const char *info;
 };
 
-extern const struct bfdev_errname bfdev_errname_table[];
-extern struct bfdev_errname *bfdev_errname_find(int error);
-extern const char *bfdev_errname(int error, const char **infop);
+extern const struct bfdev_errname
+bfdev_errname_table[];
+
+extern struct bfdev_errname *
+bfdev_errname_find(int error);
+
+/**
+ * bfdev_errname() - find errno name.
+ * @error: the error code to find.
+ * @infop: point to info pointer.
+ *
+ * errname(EINVAL) -> "EINVAL"
+ * errname(-EINVAL) -> "-EINVAL"
+ */
+extern const char *
+bfdev_errname(int error, const char **infop);
 
 BFDEV_END_DECLS
 
