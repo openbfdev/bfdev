@@ -22,21 +22,31 @@ time_dump(int ticks, clock_t start, clock_t stop, struct tms *start_tms, struct 
     printf("\tkern time: %lf\n", (stop_tms->tms_stime - start_tms->tms_stime) / (double)ticks);
 }
 
-static inline long
-skiplist_bench_cmp(const void *nodea, const void *nodeb)
+static long
+test_cmp(const void *nodea, const void *nodeb, void *pdata)
 {
-    uintptr_t valuea = (uintptr_t)nodea;
-    uintptr_t valueb = (uintptr_t)nodeb;
-    if (valuea == valueb) return 0;
+    uintptr_t valuea, valueb;
+
+    valuea = (uintptr_t)nodea;
+    valueb = (uintptr_t)nodeb;
+
+    if (valuea == valueb)
+        return 0;
+
     return valuea > valueb ? 1 : -1;
 }
 
-static inline long
-skiplist_bench_find(const void *nodea, const void *nodeb)
+static long
+test_find(const void *node, void *pdata)
 {
-    uintptr_t valuea = (uintptr_t)nodea;
-    uintptr_t valueb = (uintptr_t)nodeb;
-    if (valuea == valueb) return 0;
+    uintptr_t valuea, valueb;
+
+    valuea = (uintptr_t)node;
+    valueb = (uintptr_t)pdata;
+
+    if (valuea == valueb)
+        return 0;
+
     return valuea > valueb ? 1 : -1;
 }
 
@@ -65,7 +75,7 @@ int main(void)
     for (count = 0; count < TEST_LEN; ++count) {
         value = ((uint64_t)rand() << 32) | rand();
         record[count] = value;
-        retval = bfdev_skiplist_insert(head, (void *)value, skiplist_bench_cmp);
+        retval = bfdev_skiplist_insert(head, (void *)value, test_cmp, NULL);
         if (retval)
             return 1;
     }
@@ -76,7 +86,7 @@ int main(void)
     start = times(&start_tms);
     for (count = 0; count < TEST_LEN; ++count) {
         value = record[(unsigned long)rand() % TEST_LEN];
-        node = bfdev_skiplist_find(head, (void *)value, skiplist_bench_find);
+        node = bfdev_skiplist_find(head, test_find, (void *)value);
         if (!node)
             return 1;
     }
