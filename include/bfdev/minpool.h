@@ -19,12 +19,12 @@ struct bfdev_minpool_head;
 struct bfdev_minpool_node;
 
 typedef struct bfdev_minpool_node *
-(*bfdev_find_t)(struct bfdev_minpool_head *head, size_t size);
+(*bfdev_minpool_find_t)(struct bfdev_minpool_head *head, size_t size);
 
 struct bfdev_minpool_head {
     struct bfdev_list_head block_list;
     struct bfdev_list_head free_list;
-    bfdev_find_t find;
+    bfdev_minpool_find_t find;
     size_t avail;
 };
 
@@ -91,7 +91,7 @@ bfdev_minpool_free(struct bfdev_minpool_head *head, void *block);
  * @size: Mempool array size.
  */
 extern void
-bfdev_minpool_setup(struct bfdev_minpool_head *head, bfdev_find_t find,
+bfdev_minpool_setup(struct bfdev_minpool_head *head, bfdev_minpool_find_t find,
                     void *array, size_t size);
 
 BFDEV_END_DECLS

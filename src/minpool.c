@@ -256,7 +256,7 @@ bfdev_minpool_realloc(struct bfdev_minpool_head *head, void *block, size_t resiz
 }
 
 export void
-bfdev_minpool_setup(struct bfdev_minpool_head *head, bfdev_find_t find,
+bfdev_minpool_setup(struct bfdev_minpool_head *head, bfdev_minpool_find_t find,
                     void *array, size_t size)
 {
     struct bfdev_minpool_node *node = array;
