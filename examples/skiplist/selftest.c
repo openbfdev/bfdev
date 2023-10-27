@@ -11,20 +11,40 @@
 #define TEST_LOOP 100
 #define TEST_LEVEL 32
 
-struct skiplist_test {
+struct test_node {
     struct bfdev_skip_head *head;
     uintptr_t values[TEST_LOOP];
 };
 
-static long skiplist_test_cmp(const void *nodea, const void *nodeb)
+static long
+test_cmp(const void *nodea, const void *nodeb, void *pdata)
 {
-    uintptr_t valuea = (uintptr_t)nodea;
-    uintptr_t valueb = (uintptr_t)nodeb;
-    if (valuea == valueb) return 0;
+    uintptr_t valuea, valueb;
+
+    valuea = (uintptr_t)nodea;
+    valueb = (uintptr_t)nodeb;
+
+    if (valuea == valueb)
+        return 0;
+
     return valuea > valueb ? 1 : -1;
 }
 
-static int skiplist_test_testing(struct skiplist_test *test)
+static long
+test_find(const void *node, void *pdata)
+{
+    uintptr_t valuea, valueb;
+
+    valuea = (uintptr_t)node;
+    valueb = (uintptr_t)pdata;
+
+    if (valuea == valueb)
+        return 0;
+
+    return valuea > valueb ? 1 : -1;
+}
+
+static int skiplist_test_testing(struct test_node *test)
 {
     unsigned int count;
     uintptr_t value;
@@ -35,8 +55,10 @@ static int skiplist_test_testing(struct skiplist_test *test)
         test->values[count] = rand() | 1;
 
     for (count = 0; count < TEST_LOOP; ++count) {
-        retval = bfdev_skiplist_insert(test->head,
-                 (void *)test->values[count], skiplist_test_cmp);
+        retval = bfdev_skiplist_insert(
+            test->head, (void *)test->values[count],
+            test_cmp, NULL
+        );
         printf("skiplist insert test%02d: %#010lx ret %d\n",
                count, (unsigned long)test->values[count], retval);
         if (retval)
@@ -44,8 +66,10 @@ static int skiplist_test_testing(struct skiplist_test *test)
     }
 
     for (count = 0; count < TEST_LOOP; ++count) {
-        value = (uintptr_t)bfdev_skiplist_find(test->head,
-                (void *)test->values[count], skiplist_test_cmp);
+        value = (uintptr_t)bfdev_skiplist_find(
+            test->head,
+            test_find, (void *)test->values[count]
+        );
         printf("skiplist find test%02d: %#010lx ret %#010lx\n",
                count, (unsigned long)test->values[count], (unsigned long)value);
         if (!value)
@@ -53,8 +77,10 @@ static int skiplist_test_testing(struct skiplist_test *test)
     }
 
     for (count = 0; count < TEST_LOOP; ++count) {
-        bfdev_skiplist_delete(test->head, (void *)test->values[count],
-            skiplist_test_cmp);
+        bfdev_skiplist_delete(
+            test->head,
+            test_find, (void *)test->values[count]
+        );
         printf("skiplist delete test%02d\n", count);
     }
 
@@ -63,10 +89,10 @@ static int skiplist_test_testing(struct skiplist_test *test)
 
 int main(void)
 {
-    struct skiplist_test *test;
+    struct test_node *test;
     int retval;
 
-    test = malloc(sizeof(struct skiplist_test));
+    test = malloc(sizeof(struct test_node));
     if (!test)
         return -BFDEV_ENOMEM;
 
