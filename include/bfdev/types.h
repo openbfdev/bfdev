@@ -41,17 +41,17 @@ typedef long bfdev_atomic_t;
 #define BFDEV_BYTES_PER_UINTPTR     sizeof(uintptr_t)
 
 /* Generic callback functions */
-#define BFDEV_CALLBACK_CMP(name, type) \
-    typedef long (*name)(type va, type vb, void *pdata)
-
 #define BFDEV_CALLBACK_FIND(name, type) \
     typedef long (*name)(type key, void *pdata)
+
+#define BFDEV_CALLBACK_CMP(name, type) \
+    typedef long (*name)(type key1, type key2, void *pdata)
 
 #define BFDEV_CALLBACK_RELEASE(name) \
     typedef void (*name)(void *pdata)
 
-BFDEV_CALLBACK_CMP(bfdev_cmp_t, const void *);
 BFDEV_CALLBACK_FIND(bfdev_find_t, const void *);
+BFDEV_CALLBACK_CMP(bfdev_cmp_t, const void *);
 BFDEV_CALLBACK_RELEASE(bfdev_release_t);
 
 BFDEV_END_DECLS

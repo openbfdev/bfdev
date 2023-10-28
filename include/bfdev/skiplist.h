@@ -15,7 +15,7 @@
 BFDEV_BEGIN_DECLS
 
 struct bfdev_skip_node {
-    void *pdata;
+    void *key;
     struct bfdev_list_head list[0];
 };
 
@@ -27,7 +27,7 @@ struct bfdev_skip_head {
 };
 
 extern int
-bfdev_skiplist_insert(struct bfdev_skip_head *head, void *data,
+bfdev_skiplist_insert(struct bfdev_skip_head *head, void *key,
                       bfdev_cmp_t cmp, void *pdata);
 
 extern void
