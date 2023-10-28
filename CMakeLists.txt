@@ -4,7 +4,7 @@
 # Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
 #
 
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.12)
 project(bfdev VERSION 1.0 LANGUAGES C)
 
 include(GNUInstallDirs)
@@ -101,7 +101,7 @@ file(GLOB BFDEV_GENERATED_HEADER
 )
 
 add_compile_options(
-    -std=gnu17
+    -std=gnu11
     -Wall
     -Wextra
     -Wno-override-init
