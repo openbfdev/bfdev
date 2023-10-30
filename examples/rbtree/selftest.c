@@ -25,21 +25,24 @@ struct rbtree_test_pdata {
 #define rbnode_to_test_safe(ptr) \
     bfdev_rb_entry_safe(ptr, struct rbtree_test_node, node)
 
-static long rbtest_rb_cmp(const struct bfdev_rb_node *rba, const struct bfdev_rb_node *rbb)
+static long
+rbtest_rb_cmp(const struct bfdev_rb_node *rba, const struct bfdev_rb_node *rbb, void *pdata)
 {
     struct rbtree_test_node *nodea = rbnode_to_test(rba);
     struct rbtree_test_node *nodeb = rbnode_to_test(rbb);
     return nodea->data < nodeb->data ? -1 : 1;
 }
 
-static long rbtest_rb_find(const struct bfdev_rb_node *rb, const void *key)
+static long
+rbtest_rb_find(const struct bfdev_rb_node *rb, void *key)
 {
     struct rbtree_test_node *node = rbnode_to_test(rb);
     if (node->data == (unsigned long)key) return 0;
     return node->data < (unsigned long)key ? -1 : 1;
 }
 
-static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
+static int
+rbtree_test_testing(struct rbtree_test_pdata *sdata)
 {
     struct rbtree_test_node *node, *nnode, *tnode;
     struct bfdev_rb_node *rbnode, *nrbnode, *trbnode;
@@ -48,7 +51,7 @@ static int rbtree_test_testing(struct rbtree_test_pdata *sdata)
     BFDEV_RB_ROOT_CACHED(test_root);
 
     for (count = 0; count < TEST_LOOP; ++count)
-        bfdev_rb_cached_insert(&test_root, &sdata->nodes[count].node, rbtest_rb_cmp);
+        bfdev_rb_cached_insert(&test_root, &sdata->nodes[count].node, rbtest_rb_cmp, NULL);
 
     for (count = 0; count < TEST_LOOP; ++count) {
         rbnode = bfdev_rb_find(&test_root.root, (void *)sdata->nodes[count].data, rbtest_rb_find);

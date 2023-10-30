@@ -25,7 +25,8 @@ struct bench_node {
     bfdev_rb_entry_safe(ptr, struct bench_node, node)
 
 #if RB_DEBUG
-static void node_dump(struct bench_node *node)
+static void
+node_dump(struct bench_node *node)
 {
     printf("\t%04d: ", node->num);
     printf("parent %-4d ", node->node.parent ? rb_to_bench(node->node.parent)->num : 0);
@@ -57,14 +58,16 @@ static BFDEV_RB_ROOT(bench_root);
 # define bc_deepth(root)                test_deepth((root)->node)
 #endif
 
-static void time_dump(int ticks, clock_t start, clock_t stop, struct tms *start_tms, struct tms *stop_tms)
+static void
+time_dump(int ticks, clock_t start, clock_t stop, struct tms *start_tms, struct tms *stop_tms)
 {
     printf("\treal time: %lf\n", (stop - start) / (double)ticks);
     printf("\tuser time: %lf\n", (stop_tms->tms_utime - start_tms->tms_utime) / (double)ticks);
     printf("\tkern time: %lf\n", (stop_tms->tms_stime - start_tms->tms_stime) / (double)ticks);
 }
 
-static unsigned int test_deepth(struct bfdev_rb_node *node)
+static unsigned int
+test_deepth(struct bfdev_rb_node *node)
 {
     unsigned int left_deepth, right_deepth;
 
@@ -76,7 +79,8 @@ static unsigned int test_deepth(struct bfdev_rb_node *node)
     return left_deepth > right_deepth ? (left_deepth + 1) : (right_deepth + 1);
 }
 
-static long demo_cmp(const struct bfdev_rb_node *a, const struct bfdev_rb_node *b)
+static long
+demo_cmp(const struct bfdev_rb_node *a, const struct bfdev_rb_node *b, void *pdata)
 {
     struct bench_node *demo_a = rb_to_bench(a);
     struct bench_node *demo_b = rb_to_bench(b);
@@ -111,7 +115,7 @@ int main(void)
     ticks = sysconf(_SC_CLK_TCK);
     start = times(&start_tms);
     for (count = 0; count < TEST_LEN; ++count)
-        bc_insert(&bench_root, &node[count].node, demo_cmp);
+        bc_insert(&bench_root, &node[count].node, demo_cmp, NULL);
     stop = times(&stop_tms);
     time_dump(ticks, start, stop, &start_tms, &stop_tms);
 
