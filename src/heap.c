@@ -43,12 +43,12 @@ parent_swap(struct bfdev_heap_root *root, struct bfdev_heap_node *parent,
 
 export void
 bfdev_heap_fixup(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
-                 bfdev_heap_cmp_t cmp)
+                 bfdev_heap_cmp_t cmp, void *pdata)
 {
     struct bfdev_heap_node *parent;
 
     while ((parent = node->parent)) {
-        if (cmp(node, parent) >= 0)
+        if (cmp(node, parent, pdata) >= 0)
             break;
         parent_swap(root, parent, node);
     }
@@ -56,13 +56,13 @@ bfdev_heap_fixup(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
 
 export void
 bfdev_heap_erase(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
-                 bfdev_heap_cmp_t cmp)
+                 bfdev_heap_cmp_t cmp, void *pdata)
 {
     struct bfdev_heap_node *successor = node->parent;
     struct bfdev_heap_node *child1, *child2;
 
-    if (successor && cmp(node, successor) < 0)
-        bfdev_heap_fixup(root, node, cmp);
+    if (successor && cmp(node, successor, pdata) < 0)
+        bfdev_heap_fixup(root, node, cmp, pdata);
 
     else for (;;) {
         child1 = node->left;
@@ -75,13 +75,13 @@ bfdev_heap_erase(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
         else if (!child1)
             successor = node->left;
         else { /* child1 && child2 */
-            if (cmp(node->left, node->right) < 0)
+            if (cmp(node->left, node->right, pdata) < 0)
                 successor = node->left;
             else
                 successor = node->right;
         }
 
-        if (cmp(node, successor) < 0)
+        if (cmp(node, successor, pdata) < 0)
             return;
         parent_swap(root, node, successor);
     }

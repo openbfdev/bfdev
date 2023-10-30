@@ -38,14 +38,16 @@ static void node_dump(struct bench_node *node)
 
 static BFDEV_HEAP_ROOT(bench_root);
 
-static void time_dump(int ticks, clock_t start, clock_t stop, struct tms *start_tms, struct tms *stop_tms)
+static void
+time_dump(int ticks, clock_t start, clock_t stop, struct tms *start_tms, struct tms *stop_tms)
 {
     printf("\treal time: %lf\n", (stop - start) / (double)ticks);
     printf("\tuser time: %lf\n", (stop_tms->tms_utime - start_tms->tms_utime) / (double)ticks);
     printf("\tkern time: %lf\n", (stop_tms->tms_stime - start_tms->tms_stime) / (double)ticks);
 }
 
-static unsigned int test_deepth(struct bfdev_heap_node *node)
+static unsigned int
+test_deepth(struct bfdev_heap_node *node)
 {
     unsigned int left_deepth, right_deepth;
 
@@ -57,7 +59,8 @@ static unsigned int test_deepth(struct bfdev_heap_node *node)
     return left_deepth > right_deepth ? (left_deepth + 1) : (right_deepth + 1);
 }
 
-static long bench_cmp(const struct bfdev_heap_node *hpa, const struct bfdev_heap_node *hpb)
+static long
+bench_cmp(const struct bfdev_heap_node *hpa, const struct bfdev_heap_node *hpb, void *pdata)
 {
     struct bench_node *nodea = bfdev_heap_to_bench(hpa);
     struct bench_node *nodeb = bfdev_heap_to_bench(hpb);
@@ -93,7 +96,7 @@ int main(void)
 #if HEAP_DEBUG
         printf("\t%08d: 0x%8x\n", bnode[count].num, bnode[count].data);
 #endif
-        bfdev_heap_insert(&bench_root, &bnode[count].node, bench_cmp);
+        bfdev_heap_insert(&bench_root, &bnode[count].node, bench_cmp, NULL);
     }
     stop = times(&stop_tms);
     time_dump(ticks, start, stop, &start_tms, &stop_tms);
@@ -116,7 +119,7 @@ int main(void)
     while (bench_root.count) {
         bnode = bfdev_heap_to_bench(bench_root.node);
         node_dump(bnode);
-        bfdev_heap_delete(&bench_root, &bnode->node, bench_cmp);
+        bfdev_heap_delete(&bench_root, &bnode->node, bench_cmp, NULL);
     }
 
     printf("Done.\n");
