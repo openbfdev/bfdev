@@ -529,7 +529,7 @@ bfdev_rb_replace(struct bfdev_rb_root *root, struct bfdev_rb_node *oldn,
 }
 
 export struct bfdev_rb_node *
-bfdev_rb_find(const struct bfdev_rb_root *root, const void *key,
+bfdev_rb_find(const struct bfdev_rb_root *root, void *key,
               bfdev_rb_find_t cmp)
 {
     struct bfdev_rb_node *node = root->node;
@@ -551,7 +551,7 @@ bfdev_rb_find(const struct bfdev_rb_root *root, const void *key,
 }
 
 export struct bfdev_rb_node *
-bfdev_rb_find_last(struct bfdev_rb_root *root, const void *key, bfdev_rb_find_t cmp,
+bfdev_rb_find_last(struct bfdev_rb_root *root, void *key, bfdev_rb_find_t cmp,
                    struct bfdev_rb_node **parentp, struct bfdev_rb_node ***linkp)
 {
     long ret;
@@ -579,7 +579,8 @@ bfdev_rb_find_last(struct bfdev_rb_root *root, const void *key, bfdev_rb_find_t 
 
 export struct bfdev_rb_node **
 bfdev_rb_parent(struct bfdev_rb_root *root, struct bfdev_rb_node **parentp,
-                struct bfdev_rb_node *node, bfdev_rb_cmp_t cmp, bool *leftmost)
+                struct bfdev_rb_node *node, bfdev_rb_cmp_t cmp, void *pdata,
+                bool *leftmost)
 {
     struct bfdev_rb_node **link;
     bool leftmost_none;
@@ -595,7 +596,7 @@ bfdev_rb_parent(struct bfdev_rb_root *root, struct bfdev_rb_node **parentp,
     }
 
     do {
-        retval = cmp(node, (*parentp = *link));
+        retval = cmp(node, (*parentp = *link), pdata);
         if (retval < 0)
             link = &(*link)->left;
         else {
@@ -609,7 +610,8 @@ bfdev_rb_parent(struct bfdev_rb_root *root, struct bfdev_rb_node **parentp,
 
 export struct bfdev_rb_node **
 bfdev_rb_parent_conflict(struct bfdev_rb_root *root, struct bfdev_rb_node **parentp,
-                         struct bfdev_rb_node *node, bfdev_rb_cmp_t cmp, bool *leftmost)
+                         struct bfdev_rb_node *node, bfdev_rb_cmp_t cmp, void *pdata,
+                         bool *leftmost)
 {
     struct bfdev_rb_node **link;
     bool leftmost_none;
@@ -625,7 +627,7 @@ bfdev_rb_parent_conflict(struct bfdev_rb_root *root, struct bfdev_rb_node **pare
     }
 
     do {
-        retval = cmp(node, (*parentp = *link));
+        retval = cmp(node, (*parentp = *link), pdata);
         if (retval < 0)
             link = &(*link)->left;
         else if (retval > 0) {

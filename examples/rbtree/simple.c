@@ -20,7 +20,8 @@ struct simple_node {
 #define rb_to_simple(ptr) \
     bfdev_rb_entry_safe(ptr, struct simple_node, node)
 
-static long demo_cmp(const struct bfdev_rb_node *a, const struct bfdev_rb_node *b)
+static long
+demo_cmp(const struct bfdev_rb_node *a, const struct bfdev_rb_node *b, void *pdata)
 {
     struct simple_node *demo_a = rb_to_simple(a);
     struct simple_node *demo_b = rb_to_simple(b);
@@ -41,7 +42,7 @@ int main(void)
         }
 
         node->data = ((uint64_t)rand() << 32) | rand();
-        bfdev_rb_insert(&simple_root, &node->node, demo_cmp);
+        bfdev_rb_insert(&simple_root, &node->node, demo_cmp, NULL);
     }
 
     printf("Middle Iteration:\n");
