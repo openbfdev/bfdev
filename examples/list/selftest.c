@@ -47,7 +47,7 @@ list_selftest(struct test_pdata *ldata)
             bfdev_list_add(&test_head, &ldata->nodes[count].list);
     }
 
-    bfdev_list_qsort(&test_head, list_test_sort, NULL);
+    bfdev_list_sort(&test_head, list_test_sort, NULL);
 
     bfdev_list_for_each(list, &test_head) {
         node = list_to_test(list);

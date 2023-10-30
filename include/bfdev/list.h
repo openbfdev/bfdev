@@ -7,6 +7,7 @@
 #define _BFDEV_LIST_H_
 
 #include <bfdev/config.h>
+#include <bfdev/types.h>
 #include <bfdev/stddef.h>
 #include <bfdev/stdbool.h>
 #include <bfdev/container.h>
@@ -28,13 +29,21 @@ struct bfdev_list_head {
 #define BFDEV_LIST_HEAD(name) \
     struct bfdev_list_head name = BFDEV_LIST_HEAD_INIT(name)
 
-typedef long (*bfdev_list_cmp_t)(const struct bfdev_list_head *, const struct bfdev_list_head *, void *);
-extern void bfdev_list_qsort(struct bfdev_list_head *head, bfdev_list_cmp_t cmp, void *data);
-extern void bfdev_list_bsort(struct bfdev_list_head *head, bfdev_list_cmp_t cmp, void *data);
+BFDEV_CALLBACK_CMP(
+    bfdev_list_cmp_t,
+    const struct bfdev_list_head *
+);
+
+extern void
+bfdev_list_sort(struct bfdev_list_head *head,
+                bfdev_list_cmp_t cmp, void *pdata);
 
 #ifdef BFDEV_DEBUG_LIST
-extern bool bfdev_list_check_add(struct bfdev_list_head *prev, struct bfdev_list_head *next, struct bfdev_list_head *node);
-extern bool bfdev_list_check_del(struct bfdev_list_head *node);
+extern bool
+bfdev_list_check_add(struct bfdev_list_head *prev, struct bfdev_list_head *next, struct bfdev_list_head *node);
+
+extern bool
+bfdev_list_check_del(struct bfdev_list_head *node);
 #endif
 
 static inline void
