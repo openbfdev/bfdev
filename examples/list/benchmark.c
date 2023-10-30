@@ -80,7 +80,7 @@ int main(void)
 
     start = times(&start_tms);
     printf("List sort:\n");
-    bfdev_list_qsort(&demo_list, demo_cmp, NULL);
+    bfdev_list_sort(&demo_list, demo_cmp, NULL);
     stop = times(&stop_tms);
     time_dump(ticks, start, stop, &start_tms, &stop_tms);
 
