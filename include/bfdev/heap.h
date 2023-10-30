@@ -7,6 +7,7 @@
 #define _BFDEV_HEAP_H_
 
 #include <bfdev/config.h>
+#include <bfdev/types.h>
 #include <bfdev/stddef.h>
 #include <bfdev/stdbool.h>
 #include <bfdev/poison.h>
@@ -79,8 +80,10 @@ extern bool
 bfdev_heap_check_delete(struct bfdev_heap_node *node);
 #endif
 
-typedef long (*bfdev_heap_cmp_t)
-(const struct bfdev_heap_node *nodea, const struct bfdev_heap_node *nodeb);
+BFDEV_CALLBACK_CMP(
+    bfdev_heap_cmp_t,
+    const struct bfdev_heap_node *
+);
 
 /**
  * bfdev_heap_fixup - balance after insert node.
@@ -90,7 +93,7 @@ typedef long (*bfdev_heap_cmp_t)
  */
 extern void
 bfdev_heap_fixup(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
-                 bfdev_heap_cmp_t cmp);
+                 bfdev_heap_cmp_t cmp, void *pdata);
 
 /**
  * bfdev_heap_erase - balance after remove node.
@@ -100,7 +103,7 @@ bfdev_heap_fixup(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
  */
 extern void
 bfdev_heap_erase(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
-                 bfdev_heap_cmp_t cmp);
+                 bfdev_heap_cmp_t cmp, void *pdata);
 
 /**
  * bfdev_heap_remove - remove node form heap.
@@ -368,10 +371,10 @@ static inline void bfdev_heap_link(struct bfdev_heap_root *root, struct bfdev_he
 static inline void
 bfdev_heap_insert_node(struct bfdev_heap_root *root, struct bfdev_heap_node *parent,
                        struct bfdev_heap_node **link, struct bfdev_heap_node *node,
-                       bfdev_heap_cmp_t cmp)
+                       bfdev_heap_cmp_t cmp, void *pdata)
 {
     bfdev_heap_link(root, parent, link, node);
-    bfdev_heap_fixup(root, node, cmp);
+    bfdev_heap_fixup(root, node, cmp, pdata);
 }
 
 /**
@@ -382,12 +385,12 @@ bfdev_heap_insert_node(struct bfdev_heap_root *root, struct bfdev_heap_node *par
  */
 static inline void
 bfdev_heap_insert(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
-                  bfdev_heap_cmp_t cmp)
+                  bfdev_heap_cmp_t cmp, void *pdata)
 {
     struct bfdev_heap_node *parent, **link;
 
     link = bfdev_heap_parent(root, &parent, node);
-    bfdev_heap_insert_node(root, parent, link, node, cmp);
+    bfdev_heap_insert_node(root, parent, link, node, cmp, pdata);
 }
 
 /**
@@ -397,7 +400,7 @@ bfdev_heap_insert(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
  */
 static inline void
 bfdev_heap_delete(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
-                  bfdev_heap_cmp_t cmp)
+                  bfdev_heap_cmp_t cmp, void *pdata)
 {
     struct bfdev_heap_node *rebalance;
 
@@ -407,7 +410,7 @@ bfdev_heap_delete(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
 #endif
 
     if ((rebalance = bfdev_heap_remove(root, node)))
-        bfdev_heap_erase(root, rebalance, cmp);
+        bfdev_heap_erase(root, rebalance, cmp, pdata);
 
     node->left = BFDEV_POISON_HPNODE1;
     node->right = BFDEV_POISON_HPNODE2;

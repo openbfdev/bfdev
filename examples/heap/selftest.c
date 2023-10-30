@@ -3,7 +3,7 @@
  * Copyright(c) 2022 John Sanpe <sanpeqf@gmail.com>
  */
 
-#define MODULE_NAME "heap"
+#define MODULE_NAME "heap-selftest"
 #define bfdev_log_fmt(fmt) MODULE_NAME ": " fmt
 
 #include <stdio.h>
@@ -27,8 +27,7 @@ struct test_pdata {
     bfdev_heap_entry(ptr, struct test_node, node)
 
 static long
-bfdev_heap_test_cmp(const struct bfdev_heap_node *hpa,
-                    const struct bfdev_heap_node *hpb)
+bfdev_heap_test_cmp(const struct bfdev_heap_node *hpa, const struct bfdev_heap_node *hpb, void *pdata)
 {
     struct test_node *nodea = hpnode_to_test(hpa);
     struct test_node *nodeb = hpnode_to_test(hpb);
@@ -45,7 +44,7 @@ bfdev_heap_test_testing(struct test_pdata *hdata)
     BFDEV_HEAP_ROOT(root);
 
     for (count = 0; count < TEST_LOOP; ++count)
-        bfdev_heap_insert(&root, &hdata->nodes[count].node, bfdev_heap_test_cmp);
+        bfdev_heap_insert(&root, &hdata->nodes[count].node, bfdev_heap_test_cmp, NULL);
 
     count = 0;
     bfdev_heap_for_each(hpnode, &index, &root) {
@@ -207,7 +206,7 @@ bfdev_heap_test_testing(struct test_pdata *hdata)
     for (count = 0; count < TEST_LOOP; ++count) {
         node = hpnode_to_test(root.node);
         bfdev_log_info("'heap_delete' test: %u\n", node->num);
-        bfdev_heap_delete(&root, &node->node, bfdev_heap_test_cmp);
+        bfdev_heap_delete(&root, &node->node, bfdev_heap_test_cmp, NULL);
     }
 
     return 0;
