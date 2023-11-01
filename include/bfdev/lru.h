@@ -74,33 +74,43 @@ struct bfdev_lru_head {
     struct bfdev_list_head changing;
 
     /* const settings */
-    unsigned int nmask;
-    unsigned int maxpend;
+    unsigned long size;
+    unsigned long maxpend;
 
     /* status description */
     unsigned long flags;
-    unsigned int used;
-    unsigned int pending;
+    unsigned long used;
+    unsigned long pending;
 
     /* state counter */
-    unsigned int changed;
+    unsigned long changed;
     unsigned long hits;
     unsigned long misses;
     unsigned long starve;
 };
 
-BFDEV_BITFLAGS_STRUCT(lru, struct bfdev_lru_head, flags);
-BFDEV_BITFLAGS_STRUCT_FLAG(lru, struct bfdev_lru_head, flags, dirty, __BFDEV_LRU_DIRTY);
-BFDEV_BITFLAGS_STRUCT_FLAG(lru, struct bfdev_lru_head, flags, starving, __BFDEV_LRU_STARVING);
+BFDEV_BITFLAGS_STRUCT(bfdev_lru,
+    struct bfdev_lru_head, flags
+);
+
+BFDEV_BITFLAGS_STRUCT_FLAG(bfdev_lru,
+    struct bfdev_lru_head, flags,
+    dirty, __BFDEV_LRU_DIRTY
+);
+
+BFDEV_BITFLAGS_STRUCT_FLAG(bfdev_lru,
+    struct bfdev_lru_head, flags,
+    starving, __BFDEV_LRU_STARVING
+);
 
 extern struct bfdev_lru_node *
-bfdev_lru_find(struct bfdev_lru_head *head, unsigned int tag);
+bfdev_lru_find(struct bfdev_lru_head *head, unsigned long tag);
 
 extern bool
-bfdev_lru_check_used(struct bfdev_lru_head *head, unsigned int tag);
+bfdev_lru_check_used(struct bfdev_lru_head *head, unsigned long tag);
 
 extern struct bfdev_lru_node *
-bfdev_lru_obtain(struct bfdev_lru_head *head, unsigned int tag,
+bfdev_lru_obtain(struct bfdev_lru_head *head, unsigned long tag,
                  unsigned long flags);
 
 extern unsigned int
@@ -111,7 +121,7 @@ bfdev_lru_del(struct bfdev_lru_head *head, struct bfdev_lru_node *node);
 
 extern void
 bfdev_lru_set(struct bfdev_lru_head *head, struct bfdev_lru_node *node,
-              unsigned int tag);
+              unsigned long tag);
 
 extern void
 bfdev_lru_committed(struct bfdev_lru_head *head);
@@ -121,7 +131,7 @@ bfdev_lru_reset(struct bfdev_lru_head *head);
 
 extern struct bfdev_lru_head *
 bfdev_lru_create(const struct bfdev_alloc *alloc,
-                 unsigned int size, unsigned int maxp);
+                 unsigned long size, unsigned long maxp);
 
 extern void
 bfdev_lru_destroy(struct bfdev_lru_head *head);

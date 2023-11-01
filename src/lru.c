@@ -5,14 +5,9 @@
 
 #include <base.h>
 #include <bfdev/lru.h>
+#include <bfdev/hashtbl.h>
 #include <bfdev/log2.h>
 #include <export.h>
-
-static __bfdev_always_inline struct bfdev_hlist_head *
-lru_hash_slot(struct bfdev_lru_head *head, unsigned int tag)
-{
-    return head->taghash + (tag & head->nmask);
-}
 
 static __bfdev_always_inline bool
 lru_unused_starving(struct bfdev_lru_head *head)
@@ -22,11 +17,13 @@ lru_unused_starving(struct bfdev_lru_head *head)
 }
 
 static struct bfdev_lru_node *
-lru_find_change(struct bfdev_lru_head *head, unsigned int tag, bool change)
+lru_find_change(struct bfdev_lru_head *head, unsigned long tag, bool change)
 {
     struct bfdev_lru_node *walk;
+    unsigned long index;
 
-    bfdev_hlist_for_each_entry(walk, lru_hash_slot(head, tag), hash) {
+    index = bfdev_hashtbl_index(head->size, tag);
+    bfdev_hashtbl_for_each_idx_entry(walk, head->taghash, head->size, hash, index) {
         if (walk->tag != tag)
             continue;
         if (!walk->uncommitted || change)
@@ -38,7 +35,7 @@ lru_find_change(struct bfdev_lru_head *head, unsigned int tag, bool change)
 }
 
 static struct bfdev_lru_node *
-lru_unused_change(struct bfdev_lru_head *head, unsigned int tag)
+lru_unused_change(struct bfdev_lru_head *head, unsigned long tag)
 {
     struct bfdev_lru_node *node;
 
@@ -56,19 +53,19 @@ lru_unused_change(struct bfdev_lru_head *head, unsigned int tag)
     node->uncommitted = true;
 
     bfdev_list_move(&head->changing, &node->list);
-    bfdev_hlist_head_add(lru_hash_slot(head, tag), &node->hash);
+    bfdev_hashtbl_add(head->taghash, head->size, &node->hash, tag);
 
     return node;
 }
 
-struct bfdev_lru_node *
-lru_find(struct bfdev_lru_head *head, unsigned int tag)
+export struct bfdev_lru_node *
+bfdev_lru_find(struct bfdev_lru_head *head, unsigned long tag)
 {
     return lru_find_change(head, tag, false);
 }
 
 export bool
-bfdev_lru_check_used(struct bfdev_lru_head *head, unsigned int tag)
+bfdev_lru_check_used(struct bfdev_lru_head *head, unsigned long tag)
 {
     struct bfdev_lru_node *node;
     node = lru_find_change(head, tag, true);
@@ -76,12 +73,12 @@ bfdev_lru_check_used(struct bfdev_lru_head *head, unsigned int tag)
 }
 
 export struct bfdev_lru_node *
-bfdev_lru_obtain(struct bfdev_lru_head *head, unsigned int tag,
+bfdev_lru_obtain(struct bfdev_lru_head *head, unsigned long tag,
                  unsigned long flags)
 {
     struct bfdev_lru_node *node;
 
-    if (bfdev_unlikely(lru_test_starving(head))) {
+    if (bfdev_unlikely(bfdev_lru_test_starving(head))) {
         head->starve++;
         return NULL;
     }
@@ -92,9 +89,9 @@ bfdev_lru_obtain(struct bfdev_lru_head *head, unsigned int tag,
         if (!(flags & BFDEV_LRU_CHANGE))
             return NULL;
 
-        lru_set_dirty(head);
+        bfdev_lru_set_dirty(head);
         if (bfdev_unlikely(lru_unused_starving(head))) {
-            lru_set_starving(head);
+            bfdev_lru_set_starving(head);
             return NULL;
         }
 
@@ -102,7 +99,7 @@ bfdev_lru_obtain(struct bfdev_lru_head *head, unsigned int tag,
             return NULL;
 
         node = lru_unused_change(head, tag);
-        lru_clr_starving(head);
+        bfdev_lru_clr_starving(head);
         head->pending++;
         head->used++;
 
@@ -127,7 +124,7 @@ export unsigned int
 bfdev_lru_put(struct bfdev_lru_head *head, struct bfdev_lru_node *node)
 {
     if (!--node->refcnt) {
-        lru_clr_starving(head);
+        bfdev_lru_clr_starving(head);
         bfdev_list_move(&head->lru, &node->list);
         head->used--;
     }
@@ -150,7 +147,7 @@ bfdev_lru_del(struct bfdev_lru_head *head, struct bfdev_lru_node *node)
 
 export void
 bfdev_lru_set(struct bfdev_lru_head *head, struct bfdev_lru_node *node,
-              unsigned int tag)
+              unsigned long tag)
 {
     node->tag = tag;
 
@@ -161,7 +158,7 @@ bfdev_lru_set(struct bfdev_lru_head *head, struct bfdev_lru_node *node,
         bfdev_hlist_node_init(&node->hash);
         bfdev_list_move(&head->freed, &node->list);
     } else {
-        bfdev_hlist_head_add(lru_hash_slot(head, tag), &node->hash);
+        bfdev_hashtbl_add(head->taghash, head->size, &node->hash, tag);
         bfdev_list_move(&head->lru, &node->list);
     }
 }
@@ -183,9 +180,8 @@ bfdev_lru_committed(struct bfdev_lru_head *head)
 export void
 bfdev_lru_reset(struct bfdev_lru_head *head)
 {
-    unsigned int size = head->nmask + 1;
-    unsigned int count;
     struct bfdev_lru_node *node;
+    unsigned long count;
 
     head->flags = 0;
     head->pending = 0;
@@ -198,9 +194,9 @@ bfdev_lru_reset(struct bfdev_lru_head *head)
     bfdev_list_head_init(&head->using);
     bfdev_list_head_init(&head->freed);
     bfdev_list_head_init(&head->changing);
-    memset(head->taghash, 0, sizeof(*head->taghash) * size);
+    memset(head->taghash, 0, sizeof(*head->taghash) * head->size);
 
-    for (count = 0; count < size; ++count) {
+    for (count = 0; count < head->size; ++count) {
         node = head->nodes[count];
         memset(node, 0, sizeof(*node));
 
@@ -212,11 +208,11 @@ bfdev_lru_reset(struct bfdev_lru_head *head)
 
 export struct bfdev_lru_head *
 bfdev_lru_create(const struct bfdev_alloc *alloc,
-                 unsigned int size, unsigned int maxpend)
+                 unsigned long size, unsigned long maxpend)
 {
     struct bfdev_lru_head *head;
     struct bfdev_lru_node *node;
-    unsigned int count;
+    unsigned long count;
 
     size = bfdev_pow2_roundup(size);
     if (bfdev_unlikely(size < 2))
@@ -235,7 +231,7 @@ bfdev_lru_create(const struct bfdev_alloc *alloc,
         goto free_htable;
 
     head->alloc = alloc;
-    head->nmask = size - 1;
+    head->size = size;
     head->maxpend = maxpend;
 
     bfdev_list_head_init(&head->lru);
@@ -277,12 +273,10 @@ bfdev_lru_destroy(struct bfdev_lru_head *head)
 {
     const struct bfdev_alloc *alloc;
     struct bfdev_lru_node *node;
-    unsigned int count, size;
+    unsigned long count;
 
     alloc = head->alloc;
-    size = head->nmask + 1;
-
-    for (count = 0; count < size; ++count) {
+    for (count = 0; count < head->size; ++count) {
         node = head->nodes[count];
         bfdev_free(alloc, node);
     }
