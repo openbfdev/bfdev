@@ -4,34 +4,16 @@
  */
 
 #include <base.h>
-#include <bfdev/lru.h>
-#include <bfdev/hashtbl.h>
 #include <bfdev/log2.h>
+#include <bfdev/hashtbl.h>
+#include <bfdev/cache/lru.h>
 #include <export.h>
 
 static __bfdev_always_inline bool
 lru_unused_starving(struct bfdev_lru_head *head)
 {
-    return bfdev_list_check_empty(&head->lru) &&
-           bfdev_list_check_empty(&head->freed);
-}
-
-static struct bfdev_lru_node *
-lru_find_change(struct bfdev_lru_head *head, unsigned long tag, bool change)
-{
-    struct bfdev_lru_node *walk;
-    unsigned long index;
-
-    index = bfdev_hashtbl_index(head->size, tag);
-    bfdev_hashtbl_for_each_idx_entry(walk, head->taghash, head->size, hash, index) {
-        if (walk->tag != tag)
-            continue;
-        if (!walk->uncommitted || change)
-            return walk;
-        break;
-    }
-
-    return NULL;
+    return bfdev_list_check_empty(&head->freed) &&
+           bfdev_list_check_empty(&head->lru);
 }
 
 static struct bfdev_lru_node *
@@ -56,6 +38,24 @@ lru_unused_change(struct bfdev_lru_head *head, unsigned long tag)
     bfdev_hashtbl_add(head->taghash, head->size, &node->hash, tag);
 
     return node;
+}
+
+static struct bfdev_lru_node *
+lru_find_change(struct bfdev_lru_head *head, unsigned long tag, bool change)
+{
+    struct bfdev_lru_node *walk;
+    unsigned long index;
+
+    index = bfdev_hashtbl_index(head->size, tag);
+    bfdev_hashtbl_for_each_idx_entry(walk, head->taghash, head->size, hash, index) {
+        if (walk->tag != tag)
+            continue;
+        if (!walk->uncommitted || change)
+            return walk;
+        break;
+    }
+
+    return NULL;
 }
 
 export struct bfdev_lru_node *
@@ -120,7 +120,7 @@ bfdev_lru_obtain(struct bfdev_lru_head *head, unsigned long tag,
     return node;
 }
 
-export unsigned int
+export unsigned long
 bfdev_lru_put(struct bfdev_lru_head *head, struct bfdev_lru_node *node)
 {
     if (!--node->refcnt) {
