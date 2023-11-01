@@ -3,8 +3,8 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
-#ifndef _BFDEV_LRU_H_
-#define _BFDEV_LRU_H_
+#ifndef _BFDEV_CACHE_LRU_H_
+#define _BFDEV_CACHE_LRU_H_
 
 #include <bfdev/config.h>
 #include <bfdev/allocator.h>
@@ -30,7 +30,7 @@ enum bfdev_lru_flags {
     BFDEV_LRU_STARVING = BFDEV_BIT(__BFDEV_LRU_STARVING),
 };
 
-#define BFDEV_LRU_FREE_TAG UINT_MAX
+#define BFDEV_LRU_FREE_TAG ULONG_MAX
 
 /**
  * struct bfdev_lru_node - least recently used cache node.
@@ -41,10 +41,10 @@ enum bfdev_lru_flags {
 struct bfdev_lru_node {
     struct bfdev_hlist_node hash;
     struct bfdev_list_head list;
-    unsigned int index;
+    unsigned long index;
 
-    unsigned int refcnt;
-    unsigned int tag;
+    unsigned long refcnt;
+    unsigned long tag;
     bool uncommitted;
     void *pdata;
 };
@@ -113,7 +113,7 @@ extern struct bfdev_lru_node *
 bfdev_lru_obtain(struct bfdev_lru_head *head, unsigned long tag,
                  unsigned long flags);
 
-extern unsigned int
+extern unsigned long
 bfdev_lru_put(struct bfdev_lru_head *head, struct bfdev_lru_node *node);
 
 extern int
@@ -156,4 +156,4 @@ bfdev_lru_cumulative(struct bfdev_lru_head *head, unsigned int tag)
 
 BFDEV_END_DECLS
 
-#endif /* _BFDEV_LRU_H_ */
+#endif /* _BFDEV_CACHE_LRU_H_ */

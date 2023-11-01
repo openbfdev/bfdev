@@ -28,7 +28,6 @@ set(BFDEV_SOURCE
     ${CMAKE_CURRENT_LIST_DIR}/list-sort.c
     ${CMAKE_CURRENT_LIST_DIR}/llist.c
     ${CMAKE_CURRENT_LIST_DIR}/log.c
-    ${CMAKE_CURRENT_LIST_DIR}/lru.c
     ${CMAKE_CURRENT_LIST_DIR}/matrix.c
     ${CMAKE_CURRENT_LIST_DIR}/minpool.c
     ${CMAKE_CURRENT_LIST_DIR}/notifier.c
@@ -79,6 +78,7 @@ if(BFDEV_DBGHEAP)
     )
 endif()
 
+include(${CMAKE_CURRENT_LIST_DIR}/cache/build.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/crypto/build.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/libc/build.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/textsearch/build.cmake)
