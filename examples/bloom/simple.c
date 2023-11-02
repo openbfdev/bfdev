@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <errno.h>
 #include <err.h>
 #include <bfdev/bloom.h>
@@ -14,9 +15,24 @@
 #define TEST_SIZE 100
 
 static unsigned int
-bloom_hash(const void *key, void *pdata)
+bloom_hash(unsigned int func, const void *key, void *pdata)
 {
-    return bfdev_pjwhash(key);
+    unsigned int hash;
+
+    switch (func) {
+        case 0:
+            hash = bfdev_pjwhash(key);
+            break;
+
+        case 1:
+            hash = (unsigned int)(uintptr_t)key;
+            break;
+
+        default:
+            abort();
+    }
+
+    return hash;
 }
 
 int main(void)
@@ -26,7 +42,7 @@ int main(void)
     unsigned int count;
     bool retval;
 
-    bloom = bfdev_bloom_create(NULL, TEST_SIZE, bloom_hash, NULL);
+    bloom = bfdev_bloom_create(NULL, TEST_SIZE, bloom_hash, 2, NULL);
     if (!bloom)
         err(errno, "bfdev_bloom_create");
 
@@ -45,6 +61,8 @@ int main(void)
             return 1;
     }
 
+    bfdev_bloom_flush(bloom);
     bfdev_bloom_destory(bloom);
+
     return 0;
 }
