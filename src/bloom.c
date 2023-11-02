@@ -10,11 +10,11 @@
 #include <export.h>
 
 static unsigned int
-bloom_index(struct bfdev_bloom *bloom, void *key)
+bloom_index(struct bfdev_bloom *bloom, unsigned int func, void *key)
 {
     unsigned int value, index;
 
-    value = bloom->hash(key, bloom->pdata);
+    value = bloom->hash(func, key, bloom->pdata);
     index = bfdev_hashtbl_index(bloom->capacity, value);
 
     return index;
@@ -23,37 +23,31 @@ bloom_index(struct bfdev_bloom *bloom, void *key)
 export bool
 bfdev_bloom_peek(struct bfdev_bloom *bloom, void *key)
 {
-    unsigned int index;
+    unsigned int index, func;
+    bool retval = true;
 
-    index = bloom_index(bloom, key);
-    if (bfdev_bit_test(bloom->bitmap, index))
-        return true;
+    for (func = 0; func < bloom->funcs; ++func) {
+        index = bloom_index(bloom, func, key);
+        if (!bfdev_bit_test(bloom->bitmap, index))
+            retval = false;
+    }
 
-    return false;
+    return retval;
 }
 
 export bool
 bfdev_bloom_push(struct bfdev_bloom *bloom, void *key)
 {
-    unsigned int index;
+    unsigned int index, func;
+    bool retval = true;
 
-    index = bloom_index(bloom, key);
-    if (bfdev_bit_test_set(bloom->bitmap, index))
-        return true;
+    for (func = 0; func < bloom->funcs; ++func) {
+        index = bloom_index(bloom, func, key);
+        if (!bfdev_bit_test_set(bloom->bitmap, index))
+            retval = false;
+    }
 
-    return false;
-}
-
-export bool
-bfdev_bloom_clear(struct bfdev_bloom *bloom, void *key)
-{
-    unsigned int index;
-
-    index = bloom_index(bloom, key);
-    if (bfdev_bit_test_clr(bloom->bitmap, index))
-        return true;
-
-    return false;
+    return retval;
 }
 
 export void
@@ -65,7 +59,7 @@ bfdev_bloom_flush(struct bfdev_bloom *bloom)
 
 export struct bfdev_bloom *
 bfdev_bloom_create(const struct bfdev_alloc *alloc, unsigned int capacity,
-                   bfdev_bloom_hash_t hash, void *pdata)
+                   bfdev_bloom_hash_t hash, unsigned int funcs, void *pdata)
 {
     struct bfdev_bloom *bloom;
     size_t size;
@@ -80,6 +74,7 @@ bfdev_bloom_create(const struct bfdev_alloc *alloc, unsigned int capacity,
     bloom->capacity = capacity;
     bloom->alloc = alloc;
     bloom->hash = hash;
+    bloom->funcs = funcs;
     bloom->pdata = pdata;
 
     return bloom;
