@@ -31,7 +31,7 @@ bfdev_level_name[] = {
     [BFDEV_LEVEL_NOTICE  ] = "notice",
     [BFDEV_LEVEL_INFO    ] = "info",
     [BFDEV_LEVEL_DEBUG   ] = "debug",
-    [BFDEV_LEVEL_DEFAULT ] = "def",
+    [BFDEV_LEVEL_DEFAULT ] = "default",
 };
 
 export struct bfdev_log
@@ -88,9 +88,6 @@ bfdev_log_state_vprint(struct bfdev_log *log, const char *fmt, va_list args)
     int retval, offset = 0;
     unsigned int level;
 
-    if (!log)
-        log = &bfdev_log_default;
-
     level = bfdev_log_level(fmt, &fmt);
     if (level >= BFDEV_LEVEL_DEFAULT)
         level = log->default_level;
@@ -130,8 +127,8 @@ bfdev_log_state_vprint(struct bfdev_log *log, const char *fmt, va_list args)
 
     if (log->write)
         return log->write(buff, offset, log->pdata);
-
     generic_write(buff);
+
     return offset;
 }
 

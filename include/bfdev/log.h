@@ -43,9 +43,20 @@ struct bfdev_log {
     void *pdata;
 };
 
-BFDEV_BITFLAGS_STRUCT(bfdev_log, struct bfdev_log, flags)
-BFDEV_BITFLAGS_STRUCT_FLAG(bfdev_log, struct bfdev_log, flags, color, __BFDEV_LOG_COLOR)
-BFDEV_BITFLAGS_STRUCT_FLAG(bfdev_log, struct bfdev_log, flags, commit, __BFDEV_LOG_COMMIT)
+BFDEV_BITFLAGS_STRUCT(bfdev_log,
+    struct bfdev_log, flags
+)
+
+BFDEV_BITFLAGS_STRUCT_FLAG(bfdev_log,
+    struct bfdev_log, flags,
+    color, __BFDEV_LOG_COLOR
+)
+
+BFDEV_BITFLAGS_STRUCT_FLAG(bfdev_log,
+    struct bfdev_log, flags,
+    commit, __BFDEV_LOG_COMMIT
+)
+
 extern struct bfdev_log bfdev_log_default;
 
 extern unsigned int
@@ -75,7 +86,7 @@ bfdev_log_state_print(struct bfdev_log *log, const char *fmt, ...);
 #endif
 
 #ifndef bfdev_log_state
-# define bfdev_log_state NULL
+# define bfdev_log_state (&bfdev_log_default)
 #endif
 
 #define bfdev_log_vprint(fmt, args) \
