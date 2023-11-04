@@ -3,7 +3,7 @@
 # Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
 #
 
-macro(host_target target source)
+function(host_target target source)
     if(NOT HOST_C_COMPILER)
         add_executable(${target} ${source})
     else()
@@ -15,4 +15,4 @@ macro(host_target target source)
             ${CMAKE_CURRENT_SOURCE_DIR}
         )
     endif()
-endmacro()
+endfunction()
