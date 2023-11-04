@@ -10,7 +10,7 @@ macro(packed_header prefix name genfile source)
     file(WRITE ${genfile}
         "/*\n"
         " * Automatically generated file; DO NOT EDIT.\n"
-        " * " ${CMAKE_PROJECT_NAME} " pack-header\n"
+        " * " ${PROJECT_NAME} " pack-header\n"
         " */\n"
         "\n"
         "#ifndef " ${name} "\n"
