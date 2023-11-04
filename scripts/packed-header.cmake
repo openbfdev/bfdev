@@ -3,14 +3,14 @@
 # Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
 #
 
-macro(packed_header prefix name genfile source)
+function(packed_header prefix name genfile source)
     file(GLOB srclist ${source}/*.h)
 
     file(REMOVE ${genfile})
     file(WRITE ${genfile}
         "/*\n"
         " * Automatically generated file; DO NOT EDIT.\n"
-        " * " ${PROJECT_NAME} " pack-header\n"
+        " * " ${PROJECT_NAME} " packed-header\n"
         " */\n"
         "\n"
         "#ifndef " ${name} "\n"
@@ -29,6 +29,4 @@ macro(packed_header prefix name genfile source)
         "\n"
         "#endif /* " ${name} " */\n"
     )
-
-    unset(srclist)
-endmacro()
+endfunction()

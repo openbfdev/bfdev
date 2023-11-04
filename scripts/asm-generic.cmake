@@ -3,7 +3,7 @@
 # Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
 #
 
-macro(asm_generic prefix generated compare source)
+function(asm_generic prefix generated compare source)
     file(GLOB srclist ${source}/*.h)
     file(GLOB cmplist ${compare}/*.h)
 
@@ -24,7 +24,4 @@ macro(asm_generic prefix generated compare source)
             )
         endif()
     endforeach()
-
-    unset(srclist)
-    unset(cmplist)
-endmacro()
+endfunction()
