@@ -17,7 +17,7 @@ macro(asm_generic prefix generated compare source)
             file(WRITE ${genfile}
                 "/*\n"
                 " * Automatically generated file; DO NOT EDIT.\n"
-                " * " ${CMAKE_PROJECT_NAME} " asm-generic\n"
+                " * " ${PROJECT_NAME} " asm-generic\n"
                 " */\n"
                 "\n"
                 "#include <" ${prefix} ${filename} ">\n"
