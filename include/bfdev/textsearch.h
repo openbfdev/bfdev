@@ -117,8 +117,14 @@ extern unsigned int
 bfdev_textsearch_linear_next(struct bfdev_ts_context *tsc, struct bfdev_ts_linear *linear);
 
 extern struct bfdev_ts_context *
-bfdev_textsearch_prepare(const struct bfdev_alloc *alloc, const char *name,
-                         const void *pattern, size_t len, unsigned long flags);
+bfdev_textsearch_create(const struct bfdev_alloc *alloc, const char *name,
+                        const void *pattern, size_t len, unsigned long flags);
+
+extern int
+bfdev_textsearch_register(struct bfdev_ts_algorithm *algo);
+
+extern void
+bfdev_textsearch_unregister(struct bfdev_ts_algorithm *algo);
 
 BFDEV_END_DECLS
 
