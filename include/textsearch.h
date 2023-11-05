@@ -14,7 +14,7 @@ BFDEV_BEGIN_DECLS
 extern int
 bfdev_textsearch_register(struct bfdev_ts_algorithm *algo);
 
-extern int
+extern void
 bfdev_textsearch_unregister(struct bfdev_ts_algorithm *algo);
 
 BFDEV_END_DECLS

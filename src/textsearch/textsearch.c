@@ -57,12 +57,11 @@ bfdev_textsearch_register(struct bfdev_ts_algorithm *algo)
     return -BFDEV_ENOERR;
 }
 
-export int
+export void
 bfdev_textsearch_unregister(struct bfdev_ts_algorithm *algo)
 {
     if (algorithm_find(algo->name))
-        return -BFDEV_ENOENT;
+        return;
 
     bfdev_list_del(&algo->list);
-    return -BFDEV_ENOERR;
 }
