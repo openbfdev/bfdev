@@ -123,6 +123,7 @@ bfdev_cache_obtain(struct bfdev_cache_head *head, unsigned long tag,
     node = cache_obtain(head, tag);
     bfdev_cache_clr_starving(head);
 
+    node->refcnt++;
     head->pending++;
     head->used++;
 

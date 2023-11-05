@@ -32,7 +32,7 @@ static void
 lru_put(struct bfdev_cache_head *head, struct bfdev_cache_node *node)
 {
     struct lru_head *lhead = head_to_cache(head);
-    bfdev_list_add(&lhead->lru, &node->list);
+    bfdev_list_move(&lhead->lru, &node->list);
 }
 
 static void
