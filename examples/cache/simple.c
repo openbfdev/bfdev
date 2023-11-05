@@ -40,15 +40,14 @@ int main(int argc, const char *argv[])
             bfdev_log_info("test%u cache miss: %u\n", count, value);
             node->pdata = (void *)(uintptr_t)value;
             bfdev_cache_committed(cache);
-            continue;
-        }
-
-        verify = (uintptr_t)node->pdata;
-        if (value == verify)
-            bfdev_log_info("test%u cache hit: %u passed\n", count, verify);
-        else {
-            bfdev_log_err("test%u cache hit: %u failed\n", count, verify);
-            return 1;
+        } else {
+            verify = (uintptr_t)node->pdata;
+            if (value == verify)
+                bfdev_log_info("test%u cache hit: %u passed\n", count, verify);
+            else {
+                bfdev_log_err("test%u cache hit: %u failed\n", count, verify);
+                return 1;
+            }
         }
 
         bfdev_cache_put(cache, node);
