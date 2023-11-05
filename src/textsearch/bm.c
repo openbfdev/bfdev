@@ -4,7 +4,7 @@
  */
 
 #include <base.h>
-#include <textsearch.h>
+#include <bfdev/textsearch.h>
 
 struct bm_context {
     struct bfdev_ts_context tsc;

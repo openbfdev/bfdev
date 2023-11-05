@@ -4,7 +4,7 @@
  */
 
 #include <base.h>
-#include <textsearch.h>
+#include <bfdev/textsearch.h>
 #include <export.h>
 
 static BFDEV_LIST_HEAD(algorithms);
@@ -23,8 +23,8 @@ algorithm_find(const char *name)
 }
 
 export struct bfdev_ts_context *
-bfdev_textsearch_prepare(const struct bfdev_alloc *alloc, const char *name,
-                         const void *pattern, size_t len, unsigned long flags)
+bfdev_textsearch_create(const struct bfdev_alloc *alloc, const char *name,
+                        const void *pattern, size_t len, unsigned long flags)
 {
     struct bfdev_ts_algorithm *algo;
     struct bfdev_ts_context *tsc;

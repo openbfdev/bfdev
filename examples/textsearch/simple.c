@@ -16,7 +16,7 @@ int main(void)
     struct bfdev_ts_linear linear;
 
     printf("test bm algorithm: ");
-    context = bfdev_textsearch_prepare(NULL, "bm", TEST_PATTERN, sizeof(TEST_PATTERN) - 1, 0);
+    context = bfdev_textsearch_create(NULL, "bm", TEST_PATTERN, sizeof(TEST_PATTERN) - 1, 0);
     if (!context || bfdev_textsearch_linear_find(context, &linear, TEST_STRING, sizeof(TEST_STRING) - 1) != TEST_OFFSET) {
         printf("failed\n");
         return 1;
@@ -25,7 +25,7 @@ int main(void)
     bfdev_textsearch_destroy(context);
 
     printf("test kmp algorithm: ");
-    context = bfdev_textsearch_prepare(NULL, "kmp", TEST_PATTERN, sizeof(TEST_PATTERN) - 1, 0);
+    context = bfdev_textsearch_create(NULL, "kmp", TEST_PATTERN, sizeof(TEST_PATTERN) - 1, 0);
     if (!context || bfdev_textsearch_linear_find(context, &linear, TEST_STRING, sizeof(TEST_STRING) - 1) != TEST_OFFSET) {
         printf("failed\n");
         return 1;
@@ -34,7 +34,7 @@ int main(void)
     bfdev_textsearch_destroy(context);
 
     printf("test sunday algorithm: ");
-    context = bfdev_textsearch_prepare(NULL, "sunday", TEST_PATTERN, sizeof(TEST_PATTERN) - 1, 0);
+    context = bfdev_textsearch_create(NULL, "sunday", TEST_PATTERN, sizeof(TEST_PATTERN) - 1, 0);
     if (!context || bfdev_textsearch_linear_find(context, &linear, TEST_STRING, sizeof(TEST_STRING) - 1) != TEST_OFFSET) {
         printf("failed\n");
         return 1;
