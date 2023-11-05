@@ -5,5 +5,6 @@
 
 set(BFDEV_SOURCE
     ${BFDEV_SOURCE}
+    ${CMAKE_CURRENT_LIST_DIR}/cache.c
     ${CMAKE_CURRENT_LIST_DIR}/lru.c
 )
