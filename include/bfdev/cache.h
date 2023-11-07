@@ -16,7 +16,7 @@
 BFDEV_BEGIN_DECLS
 
 #ifndef BFDEV_CACHE_FREE_TAG
-# define BFDEV_CACHE_FREE_TAG 0UL
+# define BFDEV_CACHE_FREE_TAG ULONG_MAX
 #endif
 
 enum bfdev_cache_obtain {
@@ -35,14 +35,21 @@ enum bfdev_cache_flags {
     BFDEV_CACHE_STARVING = BFDEV_BIT(__BFDEV_CACHE_STARVING),
 };
 
+enum bfdev_cache_status {
+    BFDEV_CACHE_FREED = 0,
+    BFDEV_CACHE_PENDING,
+    BFDEV_CACHE_USING,
+    BFDEV_CACHE_MANAGED,
+};
+
 struct bfdev_cache_node {
     struct bfdev_hlist_node hash;
     struct bfdev_list_head list;
+    enum bfdev_cache_status status;
+
     unsigned long index;
     unsigned long tag;
-
     unsigned long refcnt;
-    bool uncommitted;
     void *pdata;
 };
 
@@ -78,7 +85,10 @@ struct bfdev_cache_algo {
 
     bool (*starving)(struct bfdev_cache_head *head);
     struct bfdev_cache_node *(*obtain)(struct bfdev_cache_head *head);
+    void (*get)(struct bfdev_cache_head *head, struct bfdev_cache_node *node);
     void (*put)(struct bfdev_cache_head *head, struct bfdev_cache_node *node);
+    void (*update)(struct bfdev_cache_head *head, struct bfdev_cache_node *node);
+    void (*clear)(struct bfdev_cache_head *head, struct bfdev_cache_node *node);
     void (*reset)(struct bfdev_cache_head *head);
 
     struct bfdev_cache_head *(*create)(const struct bfdev_alloc *alloc, unsigned long size);

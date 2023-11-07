@@ -11,70 +11,99 @@ struct lru_head {
     struct bfdev_list_head lru;
 };
 
-#define head_to_cache(ptr) \
+struct lru_node {
+    struct bfdev_cache_node cache;
+    struct bfdev_list_head node;
+};
+
+#define cache_to_head(ptr) \
     bfdev_container_of(ptr, struct lru_head, cache)
+
+#define cache_to_node(ptr) \
+    bfdev_container_of(ptr, struct lru_node, cache)
 
 static bool
 lru_starving(struct bfdev_cache_head *head)
 {
-    struct lru_head *lhead = head_to_cache(head);
-    return bfdev_list_check_empty(&lhead->lru);
+    struct lru_head *lru_head;
+    lru_head = cache_to_head(head);
+    return bfdev_list_check_empty(&lru_head->lru);
 }
 
 static struct bfdev_cache_node *
 lru_obtain(struct bfdev_cache_head *head)
 {
-    struct lru_head *lhead = head_to_cache(head);
-    return bfdev_list_last_entry(&lhead->lru, struct bfdev_cache_node, list);
+    struct lru_head *lru_head;
+    struct lru_node *lru_node;
+
+    lru_head = cache_to_head(head);
+    lru_node = bfdev_list_last_entry(&lru_head->lru, struct lru_node, node);
+    bfdev_list_del(&lru_node->node);
+
+    return &lru_node->cache;
+}
+
+static void
+lru_get(struct bfdev_cache_head *head, struct bfdev_cache_node *node)
+{
+    struct lru_node *lru_node;
+    lru_node = cache_to_node(node);
+    bfdev_list_del(&lru_node->node);
 }
 
 static void
 lru_put(struct bfdev_cache_head *head, struct bfdev_cache_node *node)
 {
-    struct lru_head *lhead = head_to_cache(head);
-    bfdev_list_move(&lhead->lru, &node->list);
+    struct lru_head *lru_head;
+    struct lru_node *lru_node;
+
+    lru_head = cache_to_head(head);
+    lru_node = cache_to_node(node);
+
+    bfdev_list_add(&lru_head->lru, &lru_node->node);
 }
 
 static void
 lru_reset(struct bfdev_cache_head *head)
 {
-    struct lru_head *lhead = head_to_cache(head);
-    bfdev_list_head_init(&lhead->lru);
+    struct lru_head *lru_head;
+    lru_head = cache_to_head(head);
+    bfdev_list_head_init(&lru_head->lru);
 }
 
 static struct bfdev_cache_head *
 lru_create(const struct bfdev_alloc *alloc, unsigned long size)
 {
-    struct bfdev_cache_node *node;
     struct bfdev_cache_head *head;
-    struct lru_head *lhead;
+    struct lru_head *lru_head;
+    struct lru_node *lru_node;
     unsigned long count;
 
-    lhead = bfdev_zalloc(alloc, sizeof(*lhead));
-    if (bfdev_unlikely(!lhead))
+    lru_head = bfdev_zalloc(alloc, sizeof(*lru_head));
+    if (bfdev_unlikely(!lru_head))
         return NULL;
 
-    head = &lhead->cache;
-    bfdev_list_head_init(&lhead->lru);
+    head = &lru_head->cache;
+    bfdev_list_head_init(&lru_head->lru);
 
     head->nodes = bfdev_zalloc_array(alloc, size, sizeof(*head->nodes));
     if (bfdev_unlikely(!head->nodes))
         goto free_head;
 
     for (count = 0; count < size; ++count) {
-        node = bfdev_zalloc(alloc, sizeof(*node));
-        if (bfdev_unlikely(!node))
+        lru_node = bfdev_zalloc(alloc, sizeof(*lru_node));
+        if (bfdev_unlikely(!lru_node))
             goto free_element;
 
-        head->nodes[count] = node;
+        head->nodes[count] = &lru_node->cache;
     }
 
     return head;
 
 free_element:
     while (count--) {
-        node = head->nodes[count];
-        bfdev_free(alloc, node);
+        lru_node = cache_to_node(head->nodes[count]);
+        bfdev_free(alloc, lru_node);
     }
     bfdev_free(alloc, head->nodes);
 
@@ -86,19 +115,19 @@ free_head:
 static void
 lru_destroy(struct bfdev_cache_head *head)
 {
+    struct lru_head *lru_head = cache_to_head(head);
     const struct bfdev_alloc *alloc;
     struct bfdev_cache_node *node;
     unsigned long count;
 
     alloc = head->alloc;
-
     for (count = 0; count < head->size; ++count) {
         node = head->nodes[count];
         bfdev_free(alloc, node);
     }
 
     bfdev_free(alloc, head->nodes);
-    bfdev_free(alloc, head);
+    bfdev_free(alloc, lru_head);
 }
 
 static struct bfdev_cache_algo
@@ -106,6 +135,7 @@ lru_algorithm = {
     .name = "lru",
     .starving = lru_starving,
     .obtain = lru_obtain,
+    .get = lru_get,
     .put = lru_put,
     .reset = lru_reset,
     .create = lru_create,
