@@ -22,7 +22,7 @@ int main(int argc, const char *argv[])
     struct bfdev_cache_head *cache;
     unsigned int count;
 
-    cache = bfdev_cache_create("lru", NULL, TEST_SIZE, 1);
+    cache = bfdev_cache_create("lfu", NULL, TEST_SIZE, 1);
     if (!cache)
         return 1;
 
@@ -36,7 +36,7 @@ int main(int argc, const char *argv[])
         if (!node)
             return 1;
 
-        if (node->uncommitted) {
+        if (node->status == BFDEV_CACHE_PENDING) {
             bfdev_log_info("test%u cache miss: %u\n", count, value);
             node->pdata = (void *)(uintptr_t)value;
             bfdev_cache_committed(cache);
