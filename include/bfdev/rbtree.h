@@ -109,6 +109,12 @@ BFDEV_CALLBACK_CMP(
     const struct bfdev_rb_node *
 );
 
+static inline void
+bfdev_rb_init(struct bfdev_rb_root *root)
+{
+    *root = BFDEV_RB_INIT;
+}
+
 /**
  * bfdev_rb_fixup_augmented() - augmented balance after insert node.
  * @root: rbtree root of node.

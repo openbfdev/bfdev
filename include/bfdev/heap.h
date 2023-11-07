@@ -85,6 +85,12 @@ BFDEV_CALLBACK_CMP(
     const struct bfdev_heap_node *
 );
 
+static inline void
+bfdev_heap_init(struct bfdev_heap_root *root)
+{
+    *root = BFDEV_HEAP_INIT;
+}
+
 /**
  * bfdev_heap_fixup - balance after insert node.
  * @root: heap root of node.
