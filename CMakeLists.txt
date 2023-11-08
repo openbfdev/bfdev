@@ -53,11 +53,40 @@ option(BFDEV_DBGHLIST "Dynamic debug hlist" ON)
 option(BFDEV_DBGILIST "Dynamic debug ilist" ON)
 option(BFDEV_DBGRBTREE "Dynamic debug rbtree" ON)
 option(BFDEV_DBGHEAP "Dynamic debug heap" ON)
+option(BFDEV_DBGREFCNT "Dynamic debug refcnt" ON)
 
 if(BFDEV_DEVEL)
     set(BFDEV_EXAMPLES ON)
     set(BFDEV_ASAN ON)
     set(BFDEV_UBSAN ON)
+endif()
+
+if(BFDEV_DBGLIST)
+    set(BFDEV_DEBUG_LIST ON)
+endif()
+
+if(BFDEV_DBGSLIST)
+    set(BFDEV_DEBUG_SLIST ON)
+endif()
+
+if(BFDEV_DBGHLIST)
+    set(BFDEV_DEBUG_HLIST ON)
+endif()
+
+if(BFDEV_DBGILIST)
+    set(BFDEV_DEBUG_ILIST ON)
+endif()
+
+if(BFDEV_DBGRBTREE)
+    set(BFDEV_DEBUG_RBTREE ON)
+endif()
+
+if(BFDEV_DBGHEAP)
+    set(BFDEV_DEBUG_HEAP ON)
+endif()
+
+if(BFDEV_DBGREFCNT)
+    set(BFDEV_DEBUG_REFCNT ON)
 endif()
 
 asm_generic(
@@ -148,30 +177,6 @@ if(BFDEV_UBSAN)
          -fsanitize=enum \
          -fsanitize-undefined-trap-on-error"
     )
-endif()
-
-if(BFDEV_DBGLIST)
-    set(BFDEV_DEBUG_LIST ON)
-endif()
-
-if(BFDEV_DBGSLIST)
-    set(BFDEV_DEBUG_SLIST ON)
-endif()
-
-if(BFDEV_DBGHLIST)
-    set(BFDEV_DEBUG_HLIST ON)
-endif()
-
-if(BFDEV_DBGILIST)
-    set(BFDEV_DEBUG_ILIST ON)
-endif()
-
-if(BFDEV_DBGRBTREE)
-    set(BFDEV_DEBUG_RBTREE ON)
-endif()
-
-if(BFDEV_DBGHEAP)
-    set(BFDEV_DEBUG_HEAP ON)
 endif()
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
