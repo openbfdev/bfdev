@@ -120,6 +120,9 @@ bfdev_cache_obtain(struct bfdev_cache_head *head, unsigned long tag,
         if (node->status == BFDEV_CACHE_MANAGED)
             algo->get(head, node);
 
+        if (algo->update)
+            algo->update(head, node);
+
         if (!refcnt)
             head->used++;
 
@@ -155,6 +158,9 @@ bfdev_cache_obtain(struct bfdev_cache_head *head, unsigned long tag,
 export unsigned long
 bfdev_cache_put(struct bfdev_cache_head *head, struct bfdev_cache_node *node)
 {
+    if (bfdev_unlikely(node->status != BFDEV_CACHE_USING))
+        return -BFDEV_EINVAL;
+
     if (!--node->refcnt) {
         bfdev_cache_clr_starving(head);
         bfdev_list_del_init(&node->list);
@@ -182,8 +188,11 @@ bfdev_cache_set(struct bfdev_cache_head *head, struct bfdev_cache_node *node,
     algo = head->algo;
     node->tag = tag;
 
-    if (algo->update)
+    if (algo->update) {
+        algo->get(head, node);
         algo->update(head, node);
+        algo->put(head, node);
+    }
 
     bfdev_hashtbl_del(&node->hash);
     bfdev_hashtbl_add(head->taghash, head->size, &node->hash, tag);
@@ -194,12 +203,16 @@ bfdev_cache_set(struct bfdev_cache_head *head, struct bfdev_cache_node *node,
 export int
 bfdev_cache_del(struct bfdev_cache_head *head, struct bfdev_cache_node *node)
 {
+    const struct bfdev_cache_algo *algo;
+
     if (bfdev_unlikely(node->status != BFDEV_CACHE_MANAGED))
         return -BFDEV_EBUSY;
 
+    algo = head->algo;
     node->status = BFDEV_CACHE_FREED;
     node->tag = BFDEV_CACHE_FREE_TAG;
 
+    algo->get(head, node);
     bfdev_hashtbl_del(&node->hash);
     bfdev_list_move(&head->freed, &node->list);
 
@@ -311,7 +324,9 @@ bfdev_cache_destroy(struct bfdev_cache_head *head)
 export int
 bfdev_cache_register(struct bfdev_cache_algo *algo)
 {
-    if (!algo->name)
+    if (!(algo->name && algo->create && algo->destroy &&
+          algo->clear && algo->starving && algo->obtain &&
+          algo->get && algo->put))
         return -BFDEV_EINVAL;
 
     if (algorithm_find(algo->name))
