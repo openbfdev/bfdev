@@ -35,6 +35,7 @@ set(BFDEV_SOURCE
     ${CMAKE_CURRENT_LIST_DIR}/prandom.c
     ${CMAKE_CURRENT_LIST_DIR}/radix.c
     ${CMAKE_CURRENT_LIST_DIR}/rbtree.c
+    ${CMAKE_CURRENT_LIST_DIR}/refcount.c
     ${CMAKE_CURRENT_LIST_DIR}/respool.c
     ${CMAKE_CURRENT_LIST_DIR}/ringbuf.c
     ${CMAKE_CURRENT_LIST_DIR}/scnprintf.c
