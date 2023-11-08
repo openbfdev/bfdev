@@ -27,6 +27,14 @@ bfdev_cmpxchg(bfdev_atomic_t *atomic, bfdev_atomic_t old, bfdev_atomic_t value)
 }
 #endif
 
+#ifndef bfdev_try_cmpxchg
+static __bfdev_always_inline bool
+bfdev_try_cmpxchg(bfdev_atomic_t *atomic, bfdev_atomic_t *old, bfdev_atomic_t value)
+{
+    return bfdev_arch_try_cmpxchg(atomic, old, value);
+}
+#endif
+
 BFDEV_END_DECLS
 
 #endif /* _BFDEV_CMPXCHG_H_ */
