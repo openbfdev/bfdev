@@ -46,8 +46,9 @@ bfdev_textsearch_create(const struct bfdev_alloc *alloc, const char *name,
 export int
 bfdev_textsearch_register(struct bfdev_ts_algorithm *algo)
 {
-    if (!algo->name || !algo->find || !algo->prepare ||
-        !algo->destroy || !algo->pattern_get || !algo->pattern_len)
+    if (!(algo->name && algo->find && algo->prepare &&
+          algo->destroy && algo->pattern_get &&
+          algo->pattern_len))
         return -BFDEV_EINVAL;
 
     if (algorithm_find(algo->name))

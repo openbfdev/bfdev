@@ -24,10 +24,17 @@ struct bfdev_alloc_ops {
     void (*free)(const void *block, void *pdata);
 };
 
-extern __bfdev_malloc void *bfdev_malloc(const struct bfdev_alloc *alloc, size_t size);
-extern __bfdev_malloc void *bfdev_zalloc(const struct bfdev_alloc *alloc, size_t size);
-extern __bfdev_malloc void *bfdev_realloc(const struct bfdev_alloc *alloc, const void *block, size_t resize);
-extern void bfdev_free(const struct bfdev_alloc *alloc, const void *block);
+extern __bfdev_malloc void *
+bfdev_malloc(const struct bfdev_alloc *alloc, size_t size);
+
+extern __bfdev_malloc void *
+bfdev_zalloc(const struct bfdev_alloc *alloc, size_t size);
+
+extern __bfdev_malloc void *
+bfdev_realloc(const struct bfdev_alloc *alloc, const void *block, size_t resize);
+
+extern void
+bfdev_free(const struct bfdev_alloc *alloc, const void *block);
 
 /**
  * bfdev_malloc_array - allocate memory for an array.

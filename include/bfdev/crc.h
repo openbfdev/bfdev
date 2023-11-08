@@ -12,7 +12,7 @@
 BFDEV_BEGIN_DECLS
 
 extern uint8_t
-bfdev_crc4(const void *src, size_t bits, uint8_t crc);
+bfdev_crc4(const void *data, size_t bits, uint8_t crc);
 
 extern uint8_t
 bfdev_crc7(const void *data, size_t len, uint8_t crc);

@@ -26,17 +26,50 @@ BFDEV_BEGIN_DECLS
 #define BFDEV_DEFINE_BITMAP(name, bits) \
     unsigned long name[BFDEV_BITS_TO_LONG(bits)];
 
-extern bool bfdev_bitmap_comp_equal(const unsigned long *src1, const unsigned long *src2, unsigned int bits);
-extern bool bfdev_bitmap_comp_or_equal(const unsigned long *src1, const unsigned long *src2, const unsigned long *src3, unsigned int bits);
-extern bool bfdev_bitmap_comp_intersects(const unsigned long *src1, const unsigned long *src2, unsigned int bits);
-extern bool bfdev_bitmap_comp_and(unsigned long *dest, const unsigned long *src1, const unsigned long *src2, unsigned int bits);
-extern bool bfdev_bitmap_comp_andnot(unsigned long *dest, const unsigned long *src1, const unsigned long *src2, unsigned int bits);
-extern void bfdev_bitmap_comp_or(unsigned long *dest, const unsigned long *src1, const unsigned long *src2, unsigned int bits);
-extern void bfdev_bitmap_comp_xor(unsigned long *dest, const unsigned long *src1, const unsigned long *src2, unsigned int bits);
-extern void bfdev_bitmap_comp_complement(unsigned long *dest, const unsigned long *src, unsigned int bits);
-extern void bfdev_bitmap_comp_replace(unsigned long *bitmap, const unsigned long *oldp, const unsigned long *newp, const unsigned long *mask, unsigned int bits);
-extern void bfdev_bitmap_comp_set(unsigned long *bitmap, unsigned int start, unsigned int bits);
-extern void bfdev_bitmap_comp_clr(unsigned long *bitmap, unsigned int start, unsigned int bits);
+extern bool
+bfdev_bitmap_comp_equal(const unsigned long *src1, const unsigned long *src2,
+                        unsigned int bits);
+
+extern bool
+bfdev_bitmap_comp_or_equal(const unsigned long *src1, const unsigned long *src2,
+                           const unsigned long *src3, unsigned int bits);
+
+extern bool
+bfdev_bitmap_comp_intersects(const unsigned long *src1, const unsigned long *src2,
+                             unsigned int bits);
+
+extern bool
+bfdev_bitmap_comp_and(unsigned long *dest, const unsigned long *src1,
+                      const unsigned long *src2, unsigned int bits);
+
+extern bool
+bfdev_bitmap_comp_andnot(unsigned long *dest, const unsigned long *src1,
+                         const unsigned long *src2, unsigned int bits);
+
+extern void
+bfdev_bitmap_comp_or(unsigned long *dest, const unsigned long *src1,
+                     const unsigned long *src2, unsigned int bits);
+
+extern void
+bfdev_bitmap_comp_xor(unsigned long *dest, const unsigned long *src1,
+                      const unsigned long *src2, unsigned int bits);
+
+extern void
+bfdev_bitmap_comp_complement(unsigned long *dest, const unsigned long *src,
+                             unsigned int bits);
+
+extern void
+bfdev_bitmap_comp_replace(unsigned long *bitmap, const unsigned long *oldp,
+                          const unsigned long *newp, const unsigned long *mask,
+                          unsigned int bits);
+
+extern void
+bfdev_bitmap_comp_set(unsigned long *bitmap, unsigned int start,
+                      unsigned int bits);
+
+extern void
+bfdev_bitmap_comp_clr(unsigned long *bitmap, unsigned int start,
+                      unsigned int bits);
 
 static __bfdev_always_inline bool
 bfdev_bitmap_empty(const unsigned long *src, unsigned int bits)
