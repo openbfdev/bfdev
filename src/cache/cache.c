@@ -104,15 +104,13 @@ bfdev_cache_obtain(struct bfdev_cache_head *head, unsigned long tag,
 
     node = cache_find(head, tag, true);
     if (bfdev_likely(node)) {
-        unsigned long refcnt;
-
         head->hits++;
-        refcnt = node->refcnt++;
 
         if (node->status == BFDEV_CACHE_PENDING) {
             if (!(flags & BFDEV_CACHE_UNCOMMITTED))
                 return NULL;
 
+            node->refcnt++;
             return node;
         }
 
@@ -123,7 +121,7 @@ bfdev_cache_obtain(struct bfdev_cache_head *head, unsigned long tag,
         if (algo->update)
             algo->update(head, node);
 
-        if (!refcnt)
+        if (!node->refcnt++)
             head->used++;
 
         bfdev_list_move(&head->using, &node->list);
@@ -188,14 +186,13 @@ bfdev_cache_set(struct bfdev_cache_head *head, struct bfdev_cache_node *node,
     algo = head->algo;
     node->tag = tag;
 
-    if (algo->update) {
-        algo->get(head, node);
-        algo->update(head, node);
-        algo->put(head, node);
-    }
-
+    algo->get(head, node);
     bfdev_hashtbl_del(&node->hash);
     bfdev_hashtbl_add(head->taghash, head->size, &node->hash, tag);
+
+    if (algo->update)
+        algo->update(head, node);
+    algo->put(head, node);
 
     return -BFDEV_ENOERR;
 }
@@ -325,7 +322,7 @@ export int
 bfdev_cache_register(struct bfdev_cache_algo *algo)
 {
     if (!(algo->name && algo->create && algo->destroy &&
-          algo->clear && algo->starving && algo->obtain &&
+          algo->reset && algo->starving && algo->obtain &&
           algo->get && algo->put))
         return -BFDEV_EINVAL;
 
