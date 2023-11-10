@@ -41,10 +41,14 @@ struct bfdev_radix_node {
     };
 };
 
-#define BFDEV_GENERIC_RADIX(datatype)   \
-    union {                             \
-        struct bfdev_radix_root tree;   \
-        datatype data;                  \
+#define BFDEV_RADIX_CHECK(type) \
+    (sizeof(type) > BFDEV_RADIX_BLOCK ? -1 : 1)
+
+#define BFDEV_GENERIC_RADIX(datatype)               \
+    union {                                         \
+        struct bfdev_radix_root tree;               \
+        datatype data;                              \
+        char check[BFDEV_RADIX_CHECK(datatype)];    \
     }
 
 #define BFDEV_RADIX_STATIC(ALLOC) \
