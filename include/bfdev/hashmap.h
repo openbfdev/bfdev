@@ -20,8 +20,8 @@ BFDEV_BEGIN_DECLS
 /**
  * enum bfdev_hashmap_strategy - Hashmap insertion strategy.
  * @HASHMAP_ADD: only add key/value if key doesn't exist yet.
- * @HASHMAP_SET: add key/value pair if key doesn't exist yet.
- * @HASHMAP_UPDATE: update value, if key already exists.
+ * @HASHMAP_SET: add key/value pair if key doesn't exist yet. otherwise update value;
+ * @HASHMAP_UPDATE: only update value, if key already exists.
  * @HASHMAP_APPEND: always add key/value pair, even if key already exists.
  */
 enum bfdev_hashmap_strategy {
@@ -52,8 +52,8 @@ struct bfdev_hashmap_ops {
     bool (*shrink)(const struct bfdev_hashmap *hashmap, void *pdata);
 };
 
-#define BFDEV_HASHMAP_STATIC(ALLOC, OPS, PDATA) {       \
-    .alloc = (ALLOC), .ops = (OPS), .pdata = (PDATA),   \
+#define BFDEV_HASHMAP_STATIC(ALLOC, OPS, PDATA) { \
+    .alloc = (ALLOC), .ops = (OPS), .pdata = (PDATA), \
 }
 
 #define BFDEV_HASHMAP_INIT(alloc, ops, pdata) \
@@ -62,6 +62,13 @@ struct bfdev_hashmap_ops {
 #define BFDEV_DEFINE_HASHMAP(name, alloc, ops, pdata) \
     struct bfdev_hashmap name = BFDEV_HASHMAP_INIT(alloc, ops, pdata)
 
+/**
+ * bfdev_hashmap_init() - initialize a hashmap structure.
+ * @hashmap: hashmap structure to be initialized.
+ * @alloc: allocator operations.
+ * @ops: hashmap operations.
+ * @pdata: operations callback data.
+ */
 static inline void
 bfdev_hashmap_init(struct bfdev_hashmap *hashmap, const struct bfdev_alloc *alloc,
                    const struct bfdev_hashmap_ops *ops, void *pdata)
@@ -69,17 +76,39 @@ bfdev_hashmap_init(struct bfdev_hashmap *hashmap, const struct bfdev_alloc *allo
     *hashmap = BFDEV_HASHMAP_INIT(alloc, ops, pdata);
 }
 
+/**
+ * bfdev_hashmap_insert() - insert a hashlist node to hashmap.
+ * @hashmap: hashmap structure to be insert.
+ * @node: new hashlist node to insert.
+ * @old: pointer used to return the replaced node.
+ * @strategy: insertion strategy.
+ */
 extern int
 bfdev_hashmap_insert(struct bfdev_hashmap *hashmap, struct bfdev_hlist_node *node,
                      struct bfdev_hlist_node **old, enum bfdev_hashmap_strategy strategy);
 
+/**
+ * bfdev_hashmap_del() - delete a hashlist node from hashmap.
+ * @hashmap: hashmap structure to be delete.
+ * @key: key of the node to be deleted.
+ * @node: pointer used to return the deleted node.
+ */
 extern int
 bfdev_hashmap_del(struct bfdev_hashmap *hashmap, const void *key,
                   struct bfdev_hlist_node **node);
 
+/**
+ * bfdev_hashmap_find() - find a hashlist node in hashmap.
+ * @hashmap: hashmap structure to be find.
+ * @key: key of the node to be find.
+ */
 extern struct bfdev_hlist_node *
 bfdev_hashmap_find(struct bfdev_hashmap *hashmap, const void *key);
 
+/**
+ * bfdev_hashmap_release() - release hash bucket in hashmap.
+ * @hashmap: hashmap structure to be release.
+ */
 extern void
 bfdev_hashmap_release(struct bfdev_hashmap *hashmap);
 
