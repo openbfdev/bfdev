@@ -13,7 +13,6 @@
 - ilist
 - list
 - llist
-- lru
 - radix
 - rbtree
 - ringbuf
@@ -23,7 +22,8 @@
 
 ## Algorithms
 
-- base32
+- ascii85
+- base64
 - base64
 - bsearch
 - crc
@@ -62,7 +62,6 @@
 - fsm
 - levenshtein
 - snprintf
-- textsearch
 
 ## Mathematics
 
@@ -71,6 +70,17 @@
 - math
 - minmax
 - uplower
+
+## Cache
+
+- lfu
+- lru
+
+## Textsearch
+
+- bm
+- kmp
+- sunday
 
 ## Miscellaneous
 
