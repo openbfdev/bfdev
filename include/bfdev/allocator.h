@@ -8,6 +8,7 @@
 #define _BFDEV_ALLOCATOR_H_
 
 #include <bfdev/config.h>
+#include <bfdev/types.h>
 #include <bfdev/stddef.h>
 #include <bfdev/stdlib.h>
 
@@ -19,10 +20,35 @@ struct bfdev_alloc {
 };
 
 struct bfdev_alloc_ops {
-    void *(*malloc)(size_t size, void *pdata);
-    void *(*realloc)(const void *block, size_t resize, void *pdata);
-    void (*free)(const void *block, void *pdata);
+    bfdev_alloc_t alloc;
+    bfdev_realloc_t realloc;
+    bfdev_free_t free;
 };
+
+#define BFDEV_ALLOC_OPS_STATIC(ALLOC, REALLOC, FREE) \
+    {.alloc = (ALLOC), .realloc = (REALLOC), .free = (FREE)}
+
+#define BFDEV_ALLOC_OPS_INIT(alloc, realloc, free) \
+    (struct bfdev_alloc_ops) BFDEV_ALLOC_OPS_STATIC(alloc, realloc, free)
+
+#define BFDEV_DEFINE_ALLOC_OPS(name, alloc, realloc, free) \
+    struct bfdev_alloc_ops name = BFDEV_ALLOC_OPS_INIT(alloc, realloc, free)
+
+#define BFDEV_ALLOC_STATIC(ALLOC, REALLOC, FREE, PDATA) \
+    {.ops = &BFDEV_ALLOC_OPS_INIT(ALLOC, REALLOC, FREE), .pdata = (PDATA)}
+
+#define BFDEV_ALLOC_INIT(alloc, realloc, free, pdata) \
+    (struct bfdev_alloc) BFDEV_ALLOC_STATIC(alloc, realloc, free, pdata)
+
+#define BFDEV_DEFINE_ALLOC(name, alloc, realloc, free, pdata) \
+    struct bfdev_alloc name = BFDEV_ALLOC_INIT(alloc, realloc, free, pdata)
+
+static inline void
+bfdev_alloc_init(struct bfdev_alloc *allcator, bfdev_alloc_t alloc,
+                 bfdev_realloc_t realloc, bfdev_free_t free, void *pdata)
+{
+    *allcator = BFDEV_ALLOC_INIT(alloc, realloc, free, pdata);
+}
 
 extern __bfdev_malloc void *
 bfdev_malloc(const struct bfdev_alloc *alloc, size_t size);
