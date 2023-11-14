@@ -19,6 +19,27 @@ struct bfdev_allocpool {
     unsigned long count;
 };
 
+#define BFDEV_ALLOCPOOL_STATIC(BLOCK, SIZE) \
+    {.block = (BLOCK), .size = (SIZE)}
+
+#define BFDEV_ALLOCPOOL_INIT(block, size) \
+    (struct bfdev_allocpool) BFDEV_ALLOCPOOL_STATIC(block, size)
+
+#define BFDEV_DEFINE_ALLOCPOOL(name, block, size) \
+    struct bfdev_allocpool name = BFDEV_ALLOCPOOL_INIT(block, size)
+
+/**
+ * bfdev_allocpool_init() - Allocation mempool initialize.
+ * @pool: minimum mempool to operate.
+ * @array: mempool array address.
+ * @size: mempool array size.
+ */
+static inline void
+bfdev_allocpool_init(struct bfdev_allocpool *pool, void *block, size_t size)
+{
+    *pool = BFDEV_ALLOCPOOL_INIT(block, size);
+}
+
 /**
  * bfdev_allocpool_alloc() - Allocation mempool allocation.
  * @pool: minimum mempool to operate.
@@ -34,15 +55,6 @@ bfdev_allocpool_alloc(struct bfdev_allocpool *pool, size_t size, size_t align);
  */
 extern void
 bfdev_allocpool_free(struct bfdev_allocpool *pool);
-
-/**
- * bfdev_allocpool_setup() - Allocation mempool setup.
- * @pool: minimum mempool to operate.
- * @array: mempool array address.
- * @size: mempool array size.
- */
-extern void
-bfdev_allocpool_setup(struct bfdev_allocpool *pool, void *block, size_t size);
 
 BFDEV_END_DECLS
 
