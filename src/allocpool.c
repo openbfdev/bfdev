@@ -30,7 +30,7 @@ bfdev_allocpool_alloc(struct bfdev_allocpool *pool, size_t size, size_t align)
 }
 
 export void
-bfdev_allocpool_free(struct bfdev_allocpool *pool)
+bfdev_allocpool_free(struct bfdev_allocpool *pool, const char *block)
 {
     if (!--pool->count)
         pool->last = 0;
