@@ -35,12 +35,3 @@ bfdev_allocpool_free(struct bfdev_allocpool *pool)
     if (!--pool->count)
         pool->last = 0;
 }
-
-export void
-bfdev_allocpool_setup(struct bfdev_allocpool *pool, void *block, size_t size)
-{
-    pool->block = block;
-    pool->size = size;
-    pool->last = 0;
-    pool->count = 0;
-}
