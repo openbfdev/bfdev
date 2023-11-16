@@ -3,15 +3,17 @@
  * Copyright(c) 2021 John Sanpe <sanpeqf@gmail.com>
  */
 
+#define MODULE_NAME "heap-benchmark"
+#define bfdev_log_fmt(fmt) MODULE_NAME ": " fmt
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
-#include <unistd.h>
+#include <bfdev/log.h>
 #include <bfdev/heap.h>
-#include <sys/times.h>
+#include "../time.h"
 
-#define HEAP_DEBUG  0
-#define TEST_LEN    1000000
+#define HEAP_DEBUG 0
+#define TEST_LEN 1000000
 
 struct bench_node {
     struct bfdev_heap_node node;
@@ -25,26 +27,17 @@ struct bench_node {
 #if HEAP_DEBUG
 static void node_dump(struct bench_node *node)
 {
-    printf("\t%04d: ", node[count].num);
-    printf("parent %-4d ", node[count].node.parent ? bfdev_heap_to_bench(node[count].node.parent)->num : 0);
-    printf("left %-4d ", node[count].node.left ? bfdev_heap_to_bench(node[count].node.left)->num : 0);
-    printf("right %-4d ", node[count].node.right ? bfdev_heap_to_bench(node[count].node.right)->num : 0);
-    printf("data 0x%8x ", node[count].data);
-    printf("\n");
+    bfdev_log_info("\t%04d: ", node[count].num);
+    bfdev_log_info("parent %-4d ", node[count].node.parent ? bfdev_heap_to_bench(node[count].node.parent)->num : 0);
+    bfdev_log_info("left %-4d ", node[count].node.left ? bfdev_heap_to_bench(node[count].node.left)->num : 0);
+    bfdev_log_info("right %-4d ", node[count].node.right ? bfdev_heap_to_bench(node[count].node.right)->num : 0);
+    bfdev_log_info("data 0x%8x ", node[count].data);
+    bfdev_log_info("\n");
 }
 #else
 # define node_dump(node) ((void)(node))
 #endif
 
-static BFDEV_HEAP_ROOT(bench_root);
-
-static void
-time_dump(int ticks, clock_t start, clock_t stop, struct tms *start_tms, struct tms *stop_tms)
-{
-    printf("\treal time: %lf\n", (stop - start) / (double)ticks);
-    printf("\tuser time: %lf\n", (stop_tms->tms_utime - start_tms->tms_utime) / (double)ticks);
-    printf("\tkern time: %lf\n", (stop_tms->tms_stime - start_tms->tms_stime) / (double)ticks);
-}
 
 static unsigned int
 test_deepth(struct bfdev_heap_node *node)
@@ -70,59 +63,56 @@ bench_cmp(const struct bfdev_heap_node *hpa, const struct bfdev_heap_node *hpb, 
 int main(void)
 {
     struct bench_node *bnode;
-    struct tms start_tms, stop_tms;
-    clock_t start, stop;
-    unsigned int count, ticks;
+    unsigned int count;
     unsigned long index;
     void *block;
 
+    BFDEV_HEAP_ROOT(bench_root);
+
     block = bnode = malloc(sizeof(*bnode) * TEST_LEN);
     if (!bnode) {
-        printf("Insufficient Memory!\n");
+        bfdev_log_err("Insufficient memory!\n");
         return 1;
     }
 
-    printf("Generate %u node:\n", TEST_LEN);
     srand(time(NULL));
+    bfdev_log_info("Generate %u node:\n", TEST_LEN);
     for (count = 0; count < TEST_LEN; ++count) {
         bnode[count].num = count + 1;
         bnode[count].data = rand();
-    }
-
-    printf("Insert Nodes:\n");
-    ticks = sysconf(_SC_CLK_TCK);
-    start = times(&start_tms);
-    for (count = 0; count < TEST_LEN; ++count) {
 #if HEAP_DEBUG
-        printf("\t%08d: 0x%8x\n", bnode[count].num, bnode[count].data);
+        bfdev_log_info("\t%08d: 0x%8x\n", bnode[count].num, bnode[count].data);
 #endif
-        bfdev_heap_insert(&bench_root, &bnode[count].node, bench_cmp, NULL);
     }
-    stop = times(&stop_tms);
-    time_dump(ticks, start, stop, &start_tms, &stop_tms);
 
+    bfdev_log_info("Insert nodes:\n");
+    EXAMPLE_TIME_STATISTICAL(
+        for (count = 0; count < TEST_LEN; ++count)
+            bfdev_heap_insert(&bench_root, &bnode[count].node, bench_cmp, NULL);
+        0;
+    );
     count = test_deepth(bench_root.node);
-    printf("\theap deepth: %u\n", count);
+    bfdev_log_info("\theap deepth: %u\n", count);
 
-    start = times(&start_tms);
     count = 0;
-    printf("Levelorder Iteration:\n");
-    bfdev_heap_for_each_entry(bnode, &index, &bench_root, node) {
-        node_dump(bnode);
-        count++;
-    }
-    stop = times(&stop_tms);
-    printf("\ttotal num: %u\n", count);
-    time_dump(ticks, start, stop, &start_tms, &stop_tms);
+    bfdev_log_info("Level-order iteration:\n");
+    EXAMPLE_TIME_STATISTICAL(
+        bfdev_heap_for_each_entry(bnode, &index, &bench_root, node) {
+            node_dump(bnode);
+            count++;
+        }
+        0;
+    );
+    bfdev_log_info("\ttotal num: %u\n", count);
 
-    printf("Deletion All node...\n");
+    bfdev_log_info("Deletion all nodes...\n");
     while (bench_root.count) {
         bnode = bfdev_heap_to_bench(bench_root.node);
         node_dump(bnode);
         bfdev_heap_delete(&bench_root, &bnode->node, bench_cmp, NULL);
     }
 
-    printf("Done.\n");
+    bfdev_log_info("Done.\n");
     free(block);
 
     return 0;
