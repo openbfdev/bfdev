@@ -78,15 +78,17 @@ list_finish(bfdev_list_cmp_t cmp, void *pdata, struct bfdev_list_head *head,
 export void
 bfdev_list_sort(struct bfdev_list_head *head, bfdev_list_cmp_t cmp, void *pdata)
 {
-    struct bfdev_list_head *pending = NULL, *node = head->next;
-    unsigned int count = 0;
+    struct bfdev_list_head *pending, *node;
+    unsigned int count;
 
+    node = head->next;
     if (bfdev_unlikely(node == head->prev))
         return;
 
     head->prev->next = NULL;
+    pending = NULL;
 
-    do {
+    for (count = 0; node; ++count) {
         struct bfdev_list_head **tail = &pending;
         size_t bits;
 
@@ -102,10 +104,10 @@ bfdev_list_sort(struct bfdev_list_head *head, bfdev_list_cmp_t cmp, void *pdata)
 
         node->prev = pending;
         pending = node;
+
         node = node->next;
         pending->next = NULL;
-        ++count;
-    } while (node);
+    }
 
     node = pending;
     pending = pending->prev;

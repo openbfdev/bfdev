@@ -73,7 +73,7 @@ ilist_head_check(struct bfdev_ilist_head *ihead)
  */
 export void
 bfdev_ilist_add(struct bfdev_ilist_head *ihead, struct bfdev_ilist_node *inode,
-                bfdev_ilist_cmp_t cmp, const void *pdata)
+                bfdev_ilist_cmp_t cmp, void *pdata)
 {
     struct bfdev_ilist_node *walk, *first, *prev = NULL;
     struct bfdev_list_head *next = &ihead->node_list;

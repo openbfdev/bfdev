@@ -28,16 +28,26 @@ struct rbtree_test_pdata {
 static long
 rbtest_rb_cmp(const struct bfdev_rb_node *rba, const struct bfdev_rb_node *rbb, void *pdata)
 {
-    struct rbtree_test_node *nodea = rbnode_to_test(rba);
-    struct rbtree_test_node *nodeb = rbnode_to_test(rbb);
-    return nodea->data < nodeb->data ? -1 : 1;
+    struct rbtree_test_node *node1, *node2;
+
+    node1 = rbnode_to_test(rba);
+    node2 = rbnode_to_test(rbb);
+
+    if (node1->data== node2->data)
+        return 0;
+
+    return node1->data < node2->data ? -1 : 1;
 }
 
 static long
 rbtest_rb_find(const struct bfdev_rb_node *rb, void *key)
 {
-    struct rbtree_test_node *node = rbnode_to_test(rb);
-    if (node->data == (unsigned long)key) return 0;
+    struct rbtree_test_node *node;
+
+    node = rbnode_to_test(rb);
+    if (node->data == (unsigned long)key)
+        return 0;
+
     return node->data < (unsigned long)key ? -1 : 1;
 }
 

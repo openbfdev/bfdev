@@ -23,12 +23,18 @@ struct test_pdata {
     bfdev_list_entry(ptr, struct test_node, list)
 
 static long
-list_test_sort(const struct bfdev_list_head *nodea,
-               const struct bfdev_list_head *nodeb, void *pdata)
+list_test_sort(const struct bfdev_list_head *node1,
+               const struct bfdev_list_head *node2, void *pdata)
 {
-    struct test_node *testa = list_to_test(nodea);
-    struct test_node *testb = list_to_test(nodeb);
-    return testa->num - testb->num;
+    struct test_node *tnode1, *tnode2;
+
+    tnode1 = list_to_test(node1);
+    tnode2 = list_to_test(node2);
+
+    if (tnode1->num == tnode2->num)
+        return 0;
+
+    return tnode1->num < tnode2->num ? -1 : 1;
 }
 
 static int

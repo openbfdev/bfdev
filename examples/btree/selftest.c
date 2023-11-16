@@ -74,7 +74,7 @@ test_testing(struct test_node *nodes)
 
     for (count = 0; count < TEST_LOOP; ++count) {
         retval = bfdev_btree_insert(&root32, &nodes[count].key, &nodes[count]);
-        printf("btree random insert test%d: %#010lx ret %d\n", count,
+        printf("btree random insert test%d: %#010lx retval %d\n", count,
                 (unsigned long)nodes[count].key, retval);
         if (retval)
             return retval;
@@ -121,7 +121,7 @@ test_testing(struct test_node *nodes)
     for (count = 0; count < TEST_LOOP; ++count) {
         insert = (uintptr_t)&nodes[count].uuid;
         retval = bfdev_btree_insert(&rootstr, &insert, &nodes[count]);
-        printf("btree string insert test%d: %s ret %d\n", count,
+        printf("btree string insert test%d: %s retval %d\n", count,
                 nodes[count].uuid, retval);
         if (retval)
             return retval;

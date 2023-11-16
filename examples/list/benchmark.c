@@ -33,7 +33,8 @@ static void node_dump(struct benchmark *node)
 # define node_dump(node) ((void)(node))
 #endif
 
-static void time_dump(int ticks, clock_t start, clock_t stop, struct tms *start_tms, struct tms *stop_tms)
+static void
+time_dump(int ticks, clock_t start, clock_t stop, struct tms *start_tms, struct tms *stop_tms)
 {
     printf("\treal time: %lf\n", (stop - start) / (double)ticks);
     printf("\tuser time: %lf\n", (stop_tms->tms_utime - start_tms->tms_utime) / (double)ticks);
@@ -41,12 +42,18 @@ static void time_dump(int ticks, clock_t start, clock_t stop, struct tms *start_
 }
 
 static long
-demo_cmp(const struct bfdev_list_head *a,
-         const struct bfdev_list_head *b, void *pdata)
+demo_cmp(const struct bfdev_list_head *node1,
+         const struct bfdev_list_head *node2, void *pdata)
 {
-    struct benchmark *demo_a = list_to_demo(a);
-    struct benchmark *demo_b = list_to_demo(b);
-    return demo_a->data - demo_b->data;
+    struct benchmark *test1, *test2;
+
+    test1 = list_to_demo(node1);
+    test2 = list_to_demo(node2);
+
+    if (test1->num == test2->num)
+        return 0;
+
+    return test1->num < test2->num ? -1 : 1;
 }
 
 int main(void)
@@ -55,7 +62,7 @@ int main(void)
     struct tms start_tms, stop_tms;
     clock_t start, stop;
     unsigned int count, ticks;
-    int ret = 0;
+    int retval = 0;
 
     ticks = sysconf(_SC_CLK_TCK);
 
@@ -64,7 +71,7 @@ int main(void)
     start = times(&start_tms);
     for (count = 0; count < TEST_LEN; ++count) {
         node = malloc(sizeof(*node));
-        if ((ret = !node)) {
+        if ((retval = !node)) {
             printf("insufficient memory\n");
             return 1;
         }
@@ -95,8 +102,8 @@ int main(void)
     bfdev_list_for_each_entry_safe(node, tmp, &demo_list, list)
         free(node);
 
-    if (!ret)
+    if (!retval)
         printf("Done.\n");
 
-    return ret;
+    return retval;
 }

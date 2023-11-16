@@ -7,6 +7,7 @@
 #define _BFDEV_ILIST_H_
 
 #include <bfdev/config.h>
+#include <bfdev/types.h>
 #include <bfdev/list.h>
 
 BFDEV_BEGIN_DECLS
@@ -35,9 +36,17 @@ struct bfdev_ilist_node {
         .index_list = BFDEV_LIST_HEAD_INIT((node).index_list),  \
     }
 
-typedef long (*bfdev_ilist_cmp_t)(struct bfdev_ilist_node *inodea, struct bfdev_ilist_node *inodeb, const void *pdata);
-extern void bfdev_ilist_add(struct bfdev_ilist_head *ihead, struct bfdev_ilist_node *inode, bfdev_ilist_cmp_t cmp, const void *pdata);
-extern void bfdev_ilist_del(struct bfdev_ilist_head *ihead, struct bfdev_ilist_node *inode);
+BFDEV_CALLBACK_CMP(
+    bfdev_ilist_cmp_t,
+    const struct bfdev_ilist_node *
+);
+
+extern void
+bfdev_ilist_add(struct bfdev_ilist_head *ihead, struct bfdev_ilist_node *inode,
+                bfdev_ilist_cmp_t cmp, void *pdata);
+
+extern void
+bfdev_ilist_del(struct bfdev_ilist_head *ihead, struct bfdev_ilist_node *inode);
 
 /**
  * bfdev_ilist_head_init - initialize a bfdev_ilist_head structure.

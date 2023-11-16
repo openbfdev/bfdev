@@ -45,7 +45,7 @@ struct bfdev_hashmap {
 struct bfdev_hashmap_ops {
     unsigned long (*hash_key)(const void *key, void *pdata);
     unsigned long (*hash_node)(const struct bfdev_hlist_node *node, void *pdata);
-    long (*equal)(const struct bfdev_hlist_node *nodea, const struct bfdev_hlist_node *nodeb, void *pdata);
+    long (*equal)(const struct bfdev_hlist_node *node1, const struct bfdev_hlist_node *node2, void *pdata);
     long (*find)(const struct bfdev_hlist_node *node, const void *key, void *pdata);
 
     bool (*extend)(const struct bfdev_hashmap *hashmap, void *pdata);

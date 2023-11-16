@@ -12,16 +12,18 @@
 #include <export.h>
 
 static long
-notifier_chain_cmp(struct bfdev_ilist_node *nodea, struct bfdev_ilist_node *nodeb, const void *pdata)
+notifier_chain_cmp(const struct bfdev_ilist_node *node1,
+                   const struct bfdev_ilist_node *node2, void *pdata)
 {
-    struct bfdev_notifier_node *nnodea, *nnodeb;
+    struct bfdev_notifier_node *nnode1, *nnode2;
 
-    nnodea = bfdev_ilist_to_notifier(nodea);
-    nnodeb = bfdev_ilist_to_notifier(nodeb);
-    if (nnodea->priority == nnodeb->priority)
+    nnode1 = bfdev_ilist_to_notifier(node1);
+    nnode2 = bfdev_ilist_to_notifier(node2);
+
+    if (nnode1->priority == nnode2->priority)
         return 0;
 
-    return nnodea->priority < nnodeb->priority ? -1 : 1;
+    return nnode1->priority < nnode2->priority ? -1 : 1;
 }
 
 export bfdev_notifier_ret_t

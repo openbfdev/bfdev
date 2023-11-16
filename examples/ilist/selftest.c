@@ -22,16 +22,22 @@ struct test_pdata {
     bfdev_ilist_entry(ptr, struct test_node, ilist)
 
 static inline long
-ilist_test_cmp(struct bfdev_ilist_node *nodea, struct bfdev_ilist_node *nodeb, const void *pdata)
+ilist_cmp(const struct bfdev_ilist_node *node1,
+          const struct bfdev_ilist_node *node2, void *pdata)
 {
-    struct test_node *inodea = ilist_to_test(nodea);
-    struct test_node *inodeb = ilist_to_test(nodeb);
-    if (inodea->num == inodeb->num) return 0;
-    return inodea->num < inodeb->num ? -1 : 1;
+    struct test_node *tnode1, *tnode2;
+
+    tnode1 = ilist_to_test(node1);
+    tnode2 = ilist_to_test(node2);
+
+    if (tnode1->num == tnode2->num)
+        return 0;
+
+    return tnode1->num < tnode2->num ? -1 : 1;
 }
 
 static int
-bfdev_ilist_selftest(struct test_pdata *idata)
+ilist_selftest(struct test_pdata *idata)
 {
     unsigned int count, count2;
 
@@ -42,7 +48,7 @@ bfdev_ilist_selftest(struct test_pdata *idata)
         idata->nodes[count].num = count;
         bfdev_ilist_node_init(&idata->nodes[count].ilist);
         bfdev_ilist_add(&test_head, &idata->nodes[count].ilist,
-                        ilist_test_cmp, NULL);
+                        ilist_cmp, NULL);
     }
 
     for (count = 0; count < TEST_LOOP; ++count)
@@ -54,7 +60,7 @@ bfdev_ilist_selftest(struct test_pdata *idata)
             idata->nodes[count].num = count;
             bfdev_ilist_node_init(&idata->nodes[count * 2 + count2].ilist);
             bfdev_ilist_add(&test_head, &idata->nodes[count * 2 + count2].ilist,
-                            ilist_test_cmp, NULL);
+                            ilist_cmp, NULL);
         }
     }
 
@@ -73,7 +79,7 @@ int main(void)
     if (!idata)
         return 1;
 
-    retval = bfdev_ilist_selftest(idata);
+    retval = ilist_selftest(idata);
     free(idata);
 
     return retval;

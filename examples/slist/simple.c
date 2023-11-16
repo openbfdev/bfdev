@@ -25,13 +25,13 @@ int main(void)
 {
     struct list_simple *node, *tmp;
     unsigned int count;
-    int ret = 0;
+    int retval = 0;
 
     printf("Generate %d Node:\n", TEST_LEN);
     srand(time(NULL));
     for (count = 0; count < TEST_LEN; ++count) {
         node = malloc(sizeof(*node));
-        if ((ret = !node)) {
+        if ((retval = !node)) {
             printf("insufficient memory\n");
             return 1;
         }
@@ -50,5 +50,5 @@ int main(void)
         free(node);
     }
 
-    return ret;
+    return retval;
 }

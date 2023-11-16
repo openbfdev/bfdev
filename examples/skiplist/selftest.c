@@ -17,12 +17,12 @@ struct test_node {
 };
 
 static long
-test_cmp(const void *nodea, const void *nodeb, void *pdata)
+test_cmp(const void *node1, const void *node2, void *pdata)
 {
     uintptr_t valuea, valueb;
 
-    valuea = (uintptr_t)nodea;
-    valueb = (uintptr_t)nodeb;
+    valuea = (uintptr_t)node1;
+    valueb = (uintptr_t)node2;
 
     if (valuea == valueb)
         return 0;
@@ -59,7 +59,7 @@ static int skiplist_test_testing(struct test_node *test)
             test->head, (void *)test->values[count],
             test_cmp, NULL
         );
-        printf("skiplist insert test%02d: %#010lx ret %d\n",
+        printf("skiplist insert test%02d: %#010lx retval %d\n",
                count, (unsigned long)test->values[count], retval);
         if (retval)
             return retval;
@@ -70,7 +70,7 @@ static int skiplist_test_testing(struct test_node *test)
             test->head,
             test_find, (void *)test->values[count]
         );
-        printf("skiplist find test%02d: %#010lx ret %#010lx\n",
+        printf("skiplist find test%02d: %#010lx retval %#010lx\n",
                count, (unsigned long)test->values[count], (unsigned long)value);
         if (!value)
             return -BFDEV_ENOENT;

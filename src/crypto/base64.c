@@ -7,7 +7,8 @@
 #include <bfdev/base64.h>
 #include <export.h>
 
-static const char base64_encode_table[] = {
+static const char
+base64_encode_table[] = {
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
     'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
     'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
@@ -18,7 +19,8 @@ static const char base64_encode_table[] = {
     '4', '5', '6', '7', '8', '9', '+', '/',
 };
 
-static const char base64_decode_table[] = {
+static const char
+base64_decode_table[] = {
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
