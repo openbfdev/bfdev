@@ -15,7 +15,12 @@ extern unsigned int
 bfdev_argv_count(const char *string);
 
 extern char **
-bfdev_argv_split(const struct bfdev_alloc *alloc, const char *string, unsigned int *argcp);
+bfdev_argv_split(const struct bfdev_alloc *alloc,
+                 const char *string, unsigned int *argcp);
+
+extern void
+bfdev_argv_destory(const struct bfdev_alloc *alloc,
+                   char **argv);
 
 BFDEV_END_DECLS
 
