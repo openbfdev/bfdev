@@ -3,13 +3,14 @@
  * Copyright(c) 2021 John Sanpe <sanpeqf@gmail.com>
  */
 
+#define MODULE_NAME "list-benchmark"
+#define bfdev_log_fmt(fmt) MODULE_NAME ": " fmt
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
-#include <time.h>
-#include <unistd.h>
-#include <sys/times.h>
+#include <bfdev/log.h>
 #include <bfdev/list.h>
+#include "../time.h"
 
 #define LIST_DEBUG 0
 #define TEST_LEN 1000000
@@ -27,19 +28,11 @@ struct benchmark {
 #if LIST_DEBUG
 static void node_dump(struct benchmark *node)
 {
-    printf("\t%08d: data 0x%016lx\n", node->num, node->data);
+    bfdev_log_info("\t%08d: data 0x%016lx\n", node->num, node->data);
 }
 #else
 # define node_dump(node) ((void)(node))
 #endif
-
-static void
-time_dump(int ticks, clock_t start, clock_t stop, struct tms *start_tms, struct tms *stop_tms)
-{
-    printf("\treal time: %lf\n", (stop - start) / (double)ticks);
-    printf("\tuser time: %lf\n", (stop_tms->tms_utime - start_tms->tms_utime) / (double)ticks);
-    printf("\tkern time: %lf\n", (stop_tms->tms_stime - start_tms->tms_stime) / (double)ticks);
-}
 
 static long
 demo_cmp(const struct bfdev_list_head *node1,
@@ -59,51 +52,50 @@ demo_cmp(const struct bfdev_list_head *node1,
 int main(void)
 {
     struct benchmark *node, *tmp;
-    struct tms start_tms, stop_tms;
-    clock_t start, stop;
-    unsigned int count, ticks;
-    int retval = 0;
+    unsigned int count;
+    void *block;
 
-    ticks = sysconf(_SC_CLK_TCK);
-
-    printf("Generate %d Node:\n", TEST_LEN);
-    srand(time(NULL));
-    start = times(&start_tms);
-    for (count = 0; count < TEST_LEN; ++count) {
-        node = malloc(sizeof(*node));
-        if ((retval = !node)) {
-            printf("insufficient memory\n");
-            return 1;
-        }
-
-        node->num = count;
-        node->data = ((uint64_t)rand() << 32) | rand();
-        node_dump(node);
-
-        bfdev_list_add(&demo_list, &node->list);
+    node = block = malloc(sizeof(*node) * TEST_LEN);
+    if (!block) {
+        bfdev_log_err("insufficient memory!\n");
+        return 1;
     }
-    stop = times(&stop_tms);
-    time_dump(ticks, start, stop, &start_tms, &stop_tms);
 
-    start = times(&start_tms);
-    printf("List sort:\n");
-    bfdev_list_sort(&demo_list, demo_cmp, NULL);
-    stop = times(&stop_tms);
-    time_dump(ticks, start, stop, &start_tms, &stop_tms);
+    srand(time(NULL));
+    bfdev_log_info("Generate %u node:\n", TEST_LEN);
+    for (count = 0; count < TEST_LEN; ++count) {
+        node[count].num = count;
+        node[count].data = ((uint64_t)rand() << 32) | rand();
+    }
 
-    start = times(&start_tms);
-    printf("List for each:\n");
-    bfdev_list_for_each_entry(node, &demo_list, list)
-        node_dump(node);
-    stop = times(&stop_tms);
-    time_dump(ticks, start, stop, &start_tms, &stop_tms);
+    bfdev_log_info("Insert nodes:\n");
+    EXAMPLE_TIME_STATISTICAL(
+        for (count = 0; count < TEST_LEN; ++count) {
+            bfdev_list_add(&demo_list, &node[count].list);
+            node_dump(node);
+        }
+        0;
+    );
 
-    printf("Deletion All Node...\n");
+    bfdev_log_info("Sort nodes:\n");
+    EXAMPLE_TIME_STATISTICAL(
+        bfdev_list_sort(&demo_list, demo_cmp, NULL);
+        0;
+    );
+
+    bfdev_log_info("List for each:\n");
+    EXAMPLE_TIME_STATISTICAL(
+        bfdev_list_for_each_entry(node, &demo_list, list)
+            node_dump(node);
+        0;
+    );
+
+    bfdev_log_info("Deletion all node...\n");
     bfdev_list_for_each_entry_safe(node, tmp, &demo_list, list)
-        free(node);
+        bfdev_list_del(&node->list);
 
-    if (!retval)
-        printf("Done.\n");
+    bfdev_log_info("Done.\n");
+    free(block);
 
-    return retval;
+    return 0;
 }
