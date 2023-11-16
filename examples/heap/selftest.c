@@ -29,9 +29,9 @@ struct test_pdata {
 static long
 bfdev_heap_test_cmp(const struct bfdev_heap_node *hpa, const struct bfdev_heap_node *hpb, void *pdata)
 {
-    struct test_node *nodea = hpnode_to_test(hpa);
-    struct test_node *nodeb = hpnode_to_test(hpb);
-    return nodea->num < nodeb->num ? -1 : 1;
+    struct test_node *node1 = hpnode_to_test(hpa);
+    struct test_node *node2 = hpnode_to_test(hpb);
+    return node1->num < node2->num ? -1 : 1;
 }
 
 static int

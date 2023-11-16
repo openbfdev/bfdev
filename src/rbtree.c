@@ -533,15 +533,15 @@ bfdev_rb_find(const struct bfdev_rb_root *root, void *key,
               bfdev_rb_find_t cmp)
 {
     struct bfdev_rb_node *node = root->node;
-    long ret;
+    long retval;
 
     while (node) {
-        ret = cmp(node, key);
-        if (ret == LONG_MIN)
+        retval = cmp(node, key);
+        if (retval == LONG_MIN)
             return NULL;
-        else if (ret > 0)
+        else if (retval > 0)
             node = node->left;
-        else if (ret < 0)
+        else if (retval < 0)
             node = node->right;
         else
             return node;
@@ -554,7 +554,7 @@ export struct bfdev_rb_node *
 bfdev_rb_find_last(struct bfdev_rb_root *root, void *key, bfdev_rb_find_t cmp,
                    struct bfdev_rb_node **parentp, struct bfdev_rb_node ***linkp)
 {
-    long ret;
+    long retval;
 
     *linkp = &root->node;
     if (bfdev_unlikely(!**linkp)) {
@@ -563,12 +563,12 @@ bfdev_rb_find_last(struct bfdev_rb_root *root, void *key, bfdev_rb_find_t cmp,
     }
 
     do {
-        ret = cmp((*parentp = **linkp), key);
-        if (ret == LONG_MIN)
+        retval = cmp((*parentp = **linkp), key);
+        if (retval == LONG_MIN)
             return NULL;
-        else if (ret > 0)
+        else if (retval > 0)
             *linkp = &(**linkp)->left;
-        else if (ret < 0)
+        else if (retval < 0)
             *linkp = &(**linkp)->right;
         else
             return **linkp;

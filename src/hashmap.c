@@ -34,14 +34,14 @@ hashmap_hash_key(const struct bfdev_hashmap *hashmap,
 }
 
 static __bfdev_always_inline long
-hashmap_equal(struct bfdev_hashmap *hashmap, const struct bfdev_hlist_node *nodea,
-              const struct bfdev_hlist_node *nodeb)
+hashmap_equal(struct bfdev_hashmap *hashmap, const struct bfdev_hlist_node *node1,
+              const struct bfdev_hlist_node *node2)
 {
     const struct bfdev_hashmap_ops *ops;
     long retval;
 
     ops = hashmap->ops;
-    retval = ops->equal(nodea, nodeb, hashmap->pdata);
+    retval = ops->equal(node1, node2, hashmap->pdata);
 
     return retval;
 }

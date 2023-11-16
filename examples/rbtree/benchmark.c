@@ -80,11 +80,18 @@ test_deepth(struct bfdev_rb_node *node)
 }
 
 static long
-demo_cmp(const struct bfdev_rb_node *a, const struct bfdev_rb_node *b, void *pdata)
+demo_cmp(const struct bfdev_rb_node *node1,
+         const struct bfdev_rb_node *node2, void *pdata)
 {
-    struct bench_node *demo_a = rb_to_bench(a);
-    struct bench_node *demo_b = rb_to_bench(b);
-    return demo_a->data - demo_b->data;
+    struct bench_node *test1, *test2;
+
+    test1 = rb_to_bench(node1);
+    test2 = rb_to_bench(node2);
+
+    if (test1->data == test2->data)
+        return 0;
+
+    return test1->data < test2->data ? -1 : 1;
 }
 
 int main(void)

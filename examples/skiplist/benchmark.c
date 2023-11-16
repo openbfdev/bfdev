@@ -23,12 +23,12 @@ time_dump(int ticks, clock_t start, clock_t stop, struct tms *start_tms, struct 
 }
 
 static long
-test_cmp(const void *nodea, const void *nodeb, void *pdata)
+test_cmp(const void *node1, const void *node2, void *pdata)
 {
     uintptr_t valuea, valueb;
 
-    valuea = (uintptr_t)nodea;
-    valueb = (uintptr_t)nodeb;
+    valuea = (uintptr_t)node1;
+    valueb = (uintptr_t)node2;
 
     if (valuea == valueb)
         return 0;

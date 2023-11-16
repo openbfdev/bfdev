@@ -166,8 +166,11 @@ static __bfdev_always_inline bool
 bfdev_arch_bit_atomic_test_clr(volatile unsigned long *addr, unsigned int bit)
 {
     unsigned long old;
+
     addr += BFDEV_BITS_WORD(bit);
-    if ((BFDEV_READ_ONCE(*addr) & BFDEV_BIT(bit)) == 0) return 0;
+    if ((BFDEV_READ_ONCE(*addr) & BFDEV_BIT(bit)) == 0)
+        return 0;
+
     old = bfdev_arch_atomic_fetch_and((bfdev_atomic_t *)addr, ~BFDEV_BIT(bit));
     return !!(old & BFDEV_BIT(bit));
 }
@@ -178,8 +181,11 @@ static __bfdev_always_inline bool
 bfdev_arch_bit_atomic_test_set(volatile unsigned long *addr, unsigned int bit)
 {
     unsigned long old;
+
     addr += BFDEV_BITS_WORD(bit);
-    if ((BFDEV_READ_ONCE(*addr) & BFDEV_BIT(bit)) != 0) return 1;
+    if ((BFDEV_READ_ONCE(*addr) & BFDEV_BIT(bit)) != 0)
+        return 1;
+
     old = bfdev_arch_atomic_fetch_or((bfdev_atomic_t *)addr, BFDEV_BIT(bit));
     return !!(old & BFDEV_BIT(bit));
 }

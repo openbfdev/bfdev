@@ -62,9 +62,9 @@ test_deepth(struct bfdev_heap_node *node)
 static long
 bench_cmp(const struct bfdev_heap_node *hpa, const struct bfdev_heap_node *hpb, void *pdata)
 {
-    struct bench_node *nodea = bfdev_heap_to_bench(hpa);
-    struct bench_node *nodeb = bfdev_heap_to_bench(hpb);
-    return nodea->data < nodeb->data ? -1 : 1;
+    struct bench_node *node1 = bfdev_heap_to_bench(hpa);
+    struct bench_node *node2 = bfdev_heap_to_bench(hpb);
+    return node1->data < node2->data ? -1 : 1;
 }
 
 int main(void)

@@ -33,12 +33,12 @@ hashmap_hash_node(const struct bfdev_hlist_node *node, void *pdata)
 }
 
 static inline long
-hashmap_equal(const struct bfdev_hlist_node *nodea,
+hashmap_equal(const struct bfdev_hlist_node *node1,
               const struct bfdev_hlist_node *nodeb, void *pdata)
 {
-    const struct test_node *tnodea = node_to_test(nodea);
+    const struct test_node *tnode1 = node_to_test(node1);
     const struct test_node *tnodeb = node_to_test(nodeb);
-    return tnodea->value - tnodeb->value;
+    return tnode1->value - tnodeb->value;
 }
 
 static inline long
