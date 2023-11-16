@@ -62,3 +62,9 @@ bfdev_argv_split(const struct bfdev_alloc *alloc, const char *args,
 
     return argv;
 }
+
+export void
+bfdev_argv_destory(const struct bfdev_alloc *alloc, char **argv)
+{
+    bfdev_free(alloc, argv);
+}
