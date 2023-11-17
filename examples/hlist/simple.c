@@ -21,7 +21,7 @@ struct hlist_simple {
 #define hlist_to_simple(node) \
     bfdev_hlist_entry(node, struct hlist_simple, list)
 
-int main(void)
+int main(int argc, const char *argv[])
 {
     struct hlist_simple *node, *tmp;
     unsigned int count;

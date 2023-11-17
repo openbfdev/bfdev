@@ -44,7 +44,8 @@ test_find(const void *node, void *pdata)
     return valuea > valueb ? 1 : -1;
 }
 
-static int skiplist_test_testing(struct test_node *test)
+static int
+skiplist_testing(struct test_node *test)
 {
     unsigned int count;
     uintptr_t value;
@@ -87,7 +88,7 @@ static int skiplist_test_testing(struct test_node *test)
     return 0;
 }
 
-int main(void)
+int main(int argc, const char *argv[])
 {
     struct test_node *test;
     int retval;
@@ -102,7 +103,7 @@ int main(void)
         return -BFDEV_ENOMEM;
     }
 
-    retval = skiplist_test_testing(test);
+    retval = skiplist_testing(test);
     bfdev_skiplist_destroy(test->head, NULL);
     free(test);
 

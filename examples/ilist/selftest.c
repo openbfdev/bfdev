@@ -70,7 +70,7 @@ ilist_selftest(struct test_pdata *idata)
     return 0;
 }
 
-int main(void)
+int main(int argc, const char *argv[])
 {
     struct test_pdata *idata;
     int retval;

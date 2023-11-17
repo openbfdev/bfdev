@@ -24,7 +24,8 @@ static const char warn_table[16] = {
 #define TEST_LOOP 64
 BFDEV_DEFINE_RINGBUF(normal_bytetest, char, TEST_SIZE);
 
-static void ringbuf_warnup(void)
+static void
+ringbuf_warnup(void)
 {
     unsigned int count;
 
@@ -33,7 +34,7 @@ static void ringbuf_warnup(void)
         bfdev_ringbuf_put(&normal_bytetest, warn_table[count]);
 }
 
-int main(void)
+int main(int argc, const char *argv[])
 {
     unsigned int count, index;
     char ch = 0;

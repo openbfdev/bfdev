@@ -109,7 +109,7 @@ static int bfdev_slist_selftest(struct test_pdata *sdata)
     return 0;
 }
 
-int main(void)
+int main(int argc, const char *argv[])
 {
     struct test_pdata *sdata;
     unsigned int count;

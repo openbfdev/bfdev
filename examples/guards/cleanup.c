@@ -17,18 +17,20 @@ BFDEV_CLEAN_TEMPLATE(malloc, void *,
 static void
 test_gc_cleanup(void)
 {
-    bfdev_clean(malloc) void *block = malloc(8);
+    bfdev_clean(malloc) void *block;
+    block = malloc(8);
     (void)block;
 }
 
 static void *
 test_gc_lasting(void)
 {
-    bfdev_clean(malloc) void *block = malloc(8);
+    bfdev_clean(malloc) void *block;
+    block = malloc(8);
     bfdev_clean_return(block);
 }
 
-int main(void)
+int main(int argc, const char *argv[])
 {
     void *block;
 

@@ -52,7 +52,7 @@ rbtest_rb_find(const struct bfdev_rb_node *rb, void *key)
 }
 
 static int
-rbtree_test_testing(struct rbtree_test_pdata *sdata)
+rbtree_testing(struct rbtree_test_pdata *sdata)
 {
     struct rbtree_test_node *node, *nnode, *tnode;
     struct bfdev_rb_node *rbnode, *nrbnode, *trbnode;
@@ -433,7 +433,7 @@ rbtree_test_testing(struct rbtree_test_pdata *sdata)
     return 0;
 }
 
-int main(void)
+int main(int argc, const char *argv[])
 {
     struct rbtree_test_pdata *rdata;
     unsigned int count;
@@ -447,7 +447,7 @@ int main(void)
     for (count = 0; count < TEST_LOOP; ++count)
         rdata->nodes[count].data = count;
 
-    retval = rbtree_test_testing(rdata);
+    retval = rbtree_testing(rdata);
     if (retval) {
         printf("Abort1.\n");
         free(rdata);
@@ -459,7 +459,7 @@ int main(void)
     for (count = 0; count < TEST_LOOP; ++count)
         rdata->nodes[count].data = rand();
 
-    retval = rbtree_test_testing(rdata);
+    retval = rbtree_testing(rdata);
     if (retval) {
         printf("Abort2.\n");
         free(rdata);

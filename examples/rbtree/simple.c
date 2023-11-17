@@ -28,7 +28,7 @@ demo_cmp(const struct bfdev_rb_node *a, const struct bfdev_rb_node *b, void *pda
     return demo_a->data - demo_b->data;
 }
 
-int main(void)
+int main(int argc, const char *argv[])
 {
     struct simple_node *node, *tmp;
     unsigned int count;

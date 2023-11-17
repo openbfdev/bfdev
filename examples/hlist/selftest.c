@@ -22,7 +22,8 @@ struct test_pdata {
 #define bfdev_hlist_to_test(ptr) \
     bfdev_hlist_entry(ptr, struct test_node, list)
 
-static int bfdev_hlist_selftest(struct test_pdata *hdata)
+static int
+bfdev_hlist_selftest(struct test_pdata *hdata)
 {
     struct test_node *node, *nnode, *tnode;
     struct bfdev_hlist_node *list, *nlist, *tlist;
@@ -109,7 +110,7 @@ static int bfdev_hlist_selftest(struct test_pdata *hdata)
     return 0;
 }
 
-int main(void)
+int main(int argc, const char *argv[])
 {
     struct test_pdata *hdata;
     unsigned int count;

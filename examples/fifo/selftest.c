@@ -21,12 +21,14 @@ struct test_pdata {
     BFDEV_DECLARE_FIFO_DYNAMIC_RECORD(dynamic_record_longtest, long, 1);
 };
 
-static const char bytetest_table[TEST_LOOP] = {
+static const char
+bytetest_table[TEST_LOOP] = {
     'o', 'p', 'e', 'n', 'b', 'f', 'd', 'e',
     'v', ',', 'h', 'e', 'l', 'l', 'l', 'o',
 };
 
-static const long longtest_table[TEST_LOOP] = {
+static const long
+longtest_table[TEST_LOOP] = {
     (long)0x0000000000000000ULL, (long)0x1111111111111111ULL,
     (long)0x2222222222222222ULL, (long)0x3333333333333333ULL,
     (long)0x4444444444444444ULL, (long)0x5555555555555555ULL,
@@ -37,7 +39,8 @@ static const long longtest_table[TEST_LOOP] = {
     (long)0xeeeeeeeeeeeeeeeeULL, (long)0xffffffffffffffffULL,
 };
 
-static int fifo_testing(struct test_pdata *pdata)
+static int
+fifo_testing(struct test_pdata *pdata)
 {
     char bytevalue[TEST_LOOP];
     long longvalue[TEST_LOOP];
@@ -437,7 +440,7 @@ static int fifo_testing(struct test_pdata *pdata)
     return 0;
 }
 
-int main(void)
+int main(int argc, const char *argv[])
 {
     struct test_pdata *pdata;
     int retval;

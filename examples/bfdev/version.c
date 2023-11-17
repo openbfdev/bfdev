@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <bfdev/config.h>
 
-int main(void)
+int main(int argc, const char *argv[])
 {
     printf("arch: %s\n", __bfdev_stringify(BFDEV_ARCH));
     printf("name: %s\n", __bfdev_stringify(BFDEV_NAME));

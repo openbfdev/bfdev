@@ -11,22 +11,23 @@
 
 #define TEST_LOOP 10
 
-struct segtree_test_node {
+struct test_node {
     struct bfdev_segtree_node node;
     unsigned int num;
 };
 
-struct segtree_test_pdata {
-    struct segtree_test_node nodes[TEST_LOOP];
+struct test_pdata {
+    struct test_node nodes[TEST_LOOP];
     unsigned int queries[TEST_LOOP];
 };
 
-#define bfdev_segtree_to_test(ptr) \
-    bfdev_segtree_entry(ptr, struct segtree_test_node, node)
+#define segtree_to_test(ptr) \
+    bfdev_segtree_entry(ptr, struct test_node, node)
 
-static int bfdev_segtree_test_testing(struct segtree_test_pdata *sdata)
+static int
+segtree_testing(struct test_pdata *sdata)
 {
-    struct segtree_test_node *node, *tnode;
+    struct test_node *node, *tnode;
     struct bfdev_segtree_node *snode, *tsnode;
     unsigned int count;
 
@@ -44,7 +45,7 @@ static int bfdev_segtree_test_testing(struct segtree_test_pdata *sdata)
 
     count = 0;
     bfdev_segtree_for_each(snode, 0, ~0UL, &segtree_root) {
-        node = bfdev_segtree_to_test(snode);
+        node = segtree_to_test(snode);
         printf("srgtree 'segtree_for_each' test: %lu - %lu\n",
                 node->node.start, node->node.end);
         if (count++ == TEST_LOOP / 2)
@@ -53,14 +54,14 @@ static int bfdev_segtree_test_testing(struct segtree_test_pdata *sdata)
 
     tsnode = snode;
     bfdev_segtree_for_each_form(snode, 0, ~0UL) {
-        node = bfdev_segtree_to_test(snode);
+        node = segtree_to_test(snode);
         printf("srgtree 'segtree_for_each_form' test: %lu - %lu\n",
                 node->node.start, node->node.end);
     }
 
     snode = tsnode;
     bfdev_segtree_for_each_continue(snode, 0, ~0UL) {
-        node = bfdev_segtree_to_test(snode);
+        node = segtree_to_test(snode);
         printf("srgtree 'segtree_for_each_continue' test: %lu - %lu\n",
                 node->node.start, node->node.end);
     }
@@ -91,14 +92,14 @@ static int bfdev_segtree_test_testing(struct segtree_test_pdata *sdata)
     return 0;
 }
 
-int main(void)
+int main(int argc, const char *argv[])
 {
-    struct segtree_test_pdata *sdata;
+    struct test_pdata *sdata;
     unsigned long random;
     unsigned int count;
     int retval;
 
-    sdata = malloc(sizeof(struct segtree_test_pdata));
+    sdata = malloc(sizeof(struct test_pdata));
     if (!sdata)
         return -1;
 
@@ -109,7 +110,7 @@ int main(void)
         sdata->nodes[count].node.start = rand() % random;
     }
 
-    retval = bfdev_segtree_test_testing(sdata);
+    retval = segtree_testing(sdata);
     free(sdata);
 
     return retval;
