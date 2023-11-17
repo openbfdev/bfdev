@@ -12,7 +12,7 @@
 #define TEST_SIZE 64
 BFDEV_DEFINE_ARRAY(test_array, NULL, TEST_SIZE);
 
-int main(void)
+int main(int argc, const char *argv[])
 {
     unsigned int count;
     void *array;

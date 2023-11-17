@@ -40,7 +40,7 @@ test_once_done(const char *fmt, ...)
     va_end(args);
 }
 
-int main(void)
+int main(int argc, const char *argv[])
 {
     unsigned int count;
 

@@ -25,7 +25,8 @@ struct bench_node {
     bfdev_heap_entry_safe(ptr, struct bench_node, node)
 
 #if HEAP_DEBUG
-static void node_dump(struct bench_node *node)
+static void
+node_dump(struct bench_node *node)
 {
     bfdev_log_info("\t%04d: ", node[count].num);
     bfdev_log_info("parent %-4d ", node[count].node.parent ? bfdev_heap_to_bench(node[count].node.parent)->num : 0);
@@ -38,7 +39,6 @@ static void node_dump(struct bench_node *node)
 # define node_dump(node) ((void)(node))
 #endif
 
-
 static unsigned int
 test_deepth(struct bfdev_heap_node *node)
 {
@@ -49,18 +49,26 @@ test_deepth(struct bfdev_heap_node *node)
 
     left_deepth = test_deepth(node->left);
     right_deepth = test_deepth(node->right);
+
     return left_deepth > right_deepth ? (left_deepth + 1) : (right_deepth + 1);
 }
 
 static long
-bench_cmp(const struct bfdev_heap_node *hpa, const struct bfdev_heap_node *hpb, void *pdata)
+bench_cmp(const struct bfdev_heap_node *hpa,
+          const struct bfdev_heap_node *hpb, void *pdata)
 {
-    struct bench_node *node1 = bfdev_heap_to_bench(hpa);
-    struct bench_node *node2 = bfdev_heap_to_bench(hpb);
+    struct bench_node *node1, *node2;
+
+    node1 = bfdev_heap_to_bench(hpa);
+    node2 = bfdev_heap_to_bench(hpb);
+
+    if (node1->data == node2->data)
+        return 0;
+
     return node1->data < node2->data ? -1 : 1;
 }
 
-int main(void)
+int main(int argc, const char *argv[])
 {
     struct bench_node *bnode;
     unsigned int count;

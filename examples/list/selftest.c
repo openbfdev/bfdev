@@ -200,7 +200,7 @@ list_selftest(struct test_pdata *ldata)
     return 0;
 }
 
-int main(void)
+int main(int argc, const char *argv[])
 {
     struct test_pdata *ldata;
     unsigned int count;

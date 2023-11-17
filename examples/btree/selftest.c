@@ -159,7 +159,7 @@ test_testing(struct test_node *nodes)
     return 0;
 }
 
-int main(void)
+int main(int argc, const char *argv[])
 {
     struct test_node *bdata;
     int retval;

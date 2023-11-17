@@ -16,7 +16,8 @@ static const char test_table[] = {
 #define TEST_LOOP 64
 BFDEV_DEFINE_FIFO(normal_bytetest, char, BFDEV_ARRAY_SIZE(test_table));
 
-static void *fifo_production(void *unused)
+static void *
+fifo_production(void *unused)
 {
     unsigned int count, index;
     char ch;
@@ -37,7 +38,7 @@ static void *fifo_production(void *unused)
     return NULL;
 }
 
-int main(void)
+int main(int argc, const char *argv[])
 {
     pthread_t thread;
     char ch;

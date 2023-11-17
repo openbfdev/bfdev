@@ -10,7 +10,7 @@
 #define TEST_LOOP 128
 BFDEV_RADIX_ROOT(simple_root, unsigned int, NULL);
 
-int main(void)
+int main(int argc, const char *argv[])
 {
     unsigned int count, *block;
     int retval;

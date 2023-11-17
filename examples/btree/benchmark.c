@@ -21,7 +21,8 @@ struct bench_node {
 };
 
 #if BTREE_DEBUG
-static void node_dump(struct bench_node *node)
+static void
+node_dump(struct bench_node *node)
 {
     bfdev_log_info("\t%04d: ", node->num);
     bfdev_log_info("data %#018lx ", node->data);
@@ -31,7 +32,7 @@ static void node_dump(struct bench_node *node)
 # define node_dump(node) ((void)(node))
 #endif
 
-int main(void)
+int main(int argc, const char *argv[])
 {
     struct bench_node *node;
     unsigned int count;

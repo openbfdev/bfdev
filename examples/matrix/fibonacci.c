@@ -60,7 +60,7 @@ power(const struct bfdev_matrix *var, unsigned int pow)
     return result;
 }
 
-int main(void)
+int main(int argc, const char *argv[])
 {
     struct bfdev_matrix *result;
     unsigned int count;

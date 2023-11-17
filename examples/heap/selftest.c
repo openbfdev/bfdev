@@ -27,15 +27,22 @@ struct test_pdata {
     bfdev_heap_entry(ptr, struct test_node, node)
 
 static long
-bfdev_heap_test_cmp(const struct bfdev_heap_node *hpa, const struct bfdev_heap_node *hpb, void *pdata)
+bfdev_heap_test_cmp(const struct bfdev_heap_node *node1,
+                    const struct bfdev_heap_node *node2, void *pdata)
 {
-    struct test_node *node1 = hpnode_to_test(hpa);
-    struct test_node *node2 = hpnode_to_test(hpb);
-    return node1->num < node2->num ? -1 : 1;
+    struct test_node *tnode1, *tnode2;
+
+    tnode1 = hpnode_to_test(node1);
+    tnode2 = hpnode_to_test(node2);
+
+    if (tnode1->num == tnode2->num)
+        return 0;
+
+    return tnode1->num < tnode2->num ? -1 : 1;
 }
 
 static int
-bfdev_heap_test_testing(struct test_pdata *hdata)
+bfdev_heap_testing(struct test_pdata *hdata)
 {
     struct test_node *node, *nnode, *tnode;
     struct bfdev_heap_node *hpnode, *nhpnode, *thpnode;
@@ -212,7 +219,7 @@ bfdev_heap_test_testing(struct test_pdata *hdata)
     return 0;
 }
 
-int main(void)
+int main(int argc, const char *argv[])
 {
     struct test_pdata *rdata;
     unsigned int count;
@@ -226,7 +233,7 @@ int main(void)
     for (count = 0; count < TEST_LOOP; ++count)
         rdata->nodes[count].num = rand();
 
-    retval = bfdev_heap_test_testing(rdata);
+    retval = bfdev_heap_testing(rdata);
     bfdev_log_notice("heap test: %s\n", retval ? "failed" : "passed");
     free(rdata);
 

@@ -26,7 +26,8 @@ struct benchmark {
     bfdev_list_entry(node, struct benchmark, list)
 
 #if LIST_DEBUG
-static void node_dump(struct benchmark *node)
+static void
+node_dump(struct benchmark *node)
 {
     bfdev_log_info("\t%08d: data 0x%016lx\n", node->num, node->data);
 }
@@ -49,7 +50,7 @@ demo_cmp(const struct bfdev_list_head *node1,
     return test1->num < test2->num ? -1 : 1;
 }
 
-int main(void)
+int main(int argc, const char *argv[])
 {
     struct benchmark *node, *tmp;
     unsigned int count;
