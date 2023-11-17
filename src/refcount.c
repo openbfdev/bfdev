@@ -12,7 +12,7 @@
 #include <export.h>
 
 export void
-bfdev_refcount_warn_saturate(bfdev_refcnt_t *ref, enum bfdev_refcnt_saturation type)
+bfdev_refcnt_report(bfdev_refcnt_t *ref, enum bfdev_refcnt_saturation type)
 {
     switch (type) {
         case BFDEV_REFCNT_ADD_UAF:
