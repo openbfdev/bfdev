@@ -8,34 +8,29 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
-#include <sys/time.h>
 #include <bfdev/crc.h>
 #include <bfdev/bits.h>
 #include <bfdev/log.h>
 #include <bfdev/size.h>
+#include "../time.h"
 
 #define TEST_SIZE BFDEV_SZ_1MiB
 #define TEST_LOOP 3
 
-#define GENERIC_CRC_BANDWIDTH(func, name, size)         \
-for (count = 0; count < TEST_LOOP; ++count) {           \
-    gettimeofday(&etval, NULL);                         \
-    etval.tv_sec++;                                     \
-    loop = 0;                                           \
-                                                        \
-    do {                                                \
-        func(buff, size, 0);                            \
-        loop++;                                         \
-        gettimeofday(&stval, NULL);                     \
-    } while (timercmp(&stval, &etval, <));              \
-    bfdev_log_info(name " bandwidth %u: %uMiB/s\n",     \
-                   count, loop);                        \
+#define GENERIC_CRC_BANDWIDTH(func, name, size) \
+for (count = 0; count < TEST_LOOP; ++count) {   \
+    EXAMPLE_TIME_LOOP(&loop, 1000,              \
+        func(buff, size, 0);                    \
+        0;                                      \
+    );                                          \
+    bfdev_log_info(                             \
+        name " bandwidth %u: %uMiB/s\n",        \
+        count, loop                             \
+    );                                          \
 }
 
 int main(int argc, char const *argv[])
 {
-    struct timeval stval, etval;
     unsigned int count, loop;
     uint8_t *buff;
     size_t index;

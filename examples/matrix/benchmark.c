@@ -7,34 +7,28 @@
 #define bfdev_log_fmt(fmt) MODULE_NAME ": " fmt
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <time.h>
-#include <sys/time.h>
 #include <bfdev/log.h>
 #include <bfdev/matrix.h>
+#include "../time.h"
 
 #define TEST_SIZE 40
 #define TEST_LOOP 3
 
-#define GENERIC_MATRIX_BENCHMARK(func, name)                \
-for (count = 0; count < TEST_LOOP; ++count) {               \
-    gettimeofday(&etval, NULL);                             \
-    etval.tv_sec++;                                         \
-    loop = 0;                                               \
-                                                            \
-    do {                                                    \
-        result = func(NULL, vara, varb);                    \
-        bfdev_matrix_destory(NULL, result);                 \
-        loop++;                                             \
-        gettimeofday(&stval, NULL);                         \
-    } while (timercmp(&stval, &etval, <));                  \
-    bfdev_log_info(name " %u: %uops/s\n", count, loop);     \
+#define GENERIC_MATRIX_BENCHMARK(func, name)    \
+for (count = 0; count < TEST_LOOP; ++count) {   \
+    EXAMPLE_TIME_LOOP(&loop, 1000,              \
+        result = func(NULL, vara, varb);        \
+        bfdev_matrix_destory(NULL, result);     \
+        0;                                      \
+    );                                          \
+    bfdev_log_info(                             \
+        name " %u: %uops/s\n",                  \
+        count, loop                             \
+    );                                          \
 }
 
 int main(int argc, char const *argv[])
 {
-    struct timeval stval, etval;
     unsigned int count, loop;
     struct bfdev_matrix *vara, *varb;
     struct bfdev_matrix *result;

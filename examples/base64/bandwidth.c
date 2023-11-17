@@ -8,19 +8,17 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
-#include <sys/time.h>
 #include <bfdev/base64.h>
 #include <bfdev/crc.h>
 #include <bfdev/log.h>
 #include <bfdev/size.h>
+#include "../time.h"
 
 #define TEST_SIZE BFDEV_SZ_1MiB
 #define TEST_LOOP 3
 
 int main(int argc, char const *argv[])
 {
-    struct timeval stval, etval;
     unsigned int count, loop;
     uint8_t *dbuff, *sbuff;
     size_t dlen, slen, index;
@@ -44,26 +42,16 @@ int main(int argc, char const *argv[])
     bfdev_log_info("start checksum: %#010x\n", cksum);
 
     for (count = 0; count < TEST_LOOP; ++count) {
-        gettimeofday(&etval, NULL);
-        etval.tv_sec++;
-        loop = 0;
-
-        do {
+        EXAMPLE_TIME_LOOP(&loop, 1000,
             bfdev_base64_encode(sbuff, dbuff, TEST_SIZE);
-            loop++;
-            gettimeofday(&stval, NULL);
-        } while (timercmp(&stval, &etval, <));
+            0;
+        );
         bfdev_log_info("encode bandwidth %u: %uMiB/s\n", count, loop);
 
-        gettimeofday(&etval, NULL);
-        etval.tv_sec++;
-        loop = 0;
-
-        do {
+        EXAMPLE_TIME_LOOP(&loop, 1000,
             bfdev_base64_decode(dbuff, sbuff, slen);
-            loop++;
-            gettimeofday(&stval, NULL);
-        } while (timercmp(&stval, &etval, <));
+            0;
+        );
         bfdev_log_info("decode bandwidth %u: %uMiB/s\n", count, loop);
     }
 
