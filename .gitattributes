@@ -1,0 +1,9 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+*.h text eol=lf
+*.c text eol=lf
+*.S text eol=lf
+*.cmake text eol=lf
+*.md text eol=lf
+*.svg text eol=lf
+.gitignore text eol=lf
+CMakeLists.txt text eol=lf
