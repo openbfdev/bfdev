@@ -12,14 +12,9 @@
 
 BFDEV_BEGIN_DECLS
 
-BFDEV_CALLBACK_FIND(
-    bfdev_bsearch_find_t,
-    const void *
-);
-
 static inline void *
 bfdev_bsearch_inline(const void *base, size_t num, size_t esize,
-                     bfdev_bsearch_find_t find, void *pdata)
+                     bfdev_find_t find, void *pdata)
 {
     const void *pivot;
     long result;
@@ -42,9 +37,17 @@ bfdev_bsearch_inline(const void *base, size_t num, size_t esize,
     return NULL;
 }
 
+/**
+ * bfdev_bsearch() - binary search an array of elements.
+ * @base: pointer to first element to search.
+ * @num: number of elements.
+ * @esize: size of each element.
+ * @cmp: pointer to comparison function.
+ * @pdata: pointer to item being searched for.
+ */
 extern void *
 bfdev_bsearch(const void *base, size_t num, size_t esize,
-              bfdev_bsearch_find_t find, void *pdata);
+              bfdev_find_t find, void *pdata);
 
 BFDEV_END_DECLS
 

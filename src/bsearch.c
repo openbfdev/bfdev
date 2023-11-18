@@ -8,7 +8,7 @@
 
 export void *
 bfdev_bsearch(const void *base, size_t num, size_t esize,
-              bfdev_bsearch_find_t find, void *pdata)
+              bfdev_find_t find, void *pdata)
 {
     return bfdev_bsearch_inline(base, num, esize, find, pdata);
 }
