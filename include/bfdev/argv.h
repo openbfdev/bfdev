@@ -14,10 +14,21 @@ BFDEV_BEGIN_DECLS
 extern unsigned int
 bfdev_argv_count(const char *string);
 
+/**
+ * bfdev_argv_split() - split a string at whitespace, returning an argv.
+ * @alloc: the allocator used to allocate memory.
+ * @string: the string to be split.
+ * @argcp: returned argument count.
+ */
 extern char **
 bfdev_argv_split(const struct bfdev_alloc *alloc,
                  const char *string, unsigned int *argcp);
 
+/**
+ * bfdev_argv_destory() - destory an argv.
+ * @alloc: the allocator used to free memory.
+ * @argv: the argument vector to be freed.
+ */
 extern void
 bfdev_argv_destory(const struct bfdev_alloc *alloc,
                    char **argv);
