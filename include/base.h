@@ -17,6 +17,7 @@
 #include <bfdev/stdlib.h>
 #include <bfdev/string.h>
 #include <bfdev/ctype.h>
+#include <bfdev/alloca.h>
 
 #include <bfdev/align.h>
 #include <bfdev/allocator.h>
