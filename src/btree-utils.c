@@ -39,9 +39,10 @@ bfdev_btree_layoutptr = {
 export long
 bfdev_btree_key_find(struct bfdev_btree_root *root, uintptr_t *node, uintptr_t *key)
 {
-    struct bfdev_btree_layout *layout = root->layout;
+    struct bfdev_btree_layout *layout;
     unsigned int index;
 
+    layout = root->layout;
     for (index = 0; index < layout->keylen; ++index) {
         if (node[index] < key[index])
             return -1;
@@ -55,12 +56,19 @@ bfdev_btree_key_find(struct bfdev_btree_root *root, uintptr_t *node, uintptr_t *
 export void *
 bfdev_btree_alloc(struct bfdev_btree_root *root)
 {
-    struct bfdev_btree_layout *layout = root->layout;
-    return bfdev_malloc(NULL, layout->nodesize);
+    const struct bfdev_alloc *alloc;
+    struct bfdev_btree_layout *layout;
+
+    alloc = root->alloc;
+    layout = root->layout;
+
+    return bfdev_malloc(alloc, layout->nodesize);
 }
 
 export void
 bfdev_btree_free(struct bfdev_btree_root *root, void *node)
 {
-    bfdev_free(NULL, node);
+    const struct bfdev_alloc *alloc;
+    alloc = root->alloc;
+    bfdev_free(alloc, node);
 }

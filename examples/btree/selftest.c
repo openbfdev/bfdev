@@ -52,6 +52,25 @@ test_strfind(struct bfdev_btree_root *root, uintptr_t *node, uintptr_t *key)
     return strcmp(nstring, kstring);
 }
 
+static const struct bfdev_btree_ops
+test_value_ops = {
+    .alloc = bfdev_btree_alloc,
+    .free = bfdev_btree_free,
+    .find = bfdev_btree_key_find,
+    .clash = test_clash,
+    .remove = test_remove,
+
+};
+
+static const struct bfdev_btree_ops
+test_string_ops = {
+    .alloc = bfdev_btree_alloc,
+    .free = bfdev_btree_free,
+    .find = test_strfind,
+    .clash = test_clash,
+    .remove = test_remove,
+};
+
 static int
 test_testing(struct test_node *nodes)
 {
@@ -61,9 +80,9 @@ test_testing(struct test_node *nodes)
     void *value;
     int retval;
 
-    BFDEV_BTREE_ROOT(root32, &bfdev_btree_layout32,
-        bfdev_btree_alloc, bfdev_btree_free, bfdev_btree_key_find,
-        test_clash, test_remove, NULL
+    BFDEV_BTREE_ROOT(
+        root32, &bfdev_btree_layout32,
+        &test_value_ops, NULL
     );
 
     srand(time(NULL));
@@ -92,12 +111,12 @@ test_testing(struct test_node *nodes)
 
     bfdev_btree_for_each(&root32, &insert, value) {
         printf("btree random for each: %#010lx = %p\n",
-                (unsigned long)insert, value);
+               (unsigned long)insert, value);
     }
 
     bfdev_btree_for_each_reverse(&root32, &insert, value) {
         printf("btree random for each reverse: %#010lx = %p\n",
-                (unsigned long)insert, value);
+               (unsigned long)insert, value);
     }
 
     for (count = 0; count < TEST_LOOP; ++count) {
@@ -107,9 +126,9 @@ test_testing(struct test_node *nodes)
 
     bfdev_btree_destroy(&root32);
 
-    BFDEV_BTREE_ROOT(rootstr, &bfdev_btree_layout32,
-        bfdev_btree_alloc, bfdev_btree_free, test_strfind,
-        test_clash, test_remove, NULL
+    BFDEV_BTREE_ROOT(
+        rootstr, &bfdev_btree_layout32,
+        &test_string_ops, NULL
     );
 
     for (count = 0; count < TEST_LOOP; ++count) {

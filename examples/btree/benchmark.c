@@ -32,6 +32,13 @@ node_dump(struct bench_node *node)
 # define node_dump(node) ((void)(node))
 #endif
 
+static const struct bfdev_btree_ops
+bench_ops = {
+    .alloc = bfdev_btree_alloc,
+    .free = bfdev_btree_free,
+    .find = bfdev_btree_key_find,
+};
+
 int main(int argc, const char *argv[])
 {
     struct bench_node *node;
@@ -39,9 +46,9 @@ int main(int argc, const char *argv[])
     uintptr_t key;
     void *block;
 
-    BFDEV_BTREE_ROOT(bench_root, &bfdev_btree_layoutptr,
-        bfdev_btree_alloc, bfdev_btree_free, bfdev_btree_key_find,
-        NULL, NULL, NULL
+    BFDEV_BTREE_ROOT(
+        bench_root, &bfdev_btree_layoutptr,
+        &bench_ops, NULL
     );
 
     node = block = malloc(sizeof(*node) * TEST_LEN);
