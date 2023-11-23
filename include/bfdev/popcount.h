@@ -103,7 +103,7 @@ bool bfdev_popparity64_const(uint64_t value)
 extern const uint8_t
 bfdev_popcount_table[256];
 
-extern const uint8_t
+extern const bool
 bfdev_popparity_table[256];
 
 static inline __bfdev_attribute_const
