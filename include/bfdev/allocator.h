@@ -44,10 +44,10 @@ struct bfdev_alloc_ops {
     struct bfdev_alloc name = BFDEV_ALLOC_INIT(alloc, realloc, free, pdata)
 
 static inline void
-bfdev_alloc_init(struct bfdev_alloc *allcator, bfdev_alloc_t alloc,
+bfdev_alloc_init(struct bfdev_alloc *allocator, bfdev_alloc_t alloc,
                  bfdev_realloc_t realloc, bfdev_free_t free, void *pdata)
 {
-    *allcator = BFDEV_ALLOC_INIT(alloc, realloc, free, pdata);
+    *allocator = BFDEV_ALLOC_INIT(alloc, realloc, free, pdata);
 }
 
 extern __bfdev_malloc void *
