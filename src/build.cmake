@@ -41,6 +41,7 @@ set(BFDEV_SOURCE
     ${CMAKE_CURRENT_LIST_DIR}/scnprintf.c
     ${CMAKE_CURRENT_LIST_DIR}/segtree.c
     ${CMAKE_CURRENT_LIST_DIR}/skiplist.c
+    ${CMAKE_CURRENT_LIST_DIR}/sort.c
     ${CMAKE_CURRENT_LIST_DIR}/stringhash.c
 )
 
