@@ -1,0 +1,64 @@
+/* SPDX-License-Identifier: GPL-2.0-or-later */
+/*
+ * Copyright(c) 2023 ffashion <helloworldffashion@gmail.com>
+ * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
+ */
+
+#ifndef _BFDEV_CONFIG_H_
+#define _BFDEV_CONFIG_H_
+
+#include <bfdev/cdefs.h>
+#include <bfdev/stringify.h>
+#include <bfdev/compiler.h>
+
+BFDEV_BEGIN_DECLS
+
+#define BFDEV_VERSION_MAJOR ${CMAKE_PROJECT_VERSION_MAJOR}
+#define BFDEV_VERSION_MINOR ${CMAKE_PROJECT_VERSION_MINOR}
+#define BFDEV_VERSION_PATCH ${CMAKE_PROJECT_VERSION_PATCH}
+#define BFDEV_VERSION_TWEAK ${CMAKE_PROJECT_VERSION_TWEAK}
+#define BFDEV_EXTREVERSION ${BFDEV_EXTREVERSION}
+
+#define BFDEV_ARCH ${BFDEV_ARCH}
+#define BFDEV_NAME ${BFDEV_NAME}
+#define BFDEV_VERSION ${BFDEV_VERSION}
+
+#define BFDEV_COMMITID ${BFDEV_COMMITID}
+#define BFDEV_BRANCH ${BFDEV_BRANCH}
+
+#cmakedefine BFDEV_DEBUG_LIST
+#cmakedefine BFDEV_DEBUG_SLIST
+#cmakedefine BFDEV_DEBUG_HLIST
+#cmakedefine BFDEV_DEBUG_ILIST
+#cmakedefine BFDEV_DEBUG_RBTREE
+#cmakedefine BFDEV_DEBUG_HEAP
+#cmakedefine BFDEV_DEBUG_REFCNT
+
+#define BFDEV_VERSION_CHECK(major, minor, patch) (  \
+    ((major) == BFDEV_VERSION_MAJOR) &&             \
+    (((minor) < BFDEV_VERSION_MINOR) ||             \
+     ((minor) == BFDEV_VERSION_MINOR &&             \
+      (patch) <= BFDEV_VERSION_PATCH))              \
+)
+
+static inline int
+bfdev_version_major(void)
+{
+    return BFDEV_VERSION_MAJOR;
+}
+
+static inline int
+bfdev_version_minor(void)
+{
+    return BFDEV_VERSION_MINOR;
+}
+
+static inline int
+bfdev_version_patch(void)
+{
+    return BFDEV_VERSION_PATCH;
+}
+
+BFDEV_END_DECLS
+
+#endif /*_BFDEV_CONFIG_H_*/

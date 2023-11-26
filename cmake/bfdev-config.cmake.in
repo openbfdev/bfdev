@@ -1,0 +1,11 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Copyright(c) 2023 ffashion <helloworldffashion@gmail.com>
+#
+
+@PACKAGE_INIT@
+
+set(BFDEV_VERSION "@BFDEV_VERSION@")
+set(BFDEV_INCLUDE_DIR "@CMAKE_INSTALL_PREFIX@/include")
+set(BFDEV_LIBRARY_DIR "@CMAKE_INSTALL_PREFIX@/lib")
+set(BFDEV_FOUND true)

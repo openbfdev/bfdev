@@ -1,0 +1,8 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+CMakeFiles/
+generated/
+CMakeCache.txt
+CTestTestfile.cmake
+cmake_install.cmake
+Makefile
+libbfdev.*

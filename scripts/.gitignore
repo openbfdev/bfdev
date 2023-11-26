@@ -1,0 +1,8 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+/gen-crc8
+/gen-crc16
+/gen-crc16be
+/gen-crc32
+/gen-crc32be
+/gen-crc64
+/gen-crc64be
