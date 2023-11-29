@@ -11,7 +11,7 @@
 BFDEV_BEGIN_DECLS
 
 /**
- * min - return minimum of two values of the same or compatible types.
+ * bfdev_min() - return minimum of two values of the same or compatible types.
  * @a: first value.
  * @b: second value.
  */
@@ -23,7 +23,7 @@ BFDEV_BEGIN_DECLS
 })
 
 /**
- * max - return maximum of two values of the same or compatible types.
+ * bfdev_max() - return maximum of two values of the same or compatible types.
  * @a: first value.
  * @b: second value.
  */
@@ -35,7 +35,7 @@ BFDEV_BEGIN_DECLS
 })
 
 /**
- * clamp - return a value clamped to a given range with strict typechecking.
+ * bfdev_clamp() - return a value clamped to a given range with strict typechecking.
  * @val: current value.
  * @lo: lowest allowable value.
  * @hi: highest allowable value.
@@ -45,7 +45,7 @@ BFDEV_BEGIN_DECLS
 )
 
 /**
- * min_adj - Adjust the minimum value of @val.
+ * bfdev_min_adj() - Adjust the minimum value of @val.
  * @val: value to adjust.
  * @lo: lowest allowable value.
  */
@@ -54,7 +54,7 @@ BFDEV_BEGIN_DECLS
 })
 
 /**
- * max_adj - Adjust the maximum value of @val.
+ * bfdev_max_adj() - Adjust the maximum value of @val.
  * @val: value to adjust.
  * @hi: highest allowable value.
  */
@@ -63,7 +63,7 @@ BFDEV_BEGIN_DECLS
 })
 
 /**
- * clamp_adj - Adjust the clamped value of @val.
+ * bfdev_clamp_adj() - Adjust the clamped value of @val.
  * @val: value to adjust.
  * @lo: lowest allowable value.
  * @hi: highest allowable value.
