@@ -49,6 +49,7 @@ int main(int argc, const char *argv[])
     struct bfdev_skip_node *node;
     uintptr_t value, *record;
     unsigned int count;
+    int retval;
 
     record = malloc(TEST_LEN * sizeof(*record));
     if (!record)
