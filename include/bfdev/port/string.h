@@ -3,19 +3,19 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
-#ifndef _BFDEV_STDBOOL_H_
-#define _BFDEV_STDBOOL_H_
+#ifndef _BFDEV_PORT_STRING_H_
+#define _BFDEV_PORT_STRING_H_
 
 #include <bfdev/config.h>
 
 #if defined(__FreeBSD__) && defined(_KERNEL)
-# include <sys/types.h>
+# include <sys/systm.h>
 #else
-# include <stdbool.h>
+# include <string.h>
 #endif
 
 BFDEV_BEGIN_DECLS
 
 BFDEV_END_DECLS
 
-#endif /* _BFDEV_STDBOOL_H_ */
+#endif /* _BFDEV_PORT_STRING_H_ */

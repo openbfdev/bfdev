@@ -7,13 +7,8 @@
 #define _BFDEV_STRING_H_
 
 #include <bfdev/config.h>
+#include <bfdev/port/string.h>
 #include <bfdev/allocator.h>
-
-#if defined(__FreeBSD__) && defined(_KERNEL)
-# include <sys/systm.h>
-#else
-# include <string.h>
-#endif
 
 BFDEV_BEGIN_DECLS
 

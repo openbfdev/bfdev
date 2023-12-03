@@ -7,8 +7,8 @@
 #define _BFDEV_FSM_H_
 
 #include <bfdev/config.h>
+#include <bfdev/types.h>
 #include <bfdev/stddef.h>
-#include <bfdev/stdbool.h>
 #include <bfdev/macro.h>
 #include <bfdev/array.h>
 

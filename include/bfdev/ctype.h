@@ -7,12 +7,7 @@
 #define _BFDEV_CTYPE_H_
 
 #include <bfdev/config.h>
-
-#if defined(__FreeBSD__) && defined(_KERNEL)
-# include <sys/ctype.h>
-#else
-# include <ctype.h>
-#endif
+#include <bfdev/port/ctype.h>
 
 BFDEV_BEGIN_DECLS
 

@@ -7,7 +7,7 @@
 #define _BFDEV_ALIGN_H_
 
 #include <bfdev/config.h>
-#include <bfdev/stdlib.h>
+#include <bfdev/types.h>
 #include <bfdev/stddef.h>
 
 BFDEV_BEGIN_DECLS

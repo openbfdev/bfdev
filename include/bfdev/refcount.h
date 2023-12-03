@@ -8,7 +8,6 @@
 
 #include <bfdev/config.h>
 #include <bfdev/types.h>
-#include <bfdev/stdbool.h>
 #include <bfdev/stddef.h>
 #include <bfdev/atomic.h>
 #include <bfdev/cmpxchg.h>

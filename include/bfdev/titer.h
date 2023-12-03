@@ -7,6 +7,7 @@
 #define _BFDEV_TITER_H_
 
 #include <bfdev/config.h>
+#include <bfdev/types.h>
 #include <bfdev/stddef.h>
 #include <bfdev/bitops.h>
 
