@@ -9,7 +9,6 @@
 #include <bfdev/config.h>
 #include <bfdev/types.h>
 #include <bfdev/stddef.h>
-#include <bfdev/stdbool.h>
 #include <bfdev/container.h>
 #include <bfdev/poison.h>
 

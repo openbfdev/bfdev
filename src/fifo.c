@@ -3,10 +3,8 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
-#include <bfdev/stdbool.h>
-#include <bfdev/string.h>
+#include <base.h>
 #include <bfdev/log2.h>
-#include <bfdev/minmax.h>
 #include <bfdev/fifo.h>
 #include <bfdev/bits.h>
 #include <export.h>

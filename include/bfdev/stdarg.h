@@ -7,12 +7,7 @@
 #define _BFDEV_STDARG_H_
 
 #include <bfdev/config.h>
-
-#if defined(__FreeBSD__) && defined(_KERNEL)
-# include <machine/stdarg.h>
-#else
-# include <stdarg.h>
-#endif
+#include <bfdev/port/stdarg.h>
 
 BFDEV_BEGIN_DECLS
 

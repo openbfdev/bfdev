@@ -7,13 +7,7 @@
 #define _BFDEV_LIMITS_H_
 
 #include <bfdev/config.h>
-
-#if defined(__FreeBSD__) && defined(_KERNEL)
-# include <sys/stdint.h>
-# include <sys/limits.h>
-#else
-# include <limits.h>
-#endif
+#include <bfdev/port/limits.h>
 
 BFDEV_BEGIN_DECLS
 

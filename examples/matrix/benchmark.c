@@ -7,6 +7,7 @@
 #define bfdev_log_fmt(fmt) MODULE_NAME ": " fmt
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <bfdev/log.h>
 #include <bfdev/matrix.h>
 #include "../time.h"

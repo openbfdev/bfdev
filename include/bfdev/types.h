@@ -7,8 +7,8 @@
 #define _BFDEV_TYPES_H_
 
 #include <bfdev/config.h>
-#include <bfdev/stdint.h>
-#include <bfdev/stddef.h>
+#include <bfdev/port/stdint.h>
+#include <bfdev/port/stddef.h>
 
 BFDEV_BEGIN_DECLS
 

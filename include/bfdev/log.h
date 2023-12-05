@@ -7,6 +7,7 @@
 #define _BFDEV_LOG_H_
 
 #include <bfdev/config.h>
+#include <bfdev/types.h>
 #include <bfdev/stddef.h>
 #include <bfdev/stdarg.h>
 #include <bfdev/level.h>

@@ -10,7 +10,6 @@
 #include <bfdev/config.h>
 #include <bfdev/types.h>
 #include <bfdev/stddef.h>
-#include <bfdev/stdlib.h>
 
 BFDEV_BEGIN_DECLS
 
