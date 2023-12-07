@@ -66,11 +66,6 @@ ilist_head_check(struct bfdev_ilist_head *ihead)
 }
 #endif
 
-/**
- * ilist_add - insert a new index list node.
- * @ihead: the index head to be insert.
- * @inode: the index node to insert.
- */
 export void
 bfdev_ilist_add(struct bfdev_ilist_head *ihead, struct bfdev_ilist_node *inode,
                 bfdev_ilist_cmp_t cmp, void *pdata)
@@ -115,11 +110,6 @@ finish:
 #endif
 }
 
-/**
- * ilist_del - delete a node form index head.
- * @ihead: the index head to be delete.
- * @inode: the index node to delete.
- */
 export void
 bfdev_ilist_del(struct bfdev_ilist_head *ihead, struct bfdev_ilist_node *inode)
 {

@@ -41,15 +41,25 @@ BFDEV_CALLBACK_CMP(
     const struct bfdev_ilist_node *
 );
 
+/**
+ * bfdev_ilist_add() - insert a new index list node.
+ * @ihead: the index head to be insert.
+ * @inode: the index node to insert.
+ */
 extern void
 bfdev_ilist_add(struct bfdev_ilist_head *ihead, struct bfdev_ilist_node *inode,
                 bfdev_ilist_cmp_t cmp, void *pdata);
 
+/**
+ * bfdev_ilist_del() - delete a node form index head.
+ * @ihead: the index head to be delete.
+ * @inode: the index node to delete.
+ */
 extern void
 bfdev_ilist_del(struct bfdev_ilist_head *ihead, struct bfdev_ilist_node *inode);
 
 /**
- * bfdev_ilist_head_init - initialize a bfdev_ilist_head structure.
+ * bfdev_ilist_head_init() - initialize a bfdev_ilist_head structure.
  * @head: bfdev_ilist_head structure to be initialized.
  */
 static inline void
@@ -58,6 +68,10 @@ bfdev_ilist_head_init(struct bfdev_ilist_head *ihead)
     bfdev_list_head_init(&ihead->node_list);
 }
 
+/**
+ * bfdev_ilist_node_init() - initialize a bfdev_ilist_node structure.
+ * @head: bfdev_ilist_node structure to be initialized.
+ */
 static inline void
 bfdev_ilist_node_init(struct bfdev_ilist_node *inode)
 {
@@ -66,7 +80,7 @@ bfdev_ilist_node_init(struct bfdev_ilist_node *inode)
 }
 
 /**
- * bfdev_ilist_first - return the first node.
+ * bfdev_ilist_first() - return the first node.
  * @ihead: the &struct bfdev_ilist_head pointer
  */
 static inline struct bfdev_ilist_node *
@@ -76,7 +90,7 @@ bfdev_ilist_first(const struct bfdev_ilist_head *ihead)
 }
 
 /**
- * bfdev_ilist_last - return the last node.
+ * bfdev_ilist_last() - return the last node.
  * @ihead:the &struct bfdev_ilist_head pointer
  */
 static inline struct bfdev_ilist_node *
@@ -86,7 +100,7 @@ bfdev_ilist_last(const struct bfdev_ilist_head *ihead)
 }
 
 /**
- * bfdev_list_check_empty - check whether a head is empty.
+ * bfdev_list_check_empty() - check whether a head is empty.
  * @ihead: list head to check.
  */
 static inline bool
@@ -96,7 +110,7 @@ bfdev_ilist_head_empty(struct bfdev_ilist_head *ihead)
 }
 
 /**
- * bfdev_list_check_empty - check whether a node index is empty.
+ * bfdev_list_check_empty() - check whether a node index is empty.
  * @inode: list node to check.
  */
 static inline bool
