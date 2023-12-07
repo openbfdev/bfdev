@@ -11,8 +11,8 @@
 
 BFDEV_BEGIN_DECLS
 
-#define bfdev_alloca __builtin_alloca
 extern __bfdev_malloc void *bfdev_alloca(unsigned long size);
+#define bfdev_alloca __builtin_alloca
 
 BFDEV_END_DECLS
 
