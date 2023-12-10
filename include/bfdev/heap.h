@@ -136,6 +136,19 @@ bfdev_heap_parent(struct bfdev_heap_root *root, struct bfdev_heap_node **parentp
 extern struct bfdev_heap_node *
 bfdev_heap_find(struct bfdev_heap_root *root, unsigned int index);
 
+/* Base iteration - basic iteration helper */
+extern struct bfdev_heap_node *
+bfdev_heap_left_far(const struct bfdev_heap_node *node);
+
+extern struct bfdev_heap_node *
+bfdev_heap_right_far(const struct bfdev_heap_node *node);
+
+extern struct bfdev_heap_node *
+bfdev_heap_left_deep(const struct bfdev_heap_node *node);
+
+extern struct bfdev_heap_node *
+bfdev_heap_right_deep(const struct bfdev_heap_node *node);
+
 /* Level iteration (Sequential) - access in level sequence */
 extern struct bfdev_heap_node *
 bfdev_heap_first(const struct bfdev_heap_root *root, unsigned long *index);

@@ -69,12 +69,12 @@ extern void
 bfdev_respool_release(struct bfdev_respool *pool, struct bfdev_resnode *res);
 
 extern struct bfdev_resnode *
-respool_find_remove(struct bfdev_respool *pool, bfdev_respool_find_t find,
-                    const void *data);
+bfdev_respool_find_remove(struct bfdev_respool *pool, bfdev_respool_find_t find,
+                          const void *data);
 
 extern struct bfdev_resnode *
-respool_find_release(struct bfdev_respool *pool, bfdev_respool_find_t find,
-                     const void *data);
+bfdev_respool_find_release(struct bfdev_respool *pool, bfdev_respool_find_t find,
+                           const void *data);
 
 extern void
 bfdev_respool_release_all(struct bfdev_respool *pool);

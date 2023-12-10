@@ -138,6 +138,8 @@ add_compile_options(
     -Wno-sign-compare
     -Wno-pointer-sign
     -Wno-null-pointer-arithmetic
+    -Wmissing-prototypes
+    -Wmissing-declarations
     -fvisibility=hidden
 )
 

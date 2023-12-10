@@ -174,7 +174,7 @@ bfdev_bitmap_comp_clr(unsigned long *bitmap, unsigned int start, unsigned int bi
 }
 
 export unsigned long *
-bfdev_bitmap_malloc(const struct bfdev_alloc *alloc, unsigned int bits)
+bfdev_bitmap_alloc(const struct bfdev_alloc *alloc, unsigned int bits)
 {
     return bfdev_malloc_array(
         alloc, BFDEV_BITS_TO_LONG(bits), sizeof(unsigned long)
