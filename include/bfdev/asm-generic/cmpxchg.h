@@ -27,13 +27,14 @@ bfdev_arch_cmpxchg(bfdev_atomic_t *atomic, bfdev_atomic_t old, bfdev_atomic_t va
 static __bfdev_always_inline bfdev_atomic_t
 bfdev_arch_xchg(bfdev_atomic_t *atomic, bfdev_atomic_t value)
 {
-    bfdev_atomic_t prev;
+    bfdev_atomic_t prev, result;
 
     do {
         prev = *atomic;
-    } while (!bfdev_arch_cmpxchg(atomic, prev, value));
+        result = bfdev_arch_cmpxchg(atomic, prev, value);
+    } while (bfdev_unlikely(result != prev));
 
-    return prev;
+    return result;
 }
 #endif
 
