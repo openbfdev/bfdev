@@ -246,6 +246,8 @@ bfdev_cache_reset(struct bfdev_cache_head *head)
     bfdev_list_head_init(&head->using);
     bfdev_list_head_init(&head->freed);
     bfdev_list_head_init(&head->changing);
+
+    head->algo->reset(head);
     memset(head->taghash, 0, sizeof(*head->taghash) * head->size);
 
     for (count = 0; count < head->size; ++count) {
