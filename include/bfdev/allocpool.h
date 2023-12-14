@@ -30,7 +30,7 @@ struct bfdev_allocpool {
 
 /**
  * bfdev_allocpool_init() - Allocation mempool initialize.
- * @pool: minimum mempool to initialize.
+ * @pool: the allocpool to initialize.
  * @array: mempool array address.
  * @size: mempool array size.
  */
@@ -41,8 +41,19 @@ bfdev_allocpool_init(struct bfdev_allocpool *pool, void *block, size_t size)
 }
 
 /**
+ * bfdev_allocpool_reset() - Allocation mempool reset.
+ * @pool: the allocpool to reset.
+ */
+static inline void
+bfdev_allocpool_reset(struct bfdev_allocpool *pool)
+{
+    pool->last = 0;
+    pool->count = 0;
+}
+
+/**
  * bfdev_allocpool_alloc() - Allocation mempool allocation.
- * @pool: minimum mempool to alloc.
+ * @pool: the allocpool to alloc.
  * @size: size to allocation.
  * @align: align to allocation.
  */
@@ -51,7 +62,7 @@ bfdev_allocpool_alloc(struct bfdev_allocpool *pool, size_t size, size_t align);
 
 /**
  * bfdev_allocpool_free() - Allocation mempool free.
- * @pool: minimum mempool to free.
+ * @pool: the allocpool to free.
  * @block: memory block to free.
  */
 extern void
