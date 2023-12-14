@@ -21,6 +21,7 @@
 #include <bfdev/ctype.h>
 #include <bfdev/errno.h>
 #include <bfdev/limits.h>
+#include <bfdev/log2.h>
 #include <bfdev/macro.h>
 #include <bfdev/math.h>
 #include <bfdev/minmax.h>
