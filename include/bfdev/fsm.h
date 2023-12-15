@@ -15,13 +15,17 @@
 BFDEV_BEGIN_DECLS
 
 struct bfdev_fsm_event;
+struct bfdev_fsm_transition;
 struct bfdev_fsm_state;
-
-typedef long (*bfdev_fsm_guard_t)
-(struct bfdev_fsm_event *event, const void *cond);
 
 typedef int (*bfdev_fsm_event_t)
 (struct bfdev_fsm_event *event, void *data);
+
+typedef struct bfdev_fsm_transition *(*bfdev_fsm_exception_t)
+(struct bfdev_fsm_event *event, void *data);
+
+typedef long (*bfdev_fsm_guard_t)
+(struct bfdev_fsm_event *event, const void *cond);
 
 typedef int (*bfdev_fsm_active_t)
 (struct bfdev_fsm_event *event, void *data, void *curr, void *next);
@@ -54,6 +58,7 @@ struct bfdev_fsm_transition {
 struct bfdev_fsm_state {
     bfdev_fsm_event_t enter;
     bfdev_fsm_event_t exit;
+    bfdev_fsm_exception_t exception;
     void *data;
 
     const struct bfdev_fsm_transition *trans;

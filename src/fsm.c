@@ -23,12 +23,18 @@ fsm_find_transition(const struct bfdev_fsm_state *state, struct bfdev_fsm_event 
     for (count = 0; count < state->tnum; ++count) {
         find = &state->trans[count];
 
+        /* A transition for the given event has been found. */
         if (find->type != event->type)
             continue;
 
+        /* If transition is guarded, ensure that the condition is held. */
         if (!find->guard || !find->guard(event, find->cond))
             return find;
     }
+
+    /* No transition conditions found, triggering exception */
+    if (state->exception)
+        return state->exception(event, state->data);
 
     return NULL;
 }
@@ -60,53 +66,93 @@ bfdev_fsm_handle(struct bfdev_fsm *fsm, struct bfdev_fsm_event *event)
         const struct bfdev_fsm_state **pstate;
         int retval;
 
+        /*
+         * If there were no transitions for the given event for
+         * the current state, check if there are any transitions
+         * for any of the parent states (if any).
+         */
         tran = fsm_find_transition(curr, event);
         if (!tran) {
             next = curr->parent;
             continue;
         }
 
+        /*
+         * Pop the stack as the new state, if popping is required
+         * and there have no next state.
+         */
         if (!(next = tran->next) && tran->stack < 0) {
             pstate = bfdev_array_pop(&fsm->stack, -tran->stack);
             next = *pstate;
         }
 
+        /*
+         * A transition must have a next state defined.
+         * If the user has not defined the next state,
+         * go to error state.
+         */
         if (bfdev_unlikely(!next)) {
             retval = bfdev_fsm_error(fsm, event);
             return retval ?: -BFDEV_ENOENT;
         }
 
+        /*
+         * If the new state is a parent state, enter its entry
+         * state (if it has one). Step down through the whole family
+         * tree until a state without an entry state is found.
+         */
         while (next->entry)
             next = next->entry;
 
+        /*
+         * Call the curr state's exit action, if state
+         * does not return to itself and the stack
+         * has not popped.
+         */
         if (curr != next && tran->stack <= 0 && curr->exit) {
             retval = curr->exit(event, curr->data);
             if (bfdev_unlikely(retval))
                 return retval;
         }
 
+        /* Run transition action */
         if (tran->action) {
             retval = tran->action(event, tran->data, curr->data, next->data);
             if (bfdev_unlikely(retval))
                 return retval;
         }
 
+        /*
+         * Call the new state's entry action, if state
+         * does not return to itself and has not been
+         * pushed onto the stack.
+         */
         if (curr != next && tran->stack >= 0 && next->enter) {
             retval = next->enter(event, next->data);
             if (bfdev_unlikely(retval))
                 return retval;
         }
 
+        /* Update history state */
         fsm_push_state(fsm, next);
         if (bfdev_unlikely(next == fsm->error))
             return -BFDEV_EFAULT;
 
+        /* State returned to itself */
         if (curr == next)
             return BFDEV_FSM_SELFLOOP;
 
-        if (!next->tnum)
+        /*
+         * If the new state is a final state, notify user
+         * that the state machine has stopped
+         */
+        if (!next->tnum && !next->exception)
             return BFDEV_FSM_FINISH;
 
+        /*
+         * If it needs to be pushed onto the stack,
+         * push the curr state.
+         */
         if (tran->stack > 0) {
             pstate = bfdev_array_push(&fsm->stack, 1);
             if (bfdev_unlikely(!pstate))
@@ -114,8 +160,14 @@ bfdev_fsm_handle(struct bfdev_fsm *fsm, struct bfdev_fsm_event *event)
             *pstate = curr;
         }
 
-        if (!tran->cross)
-            return BFDEV_FSM_CHANGED;
+        /*
+         * If it is declared as crossing, Immediately
+         * change to the next state.
+         */
+        if (tran->cross)
+            continue;
+
+        return BFDEV_FSM_CHANGED;
     }
 
     return BFDEV_FSM_NOCHANGE;
