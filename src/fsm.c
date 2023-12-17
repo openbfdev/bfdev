@@ -83,6 +83,8 @@ bfdev_fsm_handle(struct bfdev_fsm *fsm, struct bfdev_fsm_event *event)
          */
         if (!(next = tran->next) && tran->stack < 0) {
             pstate = bfdev_array_pop(&fsm->stack, -tran->stack);
+            if (bfdev_unlikely(!pstate))
+                return -BFDEV_EOVERFLOW;
             next = *pstate;
         }
 
