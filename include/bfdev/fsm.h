@@ -71,10 +71,8 @@ struct bfdev_fsm_state {
 struct bfdev_fsm {
     const struct bfdev_fsm_state *state[2];
     const struct bfdev_fsm_state *error;
-    unsigned int count;
-
     struct bfdev_array stack;
-    unsigned int sindex;
+    unsigned int count;
 };
 
 #define BFDEV_FSM_STATIC(ALLOC, INIT, ERROR) {  \
@@ -97,17 +95,18 @@ bfdev_fsm_init(struct bfdev_fsm *fsm, const struct bfdev_alloc *alloc,
     *fsm = BFDEV_FSM_INIT(alloc, init, error);
 }
 
-static inline const struct bfdev_fsm_state *
-bfdev_fsm_prev(const struct bfdev_fsm *fsm)
-{
-    unsigned int count = fsm->count - 1;
-    return fsm->state[count & (BFDEV_ARRAY_SIZE(fsm->state) - 1)];
-}
 
 static inline const struct bfdev_fsm_state *
 bfdev_fsm_curr(struct bfdev_fsm *fsm)
 {
-    unsigned int count = fsm->count - 0;
+    unsigned int count = fsm->count;
+    return fsm->state[count & (BFDEV_ARRAY_SIZE(fsm->state) - 1)];
+}
+
+static inline const struct bfdev_fsm_state *
+bfdev_fsm_prev(const struct bfdev_fsm *fsm)
+{
+    unsigned int count = fsm->count - 1;
     return fsm->state[count & (BFDEV_ARRAY_SIZE(fsm->state) - 1)];
 }
 
