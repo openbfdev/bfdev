@@ -95,6 +95,13 @@ bfdev_fsm_init(struct bfdev_fsm *fsm, const struct bfdev_alloc *alloc,
     *fsm = BFDEV_FSM_INIT(alloc, init, error);
 }
 
+static inline void
+bfdev_fsm_reset(struct bfdev_fsm *fsm, const struct bfdev_fsm_state *init)
+{
+    *fsm->state = init;
+    fsm->count = 0;
+    bfdev_array_reset(&fsm->stack);
+}
 
 static inline const struct bfdev_fsm_state *
 bfdev_fsm_curr(struct bfdev_fsm *fsm)
