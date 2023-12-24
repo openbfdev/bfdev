@@ -9,46 +9,86 @@
 #include <bfdev/overflow.h>
 #include <export.h>
 
-export void *
-bfdev_array_push(struct bfdev_array *array, unsigned int num)
+static int
+array_resize(struct bfdev_array *array, unsigned long count)
 {
     const struct bfdev_alloc *alloc = array->alloc;
-    unsigned int nalloc, index, count;
-    bool overflow;
+    unsigned long nalloc;
+    size_t size;
     void *data;
+
+    nalloc = bfdev_max(count << 1, BFDEV_ARRAY_MSIZE);
+    size = nalloc * array->cells;
+
+    data = bfdev_realloc(alloc, array->data, size);
+    if (bfdev_unlikely(!data))
+        return -BFDEV_ENOMEM;
+
+    array->data = data;
+    array->capacity = nalloc;
+
+    return -BFDEV_ENOERR;
+}
+
+static int
+array_apply(struct bfdev_array *array, unsigned long count)
+{
+    if (count > array->capacity)
+        return array_resize(array, count);
+    return -BFDEV_ENOERR;
+}
+
+export void *
+bfdev_array_push(struct bfdev_array *array, unsigned long num)
+{
+    unsigned long index, count;
+    uintptr_t offset;
+    bool overflow;
+    int retval;
 
     overflow = bfdev_overflow_check_add(array->index, num, &count);
     if (bfdev_unlikely(overflow))
         return NULL;
 
-    if (count > array->capacity) {
-        nalloc = bfdev_max(count << 1, BFDEV_ARRAY_MSIZE);
-
-        data = bfdev_realloc(alloc, array->data, nalloc * array->cells);
-        if (bfdev_unlikely(!data))
-            return NULL;
-
-        array->data = data;
-        array->capacity = nalloc;
-    }
+    retval = array_apply(array, count);
+    if (bfdev_unlikely(retval))
+        return NULL;
 
     index = array->index;
     array->index = count;
+    offset = bfdev_array_offset(array, index);
 
-    return bfdev_array_data(array, index);
+    return array->data + offset;
 }
 
 export void *
-bfdev_array_pop(struct bfdev_array *array, unsigned int num)
+bfdev_array_pop(struct bfdev_array *array, unsigned long num)
 {
-    unsigned int index;
-    void *data;
+    unsigned long index;
+    uintptr_t offset;
+    bool overflow;
 
-    index = array->index - num;
-    data = bfdev_array_data(array, index);
+    overflow = bfdev_overflow_check_sub(array->index, num, &index);
+    if (bfdev_unlikely(overflow))
+        return NULL;
+
     array->index = index;
+    offset = bfdev_array_offset(array, index);
 
-    return data;
+    return array->data + offset;
+}
+
+export int
+bfdev_array_reserve(struct bfdev_array *array, unsigned long num)
+{
+    unsigned long count;
+    bool overflow;
+
+    overflow = bfdev_overflow_check_add(array->index, num, &count);
+    if (bfdev_unlikely(overflow))
+        return -BFDEV_EOVERFLOW;
+
+    return array_apply(array, count);
 }
 
 export void
