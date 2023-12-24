@@ -20,8 +20,8 @@ BFDEV_BEGIN_DECLS
 
 struct bfdev_array {
     const struct bfdev_alloc *alloc;
-    unsigned int capacity;
-    unsigned int index;
+    unsigned long capacity;
+    unsigned long index;
     size_t cells;
     void *data;
 };
@@ -48,7 +48,7 @@ bfdev_array_reset(struct bfdev_array *array)
     array->index = 0;
 }
 
-static inline unsigned int
+static inline unsigned long
 bfdev_array_index(struct bfdev_array *array)
 {
     return array->index;
@@ -61,13 +61,13 @@ bfdev_array_size(struct bfdev_array *array)
 }
 
 static inline uintptr_t
-bfdev_array_offset(struct bfdev_array *array, unsigned int index)
+bfdev_array_offset(struct bfdev_array *array, unsigned long index)
 {
     return array->cells * index;
 }
 
 static inline void *
-bfdev_array_data(struct bfdev_array *array, unsigned int index)
+bfdev_array_data(struct bfdev_array *array, unsigned long index)
 {
     if (bfdev_unlikely(index >= array->index))
         return NULL;
@@ -75,10 +75,13 @@ bfdev_array_data(struct bfdev_array *array, unsigned int index)
 }
 
 extern void *
-bfdev_array_push(struct bfdev_array *array, unsigned int num);
+bfdev_array_push(struct bfdev_array *array, unsigned long num);
 
 extern void *
-bfdev_array_pop(struct bfdev_array *array, unsigned int num);
+bfdev_array_pop(struct bfdev_array *array, unsigned long num);
+
+extern int
+bfdev_array_reserve(struct bfdev_array *array, unsigned long num);
 
 extern void
 bfdev_array_release(struct bfdev_array *array);
