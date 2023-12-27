@@ -62,6 +62,8 @@ bm_find(struct bfdev_ts_context *tsc, struct bfdev_ts_state *tss)
 
         consumed += length;
     }
+
+    #undef find_pattern
 }
 
 static inline bool
@@ -80,7 +82,7 @@ subpattern(const uint8_t *pattern, int index, int j, int g)
 }
 
 static inline void
-compute_prefix(struct bm_context *bctx, unsigned long flags)
+bm_compute_prefix(struct bm_context *bctx, unsigned long flags)
 {
     int index, start, count;
 
@@ -129,7 +131,7 @@ bm_prepare(const struct bfdev_alloc *alloc, const void *pattern,
         memcpy(bctx->pattern, pattern, len);
     else for (index = 0; index < len; ++index)
         bctx->pattern[index] = toupper(((char *)pattern)[index]);
-    compute_prefix(bctx, flags);
+    bm_compute_prefix(bctx, flags);
 
     return &bctx->tsc;
 }

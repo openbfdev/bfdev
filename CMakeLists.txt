@@ -36,6 +36,7 @@ set(BFDEV_CONFIGURE ${BFDEV_GENERATED_PATH}/bfdev-config.cmake)
 include(scripts/asm-generic.cmake)
 include(scripts/hostrule.cmake)
 include(scripts/packed-header.cmake)
+include(scripts/packed-source.cmake)
 include(scripts/commit.cmake)
 
 commit_hash(BFDEV_COMMITID)
@@ -94,13 +95,6 @@ asm_generic(
     ${BFDEV_GENERATED_PATH}/bfdev/asm
     ${BFDEV_ARCH_HEADER_PATH}/bfdev/asm
     ${BFDEV_HEADER_PATH}/bfdev/asm-generic
-)
-
-packed_header(
-    bfdev/
-    _BFDEV_H_
-    ${BFDEV_GENERATED_PATH}/bfdev.h
-    ${BFDEV_HEADER_PATH}/bfdev
 )
 
 configure_file(
@@ -187,14 +181,21 @@ include_directories(${PROJECT_BINARY_DIR}/generated)
 add_subdirectory(${PROJECT_SOURCE_DIR}/scripts)
 include(${PROJECT_SOURCE_DIR}/build.cmake)
 
-set(BFDEV_LIBRARY
+set(BFDEV_LIBRARY_HEADER
     ${BFDEV_HEADER}
     ${BFDEV_ASM_HEADER}
     ${BFDEV_ARCH_ASM_HEADER}
     ${BFDEV_GENERATED_HEADER}
-    ${BFDEV_INCLUDE}
+)
+
+set(BFDEV_LIBRARY_SOURCE
     ${BFDEV_SOURCE}
     ${BFDEV_ARCH_SOURCE}
+)
+
+set(BFDEV_LIBRARY
+    ${BFDEV_LIBRARY_HEADER}
+    ${BFDEV_LIBRARY_SOURCE}
 )
 
 macro(bfdev_dependencies target)
@@ -209,6 +210,20 @@ macro(bfdev_dependencies target)
         gen-crc64be
     )
 endmacro()
+
+packed_header(
+    bfdev/
+    _BFDEV_H_
+    ${BFDEV_GENERATED_PATH}/bfdev.h
+    ${BFDEV_HEADER_PATH}/bfdev
+)
+
+packed_source(
+    ${PROJECT_BINARY_DIR}/bfdev.c
+    "${BFDEV_LIBRARY_SOURCE}"
+    "#undef MODULE_NAME\n"
+    "#undef bfdev_log_fmt\n"
+)
 
 add_library(bfdev_object OBJECT ${BFDEV_LIBRARY})
 bfdev_dependencies(bfdev_object)
