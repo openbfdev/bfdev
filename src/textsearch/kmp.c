@@ -60,10 +60,12 @@ kmp_find(struct bfdev_ts_context *tsc, struct bfdev_ts_state *tss)
 
         consumed += length;
     }
+
+    #undef find_pattern
 }
 
 static inline void
-compute_prefix(struct kmp_context *kctx)
+kmp_compute_prefix(struct kmp_context *kctx)
 {
     unsigned int index, match;
 
@@ -98,7 +100,7 @@ kmp_prepare(const struct bfdev_alloc *alloc, const void *pattern,
         memcpy(kctx->pattern, pattern, len);
     else for (index = 0; index < len; ++index)
         kctx->pattern[index] = toupper(((char *)pattern)[index]);
-    compute_prefix(kctx);
+    kmp_compute_prefix(kctx);
 
     return &kctx->tsc;
 }

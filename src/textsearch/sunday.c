@@ -62,10 +62,12 @@ sunday_find(struct bfdev_ts_context *tsc, struct bfdev_ts_state *tss)
 
         consumed += length;
     }
+
+    #undef find_pattern
 }
 
 static inline void
-compute_prefix(struct sunday_context *sctx, unsigned int flags)
+sunday_compute_prefix(struct sunday_context *sctx, unsigned int flags)
 {
     unsigned int index;
 
@@ -99,7 +101,7 @@ sunday_prepare(const struct bfdev_alloc *alloc, const void *pattern,
         memcpy(sctx->pattern, pattern, len);
     else for (index = 0; index < len; ++index)
         sctx->pattern[index] = toupper(((char *)pattern)[index]);
-    compute_prefix(sctx, flags);
+    sunday_compute_prefix(sctx, flags);
 
     return &sctx->tsc;
 }

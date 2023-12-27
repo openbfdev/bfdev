@@ -9,14 +9,14 @@
 #include <bfdev/cache.h>
 #include <export.h>
 
-static BFDEV_LIST_HEAD(algorithms);
+static BFDEV_LIST_HEAD(cache_algorithms);
 
 static struct bfdev_cache_algo *
-algorithm_find(const char *name)
+cache_algorithm_find(const char *name)
 {
     struct bfdev_cache_algo *algo;
 
-    bfdev_list_for_each_entry(algo, &algorithms, list) {
+    bfdev_list_for_each_entry(algo, &cache_algorithms, list) {
         if (!strcmp(algo->name, name))
             return algo;
     }
@@ -272,7 +272,7 @@ bfdev_cache_create(const char *name, const struct bfdev_alloc *alloc,
     if (bfdev_unlikely(size < 2))
         return NULL;
 
-    algo = algorithm_find(name);
+    algo = cache_algorithm_find(name);
     if (bfdev_unlikely(!algo))
         return NULL;
 
@@ -328,17 +328,17 @@ bfdev_cache_register(struct bfdev_cache_algo *algo)
           algo->get && algo->put))
         return -BFDEV_EINVAL;
 
-    if (algorithm_find(algo->name))
+    if (cache_algorithm_find(algo->name))
         return -BFDEV_EALREADY;
 
-    bfdev_list_add(&algorithms, &algo->list);
+    bfdev_list_add(&cache_algorithms, &algo->list);
     return -BFDEV_ENOERR;
 }
 
 export void
 bfdev_cache_unregister(struct bfdev_cache_algo *algo)
 {
-    if (algorithm_find(algo->name))
+    if (cache_algorithm_find(algo->name))
         return;
 
     bfdev_list_del(&algo->list);
