@@ -4,7 +4,7 @@
  */
 
 #define MODULE_NAME "bfdev-respool"
-#define pr_fmt(fmt) MODULE_NAME ": " fmt
+#define bfdev_log_fmt(fmt) MODULE_NAME ": " fmt
 
 #include <base.h>
 #include <bfdev/respool.h>
