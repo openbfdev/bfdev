@@ -25,7 +25,8 @@ typedef uint16_t __bfdev_bitwise bfdev_be16;
 typedef uint32_t __bfdev_bitwise bfdev_be32;
 typedef uint64_t __bfdev_bitwise bfdev_be64;
 
-typedef long bfdev_atomic_t;
+typedef int bfdev_state_t;
+typedef intptr_t bfdev_atomic_t;
 
 #define BFDEV_BYTES_PER_CHAR        sizeof(char)
 #define BFDEV_BYTES_PER_SHORT       sizeof(short)

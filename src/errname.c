@@ -133,7 +133,7 @@ static long
 errname_search(const void *key, void *pdata)
 {
     const struct bfdev_errname *entry = key;
-    return entry->errnum - (long)pdata;
+    return entry->errnum - (intptr_t)pdata;
 }
 
 export struct bfdev_errname *

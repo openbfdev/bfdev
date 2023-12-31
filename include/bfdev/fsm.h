@@ -125,4 +125,4 @@ bfdev_fsm_handle(struct bfdev_fsm *fsm, struct bfdev_fsm_event *event);
 
 BFDEV_END_DECLS
 
-#endif /* _BFDEV_FSM_H */
+#endif /* _BFDEV_FSM_H_ */
