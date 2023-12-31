@@ -12,9 +12,11 @@ BFDEV_BEGIN_DECLS
 
 #if __SIZEOF_POINTER__ == 4
 # define BFDEV_BITS_PER_LONG 32
-#else /* __SIZEOF_POINTER__ == 8 */
+#elif __SIZEOF_POINTER__ == 8
 # define BFDEV_BITS_PER_LONG 64
-#endif /* __SIZEOF_POINTER__ == 8 */
+#else
+# error "Unknown type length"
+#endif
 
 #define bfdev_const_small_nbits(nbits) ( \
     __builtin_constant_p(nbits) && (nbits) <= \
