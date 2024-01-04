@@ -15,6 +15,9 @@
 #define TEST_SIZE 40
 #define TEST_LOOP 3
 
+#define MUL_MASK(value) \
+    ((value) & BFDEV_BIT_LOW_MASK((BFDEV_BITS_PER_LONG - 1) >> 1))
+
 #define GENERIC_MATRIX_BENCHMARK(func, name)    \
 for (count = 0; count < TEST_LOOP; ++count) {   \
     EXAMPLE_TIME_LOOP(&loop, 1000,              \
@@ -44,8 +47,8 @@ int main(int argc, char const *argv[])
 
     srand(time(NULL));
     for (count = 0; count < TEST_SIZE * TEST_SIZE; ++count) {
-        vara->values[count] = (uint16_t)rand();
-        varb->values[count] = (uint16_t)rand();
+        vara->values[count] = MUL_MASK((unsigned int)rand());
+        varb->values[count] = MUL_MASK((unsigned int)rand());
     }
 
     GENERIC_MATRIX_BENCHMARK(bfdev_matrix_add, "adding")
