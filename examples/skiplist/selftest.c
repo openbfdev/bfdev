@@ -12,7 +12,7 @@
 #define TEST_LEVEL 32
 
 struct test_node {
-    struct bfdev_skip_head *head;
+    bfdev_skip_head_t *head;
     uintptr_t values[TEST_LOOP];
 };
 
