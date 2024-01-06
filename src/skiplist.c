@@ -8,7 +8,7 @@
 #include <export.h>
 
 static unsigned int
-random_level(struct bfdev_skip_head *head)
+random_level(bfdev_skip_head_t *head)
 {
     unsigned int level = 1;
 
@@ -21,13 +21,13 @@ random_level(struct bfdev_skip_head *head)
     return level;
 }
 
-static struct bfdev_skip_node *
-skipnode_find(struct bfdev_skip_head *head, bfdev_find_t find,
+static bfdev_skip_node_t *
+skipnode_find(bfdev_skip_head_t *head, bfdev_find_t find,
               void *pdata, unsigned int *plev)
 {
     unsigned int level = head->curr;
     struct bfdev_list_head *list, *end;
-    struct bfdev_skip_node *walk;
+    bfdev_skip_node_t *walk;
     long retval;
 
     if (bfdev_unlikely(!level))
@@ -38,7 +38,7 @@ skipnode_find(struct bfdev_skip_head *head, bfdev_find_t find,
 
     for (; level--; --list, --end) {
         bfdev_list_for_each_continue(list, end) {
-            walk = bfdev_list_entry(list, struct bfdev_skip_node, list[level]);
+            walk = bfdev_list_entry(list, bfdev_skip_node_t, list[level]);
             retval = find(walk->key, pdata);
             if (retval >= 0) {
                 end = list;
@@ -59,12 +59,12 @@ skipnode_find(struct bfdev_skip_head *head, bfdev_find_t find,
 }
 
 export int
-bfdev_skiplist_insert(struct bfdev_skip_head *head, void *key,
+bfdev_skiplist_insert(bfdev_skip_head_t *head, void *key,
                       bfdev_cmp_t cmp, void *pdata)
 {
     const struct bfdev_alloc *alloc = head->alloc;
     struct bfdev_list_head *list, *end;
-    struct bfdev_skip_node *walk, *node;
+    bfdev_skip_node_t *walk, *node;
     unsigned int level, count;
     long retval;
 
@@ -81,7 +81,7 @@ bfdev_skiplist_insert(struct bfdev_skip_head *head, void *key,
 
     for (count = head->curr; count--; --list, --end) {
         bfdev_list_for_each_continue(list, end) {
-            walk = bfdev_list_entry(list, struct bfdev_skip_node, list[count]);
+            walk = bfdev_list_entry(list, bfdev_skip_node_t, list[count]);
             retval = cmp(walk->key, key, pdata);
             if (retval >= 0) {
                 end = list;
@@ -98,11 +98,11 @@ bfdev_skiplist_insert(struct bfdev_skip_head *head, void *key,
 }
 
 export void
-bfdev_skiplist_delete(struct bfdev_skip_head *head,
+bfdev_skiplist_delete(bfdev_skip_head_t *head,
                       bfdev_find_t find, void *pdata)
 {
     const struct bfdev_alloc *alloc = head->alloc;
-    struct bfdev_skip_node *node;
+    bfdev_skip_node_t *node;
     unsigned int level;
 
     node = skipnode_find(head, find, pdata, &level);
@@ -118,21 +118,21 @@ bfdev_skiplist_delete(struct bfdev_skip_head *head,
     bfdev_free(alloc, node);
 }
 
-export struct bfdev_skip_node *
-bfdev_skiplist_find(struct bfdev_skip_head *head,
+export bfdev_skip_node_t *
+bfdev_skiplist_find(bfdev_skip_head_t *head,
                     bfdev_find_t find, void *pdata)
 {
-    struct bfdev_skip_node *node;
+    bfdev_skip_node_t *node;
     node = skipnode_find(head, find, pdata, NULL);
     return node;
 }
 
 static void
-bfdev_skiplist_release(struct bfdev_skip_head *head,
+bfdev_skiplist_release(bfdev_skip_head_t *head,
                        bfdev_release_t relse)
 {
     const struct bfdev_alloc *alloc = head->alloc;
-    struct bfdev_skip_node *node, *tmp;
+    bfdev_skip_node_t *node, *tmp;
 
     bfdev_list_for_each_entry_safe(node, tmp, head->nodes, list[0]) {
         if (relse)
@@ -142,7 +142,7 @@ bfdev_skiplist_release(struct bfdev_skip_head *head,
 }
 
 export void
-bfdev_skiplist_reset(struct bfdev_skip_head *head,
+bfdev_skiplist_reset(bfdev_skip_head_t *head,
                      bfdev_release_t relse)
 {
     unsigned int count;
@@ -155,7 +155,7 @@ bfdev_skiplist_reset(struct bfdev_skip_head *head,
 }
 
 export void
-bfdev_skiplist_destroy(struct bfdev_skip_head *head,
+bfdev_skiplist_destroy(bfdev_skip_head_t *head,
                        bfdev_release_t relse)
 {
     const struct bfdev_alloc *alloc = head->alloc;
@@ -164,11 +164,11 @@ bfdev_skiplist_destroy(struct bfdev_skip_head *head,
     bfdev_free(alloc, head);
 }
 
-export struct bfdev_skip_head *
+export bfdev_skip_head_t *
 bfdev_skiplist_create(const struct bfdev_alloc *alloc,
                       unsigned int levels)
 {
-    struct bfdev_skip_head *head;
+    bfdev_skip_head_t *head;
     unsigned int count;
 
     if (bfdev_unlikely(!levels))

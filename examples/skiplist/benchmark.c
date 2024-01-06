@@ -45,8 +45,8 @@ test_find(const void *node, void *pdata)
 
 int main(int argc, const char *argv[])
 {
-    struct bfdev_skip_head *head;
-    struct bfdev_skip_node *node;
+    bfdev_skip_head_t *head;
+    bfdev_skip_node_t *node;
     uintptr_t value, *record;
     unsigned int count;
     int retval;
