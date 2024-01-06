@@ -8,16 +8,16 @@
 #include <export.h>
 
 static inline void
-fsm_push_state(struct bfdev_fsm *fsm, const struct bfdev_fsm_state *state)
+fsm_push_state(bfdev_fsm_t *fsm, const bfdev_fsm_state_t *state)
 {
     unsigned int count = ++fsm->count;
     fsm->state[count & (BFDEV_ARRAY_SIZE(fsm->state) - 1)] = state;
 }
 
-static const struct bfdev_fsm_transition *
-fsm_find_transition(const struct bfdev_fsm_state *state, struct bfdev_fsm_event *event)
+static const bfdev_fsm_transition_t *
+fsm_find_transition(const bfdev_fsm_state_t *state, bfdev_fsm_event_t *event)
 {
-    const struct bfdev_fsm_transition *find;
+    const bfdev_fsm_transition_t *find;
     unsigned int count;
 
     for (count = 0; count < state->tnum; ++count) {
@@ -40,9 +40,9 @@ fsm_find_transition(const struct bfdev_fsm_state *state, struct bfdev_fsm_event 
 }
 
 export int
-bfdev_fsm_error(struct bfdev_fsm *fsm, struct bfdev_fsm_event *event)
+bfdev_fsm_error(bfdev_fsm_t *fsm, bfdev_fsm_event_t *event)
 {
-    const struct bfdev_fsm_state *error = fsm->error;
+    const bfdev_fsm_state_t *error = fsm->error;
     int retval = 0;
 
     fsm_push_state(fsm, error);
@@ -53,17 +53,17 @@ bfdev_fsm_error(struct bfdev_fsm *fsm, struct bfdev_fsm_event *event)
 }
 
 export int
-bfdev_fsm_handle(struct bfdev_fsm *fsm, struct bfdev_fsm_event *event)
+bfdev_fsm_handle(bfdev_fsm_t *fsm, bfdev_fsm_event_t *event)
 {
-    const struct bfdev_fsm_state *curr = bfdev_fsm_curr(fsm);
-    const struct bfdev_fsm_state *next;
+    const bfdev_fsm_state_t *curr = bfdev_fsm_curr(fsm);
+    const bfdev_fsm_state_t *next;
 
     if (bfdev_unlikely(!curr))
         return -BFDEV_EINVAL;
 
     for (next = curr; next; curr = next) {
-        const struct bfdev_fsm_transition *tran;
-        const struct bfdev_fsm_state **pstate;
+        const bfdev_fsm_transition_t *tran;
+        const bfdev_fsm_state_t **pstate;
         int retval;
 
         /*
