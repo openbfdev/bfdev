@@ -7,7 +7,7 @@
 #include <bfdev/textsearch.h>
 
 struct bm_context {
-    struct bfdev_ts_context tsc;
+    bfdev_ts_context_t tsc;
     uint8_t *pattern;
     unsigned int pattern_len;
     unsigned int bad_shift[UINT8_MAX];
@@ -18,21 +18,21 @@ struct bm_context {
     bfdev_container_of(ptr, struct bm_context, tsc)
 
 static const void *
-bm_pattern_get(struct bfdev_ts_context *tsc)
+bm_pattern_get(bfdev_ts_context_t *tsc)
 {
     struct bm_context *bctx = ts_to_bm(tsc);
     return bctx->pattern;
 }
 
 static unsigned int
-bm_pattern_len(struct bfdev_ts_context *tsc)
+bm_pattern_len(bfdev_ts_context_t *tsc)
 {
     struct bm_context *bctx = ts_to_bm(tsc);
     return bctx->pattern_len;
 }
 
 static unsigned int
-bm_find(struct bfdev_ts_context *tsc, struct bfdev_ts_state *tss)
+bm_find(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss)
 {
     #define find_pattern() (icase ? toupper(text[shift - index]) : text[shift - index])
     bool icase = bfdev_ts_test_igcase(tsc);
@@ -111,7 +111,7 @@ bm_compute_prefix(struct bm_context *bctx, unsigned long flags)
     }
 }
 
-static struct bfdev_ts_context *
+static bfdev_ts_context_t *
 bm_prepare(const struct bfdev_alloc *alloc, const void *pattern,
            size_t len, unsigned long flags)
 {
@@ -137,13 +137,13 @@ bm_prepare(const struct bfdev_alloc *alloc, const void *pattern,
 }
 
 static void
-bm_destroy(struct bfdev_ts_context *tsc)
+bm_destroy(bfdev_ts_context_t *tsc)
 {
     struct bm_context *bctx = ts_to_bm(tsc);
     bfdev_free(tsc->alloc, bctx);
 }
 
-static struct bfdev_ts_algorithm
+static bfdev_ts_algorithm_t
 bm_algorithm = {
     .name = "bm",
     .find = bm_find,
