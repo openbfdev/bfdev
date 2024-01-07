@@ -13,10 +13,12 @@
 
 BFDEV_BEGIN_DECLS
 
+typedef struct bfdev_action bfdev_action_t;
+
 typedef int
 (*bfdev_action_func_t)(void *data);
 
-struct bfdev_action {
+struct  bfdev_action {
     bfdev_action_func_t func;
     const void *data;
 };
@@ -26,10 +28,10 @@ struct bfdev_action {
 }
 
 #define BFDEV_ACTION_INIT(func, data) \
-    (struct bfdev_action) BFDEV_ACTION_STATIC(func, data)
+    (bfdev_action_t) BFDEV_ACTION_STATIC(func, data)
 
 #define BFDEV_DEFINE_ACTION(name, func, data) \
-    struct bfdev_action name = BFDEV_ACTION_INIT(func, data)
+    bfdev_action_t name = BFDEV_ACTION_INIT(func, data)
 
 /**
  * bfdev_action_init - initialize action.
@@ -38,7 +40,7 @@ struct bfdev_action {
  * @data: callback data of @func.
  */
 static inline void
-bfdev_action_init(struct bfdev_action *action,
+bfdev_action_init(bfdev_action_t *action,
                   bfdev_action_func_t func, const void *data)
 {
     *action = BFDEV_ACTION_INIT(func, data);
@@ -50,7 +52,7 @@ bfdev_action_init(struct bfdev_action *action,
  * @data: the data to update.
  */
 static inline void
-bfdev_action_update(struct bfdev_action *action, const void *data)
+bfdev_action_update(bfdev_action_t *action, const void *data)
 {
     action->data = data;
 }
@@ -60,7 +62,7 @@ bfdev_action_update(struct bfdev_action *action, const void *data)
  * @action: the action pointer.
  */
 static inline void
-bfdev_action_clear(struct bfdev_action *action)
+bfdev_action_clear(bfdev_action_t *action)
 {
     action->func = NULL;
 }
@@ -70,7 +72,7 @@ bfdev_action_clear(struct bfdev_action *action)
  * @action: the action pointer.
  */
 static inline int
-bfdev_action_call(struct bfdev_action *action)
+bfdev_action_call(bfdev_action_t *action)
 {
     if (bfdev_likely(action->func))
         return action->func((void *)action->data);
