@@ -10,7 +10,7 @@
 #include <export.h>
 
 static int
-array_resize(struct bfdev_array *array, unsigned long count)
+array_resize(bfdev_array_t *array, unsigned long count)
 {
     const struct bfdev_alloc *alloc = array->alloc;
     unsigned long nalloc;
@@ -31,7 +31,7 @@ array_resize(struct bfdev_array *array, unsigned long count)
 }
 
 static int
-array_apply(struct bfdev_array *array, unsigned long count)
+array_apply(bfdev_array_t *array, unsigned long count)
 {
     if (count > array->capacity)
         return array_resize(array, count);
@@ -39,7 +39,7 @@ array_apply(struct bfdev_array *array, unsigned long count)
 }
 
 export void *
-bfdev_array_push(struct bfdev_array *array, unsigned long num)
+bfdev_array_push(bfdev_array_t *array, unsigned long num)
 {
     unsigned long index, count;
     uintptr_t offset;
@@ -62,7 +62,7 @@ bfdev_array_push(struct bfdev_array *array, unsigned long num)
 }
 
 export void *
-bfdev_array_pop(struct bfdev_array *array, unsigned long num)
+bfdev_array_pop(bfdev_array_t *array, unsigned long num)
 {
     unsigned long index;
     uintptr_t offset;
@@ -79,7 +79,7 @@ bfdev_array_pop(struct bfdev_array *array, unsigned long num)
 }
 
 export int
-bfdev_array_reserve(struct bfdev_array *array, unsigned long num)
+bfdev_array_reserve(bfdev_array_t *array, unsigned long num)
 {
     unsigned long count;
     bool overflow;
@@ -92,7 +92,7 @@ bfdev_array_reserve(struct bfdev_array *array, unsigned long num)
 }
 
 export void
-bfdev_array_release(struct bfdev_array *array)
+bfdev_array_release(bfdev_array_t *array)
 {
     const struct bfdev_alloc *alloc = array->alloc;
 

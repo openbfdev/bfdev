@@ -72,7 +72,7 @@ struct bfdev_fsm_state {
 struct bfdev_fsm {
     const bfdev_fsm_state_t *state[2];
     const bfdev_fsm_state_t *error;
-    struct bfdev_array stack;
+    bfdev_array_t stack;
     unsigned int count;
 };
 
