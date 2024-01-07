@@ -34,13 +34,13 @@ bfdev_bcd2bin_table[256];
 extern const uint8_t
 bfdev_bin2bcd_table[256];
 
-static __bfdev_attribute_const inline
+static __bfdev_attribute_const __bfdev_always_inline
 uint8_t bfdev_bcd2bin_dynamic(uint8_t bcd)
 {
     return bfdev_bcd2bin_table[bcd];
 }
 
-static inline __bfdev_attribute_const
+static __bfdev_attribute_const __bfdev_always_inline
 uint8_t bfdev_bin2bcd_dynamic(uint8_t bin)
 {
     return bfdev_bin2bcd_table[bin];
