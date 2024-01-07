@@ -39,7 +39,8 @@ bfdev_list_sort(struct bfdev_list_head *head,
 
 #ifdef BFDEV_DEBUG_LIST
 extern bool
-bfdev_list_check_add(struct bfdev_list_head *prev, struct bfdev_list_head *next, struct bfdev_list_head *node);
+bfdev_list_check_add(struct bfdev_list_head *prev, struct bfdev_list_head *next,
+                     struct bfdev_list_head *node);
 
 extern bool
 bfdev_list_check_del(struct bfdev_list_head *node);
