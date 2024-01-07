@@ -12,8 +12,8 @@
 #include <export.h>
 
 static long
-notifier_chain_cmp(const struct bfdev_ilist_node *node1,
-                   const struct bfdev_ilist_node *node2, void *pdata)
+notifier_chain_cmp(const bfdev_ilist_node_t *node1,
+                   const bfdev_ilist_node_t *node2, void *pdata)
 {
     struct bfdev_notifier_node *nnode1, *nnode2;
 

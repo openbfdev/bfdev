@@ -36,7 +36,7 @@ enum bfdev_notifier_ret {
  * @pdata: private data of notification chain node.
  */
 struct bfdev_notifier_node {
-    struct bfdev_ilist_node list;
+    bfdev_ilist_node_t list;
     bfdev_notifier_entry_t entry;
     int priority;
     void *pdata;
@@ -48,7 +48,7 @@ struct bfdev_notifier_node {
  * @name: name of notification chain.
  */
 struct bfdev_notifier_head {
-    struct bfdev_ilist_head node;
+    bfdev_ilist_head_t node;
     const char *name;
 };
 
