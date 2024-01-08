@@ -11,7 +11,7 @@
 #define TEST_LOOP 100
 
 struct rbtree_test_node {
-    struct bfdev_rb_node node;
+    bfdev_rb_node_t node;
     unsigned long data;
 };
 
@@ -26,7 +26,7 @@ struct rbtree_test_pdata {
     bfdev_rb_entry_safe(ptr, struct rbtree_test_node, node)
 
 static long
-rbtest_rb_cmp(const struct bfdev_rb_node *rba, const struct bfdev_rb_node *rbb, void *pdata)
+rbtest_rb_cmp(const bfdev_rb_node_t *rba, const bfdev_rb_node_t *rbb, void *pdata)
 {
     struct rbtree_test_node *node1, *node2;
 
@@ -40,7 +40,7 @@ rbtest_rb_cmp(const struct bfdev_rb_node *rba, const struct bfdev_rb_node *rbb, 
 }
 
 static long
-rbtest_rb_find(const struct bfdev_rb_node *rb, void *key)
+rbtest_rb_find(const bfdev_rb_node_t *rb, void *key)
 {
     struct rbtree_test_node *node;
 
@@ -55,7 +55,7 @@ static int
 rbtree_testing(struct rbtree_test_pdata *sdata)
 {
     struct rbtree_test_node *node, *nnode, *tnode;
-    struct bfdev_rb_node *rbnode, *nrbnode, *trbnode;
+    bfdev_rb_node_t *rbnode, *nrbnode, *trbnode;
     unsigned long count;
 
     BFDEV_RB_ROOT_CACHED(test_root);

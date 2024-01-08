@@ -16,8 +16,8 @@
  * @newn: new node to insert.
  */
 static __bfdev_always_inline void
-child_change(struct bfdev_rb_root *root, struct bfdev_rb_node *parent,
-             struct bfdev_rb_node *oldn, struct bfdev_rb_node *newn)
+child_change(bfdev_rb_root_t *root, bfdev_rb_node_t *parent,
+             bfdev_rb_node_t *oldn, bfdev_rb_node_t *newn)
 {
     if (!parent)
         root->node = newn;
@@ -38,11 +38,11 @@ child_change(struct bfdev_rb_root *root, struct bfdev_rb_node *parent,
  * @callbacks: augmented callback function.
  */
 static __bfdev_always_inline void
-rotate_set(struct bfdev_rb_root *root, struct bfdev_rb_node *node, struct bfdev_rb_node *newn,
-           struct bfdev_rb_node *child, unsigned int color, unsigned int ccolor,
+rotate_set(bfdev_rb_root_t *root, bfdev_rb_node_t *node, bfdev_rb_node_t *newn,
+           bfdev_rb_node_t *child, unsigned int color, unsigned int ccolor,
            const struct bfdev_rb_callbacks *callbacks)
 {
-    struct bfdev_rb_node *parent = node->parent;
+    bfdev_rb_node_t *parent = node->parent;
 
     newn->parent = node->parent;
     node->parent = newn;
@@ -70,12 +70,12 @@ rotate_set(struct bfdev_rb_root *root, struct bfdev_rb_node *node, struct bfdev_
  * @ccolor: color of child.
  * @callbacks: augmented callback function.
  */
-static __bfdev_always_inline struct bfdev_rb_node *
-left_rotate(struct bfdev_rb_root *root, struct bfdev_rb_node *node,
+static __bfdev_always_inline bfdev_rb_node_t *
+left_rotate(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
             unsigned int color, unsigned int ccolor,
             const struct bfdev_rb_callbacks *callbacks)
 {
-    struct bfdev_rb_node *child, *successor = node->right;
+    bfdev_rb_node_t *child, *successor = node->right;
 
     /* change left child */
     child = node->right = successor->left;
@@ -93,12 +93,12 @@ left_rotate(struct bfdev_rb_root *root, struct bfdev_rb_node *node,
  * @ccolor: color of child.
  * @callbacks: augmented callback function.
  */
-static __bfdev_always_inline struct bfdev_rb_node *
-right_rotate(struct bfdev_rb_root *root, struct bfdev_rb_node *node,
+static __bfdev_always_inline bfdev_rb_node_t *
+right_rotate(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
              unsigned int color, unsigned int ccolor,
              const struct bfdev_rb_callbacks *callbacks)
 {
-    struct bfdev_rb_node *child, *successor = node->left;
+    bfdev_rb_node_t *child, *successor = node->left;
 
     /* change right child */
     child = node->left = successor->right;
@@ -109,10 +109,10 @@ right_rotate(struct bfdev_rb_root *root, struct bfdev_rb_node *node,
 }
 
 export void
-bfdev_rb_fixup_augmented(struct bfdev_rb_root *root, struct bfdev_rb_node *node,
+bfdev_rb_fixup_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
                          const struct bfdev_rb_callbacks *callbacks)
 {
-    struct bfdev_rb_node *parent, *gparent, *tmp;
+    bfdev_rb_node_t *parent, *gparent, *tmp;
 
     while (root && node) {
         parent = node->parent;
@@ -219,10 +219,10 @@ bfdev_rb_fixup_augmented(struct bfdev_rb_root *root, struct bfdev_rb_node *node,
 }
 
 export void
-bfdev_rb_erase_augmented(struct bfdev_rb_root *root, struct bfdev_rb_node *parent,
+bfdev_rb_erase_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *parent,
                          const struct bfdev_rb_callbacks *callbacks)
 {
-    struct bfdev_rb_node *tmp1, *tmp2, *sibling, *node = NULL;
+    bfdev_rb_node_t *tmp1, *tmp2, *sibling, *node = NULL;
 
     while (root && parent) {
         /*
@@ -367,13 +367,13 @@ bfdev_rb_erase_augmented(struct bfdev_rb_root *root, struct bfdev_rb_node *paren
     }
 }
 
-export struct bfdev_rb_node *
-bfdev_rb_remove_augmented(struct bfdev_rb_root *root, struct bfdev_rb_node *node,
+export bfdev_rb_node_t *
+bfdev_rb_remove_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
                           const struct bfdev_rb_callbacks *callbacks)
 {
-    struct bfdev_rb_node *parent = node->parent, *rebalance = NULL;
-    struct bfdev_rb_node *child1 = node->left;
-    struct bfdev_rb_node *child2 = node->right;
+    bfdev_rb_node_t *parent = node->parent, *rebalance = NULL;
+    bfdev_rb_node_t *child1 = node->left;
+    bfdev_rb_node_t *child2 = node->right;
 
     if (!child1 && !child2) {
         /*
@@ -418,7 +418,7 @@ bfdev_rb_remove_augmented(struct bfdev_rb_root *root, struct bfdev_rb_node *node
         child2->parent = node->parent;
         child_change(root, parent, node, child2);
     } else { /* child1 && child2 */
-        struct bfdev_rb_node *tmp, *successor = child2;
+        bfdev_rb_node_t *tmp, *successor = child2;
 
         child1 = child2->left;
         if (!child1) {
@@ -495,28 +495,28 @@ static const struct bfdev_rb_callbacks dummy_callbacks = {
 };
 
 export void
-bfdev_rb_fixup(struct bfdev_rb_root *root, struct bfdev_rb_node *node)
+bfdev_rb_fixup(bfdev_rb_root_t *root, bfdev_rb_node_t *node)
 {
     bfdev_rb_fixup_augmented(root, node, &dummy_callbacks);
 }
 
 export void
-bfdev_rb_erase(struct bfdev_rb_root *root, struct bfdev_rb_node *parent)
+bfdev_rb_erase(bfdev_rb_root_t *root, bfdev_rb_node_t *parent)
 {
     bfdev_rb_erase_augmented(root, parent, &dummy_callbacks);
 }
 
-export struct bfdev_rb_node *
-bfdev_rb_remove(struct bfdev_rb_root *root, struct bfdev_rb_node *node)
+export bfdev_rb_node_t *
+bfdev_rb_remove(bfdev_rb_root_t *root, bfdev_rb_node_t *node)
 {
     return bfdev_rb_remove_augmented(root, node, &dummy_callbacks);
 }
 
 export void
-bfdev_rb_replace(struct bfdev_rb_root *root, struct bfdev_rb_node *oldn,
-                 struct bfdev_rb_node *newn)
+bfdev_rb_replace(bfdev_rb_root_t *root, bfdev_rb_node_t *oldn,
+                 bfdev_rb_node_t *newn)
 {
-    struct bfdev_rb_node *parent = oldn->parent;
+    bfdev_rb_node_t *parent = oldn->parent;
 
     *newn = *oldn;
 
@@ -528,11 +528,11 @@ bfdev_rb_replace(struct bfdev_rb_root *root, struct bfdev_rb_node *oldn,
     child_change(root, parent, oldn, newn);
 }
 
-export struct bfdev_rb_node *
-bfdev_rb_find(const struct bfdev_rb_root *root, void *key,
+export bfdev_rb_node_t *
+bfdev_rb_find(const bfdev_rb_root_t *root, void *key,
               bfdev_rb_find_t cmp)
 {
-    struct bfdev_rb_node *node = root->node;
+    bfdev_rb_node_t *node = root->node;
     long retval;
 
     while (node) {
@@ -550,9 +550,9 @@ bfdev_rb_find(const struct bfdev_rb_root *root, void *key,
     return NULL;
 }
 
-export struct bfdev_rb_node *
-bfdev_rb_find_last(struct bfdev_rb_root *root, void *key, bfdev_rb_find_t cmp,
-                   struct bfdev_rb_node **parentp, struct bfdev_rb_node ***linkp)
+export bfdev_rb_node_t *
+bfdev_rb_find_last(bfdev_rb_root_t *root, void *key, bfdev_rb_find_t cmp,
+                   bfdev_rb_node_t **parentp, bfdev_rb_node_t ***linkp)
 {
     long retval;
 
@@ -577,12 +577,12 @@ bfdev_rb_find_last(struct bfdev_rb_root *root, void *key, bfdev_rb_find_t cmp,
     return NULL;
 }
 
-export struct bfdev_rb_node **
-bfdev_rb_parent(struct bfdev_rb_root *root, struct bfdev_rb_node **parentp,
-                struct bfdev_rb_node *node, bfdev_rb_cmp_t cmp, void *pdata,
+export bfdev_rb_node_t **
+bfdev_rb_parent(bfdev_rb_root_t *root, bfdev_rb_node_t **parentp,
+                bfdev_rb_node_t *node, bfdev_rb_cmp_t cmp, void *pdata,
                 bool *leftmost)
 {
-    struct bfdev_rb_node **link;
+    bfdev_rb_node_t **link;
     bool leftmost_none;
     long retval;
 
@@ -608,12 +608,12 @@ bfdev_rb_parent(struct bfdev_rb_root *root, struct bfdev_rb_node **parentp,
     return link;
 }
 
-export struct bfdev_rb_node **
-bfdev_rb_parent_conflict(struct bfdev_rb_root *root, struct bfdev_rb_node **parentp,
-                         struct bfdev_rb_node *node, bfdev_rb_cmp_t cmp, void *pdata,
+export bfdev_rb_node_t **
+bfdev_rb_parent_conflict(bfdev_rb_root_t *root, bfdev_rb_node_t **parentp,
+                         bfdev_rb_node_t *node, bfdev_rb_cmp_t cmp, void *pdata,
                          bool *leftmost)
 {
-    struct bfdev_rb_node **link;
+    bfdev_rb_node_t **link;
     bool leftmost_none;
     long retval;
 
@@ -642,23 +642,23 @@ bfdev_rb_parent_conflict(struct bfdev_rb_root *root, struct bfdev_rb_node **pare
 
 BFDEV_TITER_BASE_DEFINE(
     export, bfdev_rb,
-    struct bfdev_rb_node, left, right
+    bfdev_rb_node_t, left, right
 )
 
 BFDEV_TITER_INORDER_DEFINE(
     export, bfdev_rb, bfdev_rb,
-    struct bfdev_rb_root, node,
-    struct bfdev_rb_node, parent, left, right
+    bfdev_rb_root_t, node,
+    bfdev_rb_node_t, parent, left, right
 )
 
 BFDEV_TITER_PREORDER_DEFINE(
     export, bfdev_rb_pre, bfdev_rb,
-    struct bfdev_rb_root, node,
-    struct bfdev_rb_node, parent, left, right
+    bfdev_rb_root_t, node,
+    bfdev_rb_node_t, parent, left, right
 )
 
 BFDEV_TITER_POSTORDER_DEFINE(
     export, bfdev_rb_post, bfdev_rb,
-    struct bfdev_rb_root, node,
-    struct bfdev_rb_node, parent, left, right
+    bfdev_rb_root_t, node,
+    bfdev_rb_node_t, parent, left, right
 )
