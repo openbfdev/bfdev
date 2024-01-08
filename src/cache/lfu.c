@@ -9,12 +9,12 @@
 
 struct lfu_head {
     struct bfdev_cache_head cache;
-    struct bfdev_heap_root lfu;
+    bfdev_heap_root_t lfu;
 };
 
 struct lfu_node {
     struct bfdev_cache_node cache;
-    struct bfdev_heap_node node;
+    bfdev_heap_node_t node;
     unsigned long count;
 };
 
@@ -28,8 +28,8 @@ struct lfu_node {
     bfdev_heap_entry(ptr, struct lfu_node, node)
 
 static long
-lfu_compare(const struct bfdev_heap_node *node1,
-            const struct bfdev_heap_node *node2, void *pdata)
+lfu_compare(const bfdev_heap_node_t *node1,
+            const bfdev_heap_node_t *node2, void *pdata)
 {
     struct lfu_node *lfu1, *lfu2;
 
