@@ -22,13 +22,13 @@ typedef long (*bfdev_respool_find_t)
 
 struct bfdev_resnode {
     const char *name;
-    struct bfdev_list_head list;
+    bfdev_list_head_t list;
     bfdev_respool_release_t release;
 };
 
 struct bfdev_respool {
     const char *name;
-    struct bfdev_list_head node;
+    bfdev_list_head_t node;
 };
 
 #define BFDEV_RESPOOL_STATIC(name) {                \

@@ -64,7 +64,7 @@ struct bfdev_ts_context {
  * @pattern_len: return length of pattern.
  */
 struct bfdev_ts_algorithm {
-    struct bfdev_list_head list;
+    bfdev_list_head_t list;
     const char *name;
 
     bfdev_ts_context_t *(*prepare)(const struct bfdev_alloc *alloc, const void *pattern,

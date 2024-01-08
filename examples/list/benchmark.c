@@ -17,7 +17,7 @@
 static BFDEV_LIST_HEAD(demo_list);
 
 struct benchmark {
-    struct bfdev_list_head list;
+    bfdev_list_head_t list;
     unsigned int num;
     unsigned long data;
 };
@@ -36,8 +36,8 @@ node_dump(struct benchmark *node)
 #endif
 
 static long
-demo_cmp(const struct bfdev_list_head *node1,
-         const struct bfdev_list_head *node2, void *pdata)
+demo_cmp(const bfdev_list_head_t *node1,
+         const bfdev_list_head_t *node2, void *pdata)
 {
     struct benchmark *test1, *test2;
 

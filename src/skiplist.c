@@ -26,7 +26,7 @@ skipnode_find(bfdev_skip_head_t *head, bfdev_find_t find,
               void *pdata, unsigned int *plev)
 {
     unsigned int level = head->curr;
-    struct bfdev_list_head *list, *end;
+    bfdev_list_head_t *list, *end;
     bfdev_skip_node_t *walk;
     long retval;
 
@@ -63,7 +63,7 @@ bfdev_skiplist_insert(bfdev_skip_head_t *head, void *key,
                       bfdev_cmp_t cmp, void *pdata)
 {
     const struct bfdev_alloc *alloc = head->alloc;
-    struct bfdev_list_head *list, *end;
+    bfdev_list_head_t *list, *end;
     bfdev_skip_node_t *walk, *node;
     unsigned int level, count;
     long retval;

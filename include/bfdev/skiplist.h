@@ -19,14 +19,14 @@ typedef struct bfdev_skip_node bfdev_skip_node_t;
 
 struct bfdev_skip_node {
     void *key;
-    struct bfdev_list_head list[0];
+    bfdev_list_head_t list[0];
 };
 
 struct bfdev_skip_head {
     const struct bfdev_alloc *alloc;
     unsigned int curr;
     unsigned int levels;
-    struct bfdev_list_head nodes[0];
+    bfdev_list_head_t nodes[0];
 };
 
 extern int

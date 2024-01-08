@@ -8,12 +8,12 @@
 
 struct lru_head {
     struct bfdev_cache_head cache;
-    struct bfdev_list_head lru;
+    bfdev_list_head_t lru;
 };
 
 struct lru_node {
     struct bfdev_cache_node cache;
-    struct bfdev_list_head node;
+    bfdev_list_head_t node;
 };
 
 #define cache_to_lru_head(ptr) \

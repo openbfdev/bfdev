@@ -44,7 +44,7 @@ enum bfdev_cache_status {
 
 struct bfdev_cache_node {
     struct bfdev_hlist_node hash;
-    struct bfdev_list_head list;
+    bfdev_list_head_t list;
     enum bfdev_cache_status status;
 
     unsigned long index;
@@ -59,9 +59,9 @@ struct bfdev_cache_head {
     struct bfdev_hlist_head *taghash;
     struct bfdev_cache_node **nodes;
 
-    struct bfdev_list_head using;
-    struct bfdev_list_head freed;
-    struct bfdev_list_head changing;
+    bfdev_list_head_t using;
+    bfdev_list_head_t freed;
+    bfdev_list_head_t changing;
 
     /* const settings */
     unsigned long size;
@@ -80,7 +80,7 @@ struct bfdev_cache_head {
 };
 
 struct bfdev_cache_algo {
-    struct bfdev_list_head list;
+    bfdev_list_head_t list;
     const char *name;
 
     bool (*starving)(struct bfdev_cache_head *head);
