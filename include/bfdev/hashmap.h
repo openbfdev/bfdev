@@ -17,6 +17,9 @@ BFDEV_BEGIN_DECLS
 # define BFDEV_HASHMAP_MIN_BITS 4
 #endif
 
+typedef struct bfdev_hashmap bfdev_hashmap_t;
+typedef struct bfdev_hashmap_ops bfdev_hashmap_ops_t;
+
 /**
  * enum bfdev_hashmap_strategy - Hashmap insertion strategy.
  * @HASHMAP_ADD: only add key/value if key doesn't exist yet.
@@ -38,7 +41,7 @@ struct bfdev_hashmap {
     unsigned long used;
 
     const struct bfdev_alloc *alloc;
-    const struct bfdev_hashmap_ops *ops;
+    const bfdev_hashmap_ops_t *ops;
     void *pdata;
 };
 
@@ -48,8 +51,8 @@ struct bfdev_hashmap_ops {
     long (*equal)(const struct bfdev_hlist_node *node1, const struct bfdev_hlist_node *node2, void *pdata);
     long (*find)(const struct bfdev_hlist_node *node, const void *key, void *pdata);
 
-    bool (*extend)(const struct bfdev_hashmap *hashmap, void *pdata);
-    bool (*shrink)(const struct bfdev_hashmap *hashmap, void *pdata);
+    bool (*extend)(const bfdev_hashmap_t *hashmap, void *pdata);
+    bool (*shrink)(const bfdev_hashmap_t *hashmap, void *pdata);
 };
 
 #define BFDEV_HASHMAP_STATIC(ALLOC, OPS, PDATA) { \
@@ -57,10 +60,10 @@ struct bfdev_hashmap_ops {
 }
 
 #define BFDEV_HASHMAP_INIT(alloc, ops, pdata) \
-    (struct bfdev_hashmap) BFDEV_HASHMAP_STATIC(alloc, ops, pdata)
+    (bfdev_hashmap_t) BFDEV_HASHMAP_STATIC(alloc, ops, pdata)
 
 #define BFDEV_DEFINE_HASHMAP(name, alloc, ops, pdata) \
-    struct bfdev_hashmap name = BFDEV_HASHMAP_INIT(alloc, ops, pdata)
+    bfdev_hashmap_t name = BFDEV_HASHMAP_INIT(alloc, ops, pdata)
 
 /**
  * bfdev_hashmap_init() - initialize a hashmap structure.
@@ -70,8 +73,8 @@ struct bfdev_hashmap_ops {
  * @pdata: operations callback data.
  */
 static inline void
-bfdev_hashmap_init(struct bfdev_hashmap *hashmap, const struct bfdev_alloc *alloc,
-                   const struct bfdev_hashmap_ops *ops, void *pdata)
+bfdev_hashmap_init(bfdev_hashmap_t *hashmap, const struct bfdev_alloc *alloc,
+                   const bfdev_hashmap_ops_t *ops, void *pdata)
 {
     *hashmap = BFDEV_HASHMAP_INIT(alloc, ops, pdata);
 }
@@ -84,7 +87,7 @@ bfdev_hashmap_init(struct bfdev_hashmap *hashmap, const struct bfdev_alloc *allo
  * @strategy: insertion strategy.
  */
 extern int
-bfdev_hashmap_insert(struct bfdev_hashmap *hashmap, struct bfdev_hlist_node *node,
+bfdev_hashmap_insert(bfdev_hashmap_t *hashmap, struct bfdev_hlist_node *node,
                      struct bfdev_hlist_node **old, enum bfdev_hashmap_strategy strategy);
 
 /**
@@ -94,7 +97,7 @@ bfdev_hashmap_insert(struct bfdev_hashmap *hashmap, struct bfdev_hlist_node *nod
  * @node: pointer used to return the deleted node.
  */
 extern int
-bfdev_hashmap_del(struct bfdev_hashmap *hashmap, const void *key,
+bfdev_hashmap_del(bfdev_hashmap_t *hashmap, const void *key,
                   struct bfdev_hlist_node **node);
 
 /**
@@ -103,37 +106,37 @@ bfdev_hashmap_del(struct bfdev_hashmap *hashmap, const void *key,
  * @key: key of the node to be find.
  */
 extern struct bfdev_hlist_node *
-bfdev_hashmap_find(struct bfdev_hashmap *hashmap, const void *key);
+bfdev_hashmap_find(bfdev_hashmap_t *hashmap, const void *key);
 
 /**
  * bfdev_hashmap_release() - release hash bucket in hashmap.
  * @hashmap: hashmap structure to be release.
  */
 extern void
-bfdev_hashmap_release(struct bfdev_hashmap *hashmap);
+bfdev_hashmap_release(bfdev_hashmap_t *hashmap);
 
 static __bfdev_always_inline int
-bfdev_hashmap_add(struct bfdev_hashmap *hashmap, struct bfdev_hlist_node *node)
+bfdev_hashmap_add(bfdev_hashmap_t *hashmap, struct bfdev_hlist_node *node)
 {
     return bfdev_hashmap_insert(hashmap, node, NULL, BFDEV_HASHMAP_ADD);
 }
 
 static __bfdev_always_inline int
-bfdev_hashmap_set(struct bfdev_hashmap *hashmap, struct bfdev_hlist_node *node,
+bfdev_hashmap_set(bfdev_hashmap_t *hashmap, struct bfdev_hlist_node *node,
                   struct bfdev_hlist_node **old)
 {
     return bfdev_hashmap_insert(hashmap, node, old, BFDEV_HASHMAP_SET);
 }
 
 static __bfdev_always_inline int
-bfdev_hashmap_update(struct bfdev_hashmap *hashmap, struct bfdev_hlist_node *node,
+bfdev_hashmap_update(bfdev_hashmap_t *hashmap, struct bfdev_hlist_node *node,
                      struct bfdev_hlist_node **old)
 {
     return bfdev_hashmap_insert(hashmap, node, old, BFDEV_HASHMAP_UPDATE);
 }
 
 static __bfdev_always_inline int
-bfdev_hashmap_append(struct bfdev_hashmap *hashmap, struct bfdev_hlist_node *node)
+bfdev_hashmap_append(bfdev_hashmap_t *hashmap, struct bfdev_hlist_node *node)
 {
     return bfdev_hashmap_insert(hashmap, node, NULL, BFDEV_HASHMAP_APPEND);
 }
