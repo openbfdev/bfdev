@@ -55,7 +55,7 @@ BFDEV_CALLBACK_FIND(bfdev_find_t, const void *);
 BFDEV_CALLBACK_CMP(bfdev_cmp_t, const void *);
 BFDEV_CALLBACK_RELEASE(bfdev_release_t);
 
-typedef void *(*bfdev_alloc_t)(size_t size, void *pdata);
+typedef void *(*bfdev_malloc_t)(size_t size, void *pdata);
 typedef void *(*bfdev_realloc_t)(void *block, size_t resize, void *pdata);
 typedef void (*bfdev_free_t)(void *block, void *pdata);
 

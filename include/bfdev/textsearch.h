@@ -46,7 +46,7 @@ struct bfdev_ts_linear {
  * @next_block: fetch next block of data.
  */
 struct bfdev_ts_context {
-    const struct bfdev_alloc *alloc;
+    const bfdev_alloc_t *alloc;
     unsigned long flags;
 
     bfdev_ts_algorithm_t *algo;
@@ -67,7 +67,7 @@ struct bfdev_ts_algorithm {
     bfdev_list_head_t list;
     const char *name;
 
-    bfdev_ts_context_t *(*prepare)(const struct bfdev_alloc *alloc, const void *pattern,
+    bfdev_ts_context_t *(*prepare)(const bfdev_alloc_t *alloc, const void *pattern,
                                    size_t len, unsigned long flags);
     void (*destroy)(bfdev_ts_context_t *tsc);
     unsigned int (*find)(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss);
@@ -122,7 +122,7 @@ extern unsigned int
 bfdev_textsearch_linear_next(bfdev_ts_context_t *tsc, bfdev_ts_linear_t *linear);
 
 extern bfdev_ts_context_t *
-bfdev_textsearch_create(const struct bfdev_alloc *alloc, const char *name,
+bfdev_textsearch_create(const bfdev_alloc_t *alloc, const char *name,
                         const void *pattern, size_t len, unsigned long flags);
 
 extern int

@@ -129,7 +129,7 @@ hashmap_find_key(bfdev_hashmap_t *hashmap, const void *key,
 static inline int
 hashmap_rehash(bfdev_hashmap_t *hashmap, unsigned int nbits)
 {
-    const struct bfdev_alloc *alloc = hashmap->alloc;
+    const bfdev_alloc_t *alloc = hashmap->alloc;
     bfdev_hlist_node_t *walk, *tmp;
     bfdev_hlist_head_t *nbuckets;
     unsigned long value, index, ncapacity;
@@ -256,7 +256,7 @@ bfdev_hashmap_find(bfdev_hashmap_t *hashmap, const void *key)
 export void
 bfdev_hashmap_release(bfdev_hashmap_t *hashmap)
 {
-    const struct bfdev_alloc *alloc = hashmap->alloc;
+    const bfdev_alloc_t *alloc = hashmap->alloc;
 
     bfdev_free(alloc, hashmap->buckets);
     hashmap->buckets = NULL;

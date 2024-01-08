@@ -21,7 +21,7 @@ BFDEV_BEGIN_DECLS
 typedef struct bfdev_array bfdev_array_t;
 
 struct bfdev_array {
-    const struct bfdev_alloc *alloc;
+    const bfdev_alloc_t *alloc;
     unsigned long capacity;
     unsigned long index;
     size_t cells;
@@ -38,8 +38,7 @@ struct bfdev_array {
     bfdev_array_t name = BFDEV_ARRAY_INIT(alloc, cells)
 
 static inline void
-bfdev_array_init(bfdev_array_t *array, const struct bfdev_alloc *alloc,
-                 size_t cells)
+bfdev_array_init(bfdev_array_t *array, const bfdev_alloc_t *alloc, size_t cells)
 {
     *array = BFDEV_ARRAY_INIT(alloc, cells);
 }

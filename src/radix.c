@@ -54,7 +54,7 @@ bfdev_radix_root_find(bfdev_radix_root_t *root, uintptr_t offset)
 static inline bfdev_radix_node_t *
 radix_extend(bfdev_radix_root_t *root, uintptr_t offset)
 {
-    const struct bfdev_alloc *alloc = root->alloc;
+    const bfdev_alloc_t *alloc = root->alloc;
     bfdev_radix_node_t *node, *successor;
     unsigned int level;
 
@@ -85,7 +85,7 @@ radix_extend(bfdev_radix_root_t *root, uintptr_t offset)
 static inline void
 radix_shrink(bfdev_radix_root_t *root)
 {
-    const struct bfdev_alloc *alloc = root->alloc;
+    const bfdev_alloc_t *alloc = root->alloc;
     bfdev_radix_node_t *node, *successor;
 
     while (root->level) {
@@ -106,7 +106,7 @@ radix_shrink(bfdev_radix_root_t *root)
 export void *
 bfdev_radix_root_alloc(bfdev_radix_root_t *root, uintptr_t offset)
 {
-    const struct bfdev_alloc *alloc = root->alloc;
+    const bfdev_alloc_t *alloc = root->alloc;
     bfdev_radix_node_t *node;
     unsigned int level;
 
@@ -140,7 +140,7 @@ bfdev_radix_root_alloc(bfdev_radix_root_t *root, uintptr_t offset)
 export int
 bfdev_radix_root_free(bfdev_radix_root_t *root, uintptr_t offset)
 {
-    const struct bfdev_alloc *alloc = root->alloc;
+    const bfdev_alloc_t *alloc = root->alloc;
     bfdev_radix_node_t *node;
     unsigned int level;
     uintptr_t index;
@@ -196,7 +196,7 @@ bfdev_radix_root_charge(bfdev_radix_root_t *root,
 }
 
 static void
-radix_destory_recurse(const struct bfdev_alloc *alloc,
+radix_destory_recurse(const bfdev_alloc_t *alloc,
                       bfdev_radix_node_t *node, unsigned int level)
 {
     bfdev_radix_node_t *child;
@@ -215,7 +215,7 @@ radix_destory_recurse(const struct bfdev_alloc *alloc,
 export void
 bfdev_radix_root_destory(bfdev_radix_root_t *root)
 {
-    const struct bfdev_alloc *alloc = root->alloc;
+    const bfdev_alloc_t *alloc = root->alloc;
 
     radix_destory_recurse(alloc, root->node, root->level);
     root->level = 0;

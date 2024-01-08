@@ -20,7 +20,7 @@ typedef unsigned int (*bfdev_bloom_hash_t)
 (unsigned int func, const void *key, void *pdata);
 
 struct bfdev_bloom {
-    const struct bfdev_alloc *alloc;
+    const bfdev_alloc_t *alloc;
     bfdev_bloom_hash_t hash;
     unsigned int funcs;
     void *pdata;
@@ -64,7 +64,7 @@ bfdev_bloom_flush(bfdev_bloom_t *bloom);
  * @pdata: private data pointer of @hash.
  */
 extern bfdev_bloom_t *
-bfdev_bloom_create(const struct bfdev_alloc *alloc, unsigned int capacity,
+bfdev_bloom_create(const bfdev_alloc_t *alloc, unsigned int capacity,
                    bfdev_bloom_hash_t hash, unsigned int funcs, void *pdata);
 
 /**

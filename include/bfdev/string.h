@@ -19,11 +19,11 @@ extern void *
 bfdev_memdiff(const void *addr, int c, size_t size);
 
 extern char *
-bfdev_strdup(const struct bfdev_alloc *alloc,
+bfdev_strdup(const bfdev_alloc_t *alloc,
              const char *string);
 
 extern char *
-bfdev_strndup(const struct bfdev_alloc *alloc,
+bfdev_strndup(const bfdev_alloc_t *alloc,
               const char *string, size_t len);
 
 BFDEV_END_DECLS

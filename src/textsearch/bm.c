@@ -112,7 +112,7 @@ bm_compute_prefix(struct bm_context *bctx, unsigned long flags)
 }
 
 static bfdev_ts_context_t *
-bm_prepare(const struct bfdev_alloc *alloc, const void *pattern,
+bm_prepare(const bfdev_alloc_t *alloc, const void *pattern,
            size_t len, unsigned long flags)
 {
     unsigned int gsize = sizeof(unsigned int) * len;

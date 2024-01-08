@@ -58,7 +58,7 @@ struct  bfdev_cache_node {
 };
 
 struct bfdev_cache_head {
-    const struct bfdev_alloc *alloc;
+    const bfdev_alloc_t *alloc;
     const bfdev_cache_algo_t *algo;
     bfdev_hlist_head_t *taghash;
     bfdev_cache_node_t **nodes;
@@ -95,7 +95,7 @@ struct bfdev_cache_algo {
     void (*clear)(bfdev_cache_head_t *head, bfdev_cache_node_t *node);
     void (*reset)(bfdev_cache_head_t *head);
 
-    bfdev_cache_head_t *(*create)(const struct bfdev_alloc *alloc, unsigned long size);
+    bfdev_cache_head_t *(*create)(const bfdev_alloc_t *alloc, unsigned long size);
     void (*destroy)(bfdev_cache_head_t *head);
 };
 
@@ -137,7 +137,7 @@ extern void
 bfdev_cache_reset(bfdev_cache_head_t *head);
 
 extern bfdev_cache_head_t *
-bfdev_cache_create(const char *name, const struct bfdev_alloc *alloc,
+bfdev_cache_create(const char *name, const bfdev_alloc_t *alloc,
                    unsigned long size, unsigned long maxp);
 
 extern void

@@ -58,7 +58,7 @@ bfdev_bloom_flush(bfdev_bloom_t *bloom)
 }
 
 export bfdev_bloom_t *
-bfdev_bloom_create(const struct bfdev_alloc *alloc, unsigned int capacity,
+bfdev_bloom_create(const bfdev_alloc_t *alloc, unsigned int capacity,
                    bfdev_bloom_hash_t hash, unsigned int funcs, void *pdata)
 {
     bfdev_bloom_t *bloom;
@@ -83,6 +83,6 @@ bfdev_bloom_create(const struct bfdev_alloc *alloc, unsigned int capacity,
 export void
 bfdev_bloom_destory(bfdev_bloom_t *bloom)
 {
-    const struct bfdev_alloc *alloc = bloom->alloc;
+    const bfdev_alloc_t *alloc = bloom->alloc;
     bfdev_free(alloc, bloom);
 }
