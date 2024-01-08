@@ -12,7 +12,7 @@
 #define TEST_SIZE 16
 #define TEST_LOOP (TEST_SIZE * 64)
 
-struct bfdev_circle test_circle = {
+static bfdev_circle_t test_circle = {
     .buffer = (char [TEST_SIZE]){},
 };
 

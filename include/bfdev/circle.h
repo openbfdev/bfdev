@@ -10,6 +10,8 @@
 
 BFDEV_BEGIN_DECLS
 
+typedef struct bfdev_circle bfdev_circle_t;
+
 struct bfdev_circle {
     void *buffer;
     unsigned long head;
