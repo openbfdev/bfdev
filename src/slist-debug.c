@@ -12,7 +12,7 @@
 #include <export.h>
 
 export bool
-bfdev_slist_check_add(struct bfdev_slist_head *node, struct bfdev_slist_head *newn)
+bfdev_slist_check_add(bfdev_slist_head_t *node, bfdev_slist_head_t *newn)
 {
     if (bfdev_unlikely(newn->next && newn->next == node->next)) {
         bfdev_log_err(
@@ -27,7 +27,7 @@ bfdev_slist_check_add(struct bfdev_slist_head *node, struct bfdev_slist_head *ne
 }
 
 export bool
-bfdev_slist_check_del(struct bfdev_slist_head *node)
+bfdev_slist_check_del(bfdev_slist_head_t *node)
 {
     if (bfdev_unlikely(node->next == BFDEV_POISON_SLIST)) {
         bfdev_log_err(
