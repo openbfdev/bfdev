@@ -8,7 +8,7 @@
 #include <export.h>
 
 export unsigned int
-bfdev_levenshtein_len(const struct bfdev_alloc *alloc,
+bfdev_levenshtein_len(const bfdev_alloc_t *alloc,
                       const char *str1, const char *str2,
                       size_t len1, size_t len2,
                       unsigned int s, unsigned int w,
@@ -67,7 +67,7 @@ bfdev_levenshtein_len(const struct bfdev_alloc *alloc,
 }
 
 export unsigned int
-bfdev_levenshtein(const struct bfdev_alloc *alloc,
+bfdev_levenshtein(const bfdev_alloc_t *alloc,
                   const char *str1, const char *str2,
                   unsigned int s, unsigned int w,
                   unsigned int a, unsigned int d)

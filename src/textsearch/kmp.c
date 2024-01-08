@@ -81,7 +81,7 @@ kmp_compute_prefix(struct kmp_context *kctx)
 }
 
 static bfdev_ts_context_t *
-kmp_prepare(const struct bfdev_alloc *alloc, const void *pattern,
+kmp_prepare(const bfdev_alloc_t *alloc, const void *pattern,
             size_t len, unsigned long flags)
 {
     unsigned int prefix_size = sizeof(unsigned int) * len;

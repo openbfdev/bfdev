@@ -121,7 +121,7 @@ lfu_reset(struct bfdev_cache_head *head)
 }
 
 static struct bfdev_cache_head *
-lfu_create(const struct bfdev_alloc *alloc, unsigned long size)
+lfu_create(const bfdev_alloc_t *alloc, unsigned long size)
 {
     struct bfdev_cache_head *head;
     struct lfu_head *lfu_head;
@@ -164,7 +164,7 @@ free_head:
 static void
 lfu_destroy(struct bfdev_cache_head *head)
 {
-    const struct bfdev_alloc *alloc;
+    const bfdev_alloc_t *alloc;
     struct bfdev_cache_node *node;
     unsigned long count;
 

@@ -261,7 +261,7 @@ bfdev_cache_reset(struct bfdev_cache_head *head)
 }
 
 export struct bfdev_cache_head *
-bfdev_cache_create(const char *name, const struct bfdev_alloc *alloc,
+bfdev_cache_create(const char *name, const bfdev_alloc_t *alloc,
                    unsigned long size, unsigned long maxpend)
 {
     const struct bfdev_cache_algo *algo;
@@ -311,7 +311,7 @@ export void
 bfdev_cache_destroy(struct bfdev_cache_head *head)
 {
     const struct bfdev_cache_algo *algo;
-    const struct bfdev_alloc *alloc;
+    const bfdev_alloc_t *alloc;
 
     algo = head->algo;
     alloc = head->alloc;

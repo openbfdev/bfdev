@@ -40,7 +40,7 @@ struct bfdev_hashmap {
     unsigned long capacity;
     unsigned long used;
 
-    const struct bfdev_alloc *alloc;
+    const bfdev_alloc_t *alloc;
     const bfdev_hashmap_ops_t *ops;
     void *pdata;
 };
@@ -73,7 +73,7 @@ struct bfdev_hashmap_ops {
  * @pdata: operations callback data.
  */
 static inline void
-bfdev_hashmap_init(bfdev_hashmap_t *hashmap, const struct bfdev_alloc *alloc,
+bfdev_hashmap_init(bfdev_hashmap_t *hashmap, const bfdev_alloc_t *alloc,
                    const bfdev_hashmap_ops_t *ops, void *pdata)
 {
     *hashmap = BFDEV_HASHMAP_INIT(alloc, ops, pdata);

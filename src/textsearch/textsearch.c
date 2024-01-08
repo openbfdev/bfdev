@@ -23,7 +23,7 @@ textsearch_algorithm_find(const char *name)
 }
 
 export bfdev_ts_context_t *
-bfdev_textsearch_create(const struct bfdev_alloc *alloc, const char *name,
+bfdev_textsearch_create(const bfdev_alloc_t *alloc, const char *name,
                         const void *pattern, size_t len, unsigned long flags)
 {
     bfdev_ts_algorithm_t *algo;

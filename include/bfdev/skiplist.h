@@ -23,7 +23,7 @@ struct bfdev_skip_node {
 };
 
 struct bfdev_skip_head {
-    const struct bfdev_alloc *alloc;
+    const bfdev_alloc_t *alloc;
     unsigned int curr;
     unsigned int levels;
     bfdev_list_head_t nodes[0];
@@ -46,7 +46,7 @@ extern void
 bfdev_skiplist_destroy(bfdev_skip_head_t *head, bfdev_release_t relse);
 
 extern bfdev_skip_head_t *
-bfdev_skiplist_create(const struct bfdev_alloc *alloc, unsigned int levels);
+bfdev_skiplist_create(const bfdev_alloc_t *alloc, unsigned int levels);
 
 /**
  * bfdev_skiplist_for_each - iterate over list of given type.

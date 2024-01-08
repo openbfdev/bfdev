@@ -9,7 +9,7 @@
 
 #define GENERIC_MATRIX_ADDSUB(name, operate)            \
 export struct bfdev_matrix *                            \
-bfdev_matrix_##name(const struct bfdev_alloc *alloc,    \
+bfdev_matrix_##name(const bfdev_alloc_t *alloc,         \
                     const struct bfdev_matrix *va,      \
                     const struct bfdev_matrix *vb)      \
 {                                                       \
@@ -41,7 +41,7 @@ GENERIC_MATRIX_ADDSUB(add, +)
 GENERIC_MATRIX_ADDSUB(sub, -)
 
 export struct bfdev_matrix *
-bfdev_matrix_mul(const struct bfdev_alloc *alloc,
+bfdev_matrix_mul(const bfdev_alloc_t *alloc,
                  const struct bfdev_matrix *va,
                  const struct bfdev_matrix *vb)
 {
@@ -74,7 +74,7 @@ bfdev_matrix_mul(const struct bfdev_alloc *alloc,
 }
 
 export struct bfdev_matrix *
-bfdev_matrix_copy(const struct bfdev_alloc *alloc,
+bfdev_matrix_copy(const bfdev_alloc_t *alloc,
                   const struct bfdev_matrix *var)
 {
     struct bfdev_matrix *result;
@@ -94,7 +94,7 @@ bfdev_matrix_copy(const struct bfdev_alloc *alloc,
 }
 
 export struct bfdev_matrix *
-bfdev_matrix_create(const struct bfdev_alloc *alloc,
+bfdev_matrix_create(const bfdev_alloc_t *alloc,
                     unsigned int row, unsigned int col)
 {
     struct bfdev_matrix *var;
@@ -110,7 +110,7 @@ bfdev_matrix_create(const struct bfdev_alloc *alloc,
 }
 
 export void
-bfdev_matrix_destory(const struct bfdev_alloc *alloc,
+bfdev_matrix_destory(const bfdev_alloc_t *alloc,
                      const struct bfdev_matrix *var)
 {
     bfdev_free(alloc, var);

@@ -12,7 +12,7 @@
 static int
 array_resize(bfdev_array_t *array, unsigned long count)
 {
-    const struct bfdev_alloc *alloc = array->alloc;
+    const bfdev_alloc_t *alloc = array->alloc;
     unsigned long nalloc;
     size_t size;
     void *data;
@@ -94,7 +94,7 @@ bfdev_array_reserve(bfdev_array_t *array, unsigned long num)
 export void
 bfdev_array_release(bfdev_array_t *array)
 {
-    const struct bfdev_alloc *alloc = array->alloc;
+    const bfdev_alloc_t *alloc = array->alloc;
 
     array->capacity = 0;
     array->index = 0;

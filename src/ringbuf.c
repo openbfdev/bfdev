@@ -216,7 +216,7 @@ bfdev_ringbuf_in_record(struct bfdev_ringbuf *ringbuf, const void *buff,
 }
 
 export int
-bfdev_ringbuf_dynamic_alloc(struct bfdev_ringbuf *ringbuf, const struct bfdev_alloc *alloc,
+bfdev_ringbuf_dynamic_alloc(struct bfdev_ringbuf *ringbuf, const bfdev_alloc_t *alloc,
                             size_t esize, size_t size)
 {
     size = bfdev_pow2_roundup(size);
@@ -239,7 +239,7 @@ bfdev_ringbuf_dynamic_alloc(struct bfdev_ringbuf *ringbuf, const struct bfdev_al
 export void
 bfdev_ringbuf_dynamic_free(struct bfdev_ringbuf *ringbuf)
 {
-    const struct bfdev_alloc *alloc = ringbuf->alloc;
+    const bfdev_alloc_t *alloc = ringbuf->alloc;
 
     ringbuf->in = 0;
     ringbuf->out = 0;

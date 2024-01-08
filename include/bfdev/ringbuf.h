@@ -12,7 +12,7 @@
 #include <bfdev/allocator.h>
 
 struct bfdev_ringbuf {
-    const struct bfdev_alloc *alloc;
+    const bfdev_alloc_t *alloc;
     unsigned long in;
     unsigned long out;
     unsigned long mask;
@@ -431,7 +431,7 @@ extern unsigned long bfdev_ringbuf_in_flat(struct bfdev_ringbuf *ringbuf, const 
 extern unsigned long bfdev_ringbuf_peek_record(struct bfdev_ringbuf *ringbuf, void *buff, unsigned long len, unsigned long record);
 extern unsigned long bfdev_ringbuf_out_record(struct bfdev_ringbuf *ringbuf, void *buff, unsigned long len, unsigned long record);
 extern unsigned long bfdev_ringbuf_in_record(struct bfdev_ringbuf *ringbuf, const void *buff, unsigned long len, unsigned long record);
-extern int bfdev_ringbuf_dynamic_alloc(struct bfdev_ringbuf *ringbuf, const struct bfdev_alloc *alloc, size_t esize, size_t size);
+extern int bfdev_ringbuf_dynamic_alloc(struct bfdev_ringbuf *ringbuf, const bfdev_alloc_t *alloc, size_t esize, size_t size);
 extern void bfdev_ringbuf_dynamic_free(struct bfdev_ringbuf *ringbuf);
 
 #endif /* _BFDEV_RINGBUF_H_ */
