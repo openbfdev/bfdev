@@ -37,7 +37,7 @@ bloom_hash(unsigned int func, const void *key, void *pdata)
 
 int main(int argc, const char *argv[])
 {
-    struct bfdev_bloom *bloom;
+    bfdev_bloom_t *bloom;
     char buffer[TEST_SIZE][32];
     unsigned int count;
     bool retval;
