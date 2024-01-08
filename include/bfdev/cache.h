@@ -46,7 +46,7 @@ enum bfdev_cache_status {
     BFDEV_CACHE_MANAGED,
 };
 
-struct  bfdev_cache_node {
+struct bfdev_cache_node {
     bfdev_hlist_node_t hash;
     bfdev_list_head_t list;
     enum bfdev_cache_status status;

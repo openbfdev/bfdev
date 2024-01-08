@@ -14,9 +14,9 @@
 
 BFDEV_BEGIN_DECLS
 
-typedef struct  bfdev_list_head bfdev_list_head_t;
+typedef struct bfdev_list_head bfdev_list_head_t;
 
-struct  bfdev_list_head {
+struct bfdev_list_head {
     bfdev_list_head_t *prev;
     bfdev_list_head_t *next;
 };

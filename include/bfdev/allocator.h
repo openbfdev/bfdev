@@ -21,7 +21,7 @@ struct bfdev_alloc {
     void *pdata;
 };
 
-struct  bfdev_alloc_ops {
+struct bfdev_alloc_ops {
     bfdev_malloc_t alloc;
     bfdev_realloc_t realloc;
     bfdev_free_t free;

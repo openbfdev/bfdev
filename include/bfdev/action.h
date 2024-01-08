@@ -18,7 +18,7 @@ typedef struct bfdev_action bfdev_action_t;
 typedef int
 (*bfdev_action_func_t)(void *data);
 
-struct  bfdev_action {
+struct bfdev_action {
     bfdev_action_func_t func;
     const void *data;
 };
