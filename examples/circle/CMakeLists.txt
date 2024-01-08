@@ -3,19 +3,19 @@
 # Copyright(c) 2023 ffashion <helloworldffashion@gmail.com>
 #
 
-add_executable(circle-simple simple.c)
-target_link_libraries(circle-simple bfdev)
-add_test(circle-simple circle-simple)
+add_executable(circle-atomic atomic.c)
+target_link_libraries(circle-atomic bfdev)
+add_test(circle-atomic circle-atomic)
 
 if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
     install(FILES
-        simple.c
+        atomic.c
         DESTINATION
         ${CMAKE_INSTALL_DOCDIR}/examples/circle
     )
 
     install(TARGETS
-        circle-simple
+        circle-atomic
         DESTINATION
         ${CMAKE_INSTALL_DOCDIR}/bin
     )

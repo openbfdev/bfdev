@@ -12,7 +12,8 @@
 #define TEST_SIZE 16
 #define TEST_LOOP (TEST_SIZE * 64)
 
-static bfdev_circle_t test_circle = {
+static volatile bfdev_circle_t
+test_circle = {
     .buffer = (char [TEST_SIZE]){},
 };
 

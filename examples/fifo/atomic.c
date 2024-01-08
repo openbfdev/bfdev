@@ -11,6 +11,7 @@
 #define TEST_SIZE 16
 #define TEST_LOOP (TEST_SIZE * 64)
 
+static
 BFDEV_DEFINE_FIFO(fifo_test, char, TEST_SIZE);
 
 static void *
