@@ -11,6 +11,8 @@
 
 BFDEV_BEGIN_DECLS
 
+typedef struct bfdev_matrix bfdev_matrix_t;
+
 struct bfdev_matrix {
     unsigned int row;
     unsigned int col;
@@ -22,42 +24,42 @@ struct bfdev_matrix {
  * @va: first addend matrix.
  * @vb: second addend matrix.
  */
-extern struct bfdev_matrix *
-bfdev_matrix_add(const bfdev_alloc_t *alloc, const struct bfdev_matrix *va,
-                 const struct bfdev_matrix *vb);
+extern bfdev_matrix_t *
+bfdev_matrix_add(const bfdev_alloc_t *alloc, const bfdev_matrix_t *va,
+                 const bfdev_matrix_t *vb);
 
 /**
  * bfdev_matrix_sub() - subtracting two matrices.
  * @va: minuend; matrix to subtract from.
  * @vb: subtrahend; matrix to subtract from @va.
  */
-extern struct bfdev_matrix *
-bfdev_matrix_sub(const bfdev_alloc_t *alloc, const struct bfdev_matrix *va,
-                 const struct bfdev_matrix *vb);
+extern bfdev_matrix_t *
+bfdev_matrix_sub(const bfdev_alloc_t *alloc, const bfdev_matrix_t *va,
+                 const bfdev_matrix_t *vb);
 
 /**
  * bfdev_matrix_mul() - multiplying two matrices.
  * @va: first factor matrix.
  * @vb: second factor matrix.
  */
-extern struct bfdev_matrix *
-bfdev_matrix_mul(const bfdev_alloc_t *alloc, const struct bfdev_matrix *va,
-                 const struct bfdev_matrix *vb);
+extern bfdev_matrix_t *
+bfdev_matrix_mul(const bfdev_alloc_t *alloc, const bfdev_matrix_t *va,
+                 const bfdev_matrix_t *vb);
 
 /**
  * bfdev_matrix_copy() - copy a new matrix.
  * @var: variables to copy.
  */
-extern struct bfdev_matrix *
+extern bfdev_matrix_t *
 bfdev_matrix_copy(const bfdev_alloc_t *alloc,
-                  const struct bfdev_matrix *var);
+                  const bfdev_matrix_t *var);
 
 /**
  * bfdev_matrix_create() - create a new matrix.
  * @row: number of rows in the matrix.
  * @col: number of columns in the matrix.
  */
-extern struct bfdev_matrix *
+extern bfdev_matrix_t *
 bfdev_matrix_create(const bfdev_alloc_t *alloc,
                     unsigned int row, unsigned int col);
 
@@ -67,7 +69,7 @@ bfdev_matrix_create(const bfdev_alloc_t *alloc,
  */
 extern void
 bfdev_matrix_destory(const bfdev_alloc_t *alloc,
-                     const struct bfdev_matrix *var);
+                     const bfdev_matrix_t *var);
 
 BFDEV_END_DECLS
 

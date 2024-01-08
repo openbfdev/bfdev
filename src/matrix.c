@@ -7,45 +7,45 @@
 #include <bfdev/matrix.h>
 #include <export.h>
 
-#define GENERIC_MATRIX_ADDSUB(name, operate)            \
-export struct bfdev_matrix *                            \
-bfdev_matrix_##name(const bfdev_alloc_t *alloc,         \
-                    const struct bfdev_matrix *va,      \
-                    const struct bfdev_matrix *vb)      \
-{                                                       \
-    struct bfdev_matrix *result;                        \
-    unsigned int row, col;                              \
-    unsigned int size, count;                           \
-                                                        \
-    row = va->row;                                      \
-    col = va->col;                                      \
-                                                        \
-    if (row != vb->row || col != vb->col)               \
-        return NULL;                                    \
-                                                        \
-    result = bfdev_matrix_create(alloc, row, col);      \
-    if (bfdev_unlikely(!result))                        \
-        return NULL;                                    \
-                                                        \
-    size = row * col;                                   \
-    for (count = 0; count < size; ++count) {            \
-        result->values[count]                           \
-            = va->values[count] operate                 \
-              vb->values[count];                        \
-    }                                                   \
-                                                        \
-    return result;                                      \
+#define GENERIC_MATRIX_ADDSUB(name, operate)        \
+export bfdev_matrix_t *                             \
+bfdev_matrix_##name(const bfdev_alloc_t *alloc,     \
+                    const bfdev_matrix_t *va,       \
+                    const bfdev_matrix_t *vb)       \
+{                                                   \
+    bfdev_matrix_t *result;                         \
+    unsigned int row, col;                          \
+    unsigned int size, count;                       \
+                                                    \
+    row = va->row;                                  \
+    col = va->col;                                  \
+                                                    \
+    if (row != vb->row || col != vb->col)           \
+        return NULL;                                \
+                                                    \
+    result = bfdev_matrix_create(alloc, row, col);  \
+    if (bfdev_unlikely(!result))                    \
+        return NULL;                                \
+                                                    \
+    size = row * col;                               \
+    for (count = 0; count < size; ++count) {        \
+        result->values[count]                       \
+            = va->values[count] operate             \
+              vb->values[count];                    \
+    }                                               \
+                                                    \
+    return result;                                  \
 }
 
 GENERIC_MATRIX_ADDSUB(add, +)
 GENERIC_MATRIX_ADDSUB(sub, -)
 
-export struct bfdev_matrix *
+export bfdev_matrix_t *
 bfdev_matrix_mul(const bfdev_alloc_t *alloc,
-                 const struct bfdev_matrix *va,
-                 const struct bfdev_matrix *vb)
+                 const bfdev_matrix_t *va,
+                 const bfdev_matrix_t *vb)
 {
-    struct bfdev_matrix *result;
+    bfdev_matrix_t *result;
     unsigned int row, col;
     unsigned int count;
     long value;
@@ -73,11 +73,11 @@ bfdev_matrix_mul(const bfdev_alloc_t *alloc,
     return result;
 }
 
-export struct bfdev_matrix *
+export bfdev_matrix_t *
 bfdev_matrix_copy(const bfdev_alloc_t *alloc,
-                  const struct bfdev_matrix *var)
+                  const bfdev_matrix_t *var)
 {
-    struct bfdev_matrix *result;
+    bfdev_matrix_t *result;
     unsigned int row, col;
 
     row = var->row;
@@ -93,11 +93,11 @@ bfdev_matrix_copy(const bfdev_alloc_t *alloc,
     return result;
 }
 
-export struct bfdev_matrix *
+export bfdev_matrix_t *
 bfdev_matrix_create(const bfdev_alloc_t *alloc,
                     unsigned int row, unsigned int col)
 {
-    struct bfdev_matrix *var;
+    bfdev_matrix_t *var;
 
     var = bfdev_zalloc(alloc, sizeof(*var) + sizeof(*var->values) * row * col);
     if (bfdev_unlikely(!var))
@@ -111,7 +111,7 @@ bfdev_matrix_create(const bfdev_alloc_t *alloc,
 
 export void
 bfdev_matrix_destory(const bfdev_alloc_t *alloc,
-                     const struct bfdev_matrix *var)
+                     const bfdev_matrix_t *var)
 {
     bfdev_free(alloc, var);
 }
