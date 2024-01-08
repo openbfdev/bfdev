@@ -72,7 +72,7 @@ lru_reset(bfdev_cache_head_t *head)
 }
 
 static bfdev_cache_head_t *
-lru_create(const struct bfdev_alloc *alloc, unsigned long size)
+lru_create(const bfdev_alloc_t *alloc, unsigned long size)
 {
     bfdev_cache_head_t *head;
     struct lru_head *lru_head;
@@ -116,7 +116,7 @@ static void
 lru_destroy(bfdev_cache_head_t *head)
 {
     struct lru_head *lru_head = cache_to_lru_head(head);
-    const struct bfdev_alloc *alloc;
+    const bfdev_alloc_t *alloc;
     bfdev_cache_node_t *node;
     unsigned long count;
 

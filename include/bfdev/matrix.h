@@ -23,7 +23,7 @@ struct bfdev_matrix {
  * @vb: second addend matrix.
  */
 extern struct bfdev_matrix *
-bfdev_matrix_add(const struct bfdev_alloc *alloc, const struct bfdev_matrix *va,
+bfdev_matrix_add(const bfdev_alloc_t *alloc, const struct bfdev_matrix *va,
                  const struct bfdev_matrix *vb);
 
 /**
@@ -32,7 +32,7 @@ bfdev_matrix_add(const struct bfdev_alloc *alloc, const struct bfdev_matrix *va,
  * @vb: subtrahend; matrix to subtract from @va.
  */
 extern struct bfdev_matrix *
-bfdev_matrix_sub(const struct bfdev_alloc *alloc, const struct bfdev_matrix *va,
+bfdev_matrix_sub(const bfdev_alloc_t *alloc, const struct bfdev_matrix *va,
                  const struct bfdev_matrix *vb);
 
 /**
@@ -41,7 +41,7 @@ bfdev_matrix_sub(const struct bfdev_alloc *alloc, const struct bfdev_matrix *va,
  * @vb: second factor matrix.
  */
 extern struct bfdev_matrix *
-bfdev_matrix_mul(const struct bfdev_alloc *alloc, const struct bfdev_matrix *va,
+bfdev_matrix_mul(const bfdev_alloc_t *alloc, const struct bfdev_matrix *va,
                  const struct bfdev_matrix *vb);
 
 /**
@@ -49,7 +49,7 @@ bfdev_matrix_mul(const struct bfdev_alloc *alloc, const struct bfdev_matrix *va,
  * @var: variables to copy.
  */
 extern struct bfdev_matrix *
-bfdev_matrix_copy(const struct bfdev_alloc *alloc,
+bfdev_matrix_copy(const bfdev_alloc_t *alloc,
                   const struct bfdev_matrix *var);
 
 /**
@@ -58,7 +58,7 @@ bfdev_matrix_copy(const struct bfdev_alloc *alloc,
  * @col: number of columns in the matrix.
  */
 extern struct bfdev_matrix *
-bfdev_matrix_create(const struct bfdev_alloc *alloc,
+bfdev_matrix_create(const bfdev_alloc_t *alloc,
                     unsigned int row, unsigned int col);
 
 /**
@@ -66,7 +66,7 @@ bfdev_matrix_create(const struct bfdev_alloc *alloc,
  * @var: variables to destory.
  */
 extern void
-bfdev_matrix_destory(const struct bfdev_alloc *alloc,
+bfdev_matrix_destory(const bfdev_alloc_t *alloc,
                      const struct bfdev_matrix *var);
 
 BFDEV_END_DECLS

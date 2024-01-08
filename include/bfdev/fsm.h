@@ -90,7 +90,7 @@ struct bfdev_fsm {
     bfdev_fsm_t name = BFDEV_FSM_INIT(alloc, init, error)
 
 static inline void
-bfdev_fsm_init(bfdev_fsm_t *fsm, const struct bfdev_alloc *alloc,
+bfdev_fsm_init(bfdev_fsm_t *fsm, const bfdev_alloc_t *alloc,
                const bfdev_fsm_state_t *init, const bfdev_fsm_state_t *error)
 {
     *fsm = BFDEV_FSM_INIT(alloc, init, error);

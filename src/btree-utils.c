@@ -56,7 +56,7 @@ bfdev_btree_key_find(struct bfdev_btree_root *root, uintptr_t *node, uintptr_t *
 export void *
 bfdev_btree_alloc(struct bfdev_btree_root *root)
 {
-    const struct bfdev_alloc *alloc;
+    const bfdev_alloc_t *alloc;
     struct bfdev_btree_layout *layout;
 
     alloc = root->alloc;
@@ -68,7 +68,7 @@ bfdev_btree_alloc(struct bfdev_btree_root *root)
 export void
 bfdev_btree_free(struct bfdev_btree_root *root, void *node)
 {
-    const struct bfdev_alloc *alloc;
+    const bfdev_alloc_t *alloc;
     alloc = root->alloc;
     bfdev_free(alloc, node);
 }

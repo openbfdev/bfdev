@@ -12,7 +12,7 @@
 #include <bfdev/allocator.h>
 
 struct bfdev_fifo {
-    const struct bfdev_alloc *alloc;
+    const bfdev_alloc_t *alloc;
     unsigned long in;
     unsigned long out;
     unsigned long mask;
@@ -431,7 +431,7 @@ extern unsigned long bfdev_fifo_in_flat(struct bfdev_fifo *fifo, const void *buf
 extern unsigned long bfdev_fifo_peek_record(struct bfdev_fifo *fifo, void *buff, unsigned long len, unsigned long record);
 extern unsigned long bfdev_fifo_out_record(struct bfdev_fifo *fifo, void *buff, unsigned long len, unsigned long record);
 extern unsigned long bfdev_fifo_in_record(struct bfdev_fifo *fifo, const void *buff, unsigned long len, unsigned long record);
-extern int bfdev_fifo_dynamic_alloc(struct bfdev_fifo *fifo, const struct bfdev_alloc *alloc, size_t esize, size_t size);
+extern int bfdev_fifo_dynamic_alloc(struct bfdev_fifo *fifo, const bfdev_alloc_t *alloc, size_t esize, size_t size);
 extern void bfdev_fifo_dynamic_free(struct bfdev_fifo *fifo);
 
 #endif  /* _BFDEV_FIFO_H_ */

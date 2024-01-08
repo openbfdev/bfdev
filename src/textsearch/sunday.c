@@ -84,7 +84,7 @@ sunday_compute_prefix(struct sunday_context *sctx, unsigned int flags)
 }
 
 static bfdev_ts_context_t *
-sunday_prepare(const struct bfdev_alloc *alloc, const void *pattern,
+sunday_prepare(const bfdev_alloc_t *alloc, const void *pattern,
                size_t len, unsigned long flags)
 {
     struct sunday_context *sctx;

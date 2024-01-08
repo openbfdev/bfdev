@@ -25,7 +25,7 @@ typedef struct bfdev_radix_root bfdev_radix_root_t;
 typedef struct bfdev_radix_node bfdev_radix_node_t;
 
 struct bfdev_radix_root {
-    const struct bfdev_alloc *alloc;
+    const bfdev_alloc_t *alloc;
     bfdev_radix_node_t *node;
     unsigned int level;
 };

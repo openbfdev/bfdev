@@ -62,7 +62,7 @@ export int
 bfdev_skiplist_insert(bfdev_skip_head_t *head, void *key,
                       bfdev_cmp_t cmp, void *pdata)
 {
-    const struct bfdev_alloc *alloc = head->alloc;
+    const bfdev_alloc_t *alloc = head->alloc;
     bfdev_list_head_t *list, *end;
     bfdev_skip_node_t *walk, *node;
     unsigned int level, count;
@@ -101,7 +101,7 @@ export void
 bfdev_skiplist_delete(bfdev_skip_head_t *head,
                       bfdev_find_t find, void *pdata)
 {
-    const struct bfdev_alloc *alloc = head->alloc;
+    const bfdev_alloc_t *alloc = head->alloc;
     bfdev_skip_node_t *node;
     unsigned int level;
 
@@ -131,7 +131,7 @@ static void
 bfdev_skiplist_release(bfdev_skip_head_t *head,
                        bfdev_release_t relse)
 {
-    const struct bfdev_alloc *alloc = head->alloc;
+    const bfdev_alloc_t *alloc = head->alloc;
     bfdev_skip_node_t *node, *tmp;
 
     bfdev_list_for_each_entry_safe(node, tmp, head->nodes, list[0]) {
@@ -158,14 +158,14 @@ export void
 bfdev_skiplist_destroy(bfdev_skip_head_t *head,
                        bfdev_release_t relse)
 {
-    const struct bfdev_alloc *alloc = head->alloc;
+    const bfdev_alloc_t *alloc = head->alloc;
 
     bfdev_skiplist_release(head, relse);
     bfdev_free(alloc, head);
 }
 
 export bfdev_skip_head_t *
-bfdev_skiplist_create(const struct bfdev_alloc *alloc,
+bfdev_skiplist_create(const bfdev_alloc_t *alloc,
                       unsigned int levels)
 {
     bfdev_skip_head_t *head;
