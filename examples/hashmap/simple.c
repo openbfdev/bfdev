@@ -12,7 +12,7 @@
 #define TEST_LOOP 100
 
 struct test_node {
-    struct bfdev_hlist_node node;
+    bfdev_hlist_node_t node;
     unsigned long value;
 };
 
@@ -26,15 +26,15 @@ hashmap_hash_key(const void *key, void *pdata)
 }
 
 static inline unsigned long
-hashmap_hash_node(const struct bfdev_hlist_node *node, void *pdata)
+hashmap_hash_node(const bfdev_hlist_node_t *node, void *pdata)
 {
     const struct test_node *tnode = node_to_test(node);
     return tnode->value;
 }
 
 static inline long
-hashmap_equal(const struct bfdev_hlist_node *node1,
-              const struct bfdev_hlist_node *nodeb, void *pdata)
+hashmap_equal(const bfdev_hlist_node_t *node1,
+              const bfdev_hlist_node_t *nodeb, void *pdata)
 {
     const struct test_node *tnode1 = node_to_test(node1);
     const struct test_node *tnodeb = node_to_test(nodeb);
@@ -42,7 +42,7 @@ hashmap_equal(const struct bfdev_hlist_node *node1,
 }
 
 static inline long
-hashmap_find(const struct bfdev_hlist_node *node, const void *key, void *pdata)
+hashmap_find(const bfdev_hlist_node_t *node, const void *key, void *pdata)
 {
     const struct test_node *tnode = node_to_test(node);
     return tnode->value - (unsigned long)key;
@@ -59,7 +59,7 @@ test_ops = {
 int main(int argc, const char *argv[])
 {
     struct test_node *nodes, *find;
-    struct bfdev_hlist_node *hnode;
+    bfdev_hlist_node_t *hnode;
     unsigned long value;
     unsigned int count;
     int retval;

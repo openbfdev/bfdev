@@ -367,8 +367,9 @@ bfdev_heap_post_next(const bfdev_heap_node_t *node);
  * @link: point to pointer to child node.
  * @node: new node to link.
  */
-static inline void bfdev_heap_link(bfdev_heap_root_t *root, bfdev_heap_node_t *parent,
-                             bfdev_heap_node_t **link, bfdev_heap_node_t *node)
+static inline void
+bfdev_heap_link(bfdev_heap_root_t *root, bfdev_heap_node_t *parent,
+                bfdev_heap_node_t **link, bfdev_heap_node_t *node)
 {
 #ifdef BFDEV_DEBUG_HEAP
     if (bfdev_unlikely(!bfdev_heap_check_link(parent, link, node)))

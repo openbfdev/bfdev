@@ -43,7 +43,7 @@ enum bfdev_cache_status {
 };
 
 struct bfdev_cache_node {
-    struct bfdev_hlist_node hash;
+    bfdev_hlist_node_t hash;
     bfdev_list_head_t list;
     enum bfdev_cache_status status;
 
@@ -56,7 +56,7 @@ struct bfdev_cache_node {
 struct bfdev_cache_head {
     const struct bfdev_alloc *alloc;
     const struct bfdev_cache_algo *algo;
-    struct bfdev_hlist_head *taghash;
+    bfdev_hlist_head_t *taghash;
     struct bfdev_cache_node **nodes;
 
     bfdev_list_head_t using;
