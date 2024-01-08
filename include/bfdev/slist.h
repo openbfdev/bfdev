@@ -14,22 +14,24 @@
 
 BFDEV_BEGIN_DECLS
 
+typedef struct bfdev_slist_head bfdev_slist_head_t;
+
 struct bfdev_slist_head {
-    struct bfdev_slist_head *next;
+    bfdev_slist_head_t *next;
 };
 
 #define BFDEV_SLIST_HEAD_STATIC \
     {NULL}
 
 #define BFDEV_SLIST_HEAD_INIT \
-    (struct bfdev_slist_head) BFDEV_SLIST_HEAD_STATIC
+    (bfdev_slist_head_t) BFDEV_SLIST_HEAD_STATIC
 
 #define BFDEV_SLIST_HEAD(name) \
-    struct bfdev_slist_head name = BFDEV_SLIST_HEAD_INIT
+    bfdev_slist_head_t name = BFDEV_SLIST_HEAD_INIT
 
 #ifdef BFDEV_DEBUG_SLIST
-extern bool bfdev_slist_check_add(struct bfdev_slist_head *node, struct bfdev_slist_head *newn);
-extern bool bfdev_slist_check_del(struct bfdev_slist_head *node);
+extern bool bfdev_slist_check_add(bfdev_slist_head_t *node, bfdev_slist_head_t *newn);
+extern bool bfdev_slist_check_del(bfdev_slist_head_t *node);
 #endif
 
 /**
@@ -37,7 +39,7 @@ extern bool bfdev_slist_check_del(struct bfdev_slist_head *node);
  * @head: slist head structure to be initialized.
  */
 static inline void
-bfdev_slist_head_init(struct bfdev_slist_head *head)
+bfdev_slist_head_init(bfdev_slist_head_t *head)
 {
     head->next = NULL;
 }
@@ -48,7 +50,7 @@ bfdev_slist_head_init(struct bfdev_slist_head *head)
  * @newn: new entry to be added.
  */
 static inline void
-bfdev_slist_add(struct bfdev_slist_head *node, struct bfdev_slist_head *newn)
+bfdev_slist_add(bfdev_slist_head_t *node, bfdev_slist_head_t *newn)
 {
 #ifdef BFDEV_DEBUG_SLIST
     if (bfdev_unlikely(!bfdev_slist_check_add(node, newn)))
@@ -65,9 +67,9 @@ bfdev_slist_add(struct bfdev_slist_head *node, struct bfdev_slist_head *newn)
  * @entry: the element to delete from the slist.
  */
 static inline void
-bfdev_slist_del(struct bfdev_slist_head *head, struct bfdev_slist_head *node)
+bfdev_slist_del(bfdev_slist_head_t *head, bfdev_slist_head_t *node)
 {
-    struct bfdev_slist_head *walk = head;
+    bfdev_slist_head_t *walk = head;
 
 #ifdef BFDEV_DEBUG_SLIST
     if (bfdev_unlikely(!bfdev_slist_check_del(node)))
@@ -86,7 +88,7 @@ bfdev_slist_del(struct bfdev_slist_head *head, struct bfdev_slist_head *node)
  * @head: slist head to check.
  */
 static inline bool
-bfdev_slist_check_empty(const struct bfdev_slist_head *head)
+bfdev_slist_check_empty(const bfdev_slist_head_t *head)
 {
     return !head->next;
 }
@@ -97,8 +99,8 @@ bfdev_slist_check_empty(const struct bfdev_slist_head *head)
  * @node: the entry to test.
  */
 static inline bool
-bfdev_slist_check_first(const struct bfdev_slist_head *head,
-                        const struct bfdev_slist_head *node)
+bfdev_slist_check_first(const bfdev_slist_head_t *head,
+                        const bfdev_slist_head_t *node)
 {
     return head->next == node;
 }
@@ -108,7 +110,7 @@ bfdev_slist_check_first(const struct bfdev_slist_head *head,
  * @node: the node to check.
  */
 static inline bool
-bfdev_slist_check_end(const struct bfdev_slist_head *node)
+bfdev_slist_check_end(const bfdev_slist_head_t *node)
 {
     return !node->next;
 }
@@ -119,8 +121,8 @@ bfdev_slist_check_end(const struct bfdev_slist_head *node)
  * @node: the unique node.
  */
 static inline bool
-bfdev_slist_check_another(const struct bfdev_slist_head *head,
-                          const struct bfdev_slist_head *node)
+bfdev_slist_check_another(const bfdev_slist_head_t *head,
+                          const bfdev_slist_head_t *node)
 {
     return head->next == node && node->next == NULL;
 }
@@ -132,10 +134,10 @@ bfdev_slist_check_another(const struct bfdev_slist_head *head,
  * @newn: the new element to insert.
  */
 static inline void
-bfdev_slist_replace(struct bfdev_slist_head *head, struct bfdev_slist_head *oldn,
-                    struct bfdev_slist_head *newn)
+bfdev_slist_replace(bfdev_slist_head_t *head, bfdev_slist_head_t *oldn,
+                    bfdev_slist_head_t *newn)
 {
-    struct bfdev_slist_head *walk = head;
+    bfdev_slist_head_t *walk = head;
 
     while (walk->next != oldn)
         walk = walk->next;
