@@ -80,6 +80,13 @@ if(BFDEV_DBGHEAP)
     )
 endif()
 
+if(BFDEV_DBGBRANCH)
+    set(BFDEV_SOURCE
+        ${BFDEV_SOURCE}
+        ${CMAKE_CURRENT_LIST_DIR}/branch.c
+    )
+endif()
+
 include(${CMAKE_CURRENT_LIST_DIR}/cache/build.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/crypto/build.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/libc/build.cmake)

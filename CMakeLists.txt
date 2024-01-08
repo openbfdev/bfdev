@@ -55,6 +55,7 @@ option(BFDEV_DBGILIST "Dynamic debug ilist" ON)
 option(BFDEV_DBGRBTREE "Dynamic debug rbtree" ON)
 option(BFDEV_DBGHEAP "Dynamic debug heap" ON)
 option(BFDEV_DBGREFCNT "Dynamic debug refcnt" ON)
+option(BFDEV_DBGBRANCH "Dynamic debug branch" ON)
 
 if(BFDEV_DEVEL)
     set(BFDEV_EXAMPLES ON)
@@ -88,6 +89,10 @@ endif()
 
 if(BFDEV_DBGREFCNT)
     set(BFDEV_DEBUG_REFCNT ON)
+endif()
+
+if(BFDEV_DBGBRANCH)
+    set(BFDEV_DEBUG_BRANCH ON)
 endif()
 
 asm_generic(
