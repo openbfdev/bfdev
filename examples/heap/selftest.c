@@ -15,7 +15,7 @@
 #define TEST_LOOP 100
 
 struct test_node {
-    struct bfdev_heap_node node;
+    bfdev_heap_node_t node;
     unsigned short num;
 };
 
@@ -27,8 +27,8 @@ struct test_pdata {
     bfdev_heap_entry(ptr, struct test_node, node)
 
 static long
-bfdev_heap_test_cmp(const struct bfdev_heap_node *node1,
-                    const struct bfdev_heap_node *node2, void *pdata)
+bfdev_heap_test_cmp(const bfdev_heap_node_t *node1,
+                    const bfdev_heap_node_t *node2, void *pdata)
 {
     struct test_node *tnode1, *tnode2;
 
@@ -45,7 +45,7 @@ static int
 bfdev_heap_testing(struct test_pdata *hdata)
 {
     struct test_node *node, *nnode, *tnode;
-    struct bfdev_heap_node *hpnode, *nhpnode, *thpnode;
+    bfdev_heap_node_t *hpnode, *nhpnode, *thpnode;
     unsigned long count, index, tindex;
 
     BFDEV_HEAP_ROOT(root);
