@@ -11,6 +11,8 @@
 
 BFDEV_BEGIN_DECLS
 
+typedef struct bfdev_segtree_node bfdev_segtree_node_t;
+
 struct bfdev_segtree_node {
     bfdev_rb_node_t node;
     unsigned long start, end;
@@ -19,7 +21,7 @@ struct bfdev_segtree_node {
 
 /**
  * bfdev_segtree_entry - get the struct for this entry.
- * @ptr: the &struct bfdev_segtree_node pointer.
+ * @ptr: the &bfdev_segtree_node_t pointer.
  * @type: the type of the struct this is embedded in.
  * @member: the name of the bfdev_segtree_node within the struct.
  */
@@ -28,18 +30,18 @@ struct bfdev_segtree_node {
 
 /**
  * bfdev_segtree_entry_safe - get the struct for this entry or null.
- * @ptr: the &struct bfdev_segtree_node pointer.
+ * @ptr: the &bfdev_segtree_node_t pointer.
  * @type: the type of the struct this is embedded in.
  * @member: the name of the bfdev_segtree_node within the struct.
  */
 #define bfdev_segtree_entry_safe(ptr, type, member) \
     bfdev_container_of_safe(ptr, type, member)
 
-extern void bfdev_segtree_insert(bfdev_rb_root_cached_t *root, struct bfdev_segtree_node *node);
-extern void bfdev_segtree_delete(bfdev_rb_root_cached_t *root, struct bfdev_segtree_node *node);
-extern struct bfdev_segtree_node *bfdev_segtree_search(struct bfdev_segtree_node *node, unsigned long start, unsigned long end);
-extern struct bfdev_segtree_node *bfdev_segtree_first(bfdev_rb_root_cached_t *root, unsigned long start, unsigned long end);
-extern struct bfdev_segtree_node *bfdev_segtree_next(struct bfdev_segtree_node *node, unsigned long start, unsigned long end);
+extern void bfdev_segtree_insert(bfdev_rb_root_cached_t *root, bfdev_segtree_node_t *node);
+extern void bfdev_segtree_delete(bfdev_rb_root_cached_t *root, bfdev_segtree_node_t *node);
+extern bfdev_segtree_node_t *bfdev_segtree_search(bfdev_segtree_node_t *node, unsigned long start, unsigned long end);
+extern bfdev_segtree_node_t *bfdev_segtree_first(bfdev_rb_root_cached_t *root, unsigned long start, unsigned long end);
+extern bfdev_segtree_node_t *bfdev_segtree_next(bfdev_segtree_node_t *node, unsigned long start, unsigned long end);
 
 /**
  * bfdev_segtree_first_entry - get the first element from a segtree.
@@ -64,7 +66,7 @@ extern struct bfdev_segtree_node *bfdev_segtree_next(struct bfdev_segtree_node *
 
 /**
  * bfdev_segtree_for_each - iterate over a segtree.
- * @pos: the &struct bfdev_segtree_node to use as a loop cursor.
+ * @pos: the &bfdev_segtree_node_t to use as a loop cursor.
  * @start: start endpoint of segtree element.
  * @end: end endpoint of segtree element.
  * @root: the root for your segtree.
@@ -84,7 +86,7 @@ extern struct bfdev_segtree_node *bfdev_segtree_next(struct bfdev_segtree_node *
 
 /**
  * bfdev_segtree_for_each_continue - continue iteration over a segtree.
- * @pos: the &struct bfdev_segtree_node to use as a loop cursor.
+ * @pos: the &bfdev_segtree_node_t to use as a loop cursor.
  * @start: start endpoint of segtree element.
  * @end: end endpoint of segtree element.
  */
