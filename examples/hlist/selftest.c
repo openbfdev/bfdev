@@ -11,7 +11,7 @@
 #define TEST_LOOP 10
 
 struct test_node {
-    struct bfdev_hlist_node list;
+    bfdev_hlist_node_t list;
     unsigned long num;
 };
 
@@ -26,7 +26,7 @@ static int
 bfdev_hlist_selftest(struct test_pdata *hdata)
 {
     struct test_node *node, *nnode, *tnode;
-    struct bfdev_hlist_node *list, *nlist, *tlist;
+    bfdev_hlist_node_t *list, *nlist, *tlist;
     unsigned int count;
 
     BFDEV_HLIST_HEAD(test_head);

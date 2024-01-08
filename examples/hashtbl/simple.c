@@ -14,7 +14,7 @@
 BFDEV_DEFINE_HASHTBL(test_table, TEST_SIZE);
 
 struct test_node {
-    struct bfdev_hlist_node node;
+    bfdev_hlist_node_t node;
     unsigned int value;
 };
 

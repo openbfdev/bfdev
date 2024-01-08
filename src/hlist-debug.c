@@ -12,8 +12,8 @@
 #include <export.h>
 
 export bool
-bfdev_hlist_check_head_add(struct bfdev_hlist_head *head,
-                           struct bfdev_hlist_node *newn)
+bfdev_hlist_check_head_add(bfdev_hlist_head_t *head,
+                           bfdev_hlist_node_t *newn)
 {
     if (bfdev_unlikely(head->node == newn)) {
         bfdev_log_err(
@@ -27,8 +27,8 @@ bfdev_hlist_check_head_add(struct bfdev_hlist_head *head,
 }
 
 export bool
-bfdev_hlist_check_next_add(struct bfdev_hlist_node *next,
-                           struct bfdev_hlist_node *newn)
+bfdev_hlist_check_next_add(bfdev_hlist_node_t *next,
+                           bfdev_hlist_node_t *newn)
 {
     if (bfdev_unlikely(next->next == newn)) {
         bfdev_log_err(
@@ -43,8 +43,8 @@ bfdev_hlist_check_next_add(struct bfdev_hlist_node *next,
 }
 
 export bool
-bfdev_hlist_check_prev_add(struct bfdev_hlist_node *prev,
-                           struct bfdev_hlist_node *newn)
+bfdev_hlist_check_prev_add(bfdev_hlist_node_t *prev,
+                           bfdev_hlist_node_t *newn)
 {
     if (bfdev_unlikely(prev->pprev == &newn->next)) {
         bfdev_log_err(
@@ -59,7 +59,7 @@ bfdev_hlist_check_prev_add(struct bfdev_hlist_node *prev,
 }
 
 export bool
-bfdev_hlist_check_del(struct bfdev_hlist_node *node)
+bfdev_hlist_check_del(bfdev_hlist_node_t *node)
 {
     if (bfdev_unlikely(node->next == BFDEV_POISON_HLIST1)) {
         bfdev_log_err(
