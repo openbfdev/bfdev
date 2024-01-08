@@ -19,7 +19,7 @@
 
 int main(int argc, const char *argv[])
 {
-    struct bfdev_cache_head *cache;
+    bfdev_cache_head_t *cache;
     unsigned int count;
 
     cache = bfdev_cache_create("lfu", NULL, TEST_SIZE, 1);
@@ -28,7 +28,7 @@ int main(int argc, const char *argv[])
 
     srand(time(NULL));
     for (count = 0; count < TEST_LOOP; ++count) {
-        struct bfdev_cache_node *node;
+        bfdev_cache_node_t *node;
         unsigned int value, verify;
 
         value = (unsigned int)rand() % TEST_MASK;
