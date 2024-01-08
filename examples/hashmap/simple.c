@@ -48,7 +48,7 @@ hashmap_find(const struct bfdev_hlist_node *node, const void *key, void *pdata)
     return tnode->value - (unsigned long)key;
 }
 
-static struct bfdev_hashmap_ops
+static bfdev_hashmap_ops_t
 test_ops = {
     .hash_key = hashmap_hash_key,
     .hash_node = hashmap_hash_node,
