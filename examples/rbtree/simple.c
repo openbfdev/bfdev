@@ -13,7 +13,7 @@
 static BFDEV_RB_ROOT(simple_root);
 
 struct simple_node {
-    struct bfdev_rb_node node;
+    bfdev_rb_node_t node;
     unsigned long data;
 };
 
@@ -21,7 +21,7 @@ struct simple_node {
     bfdev_rb_entry_safe(ptr, struct simple_node, node)
 
 static long
-demo_cmp(const struct bfdev_rb_node *a, const struct bfdev_rb_node *b, void *pdata)
+demo_cmp(const bfdev_rb_node_t *a, const bfdev_rb_node_t *b, void *pdata)
 {
     struct simple_node *demo_a = rb_to_simple(a);
     struct simple_node *demo_b = rb_to_simple(b);
