@@ -22,15 +22,15 @@ typedef struct bfdev_minpool_node *
 (*bfdev_minpool_find_t)(struct bfdev_minpool_head *head, size_t size);
 
 struct bfdev_minpool_head {
-    struct bfdev_list_head block_list;
-    struct bfdev_list_head free_list;
+    bfdev_list_head_t block_list;
+    bfdev_list_head_t free_list;
     bfdev_minpool_find_t find;
     size_t avail;
 };
 
 struct bfdev_minpool_node {
-    struct bfdev_list_head block;
-    struct bfdev_list_head free;
+    bfdev_list_head_t block;
+    bfdev_list_head_t free;
     size_t usize;
     char data[0];
 };

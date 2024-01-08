@@ -16,12 +16,12 @@ typedef struct bfdev_ilist_head bfdev_ilist_head_t;
 typedef struct bfdev_ilist_node bfdev_ilist_node_t;
 
 struct bfdev_ilist_head {
-    struct bfdev_list_head node_list;
+    bfdev_list_head_t node_list;
 };
 
 struct bfdev_ilist_node {
-    struct bfdev_list_head node_list;
-    struct bfdev_list_head index_list;
+    bfdev_list_head_t node_list;
+    bfdev_list_head_t index_list;
 };
 
 #define BFDEV_ILIST_HEAD_STATIC(name) \
@@ -134,14 +134,14 @@ bfdev_ilist_node_empty(bfdev_ilist_node_t *inode)
 /**
  * bfdev_ilist_for_each - iterate over a list.
  * @head: the head for your list.
- * @pos: the &struct bfdev_list_head to use as a loop cursor.
+ * @pos: the &bfdev_list_head_t to use as a loop cursor.
  */
 #define bfdev_ilist_for_each(pos, head) \
     bfdev_list_for_each(pos, &(head)->node_list)
 
 /**
  * bfdev_ilist_for_each_reverse - iterate over a list backwards.
- * @pos: the &struct bfdev_list_head to use as a loop cursor.
+ * @pos: the &bfdev_list_head_t to use as a loop cursor.
  * @head: the head for your list.
  */
 #define bfdev_ilist_for_each_reverse(pos, head) \
@@ -150,14 +150,14 @@ bfdev_ilist_node_empty(bfdev_ilist_node_t *inode)
 /**
  * bfdev_ilist_for_each_from - iterate over a list from the current point.
  * @head: the head for your list.
- * @pos: the &struct bfdev_list_head to use as a loop cursor.
+ * @pos: the &bfdev_list_head_t to use as a loop cursor.
  */
 #define bfdev_ilist_for_each_from(pos, head) \
     bfdev_list_for_each_from(pos, &(head)->node_list)
 
 /**
  * bfdev_ilist_for_each_reverse_from - iterate over a list backwards from the current point.
- * @pos: the &struct bfdev_list_head to use as a loop cursor.
+ * @pos: the &bfdev_list_head_t to use as a loop cursor.
  * @head: the head for your list.
  */
 #define bfdev_ilist_for_each_reverse_from(pos, head) \
@@ -165,7 +165,7 @@ bfdev_ilist_node_empty(bfdev_ilist_node_t *inode)
 
 /**
  * bfdev_ilist_for_each_continue - continue iteration over a list.
- * @pos: the &struct bfdev_list_head to use as a loop cursor.
+ * @pos: the &bfdev_list_head_t to use as a loop cursor.
  * @head: the head for your list.
  */
 #define bfdev_ilist_for_each_continue(pos, head) \
@@ -173,7 +173,7 @@ bfdev_ilist_node_empty(bfdev_ilist_node_t *inode)
 
 /**
  * bfdev_ilist_for_each_reverse_continue - continue iteration over a list backwards.
- * @pos: the &struct bfdev_list_head to use as a loop cursor.
+ * @pos: the &bfdev_list_head_t to use as a loop cursor.
  * @head: the head for your list.
  */
 #define bfdev_ilist_for_each_reverse_continue(pos, head) \
@@ -181,7 +181,7 @@ bfdev_ilist_node_empty(bfdev_ilist_node_t *inode)
 
 /**
  * bfdev_ilist_for_each_safe - iterate over a list safe against removal of list entry.
- * @pos: the &struct bfdev_list_head to use as a loop cursor.
+ * @pos: the &bfdev_list_head_t to use as a loop cursor.
  * @tmp: another bfdev_list_head to use as temporary storage.
  * @head: the head for your list.
  */
@@ -190,7 +190,7 @@ bfdev_ilist_node_empty(bfdev_ilist_node_t *inode)
 
 /**
  * bfdev_ilist_for_each_reverse_safe - iterate backwards over list safe against removal.
- * @pos: the &struct bfdev_list_head to use as a loop cursor.
+ * @pos: the &bfdev_list_head_t to use as a loop cursor.
  * @tmp: another bfdev_list_head to use as temporary storage.
  * @head: the head for your list.
  */
@@ -199,7 +199,7 @@ bfdev_ilist_node_empty(bfdev_ilist_node_t *inode)
 
 /**
  * bfdev_ilist_for_each_from_safe - iterate over a list safe against removal of list entry from the current point.
- * @pos: the &struct bfdev_list_head to use as a loop cursor.
+ * @pos: the &bfdev_list_head_t to use as a loop cursor.
  * @tmp: another bfdev_list_head to use as temporary storage.
  * @head: the head for your list.
  */
@@ -208,7 +208,7 @@ bfdev_ilist_node_empty(bfdev_ilist_node_t *inode)
 
 /**
  * bfdev_ilist_for_each_reverse_from_safe - iterate backwards over list safe against removal from the current point.
- * @pos: the &struct bfdev_list_head to use as a loop cursor.
+ * @pos: the &bfdev_list_head_t to use as a loop cursor.
  * @tmp: another bfdev_list_head to use as temporary storage.
  * @head: the head for your list.
  */
@@ -217,7 +217,7 @@ bfdev_ilist_node_empty(bfdev_ilist_node_t *inode)
 
 /**
  * bfdev_ilist_for_each_continue_safe - continue list iteration safe against removal.
- * @pos: the &struct bfdev_list_head to use as a loop cursor.
+ * @pos: the &bfdev_list_head_t to use as a loop cursor.
  * @tmp: another bfdev_list_head to use as temporary storage.
  * @head: the head for your list.
  */
@@ -226,7 +226,7 @@ bfdev_ilist_node_empty(bfdev_ilist_node_t *inode)
 
 /**
  * bfdev_ilist_for_each_reverse_continue_safe - continue backwards over list iteration safe against removal.
- * @pos: the &struct bfdev_list_head to use as a loop cursor.
+ * @pos: the &bfdev_list_head_t to use as a loop cursor.
  * @tmp: another bfdev_list_head to use as temporary storage.
  * @head: the head for your list.
  */
