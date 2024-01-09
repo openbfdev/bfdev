@@ -14,14 +14,17 @@
 
 BFDEV_BEGIN_DECLS
 
+typedef struct bfdev_heap_root bfdev_heap_root_t;
+typedef struct bfdev_heap_node bfdev_heap_node_t;
+
 struct bfdev_heap_node {
-    struct bfdev_heap_node *parent;
-    struct bfdev_heap_node *left;
-    struct bfdev_heap_node *right;
+    bfdev_heap_node_t *parent;
+    bfdev_heap_node_t *left;
+    bfdev_heap_node_t *right;
 };
 
 struct bfdev_heap_root {
-    struct bfdev_heap_node *node;
+    bfdev_heap_node_t *node;
     unsigned int count;
 };
 
@@ -32,10 +35,10 @@ struct bfdev_heap_root {
     {{NULL}, NULL}
 
 #define BFDEV_HEAP_INIT \
-    (struct bfdev_heap_root) BFDEV_HEAP_STATIC
+    (bfdev_heap_root_t) BFDEV_HEAP_STATIC
 
 #define BFDEV_HEAP_ROOT(name) \
-    struct bfdev_heap_root name = BFDEV_HEAP_INIT
+    bfdev_heap_root_t name = BFDEV_HEAP_INIT
 
 #define BFDEV_HEAP_EMPTY_ROOT(root) \
     ((root)->node == NULL)
@@ -54,7 +57,7 @@ struct bfdev_heap_root {
 
 /**
  * bfdev_heap_entry - get the struct for this entry.
- * @ptr: the &struct bfdev_heap_node pointer.
+ * @ptr: the &bfdev_heap_node_t pointer.
  * @type: the type of the struct this is embedded in.
  * @member: the name of the bfdev_heap_node within the struct.
  */
@@ -63,7 +66,7 @@ struct bfdev_heap_root {
 
 /**
  * bfdev_heap_entry_safe - get the struct for this entry or null.
- * @ptr: the &struct bfdev_heap_node pointer.
+ * @ptr: the &bfdev_heap_node_t pointer.
  * @type: the type of the struct this is embedded in.
  * @member: the name of the bfdev_heap_node within the struct.
  */
@@ -72,20 +75,20 @@ struct bfdev_heap_root {
 
 #ifdef BFDEV_DEBUG_HEAP
 extern bool
-bfdev_heap_check_link(struct bfdev_heap_node *parent, struct bfdev_heap_node **link,
-                      struct bfdev_heap_node *node);
+bfdev_heap_check_link(bfdev_heap_node_t *parent, bfdev_heap_node_t **link,
+                      bfdev_heap_node_t *node);
 
 extern bool
-bfdev_heap_check_delete(struct bfdev_heap_node *node);
+bfdev_heap_check_delete(bfdev_heap_node_t *node);
 #endif
 
 BFDEV_CALLBACK_CMP(
     bfdev_heap_cmp_t,
-    const struct bfdev_heap_node *
+    const bfdev_heap_node_t *
 );
 
 static inline void
-bfdev_heap_init(struct bfdev_heap_root *root)
+bfdev_heap_init(bfdev_heap_root_t *root)
 {
     *root = BFDEV_HEAP_INIT;
 }
@@ -97,7 +100,7 @@ bfdev_heap_init(struct bfdev_heap_root *root)
  * @cmp: operator defining the node order.
  */
 extern void
-bfdev_heap_fixup(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
+bfdev_heap_fixup(bfdev_heap_root_t *root, bfdev_heap_node_t *node,
                  bfdev_heap_cmp_t cmp, void *pdata);
 
 /**
@@ -107,7 +110,7 @@ bfdev_heap_fixup(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
  * @cmp: operator defining the node order.
  */
 extern void
-bfdev_heap_erase(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
+bfdev_heap_erase(bfdev_heap_root_t *root, bfdev_heap_node_t *node,
                  bfdev_heap_cmp_t cmp, void *pdata);
 
 /**
@@ -115,8 +118,8 @@ bfdev_heap_erase(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
  * @root: heap root of node.
  * @node: node to remove.
  */
-extern struct bfdev_heap_node *
-bfdev_heap_remove(struct bfdev_heap_root *root, struct bfdev_heap_node *node);
+extern bfdev_heap_node_t *
+bfdev_heap_remove(bfdev_heap_root_t *root, bfdev_heap_node_t *node);
 
 /**
  * bfdev_heap_parent - find the parent node.
@@ -124,44 +127,44 @@ bfdev_heap_remove(struct bfdev_heap_root *root, struct bfdev_heap_node *node);
  * @parentp: pointer used to modify the parent node pointer.
  * @node: new node to insert.
  */
-extern struct bfdev_heap_node **
-bfdev_heap_parent(struct bfdev_heap_root *root, struct bfdev_heap_node **parentp,
-                  struct bfdev_heap_node *node);
+extern bfdev_heap_node_t **
+bfdev_heap_parent(bfdev_heap_root_t *root, bfdev_heap_node_t **parentp,
+                  bfdev_heap_node_t *node);
 
 /**
  * bfdev_heap_find - find @index in tree @root.
  * @root: heap tree want to search.
  * @index: index of node.
  */
-extern struct bfdev_heap_node *
-bfdev_heap_find(struct bfdev_heap_root *root, unsigned int index);
+extern bfdev_heap_node_t *
+bfdev_heap_find(bfdev_heap_root_t *root, unsigned int index);
 
 /* Base iteration - basic iteration helper */
-extern struct bfdev_heap_node *
-bfdev_heap_left_far(const struct bfdev_heap_node *node);
+extern bfdev_heap_node_t *
+bfdev_heap_left_far(const bfdev_heap_node_t *node);
 
-extern struct bfdev_heap_node *
-bfdev_heap_right_far(const struct bfdev_heap_node *node);
+extern bfdev_heap_node_t *
+bfdev_heap_right_far(const bfdev_heap_node_t *node);
 
-extern struct bfdev_heap_node *
-bfdev_heap_left_deep(const struct bfdev_heap_node *node);
+extern bfdev_heap_node_t *
+bfdev_heap_left_deep(const bfdev_heap_node_t *node);
 
-extern struct bfdev_heap_node *
-bfdev_heap_right_deep(const struct bfdev_heap_node *node);
+extern bfdev_heap_node_t *
+bfdev_heap_right_deep(const bfdev_heap_node_t *node);
 
 /* Level iteration (Sequential) - access in level sequence */
-extern struct bfdev_heap_node *
-bfdev_heap_first(const struct bfdev_heap_root *root, unsigned long *index);
+extern bfdev_heap_node_t *
+bfdev_heap_first(const bfdev_heap_root_t *root, unsigned long *index);
 
-extern struct bfdev_heap_node *
-bfdev_heap_next(const struct bfdev_heap_root *root, unsigned long *index);
+extern bfdev_heap_node_t *
+bfdev_heap_next(const bfdev_heap_root_t *root, unsigned long *index);
 
 /* Postorder iteration (Depth-first) - always visit the parent after its children */
-extern struct bfdev_heap_node *
-bfdev_heap_post_first(const struct bfdev_heap_root *root);
+extern bfdev_heap_node_t *
+bfdev_heap_post_first(const bfdev_heap_root_t *root);
 
-extern struct bfdev_heap_node *
-bfdev_heap_post_next(const struct bfdev_heap_node *node);
+extern bfdev_heap_node_t *
+bfdev_heap_post_next(const bfdev_heap_node_t *node);
 
 /**
  * bfdev_heap_first_entry - get the preorder first element from a heap.
@@ -182,7 +185,7 @@ bfdev_heap_post_next(const struct bfdev_heap_node *node);
 
 /**
  * bfdev_heap_for_each - preorder iterate over a heap.
- * @pos: the &struct bfdev_heap_node to use as a loop cursor.
+ * @pos: the &bfdev_heap_node_t to use as a loop cursor.
  * @root: the root for your heap.
  */
 #define bfdev_heap_for_each(pos, index, root) \
@@ -191,14 +194,14 @@ bfdev_heap_post_next(const struct bfdev_heap_node *node);
 
 /**
  * bfdev_heap_for_each_from - preorder iterate over a heap from the current point.
- * @pos: the &struct bfdev_heap_node to use as a loop cursor.
+ * @pos: the &bfdev_heap_node_t to use as a loop cursor.
  */
 #define bfdev_heap_for_each_from(pos, index, root) \
     for (; pos; pos = bfdev_heap_next(root, index))
 
 /**
  * bfdev_heap_for_each_continue - continue preorder iteration over a heap.
- * @pos: the &struct bfdev_heap_node to use as a loop cursor.
+ * @pos: the &bfdev_heap_node_t to use as a loop cursor.
  */
 #define bfdev_heap_for_each_continue(pos, index, root) \
     for (pos = bfdev_heap_next(root, index); \
@@ -250,7 +253,7 @@ bfdev_heap_post_next(const struct bfdev_heap_node *node);
 
 /**
  * bfdev_heap_post_for_each - postorder iterate over a heap.
- * @pos: the &struct bfdev_heap_node to use as a loop cursor.
+ * @pos: the &bfdev_heap_node_t to use as a loop cursor.
  * @root: the root for your heap.
  */
 #define bfdev_heap_post_for_each(pos, root) \
@@ -258,21 +261,21 @@ bfdev_heap_post_next(const struct bfdev_heap_node *node);
 
 /**
  * bfdev_heap_post_for_each_from - postorder iterate over a heap from the current point.
- * @pos: the &struct bfdev_heap_node to use as a loop cursor.
+ * @pos: the &bfdev_heap_node_t to use as a loop cursor.
  */
 #define bfdev_heap_post_for_each_from(pos) \
     for (; pos; pos = bfdev_heap_post_next(pos))
 
 /**
  * bfdev_heap_post_for_each_continue - continue postorder iteration over a heap.
- * @pos: the &struct bfdev_heap_node to use as a loop cursor.
+ * @pos: the &bfdev_heap_node_t to use as a loop cursor.
  */
 #define bfdev_heap_post_for_each_continue(pos) \
     for (pos = bfdev_heap_post_next(pos); pos; pos = bfdev_heap_post_next(pos))
 
 /**
  * bfdev_heap_post_for_each_safe - postorder iterate over a heap safe against removal of heap entry.
- * @pos: the &struct bfdev_heap_node to use as a loop cursor.
+ * @pos: the &bfdev_heap_node_t to use as a loop cursor.
  * @tmp: another bfdev_heap_node to use as temporary storage.
  * @root: the root for your heap.
  */
@@ -282,7 +285,7 @@ bfdev_heap_post_next(const struct bfdev_heap_node *node);
 
 /**
  * bfdev_heap_post_for_each_safe_from - postorder iterate over a heap safe against removal of heap entry from the current point.
- * @pos: the &struct bfdev_heap_node to use as a loop cursor.
+ * @pos: the &bfdev_heap_node_t to use as a loop cursor.
  * @tmp: another bfdev_heap_node to use as temporary storage.
  */
 #define bfdev_heap_post_for_each_safe_from(pos, tmp) \
@@ -290,7 +293,7 @@ bfdev_heap_post_next(const struct bfdev_heap_node *node);
 
 /**
  * bfdev_heap_post_for_each_safe_continue - continue heap postorder iteration safe against removal.
- * @pos: the &struct bfdev_heap_node to use as a loop cursor.
+ * @pos: the &bfdev_heap_node_t to use as a loop cursor.
  * @tmp: another bfdev_heap_node to use as temporary storage.
  */
 #define bfdev_heap_post_for_each_safe_continue(pos, tmp) \
@@ -364,8 +367,9 @@ bfdev_heap_post_next(const struct bfdev_heap_node *node);
  * @link: point to pointer to child node.
  * @node: new node to link.
  */
-static inline void bfdev_heap_link(struct bfdev_heap_root *root, struct bfdev_heap_node *parent,
-                             struct bfdev_heap_node **link, struct bfdev_heap_node *node)
+static inline void
+bfdev_heap_link(bfdev_heap_root_t *root, bfdev_heap_node_t *parent,
+                bfdev_heap_node_t **link, bfdev_heap_node_t *node)
 {
 #ifdef BFDEV_DEBUG_HEAP
     if (bfdev_unlikely(!bfdev_heap_check_link(parent, link, node)))
@@ -387,8 +391,8 @@ static inline void bfdev_heap_link(struct bfdev_heap_root *root, struct bfdev_he
  * @node: new node to link.
  */
 static inline void
-bfdev_heap_insert_node(struct bfdev_heap_root *root, struct bfdev_heap_node *parent,
-                       struct bfdev_heap_node **link, struct bfdev_heap_node *node,
+bfdev_heap_insert_node(bfdev_heap_root_t *root, bfdev_heap_node_t *parent,
+                       bfdev_heap_node_t **link, bfdev_heap_node_t *node,
                        bfdev_heap_cmp_t cmp, void *pdata)
 {
     bfdev_heap_link(root, parent, link, node);
@@ -402,10 +406,10 @@ bfdev_heap_insert_node(struct bfdev_heap_root *root, struct bfdev_heap_node *par
  * @cmp: operator defining the node order.
  */
 static inline void
-bfdev_heap_insert(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
+bfdev_heap_insert(bfdev_heap_root_t *root, bfdev_heap_node_t *node,
                   bfdev_heap_cmp_t cmp, void *pdata)
 {
-    struct bfdev_heap_node *parent, **link;
+    bfdev_heap_node_t *parent, **link;
 
     link = bfdev_heap_parent(root, &parent, node);
     bfdev_heap_insert_node(root, parent, link, node, cmp, pdata);
@@ -417,10 +421,10 @@ bfdev_heap_insert(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
  * @node: node to delete.
  */
 static inline void
-bfdev_heap_delete(struct bfdev_heap_root *root, struct bfdev_heap_node *node,
+bfdev_heap_delete(bfdev_heap_root_t *root, bfdev_heap_node_t *node,
                   bfdev_heap_cmp_t cmp, void *pdata)
 {
-    struct bfdev_heap_node *rebalance;
+    bfdev_heap_node_t *rebalance;
 
 #ifdef BFDEV_DEBUG_HEAP
     if (bfdev_unlikely(!bfdev_heap_check_delete(node)))

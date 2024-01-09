@@ -7,21 +7,21 @@ add_executable(fifo-selftest selftest.c)
 target_link_libraries(fifo-selftest bfdev)
 add_test(fifo-selftest fifo-selftest)
 
-add_executable(fifo-simple simple.c)
-target_link_libraries(fifo-simple bfdev pthread)
-add_test(fifo-simple fifo-simple)
+add_executable(fifo-atomic atomic.c)
+target_link_libraries(fifo-atomic bfdev pthread)
+add_test(fifo-atomic fifo-atomic)
 
 if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
     install(FILES
         selftest.c
-        simple.c
+        atomic.c
         DESTINATION
         ${CMAKE_INSTALL_DOCDIR}/examples/fifo
     )
 
     install(TARGETS
         fifo-selftest
-        fifo-simple
+        fifo-atomic
         DESTINATION
         ${CMAKE_INSTALL_DOCDIR}/bin
     )

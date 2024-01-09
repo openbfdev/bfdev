@@ -10,7 +10,7 @@
 #include <export.h>
 
 static unsigned int
-bloom_index(struct bfdev_bloom *bloom, unsigned int func, void *key)
+bloom_index(bfdev_bloom_t *bloom, unsigned int func, void *key)
 {
     unsigned int value, index;
 
@@ -21,7 +21,7 @@ bloom_index(struct bfdev_bloom *bloom, unsigned int func, void *key)
 }
 
 export bool
-bfdev_bloom_peek(struct bfdev_bloom *bloom, void *key)
+bfdev_bloom_peek(bfdev_bloom_t *bloom, void *key)
 {
     unsigned int index, func;
     bool retval = true;
@@ -36,7 +36,7 @@ bfdev_bloom_peek(struct bfdev_bloom *bloom, void *key)
 }
 
 export bool
-bfdev_bloom_push(struct bfdev_bloom *bloom, void *key)
+bfdev_bloom_push(bfdev_bloom_t *bloom, void *key)
 {
     unsigned int index, func;
     bool retval = true;
@@ -51,17 +51,17 @@ bfdev_bloom_push(struct bfdev_bloom *bloom, void *key)
 }
 
 export void
-bfdev_bloom_flush(struct bfdev_bloom *bloom)
+bfdev_bloom_flush(bfdev_bloom_t *bloom)
 {
     size_t size = BFDEV_BITS_WORD(bloom->capacity);
     memset(bloom->bitmap, 0, size);
 }
 
-export struct bfdev_bloom *
-bfdev_bloom_create(const struct bfdev_alloc *alloc, unsigned int capacity,
+export bfdev_bloom_t *
+bfdev_bloom_create(const bfdev_alloc_t *alloc, unsigned int capacity,
                    bfdev_bloom_hash_t hash, unsigned int funcs, void *pdata)
 {
-    struct bfdev_bloom *bloom;
+    bfdev_bloom_t *bloom;
     size_t size;
 
     bfdev_align_high_adj(capacity, BFDEV_BITS_PER_LONG);
@@ -81,8 +81,8 @@ bfdev_bloom_create(const struct bfdev_alloc *alloc, unsigned int capacity,
 }
 
 export void
-bfdev_bloom_destory(struct bfdev_bloom *bloom)
+bfdev_bloom_destory(bfdev_bloom_t *bloom)
 {
-    const struct bfdev_alloc *alloc = bloom->alloc;
+    const bfdev_alloc_t *alloc = bloom->alloc;
     bfdev_free(alloc, bloom);
 }

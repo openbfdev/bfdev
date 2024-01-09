@@ -13,8 +13,8 @@
 
 #ifdef BFDEV_DEBUG_ILIST
 static inline bool
-ilist_integrity_check(struct bfdev_list_head *head, struct bfdev_list_head *prev,
-                      struct bfdev_list_head *next)
+ilist_integrity_check(bfdev_list_head_t *head, bfdev_list_head_t *prev,
+                      bfdev_list_head_t *next)
 {
     if (bfdev_unlikely(prev->next != next)) {
         bfdev_log_err(
@@ -38,9 +38,9 @@ ilist_integrity_check(struct bfdev_list_head *head, struct bfdev_list_head *prev
 }
 
 static inline bool
-ilist_list_check(struct bfdev_list_head *head)
+ilist_list_check(bfdev_list_head_t *head)
 {
-    struct bfdev_list_head *prev = head, *next = head->next;
+    bfdev_list_head_t *prev = head, *next = head->next;
     bool success;
 
     success = ilist_integrity_check(head, prev, next);
@@ -54,7 +54,7 @@ ilist_list_check(struct bfdev_list_head *head)
 }
 
 static inline bool
-ilist_head_check(struct bfdev_ilist_head *ihead)
+ilist_head_check(bfdev_ilist_head_t *ihead)
 {
     bool success;
 
@@ -67,11 +67,11 @@ ilist_head_check(struct bfdev_ilist_head *ihead)
 #endif
 
 export void
-bfdev_ilist_add(struct bfdev_ilist_head *ihead, struct bfdev_ilist_node *inode,
+bfdev_ilist_add(bfdev_ilist_head_t *ihead, bfdev_ilist_node_t *inode,
                 bfdev_ilist_cmp_t cmp, void *pdata)
 {
-    struct bfdev_ilist_node *walk, *first, *prev = NULL;
-    struct bfdev_list_head *next = &ihead->node_list;
+    bfdev_ilist_node_t *walk, *first, *prev = NULL;
+    bfdev_list_head_t *next = &ihead->node_list;
 
 #ifdef BFDEV_DEBUG_ILIST
     if (bfdev_unlikely(!ilist_head_check(ihead)))
@@ -111,9 +111,9 @@ finish:
 }
 
 export void
-bfdev_ilist_del(struct bfdev_ilist_head *ihead, struct bfdev_ilist_node *inode)
+bfdev_ilist_del(bfdev_ilist_head_t *ihead, bfdev_ilist_node_t *inode)
 {
-    struct bfdev_ilist_node *next;
+    bfdev_ilist_node_t *next;
 
 #ifdef BFDEV_DEBUG_ILIST
     if (bfdev_unlikely(!ilist_head_check(ihead)))

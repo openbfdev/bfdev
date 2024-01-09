@@ -8,13 +8,13 @@
 #include <bfdev/heap.h>
 
 struct lfu_head {
-    struct bfdev_cache_head cache;
-    struct bfdev_heap_root lfu;
+    bfdev_cache_head_t cache;
+    bfdev_heap_root_t lfu;
 };
 
 struct lfu_node {
-    struct bfdev_cache_node cache;
-    struct bfdev_heap_node node;
+    bfdev_cache_node_t cache;
+    bfdev_heap_node_t node;
     unsigned long count;
 };
 
@@ -28,8 +28,8 @@ struct lfu_node {
     bfdev_heap_entry(ptr, struct lfu_node, node)
 
 static long
-lfu_compare(const struct bfdev_heap_node *node1,
-            const struct bfdev_heap_node *node2, void *pdata)
+lfu_compare(const bfdev_heap_node_t *node1,
+            const bfdev_heap_node_t *node2, void *pdata)
 {
     struct lfu_node *lfu1, *lfu2;
 
@@ -43,15 +43,15 @@ lfu_compare(const struct bfdev_heap_node *node1,
 }
 
 static bool
-lfu_starving(struct bfdev_cache_head *head)
+lfu_starving(bfdev_cache_head_t *head)
 {
     struct lfu_head *lfu_head;
     lfu_head = cache_to_lfu_head(head);
     return BFDEV_HEAP_EMPTY_ROOT(&lfu_head->lfu);
 }
 
-static struct bfdev_cache_node *
-lfu_obtain(struct bfdev_cache_head *head)
+static bfdev_cache_node_t *
+lfu_obtain(bfdev_cache_head_t *head)
 {
     struct lfu_head *lfu_head;
     struct lfu_node *lfu_node;
@@ -64,7 +64,7 @@ lfu_obtain(struct bfdev_cache_head *head)
 }
 
 static void
-lfu_get(struct bfdev_cache_head *head, struct bfdev_cache_node *node)
+lfu_get(bfdev_cache_head_t *head, bfdev_cache_node_t *node)
 {
     struct lfu_head *lfu_head;
     struct lfu_node *lfu_node;
@@ -76,7 +76,7 @@ lfu_get(struct bfdev_cache_head *head, struct bfdev_cache_node *node)
 }
 
 static void
-lfu_put(struct bfdev_cache_head *head, struct bfdev_cache_node *node)
+lfu_put(bfdev_cache_head_t *head, bfdev_cache_node_t *node)
 {
     struct lfu_head *lfu_head;
     struct lfu_node *lfu_node;
@@ -88,7 +88,7 @@ lfu_put(struct bfdev_cache_head *head, struct bfdev_cache_node *node)
 }
 
 static void
-lfu_update(struct bfdev_cache_head *head, struct bfdev_cache_node *node)
+lfu_update(bfdev_cache_head_t *head, bfdev_cache_node_t *node)
 {
     struct lfu_node *lfu_node;
     lfu_node = cache_to_lfu_node(node);
@@ -96,7 +96,7 @@ lfu_update(struct bfdev_cache_head *head, struct bfdev_cache_node *node)
 }
 
 static void
-lfu_clear(struct bfdev_cache_head *head, struct bfdev_cache_node *node)
+lfu_clear(bfdev_cache_head_t *head, bfdev_cache_node_t *node)
 {
     struct lfu_node *lfu_node;
     lfu_node = cache_to_lfu_node(node);
@@ -104,7 +104,7 @@ lfu_clear(struct bfdev_cache_head *head, struct bfdev_cache_node *node)
 }
 
 static void
-lfu_reset(struct bfdev_cache_head *head)
+lfu_reset(bfdev_cache_head_t *head)
 {
     struct lfu_head *lfu_head;
     unsigned long count;
@@ -120,10 +120,10 @@ lfu_reset(struct bfdev_cache_head *head)
     }
 }
 
-static struct bfdev_cache_head *
-lfu_create(const struct bfdev_alloc *alloc, unsigned long size)
+static bfdev_cache_head_t *
+lfu_create(const bfdev_alloc_t *alloc, unsigned long size)
 {
-    struct bfdev_cache_head *head;
+    bfdev_cache_head_t *head;
     struct lfu_head *lfu_head;
     struct lfu_node *lfu_node;
     unsigned long count;
@@ -162,10 +162,10 @@ free_head:
 }
 
 static void
-lfu_destroy(struct bfdev_cache_head *head)
+lfu_destroy(bfdev_cache_head_t *head)
 {
-    const struct bfdev_alloc *alloc;
-    struct bfdev_cache_node *node;
+    const bfdev_alloc_t *alloc;
+    bfdev_cache_node_t *node;
     unsigned long count;
 
     alloc = head->alloc;
@@ -179,7 +179,7 @@ lfu_destroy(struct bfdev_cache_head *head)
     bfdev_free(alloc, head);
 }
 
-static struct bfdev_cache_algo
+static bfdev_cache_algo_t
 lfu_algorithm = {
     .name = "lfu",
     .starving = lfu_starving,

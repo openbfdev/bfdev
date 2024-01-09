@@ -10,10 +10,12 @@
 
 BFDEV_BEGIN_DECLS
 
+typedef struct bfdev_circle bfdev_circle_t;
+
 struct bfdev_circle {
     void *buffer;
-    unsigned long head;
-    unsigned long tail;
+    volatile unsigned long head;
+    volatile unsigned long tail;
 };
 
 /* Return count in buffer */
@@ -22,7 +24,7 @@ struct bfdev_circle {
 
 /* Return space available */
 #define BFDEV_CIRCLE_SPACE(head, tail, size) \
-    (((tail) - (head) + 1) & ((size) - 1))
+    (((tail) - ((head) + 1)) & ((size) - 1))
 
 /* Return count up to the end of the buffer */
 #define BFDEV_CIRCLE_CNT_END(head, tail, size) ({   \

@@ -6,27 +6,27 @@
 #include <bfdev/list.h>
 #include <export.h>
 
-static inline struct bfdev_list_head *
+static inline bfdev_list_head_t *
 list_merge(bfdev_list_cmp_t cmp, void *pdata,
-           struct bfdev_list_head *a, struct bfdev_list_head *b)
+           bfdev_list_head_t *node1, bfdev_list_head_t *node2)
 {
-    struct bfdev_list_head *node, **tail = &node;
+    bfdev_list_head_t *node, **tail = &node;
 
     for (;;) {
-        if (cmp(a, b, pdata) <= 0) {
-            *tail = a;
-            tail = &a->next;
-            a = a->next;
-            if (!a) {
-                *tail = b;
+        if (cmp(node1, node2, pdata) <= 0) {
+            *tail = node1;
+            tail = &node1->next;
+            node1 = node1->next;
+            if (!node1) {
+                *tail = node2;
                 break;
             }
         } else {
-            *tail = b;
-            tail = &b->next;
-            b = b->next;
-            if (!b) {
-                *tail = a;
+            *tail = node2;
+            tail = &node2->next;
+            node2 = node2->next;
+            if (!node2) {
+                *tail = node1;
                 break;
             }
         }
@@ -36,49 +36,46 @@ list_merge(bfdev_list_cmp_t cmp, void *pdata,
 }
 
 static inline void
-list_finish(bfdev_list_cmp_t cmp, void *pdata, struct bfdev_list_head *head,
-            struct bfdev_list_head *a, struct bfdev_list_head *b)
+list_finish(bfdev_list_cmp_t cmp, void *pdata, bfdev_list_head_t *head,
+            bfdev_list_head_t *node1, bfdev_list_head_t *node2)
 {
-    struct bfdev_list_head *tail = head;
-    unsigned int count = 0;
+    bfdev_list_head_t *tail = head;
 
     for (;;) {
-        if (cmp(a, b, pdata) <= 0) {
-            tail->next = a;
-            a->prev = tail;
-            tail = a;
-            a = a->next;
-            if (!a)
+        if (cmp(node1, node2, pdata) <= 0) {
+            tail->next = node1;
+            node1->prev = tail;
+            tail = node1;
+            node1 = node1->next;
+            if (!node1)
                 break;
         } else {
-            tail->next = b;
-            b->prev = tail;
-            tail = b;
-            b = b->next;
-            if (!b) {
-                b = a;
+            tail->next = node2;
+            node2->prev = tail;
+            tail = node2;
+            node2 = node2->next;
+            if (!node2) {
+                node2 = node1;
                 break;
             }
         }
     }
 
-    tail->next = b;
+    tail->next = node2;
     do {
-        if (bfdev_unlikely(!++count))
-            cmp(b, b, pdata);
-        b->prev = tail;
-        tail = b;
-        b = b->next;
-    } while (b);
+        node2->prev = tail;
+        tail = node2;
+        node2 = node2->next;
+    } while (node2);
 
     tail->next = head;
     head->prev = tail;
 }
 
 export void
-bfdev_list_sort(struct bfdev_list_head *head, bfdev_list_cmp_t cmp, void *pdata)
+bfdev_list_sort(bfdev_list_head_t *head, bfdev_list_cmp_t cmp, void *pdata)
 {
-    struct bfdev_list_head *pending, *node;
+    bfdev_list_head_t *pending, *node;
     unsigned int count;
 
     node = head->next;
@@ -89,17 +86,17 @@ bfdev_list_sort(struct bfdev_list_head *head, bfdev_list_cmp_t cmp, void *pdata)
     pending = NULL;
 
     for (count = 0; node; ++count) {
-        struct bfdev_list_head **tail = &pending;
+        bfdev_list_head_t **tail = &pending;
         size_t bits;
 
         for (bits = count; bits & 1; bits >>= 1)
             tail = &(*tail)->prev;
 
         if (bfdev_likely(bits)) {
-            struct bfdev_list_head *b = *tail, *a = b->prev;
-            b = list_merge(cmp, pdata, a, b);
-            b->prev = a->prev;
-            *tail = b;
+            bfdev_list_head_t *node2 = *tail, *node1 = node2->prev;
+            node2 = list_merge(cmp, pdata, node1, node2);
+            node2->prev = node1->prev;
+            *tail = node2;
         }
 
         node->prev = pending;
@@ -113,10 +110,12 @@ bfdev_list_sort(struct bfdev_list_head *head, bfdev_list_cmp_t cmp, void *pdata)
     pending = pending->prev;
 
     for (;;) {
-        struct bfdev_list_head *next = pending->prev;
+        bfdev_list_head_t *next;
 
+        next = pending->prev;
         if (!next)
             break;
+
         node = list_merge(cmp, pdata, pending, node);
         pending = next;
     }

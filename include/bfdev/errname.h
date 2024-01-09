@@ -13,16 +13,18 @@
 
 BFDEV_BEGIN_DECLS
 
+typedef struct bfdev_errname bfdev_errname_t;
+
 struct bfdev_errname {
     int errnum;
     const char *name;
     const char *info;
 };
 
-extern const struct bfdev_errname
+extern const bfdev_errname_t
 bfdev_errname_table[];
 
-extern struct bfdev_errname *
+extern bfdev_errname_t *
 bfdev_errname_find(int error);
 
 /**

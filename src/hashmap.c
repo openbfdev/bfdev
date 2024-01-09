@@ -8,10 +8,10 @@
 #include <export.h>
 
 static __bfdev_always_inline unsigned long
-hashmap_hash_node(struct bfdev_hashmap *hashmap,
-                  const struct bfdev_hlist_node *node)
+hashmap_hash_node(bfdev_hashmap_t *hashmap,
+                  const bfdev_hlist_node_t *node)
 {
-    const struct bfdev_hashmap_ops *ops;
+    const bfdev_hashmap_ops_t *ops;
     unsigned long retval;
 
     ops = hashmap->ops;
@@ -21,10 +21,10 @@ hashmap_hash_node(struct bfdev_hashmap *hashmap,
 }
 
 static __bfdev_always_inline unsigned long
-hashmap_hash_key(const struct bfdev_hashmap *hashmap,
+hashmap_hash_key(const bfdev_hashmap_t *hashmap,
                  const void *key)
 {
-    const struct bfdev_hashmap_ops *ops;
+    const bfdev_hashmap_ops_t *ops;
     unsigned long retval;
 
     ops = hashmap->ops;
@@ -34,10 +34,10 @@ hashmap_hash_key(const struct bfdev_hashmap *hashmap,
 }
 
 static __bfdev_always_inline long
-hashmap_equal(struct bfdev_hashmap *hashmap, const struct bfdev_hlist_node *node1,
-              const struct bfdev_hlist_node *node2)
+hashmap_equal(bfdev_hashmap_t *hashmap, const bfdev_hlist_node_t *node1,
+              const bfdev_hlist_node_t *node2)
 {
-    const struct bfdev_hashmap_ops *ops;
+    const bfdev_hashmap_ops_t *ops;
     long retval;
 
     ops = hashmap->ops;
@@ -47,10 +47,10 @@ hashmap_equal(struct bfdev_hashmap *hashmap, const struct bfdev_hlist_node *node
 }
 
 static __bfdev_always_inline long
-hashmap_find(struct bfdev_hashmap *hashmap, const void *key,
-             const struct bfdev_hlist_node *node)
+hashmap_find(bfdev_hashmap_t *hashmap, const void *key,
+             const bfdev_hlist_node_t *node)
 {
-    const struct bfdev_hashmap_ops *ops;
+    const bfdev_hashmap_ops_t *ops;
     long retval;
 
     ops = hashmap->ops;
@@ -60,9 +60,9 @@ hashmap_find(struct bfdev_hashmap *hashmap, const void *key,
 }
 
 static __bfdev_always_inline bool
-hashmap_need_extend(struct bfdev_hashmap *hashmap)
+hashmap_need_extend(bfdev_hashmap_t *hashmap)
 {
-    const struct bfdev_hashmap_ops *ops;
+    const bfdev_hashmap_ops_t *ops;
 
     if (!hashmap->capacity)
         return true;
@@ -76,9 +76,9 @@ hashmap_need_extend(struct bfdev_hashmap *hashmap)
 }
 
 static __bfdev_always_inline bool
-hashmap_need_shrink(struct bfdev_hashmap *hashmap)
+hashmap_need_shrink(bfdev_hashmap_t *hashmap)
 {
-    const struct bfdev_hashmap_ops *ops;
+    const bfdev_hashmap_ops_t *ops;
 
     ops = hashmap->ops;
     if (ops->shrink)
@@ -88,11 +88,11 @@ hashmap_need_shrink(struct bfdev_hashmap *hashmap)
     return hashmap->used * 4 < hashmap->capacity;
 }
 
-static inline struct bfdev_hlist_node *
-hashmap_find_node(struct bfdev_hashmap *hashmap, const struct bfdev_hlist_node *node,
+static inline bfdev_hlist_node_t *
+hashmap_find_node(bfdev_hashmap_t *hashmap, const bfdev_hlist_node_t *node,
                   unsigned long hash)
 {
-    struct bfdev_hlist_node *walk;
+    bfdev_hlist_node_t *walk;
     unsigned long index;
 
     if (!hashmap->buckets)
@@ -107,11 +107,11 @@ hashmap_find_node(struct bfdev_hashmap *hashmap, const struct bfdev_hlist_node *
     return NULL;
 }
 
-static inline struct bfdev_hlist_node *
-hashmap_find_key(struct bfdev_hashmap *hashmap, const void *key,
+static inline bfdev_hlist_node_t *
+hashmap_find_key(bfdev_hashmap_t *hashmap, const void *key,
                  unsigned long hash)
 {
-    struct bfdev_hlist_node *walk;
+    bfdev_hlist_node_t *walk;
     unsigned long index;
 
     if (!hashmap->buckets)
@@ -127,11 +127,11 @@ hashmap_find_key(struct bfdev_hashmap *hashmap, const void *key,
 }
 
 static inline int
-hashmap_rehash(struct bfdev_hashmap *hashmap, unsigned int nbits)
+hashmap_rehash(bfdev_hashmap_t *hashmap, unsigned int nbits)
 {
-    const struct bfdev_alloc *alloc = hashmap->alloc;
-    struct bfdev_hlist_node *walk, *tmp;
-    struct bfdev_hlist_head *nbuckets;
+    const bfdev_alloc_t *alloc = hashmap->alloc;
+    bfdev_hlist_node_t *walk, *tmp;
+    bfdev_hlist_head_t *nbuckets;
     unsigned long value, index, ncapacity;
 
     ncapacity = BFDEV_BIT(nbits);
@@ -156,7 +156,7 @@ hashmap_rehash(struct bfdev_hashmap *hashmap, unsigned int nbits)
 }
 
 static inline int
-hashmap_extend(struct bfdev_hashmap *hashmap)
+hashmap_extend(bfdev_hashmap_t *hashmap)
 {
     unsigned int nbits;
 
@@ -168,7 +168,7 @@ hashmap_extend(struct bfdev_hashmap *hashmap)
 }
 
 static inline int
-hashmap_shrink(struct bfdev_hashmap *hashmap)
+hashmap_shrink(bfdev_hashmap_t *hashmap)
 {
     unsigned int nbits;
 
@@ -180,10 +180,10 @@ hashmap_shrink(struct bfdev_hashmap *hashmap)
 }
 
 export int
-bfdev_hashmap_insert(struct bfdev_hashmap *hashmap, struct bfdev_hlist_node *node,
-                     struct bfdev_hlist_node **old, enum bfdev_hashmap_strategy strategy)
+bfdev_hashmap_insert(bfdev_hashmap_t *hashmap, bfdev_hlist_node_t *node,
+                     bfdev_hlist_node_t **old, enum bfdev_hashmap_strategy strategy)
 {
-    struct bfdev_hlist_node *exist;
+    bfdev_hlist_node_t *exist;
     unsigned long value;
     int retval;
 
@@ -218,10 +218,10 @@ bfdev_hashmap_insert(struct bfdev_hashmap *hashmap, struct bfdev_hlist_node *nod
 }
 
 export int
-bfdev_hashmap_del(struct bfdev_hashmap *hashmap, const void *key,
-                  struct bfdev_hlist_node **node)
+bfdev_hashmap_del(bfdev_hashmap_t *hashmap, const void *key,
+                  bfdev_hlist_node_t **node)
 {
-    struct bfdev_hlist_node *exist;
+    bfdev_hlist_node_t *exist;
     unsigned long value;
 
     value = hashmap_hash_key(hashmap, key);
@@ -240,10 +240,10 @@ bfdev_hashmap_del(struct bfdev_hashmap *hashmap, const void *key,
     return -BFDEV_ENOERR;
 }
 
-export struct bfdev_hlist_node *
-bfdev_hashmap_find(struct bfdev_hashmap *hashmap, const void *key)
+export bfdev_hlist_node_t *
+bfdev_hashmap_find(bfdev_hashmap_t *hashmap, const void *key)
 {
-    struct bfdev_hlist_node *exist;
+    bfdev_hlist_node_t *exist;
     unsigned long value;
 
     value = hashmap_hash_key(hashmap, key);
@@ -254,9 +254,9 @@ bfdev_hashmap_find(struct bfdev_hashmap *hashmap, const void *key)
 }
 
 export void
-bfdev_hashmap_release(struct bfdev_hashmap *hashmap)
+bfdev_hashmap_release(bfdev_hashmap_t *hashmap)
 {
-    const struct bfdev_alloc *alloc = hashmap->alloc;
+    const bfdev_alloc_t *alloc = hashmap->alloc;
 
     bfdev_free(alloc, hashmap->buckets);
     hashmap->buckets = NULL;

@@ -18,7 +18,7 @@ BFDEV_BEGIN_DECLS
     (((size < 2) || (size & (size - 1))) ? -1 : size)
 
 #define BFDEV_DECLARE_HASHTBL(name, size) \
-    struct bfdev_hlist_head name[BFDEV_HASHTBL_CHECK(size)]
+    bfdev_hlist_head_t name[BFDEV_HASHTBL_CHECK(size)]
 
 #define BFDEV_DEFINE_HASHTBL(name, size)        \
     BFDEV_DECLARE_HASHTBL(name, size) = {       \
@@ -41,7 +41,7 @@ bfdev_hashtbl_index(unsigned long size, unsigned long key)
  * @hashtable: hashtable to be initialized.
  */
 static inline void
-bfdev_hashtbl_init(struct bfdev_hlist_head *head, unsigned long size)
+bfdev_hashtbl_init(bfdev_hlist_head_t *head, unsigned long size)
 {
     unsigned long count;
 
@@ -54,7 +54,7 @@ bfdev_hashtbl_init(struct bfdev_hlist_head *head, unsigned long size)
  * @hashtable: hashtable to check.
  */
 static inline bool
-bfdev_hashtbl_empty(struct bfdev_hlist_head *head, unsigned long size)
+bfdev_hashtbl_empty(bfdev_hlist_head_t *head, unsigned long size)
 {
     unsigned long count;
 
@@ -69,12 +69,12 @@ bfdev_hashtbl_empty(struct bfdev_hlist_head *head, unsigned long size)
 /**
  * bfdev_hashtbl_add - add an object to a hashtable.
  * @hashtbl: hashtable to add to.
- * @node: the &struct bfdev_hlist_node of the object to be added.
+ * @node: the &bfdev_hlist_node_t of the object to be added.
  * @key: the value of the object to be added.
  */
 static inline void
-bfdev_hashtbl_add(struct bfdev_hlist_head *head, unsigned long size,
-                  struct bfdev_hlist_node *node, unsigned long key)
+bfdev_hashtbl_add(bfdev_hlist_head_t *head, unsigned long size,
+                  bfdev_hlist_node_t *node, unsigned long key)
 {
     unsigned long index = bfdev_hashtbl_index(size, key);
     bfdev_hlist_head_add(&head[index], node);
@@ -85,14 +85,14 @@ bfdev_hashtbl_add(struct bfdev_hlist_head *head, unsigned long size,
  * @node: &struct hlist_node of the object to remove.
  */
 static inline void
-bfdev_hashtbl_del(struct bfdev_hlist_node *node)
+bfdev_hashtbl_del(bfdev_hlist_node_t *node)
 {
     bfdev_hlist_del_init(node);
 }
 
 /**
  * bfdev_hashtbl_for_each - iterate over a hashtable index.
- * @pos: the &struct bfdev_hlist_node to use as a loop cursor.
+ * @pos: the &bfdev_hlist_node_t to use as a loop cursor.
  * @head: the head for your hashtable.
  * @size: the size of your hashtable.
  * @index: index to for each.
@@ -102,7 +102,7 @@ bfdev_hashtbl_del(struct bfdev_hlist_node *node)
 
 /**
  * bfdev_hashtbl_for_each_safe - iterate over a hashtable index safe against removal of hlist entry.
- * @pos: the &struct bfdev_hlist_node to use as a loop cursor.
+ * @pos: the &bfdev_hlist_node_t to use as a loop cursor.
  * @tmp: another bfdev_hlist_node to use as temporary storage.
  * @head: the head for your hashtable.
  * @size: the size of your hashtable.
@@ -136,7 +136,7 @@ bfdev_hashtbl_del(struct bfdev_hlist_node *node)
 
 /**
  * bfdev_hashtbl_for_each - iterate over a hashtable.
- * @pos: the &struct bfdev_hlist_node to use as a loop cursor.
+ * @pos: the &bfdev_hlist_node_t to use as a loop cursor.
  * @head: the head for your hashtable.
  * @size: the size of your hashtable.
  * @index: index temporary storage.
@@ -147,7 +147,7 @@ bfdev_hashtbl_del(struct bfdev_hlist_node *node)
 
 /**
  * bfdev_hashtbl_for_each_safe - iterate over a hashtable safe against removal of hlist entry.
- * @pos: the &struct bfdev_hlist_node to use as a loop cursor.
+ * @pos: the &bfdev_hlist_node_t to use as a loop cursor.
  * @tmp: another bfdev_hlist_node to use as temporary storage.
  * @head: the head for your hashtable.
  * @size: the size of your hashtable.

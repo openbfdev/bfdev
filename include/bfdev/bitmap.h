@@ -223,7 +223,7 @@ bfdev_bitmap_copy(unsigned long *dest, unsigned long *src, unsigned int bits)
  * @flags: allocate flags.
  */
 extern unsigned long *
-bfdev_bitmap_alloc(const struct bfdev_alloc *alloc, unsigned int bits);
+bfdev_bitmap_alloc(const bfdev_alloc_t *alloc, unsigned int bits);
 
 /**
  * bfdev_bitmap_zalloc - alloc and zeroed a bitmap.
@@ -231,14 +231,14 @@ bfdev_bitmap_alloc(const struct bfdev_alloc *alloc, unsigned int bits);
  * @flags: allocate flags.
  */
 extern unsigned long *
-bfdev_bitmap_zalloc(const struct bfdev_alloc *alloc, unsigned int bits);
+bfdev_bitmap_zalloc(const bfdev_alloc_t *alloc, unsigned int bits);
 
 /**
  * bfdev_bitmap_free - free a bitmap.
  * @bitmap: bitmap to free.
  */
 extern void
-bfdev_bitmap_free(const struct bfdev_alloc *alloc, const unsigned long *bitmap);
+bfdev_bitmap_free(const bfdev_alloc_t *alloc, const unsigned long *bitmap);
 
 BFDEV_END_DECLS
 

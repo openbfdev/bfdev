@@ -19,6 +19,10 @@ BFDEV_BEGIN_DECLS
 # define BFDEV_CACHE_FREE_TAG ULONG_MAX
 #endif
 
+typedef struct bfdev_cache_head bfdev_cache_head_t;
+typedef struct bfdev_cache_node bfdev_cache_node_t;
+typedef struct bfdev_cache_algo bfdev_cache_algo_t;
+
 enum bfdev_cache_obtain {
     __BFDEV_CACHE_CHANGE = 0,
     __BFDEV_CACHE_UNCOMMITTED,
@@ -43,8 +47,8 @@ enum bfdev_cache_status {
 };
 
 struct bfdev_cache_node {
-    struct bfdev_hlist_node hash;
-    struct bfdev_list_head list;
+    bfdev_hlist_node_t hash;
+    bfdev_list_head_t list;
     enum bfdev_cache_status status;
 
     unsigned long index;
@@ -54,14 +58,14 @@ struct bfdev_cache_node {
 };
 
 struct bfdev_cache_head {
-    const struct bfdev_alloc *alloc;
-    const struct bfdev_cache_algo *algo;
-    struct bfdev_hlist_head *taghash;
-    struct bfdev_cache_node **nodes;
+    const bfdev_alloc_t *alloc;
+    const bfdev_cache_algo_t *algo;
+    bfdev_hlist_head_t *taghash;
+    bfdev_cache_node_t **nodes;
 
-    struct bfdev_list_head using;
-    struct bfdev_list_head freed;
-    struct bfdev_list_head changing;
+    bfdev_list_head_t using;
+    bfdev_list_head_t freed;
+    bfdev_list_head_t changing;
 
     /* const settings */
     unsigned long size;
@@ -80,88 +84,88 @@ struct bfdev_cache_head {
 };
 
 struct bfdev_cache_algo {
-    struct bfdev_list_head list;
+    bfdev_list_head_t list;
     const char *name;
 
-    bool (*starving)(struct bfdev_cache_head *head);
-    struct bfdev_cache_node *(*obtain)(struct bfdev_cache_head *head);
-    void (*get)(struct bfdev_cache_head *head, struct bfdev_cache_node *node);
-    void (*put)(struct bfdev_cache_head *head, struct bfdev_cache_node *node);
-    void (*update)(struct bfdev_cache_head *head, struct bfdev_cache_node *node);
-    void (*clear)(struct bfdev_cache_head *head, struct bfdev_cache_node *node);
-    void (*reset)(struct bfdev_cache_head *head);
+    bool (*starving)(bfdev_cache_head_t *head);
+    bfdev_cache_node_t *(*obtain)(bfdev_cache_head_t *head);
+    void (*get)(bfdev_cache_head_t *head, bfdev_cache_node_t *node);
+    void (*put)(bfdev_cache_head_t *head, bfdev_cache_node_t *node);
+    void (*update)(bfdev_cache_head_t *head, bfdev_cache_node_t *node);
+    void (*clear)(bfdev_cache_head_t *head, bfdev_cache_node_t *node);
+    void (*reset)(bfdev_cache_head_t *head);
 
-    struct bfdev_cache_head *(*create)(const struct bfdev_alloc *alloc, unsigned long size);
-    void (*destroy)(struct bfdev_cache_head *head);
+    bfdev_cache_head_t *(*create)(const bfdev_alloc_t *alloc, unsigned long size);
+    void (*destroy)(bfdev_cache_head_t *head);
 };
 
 BFDEV_BITFLAGS_STRUCT(bfdev_cache,
-    struct bfdev_cache_head, flags
+    bfdev_cache_head_t, flags
 );
 
 BFDEV_BITFLAGS_STRUCT_FLAG(bfdev_cache,
-    struct bfdev_cache_head, flags,
+    bfdev_cache_head_t, flags,
     dirty, __BFDEV_CACHE_DIRTY
 );
 
 BFDEV_BITFLAGS_STRUCT_FLAG(bfdev_cache,
-    struct bfdev_cache_head, flags,
+    bfdev_cache_head_t, flags,
     starving, __BFDEV_CACHE_STARVING
 );
 
-extern struct bfdev_cache_node *
-bfdev_cache_find(struct bfdev_cache_head *head, unsigned long tag);
+extern bfdev_cache_node_t *
+bfdev_cache_find(bfdev_cache_head_t *head, unsigned long tag);
 
-extern struct bfdev_cache_node *
-bfdev_cache_obtain(struct bfdev_cache_head *head, unsigned long tag,
+extern bfdev_cache_node_t *
+bfdev_cache_obtain(bfdev_cache_head_t *head, unsigned long tag,
                    unsigned long flags);
 
 extern unsigned long
-bfdev_cache_put(struct bfdev_cache_head *head, struct bfdev_cache_node *node);
+bfdev_cache_put(bfdev_cache_head_t *head, bfdev_cache_node_t *node);
 
 extern int
-bfdev_cache_del(struct bfdev_cache_head *head, struct bfdev_cache_node *node);
+bfdev_cache_del(bfdev_cache_head_t *head, bfdev_cache_node_t *node);
 
 extern int
-bfdev_cache_set(struct bfdev_cache_head *head, struct bfdev_cache_node *node,
+bfdev_cache_set(bfdev_cache_head_t *head, bfdev_cache_node_t *node,
                 unsigned long tag);
 
 extern void
-bfdev_cache_committed(struct bfdev_cache_head *head);
+bfdev_cache_committed(bfdev_cache_head_t *head);
 
 extern void
-bfdev_cache_reset(struct bfdev_cache_head *head);
+bfdev_cache_reset(bfdev_cache_head_t *head);
 
-extern struct bfdev_cache_head *
-bfdev_cache_create(const char *name, const struct bfdev_alloc *alloc,
+extern bfdev_cache_head_t *
+bfdev_cache_create(const char *name, const bfdev_alloc_t *alloc,
                    unsigned long size, unsigned long maxp);
 
 extern void
-bfdev_cache_destroy(struct bfdev_cache_head *head);
+bfdev_cache_destroy(bfdev_cache_head_t *head);
 
-static inline struct bfdev_cache_node *
-bfdev_cache_get(struct bfdev_cache_head *head, unsigned long tag)
+static inline bfdev_cache_node_t *
+bfdev_cache_get(bfdev_cache_head_t *head, unsigned long tag)
 {
     return bfdev_cache_obtain(head, tag, BFDEV_CACHE_CHANGE);
 }
 
-static inline struct bfdev_cache_node *
-bfdev_cache_try_get(struct bfdev_cache_head *head, unsigned long tag)
+static inline bfdev_cache_node_t *
+bfdev_cache_try_get(bfdev_cache_head_t *head, unsigned long tag)
 {
     return bfdev_cache_obtain(head, tag, 0);
 }
 
-static inline struct bfdev_cache_node *
-bfdev_cache_cumulative(struct bfdev_cache_head *head, unsigned long tag)
+static inline bfdev_cache_node_t *
+bfdev_cache_cumulative(bfdev_cache_head_t *head, unsigned long tag)
 {
     return bfdev_cache_obtain(head, tag, BFDEV_CACHE_CHANGE | BFDEV_CACHE_UNCOMMITTED);
 }
 
 extern int
-bfdev_cache_register(struct bfdev_cache_algo *algo);
+bfdev_cache_register(bfdev_cache_algo_t *algo);
 
 extern void
-bfdev_cache_unregister(struct bfdev_cache_algo *algo);
+bfdev_cache_unregister(bfdev_cache_algo_t *algo);
 
 BFDEV_END_DECLS
 

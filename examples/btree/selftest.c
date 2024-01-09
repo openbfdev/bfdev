@@ -13,7 +13,7 @@
 #define TEST_LOOP 100
 
 struct test_node {
-    struct bfdev_list_head list;
+    bfdev_list_head_t list;
     union {
         uintptr_t key;
         char uuid[11];

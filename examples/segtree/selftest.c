@@ -12,7 +12,7 @@
 #define TEST_LOOP 10
 
 struct test_node {
-    struct bfdev_segtree_node node;
+    bfdev_segtree_node_t node;
     unsigned int num;
 };
 
@@ -28,7 +28,7 @@ static int
 segtree_testing(struct test_pdata *sdata)
 {
     struct test_node *node, *tnode;
-    struct bfdev_segtree_node *snode, *tsnode;
+    bfdev_segtree_node_t *snode, *tsnode;
     unsigned int count;
 
     BFDEV_RB_ROOT_CACHED(segtree_root);

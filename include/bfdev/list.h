@@ -14,40 +14,43 @@
 
 BFDEV_BEGIN_DECLS
 
+typedef struct bfdev_list_head bfdev_list_head_t;
+
 struct bfdev_list_head {
-    struct bfdev_list_head *prev;
-    struct bfdev_list_head *next;
+    bfdev_list_head_t *prev;
+    bfdev_list_head_t *next;
 };
 
 #define BFDEV_LIST_HEAD_STATIC(name) \
     {&(name), &(name)}
 
 #define BFDEV_LIST_HEAD_INIT(name) \
-    (struct bfdev_list_head) BFDEV_LIST_HEAD_STATIC(name)
+    (bfdev_list_head_t) BFDEV_LIST_HEAD_STATIC(name)
 
 #define BFDEV_LIST_HEAD(name) \
-    struct bfdev_list_head name = BFDEV_LIST_HEAD_INIT(name)
+    bfdev_list_head_t name = BFDEV_LIST_HEAD_INIT(name)
 
 BFDEV_CALLBACK_CMP(
     bfdev_list_cmp_t,
-    const struct bfdev_list_head *
+    const bfdev_list_head_t *
 );
 
 extern void
-bfdev_list_sort(struct bfdev_list_head *head,
+bfdev_list_sort(bfdev_list_head_t *head,
                 bfdev_list_cmp_t cmp, void *pdata);
 
 #ifdef BFDEV_DEBUG_LIST
 extern bool
-bfdev_list_check_add(struct bfdev_list_head *prev, struct bfdev_list_head *next, struct bfdev_list_head *node);
+bfdev_list_check_add(bfdev_list_head_t *prev, bfdev_list_head_t *next,
+                     bfdev_list_head_t *node);
 
 extern bool
-bfdev_list_check_del(struct bfdev_list_head *node);
+bfdev_list_check_del(bfdev_list_head_t *node);
 #endif
 
 static inline void
-bfdev_list_insert(struct bfdev_list_head *prev, struct bfdev_list_head *next,
-                  struct bfdev_list_head *node)
+bfdev_list_insert(bfdev_list_head_t *prev, bfdev_list_head_t *next,
+                  bfdev_list_head_t *node)
 {
 #ifdef BFDEV_DEBUG_LIST
     if (bfdev_unlikely(!bfdev_list_check_add(prev, next, node)))
@@ -65,7 +68,7 @@ bfdev_list_insert(struct bfdev_list_head *prev, struct bfdev_list_head *next,
  * @head: list head structure to be initialized.
  */
 static inline void
-bfdev_list_head_init(struct bfdev_list_head *head)
+bfdev_list_head_init(bfdev_list_head_t *head)
 {
     head->prev = head;
     head->next = head;
@@ -77,7 +80,7 @@ bfdev_list_head_init(struct bfdev_list_head *head)
  * @newn: new entry to be added.
  */
 static inline void
-bfdev_list_add(struct bfdev_list_head *node, struct bfdev_list_head *newn)
+bfdev_list_add(bfdev_list_head_t *node, bfdev_list_head_t *newn)
 {
     bfdev_list_insert(node, node->next, newn);
 }
@@ -88,7 +91,7 @@ bfdev_list_add(struct bfdev_list_head *node, struct bfdev_list_head *newn)
  * @newn: new entry to be added.
  */
 static inline void
-bfdev_list_add_prev(struct bfdev_list_head *node, struct bfdev_list_head *newn)
+bfdev_list_add_prev(bfdev_list_head_t *node, bfdev_list_head_t *newn)
 {
     bfdev_list_insert(node->prev, node, newn);
 }
@@ -98,7 +101,7 @@ bfdev_list_add_prev(struct bfdev_list_head *node, struct bfdev_list_head *newn)
  * @node: the element to delete from the list.
  */
 static inline void
-bfdev_list_deluf(struct bfdev_list_head *node)
+bfdev_list_deluf(bfdev_list_head_t *node)
 {
     node->prev->next = node->next;
     node->next->prev = node->prev;
@@ -109,7 +112,7 @@ bfdev_list_deluf(struct bfdev_list_head *node)
  * @node: the element to delete from the list.
  */
 static inline void
-bfdev_list_del(struct bfdev_list_head *node)
+bfdev_list_del(bfdev_list_head_t *node)
 {
 #ifdef BFDEV_DEBUG_LIST
     if (bfdev_unlikely(!bfdev_list_check_del(node)))
@@ -117,8 +120,8 @@ bfdev_list_del(struct bfdev_list_head *node)
 #endif
 
     bfdev_list_deluf(node);
-    node->next = (struct bfdev_list_head *)BFDEV_POISON_LIST1;
-    node->prev = (struct bfdev_list_head *)BFDEV_POISON_LIST2;
+    node->next = (bfdev_list_head_t *)BFDEV_POISON_LIST1;
+    node->prev = (bfdev_list_head_t *)BFDEV_POISON_LIST2;
 }
 
 /**
@@ -126,7 +129,7 @@ bfdev_list_del(struct bfdev_list_head *node)
  * @head: list head to check.
  */
 static inline bool
-bfdev_list_check_empty(const struct bfdev_list_head *head)
+bfdev_list_check_empty(const bfdev_list_head_t *head)
 {
     return head->next == head;
 }
@@ -137,8 +140,8 @@ bfdev_list_check_empty(const struct bfdev_list_head *head)
  * @list: the entry to test
  */
 static inline bool
-bfdev_list_check_head(const struct bfdev_list_head *head,
-                      const struct bfdev_list_head *node)
+bfdev_list_check_head(const bfdev_list_head_t *head,
+                      const bfdev_list_head_t *node)
 {
     return head == node;
 }
@@ -149,8 +152,8 @@ bfdev_list_check_head(const struct bfdev_list_head *head,
  * @node: the entry to test.
  */
 static inline bool
-bfdev_list_check_first(const struct bfdev_list_head *head,
-                       const struct bfdev_list_head *node)
+bfdev_list_check_first(const bfdev_list_head_t *head,
+                       const bfdev_list_head_t *node)
 {
     return node->prev == head;
 }
@@ -161,8 +164,8 @@ bfdev_list_check_first(const struct bfdev_list_head *head,
  * @node: the entry to test.
  */
 static inline bool
-bfdev_list_check_end(const struct bfdev_list_head *head,
-                     const struct bfdev_list_head *node)
+bfdev_list_check_end(const bfdev_list_head_t *head,
+                     const bfdev_list_head_t *node)
 {
     return node->next == head;
 }
@@ -173,18 +176,18 @@ bfdev_list_check_end(const struct bfdev_list_head *head,
  * @node: the unique node.
  */
 static inline bool
-bfdev_list_check_another(const struct bfdev_list_head *head,
-                         const struct bfdev_list_head *node)
+bfdev_list_check_another(const bfdev_list_head_t *head,
+                         const bfdev_list_head_t *node)
 {
     return head->next == node && head->prev == node;
 }
 
 static inline void
-bfdev_list_relocate(struct bfdev_list_head *prev, struct bfdev_list_head *next,
-                    struct bfdev_list_head *list)
+bfdev_list_relocate(bfdev_list_head_t *prev, bfdev_list_head_t *next,
+                    bfdev_list_head_t *list)
 {
-    struct bfdev_list_head *first = list->next;
-    struct bfdev_list_head *last = list->prev;
+    bfdev_list_head_t *first = list->next;
+    bfdev_list_head_t *last = list->prev;
 
     first->prev = prev;
     prev->next = first;
@@ -199,7 +202,7 @@ bfdev_list_relocate(struct bfdev_list_head *prev, struct bfdev_list_head *next,
  * @list: the new list to add.
  */
 static inline void
-bfdev_list_splice(struct bfdev_list_head *head, struct bfdev_list_head *list)
+bfdev_list_splice(bfdev_list_head_t *head, bfdev_list_head_t *list)
 {
     if (!bfdev_list_check_empty(list))
         bfdev_list_relocate(head, head->next, list);
@@ -211,7 +214,7 @@ bfdev_list_splice(struct bfdev_list_head *head, struct bfdev_list_head *list)
  * @list: the new list to add.
  */
 static inline void
-bfdev_list_splice_prev(struct bfdev_list_head *head, struct bfdev_list_head *list)
+bfdev_list_splice_prev(bfdev_list_head_t *head, bfdev_list_head_t *list)
 {
     if (!bfdev_list_check_empty(list))
         bfdev_list_relocate(head->prev, head, list);
@@ -223,7 +226,7 @@ bfdev_list_splice_prev(struct bfdev_list_head *head, struct bfdev_list_head *lis
  * @newn: the new element to insert.
  */
 static inline void
-bfdev_list_replace(struct bfdev_list_head *oldn, struct bfdev_list_head *newn)
+bfdev_list_replace(bfdev_list_head_t *oldn, bfdev_list_head_t *newn)
 {
     newn->prev = oldn->prev;
     newn->next = oldn->next;
@@ -237,7 +240,7 @@ bfdev_list_replace(struct bfdev_list_head *oldn, struct bfdev_list_head *newn)
  * @node: the entry to move.
  */
 static inline void
-bfdev_list_move(struct bfdev_list_head *head, struct bfdev_list_head *node)
+bfdev_list_move(bfdev_list_head_t *head, bfdev_list_head_t *node)
 {
     bfdev_list_del(node);
     bfdev_list_add(head, node);
@@ -249,7 +252,7 @@ bfdev_list_move(struct bfdev_list_head *head, struct bfdev_list_head *node)
  * @node: the entry to move.
  */
 static inline void
-bfdev_list_move_prev(struct bfdev_list_head *head, struct bfdev_list_head *node)
+bfdev_list_move_prev(bfdev_list_head_t *head, bfdev_list_head_t *node)
 {
     bfdev_list_del(node);
     bfdev_list_add_prev(head, node);
@@ -261,9 +264,9 @@ bfdev_list_move_prev(struct bfdev_list_head *head, struct bfdev_list_head *node)
  * @node2: the location to place entry1.
  */
 static inline void
-bfdev_list_swap(struct bfdev_list_head *node1, struct bfdev_list_head *node2)
+bfdev_list_swap(bfdev_list_head_t *node1, bfdev_list_head_t *node2)
 {
-    struct bfdev_list_head *prev = node2->prev;
+    bfdev_list_head_t *prev = node2->prev;
 
     bfdev_list_del(node2);
     bfdev_list_replace(node1, node2);
@@ -278,7 +281,7 @@ bfdev_list_swap(struct bfdev_list_head *node1, struct bfdev_list_head *node2)
  * @node: the element to delete from the list.
  */
 static inline void
-bfdev_list_del_init(struct bfdev_list_head *node)
+bfdev_list_del_init(bfdev_list_head_t *node)
 {
     bfdev_list_deluf(node);
     bfdev_list_head_init(node);
@@ -290,7 +293,7 @@ bfdev_list_del_init(struct bfdev_list_head *node)
  * @newn: the new element to insert.
  */
 static inline void
-bfdev_list_replace_init(struct bfdev_list_head *oldn, struct bfdev_list_head *newn)
+bfdev_list_replace_init(bfdev_list_head_t *oldn, bfdev_list_head_t *newn)
 {
     bfdev_list_replace(oldn, newn);
     bfdev_list_head_init(oldn);
@@ -302,7 +305,7 @@ bfdev_list_replace_init(struct bfdev_list_head *oldn, struct bfdev_list_head *ne
  * @list: the new list to add.
  */
 static inline void
-bfdev_list_splice_init(struct bfdev_list_head *head, struct bfdev_list_head *list)
+bfdev_list_splice_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
 {
     if (!bfdev_list_check_empty(list)) {
         bfdev_list_splice(head, list);
@@ -316,7 +319,7 @@ bfdev_list_splice_init(struct bfdev_list_head *head, struct bfdev_list_head *lis
  * @list: the new list to add.
  */
 static inline void
-bfdev_list_splice_tail_init(struct bfdev_list_head *head, struct bfdev_list_head *list)
+bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
 {
     if (!bfdev_list_check_empty(list)) {
         bfdev_list_splice_prev(head, list);
@@ -383,8 +386,8 @@ bfdev_list_splice_tail_init(struct bfdev_list_head *head, struct bfdev_list_head
  * @member: the name of the list head within the struct.
  */
 #define bfdev_list_first_entry_or_null(ptr, type, member) ({ \
-    struct bfdev_list_head *head__ = (ptr); \
-    struct bfdev_list_head *pos__ = head__->next; \
+    bfdev_list_head_t *head__ = (ptr); \
+    bfdev_list_head_t *pos__ = head__->next; \
     pos__ != head__ ? bfdev_list_entry(pos__, type, member) : NULL; \
 })
 
@@ -395,8 +398,8 @@ bfdev_list_splice_tail_init(struct bfdev_list_head *head, struct bfdev_list_head
  * @member: the name of the list head within the struct.
  */
 #define bfdev_list_last_entry_or_null(ptr, type, member) ({ \
-    struct bfdev_list_head *head__ = (ptr); \
-    struct bfdev_list_head *pos__ = head__->prev; \
+    bfdev_list_head_t *head__ = (ptr); \
+    bfdev_list_head_t *pos__ = head__->prev; \
     pos__ != head__ ? bfdev_list_entry(pos__, type, member) : NULL; \
 })
 

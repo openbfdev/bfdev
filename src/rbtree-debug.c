@@ -12,8 +12,8 @@
 #include <export.h>
 
 export bool
-bfdev_rb_check_link(struct bfdev_rb_node *parent, struct bfdev_rb_node **link,
-                    struct bfdev_rb_node *node)
+bfdev_rb_check_link(bfdev_rb_node_t *parent, bfdev_rb_node_t **link,
+                    bfdev_rb_node_t *node)
 {
     if (bfdev_unlikely(*link == node)) {
         bfdev_log_err(
@@ -28,7 +28,7 @@ bfdev_rb_check_link(struct bfdev_rb_node *parent, struct bfdev_rb_node **link,
 }
 
 export bool
-bfdev_rb_check_delete(struct bfdev_rb_node *node)
+bfdev_rb_check_delete(bfdev_rb_node_t *node)
 {
     if (bfdev_unlikely(node->left == BFDEV_POISON_RBNODE1)) {
         bfdev_log_err(

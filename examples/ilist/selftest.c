@@ -10,7 +10,7 @@
 #define TEST_LOOP 10
 
 struct test_node {
-    struct bfdev_ilist_node ilist;
+    bfdev_ilist_node_t ilist;
     unsigned long num;
 };
 
@@ -22,8 +22,8 @@ struct test_pdata {
     bfdev_ilist_entry(ptr, struct test_node, ilist)
 
 static inline long
-ilist_cmp(const struct bfdev_ilist_node *node1,
-          const struct bfdev_ilist_node *node2, void *pdata)
+ilist_cmp(const bfdev_ilist_node_t *node1,
+          const bfdev_ilist_node_t *node2, void *pdata)
 {
     struct test_node *tnode1, *tnode2;
 

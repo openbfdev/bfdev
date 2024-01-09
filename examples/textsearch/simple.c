@@ -10,15 +10,16 @@
 #define TEST_PATTERN "abcd"
 #define TEST_OFFSET 9
 
-int main(int argc, const char *argv[])
+static int
+test_textsearch(const char *algo)
 {
-    struct bfdev_ts_context *context;
-    struct bfdev_ts_linear linear;
+    bfdev_ts_context_t *context;
+    bfdev_ts_linear_t linear;
     unsigned int offset;
 
-    printf("test bm algorithm: ");
+    printf("test %s algorithm: ", algo);
     context = bfdev_textsearch_create(
-        NULL, "bm", TEST_PATTERN,
+        NULL, algo, TEST_PATTERN,
         sizeof(TEST_PATTERN) - 1, 0
     );
     if (!context) {
@@ -38,48 +39,24 @@ int main(int argc, const char *argv[])
     printf("passed\n");
     bfdev_textsearch_destroy(context);
 
-    printf("test kmp algorithm: ");
-    context = bfdev_textsearch_create(
-        NULL, "kmp", TEST_PATTERN,
-        sizeof(TEST_PATTERN) - 1, 0
-    );
-    if (!context) {
-        printf("failed\n");
-        return 1;
-    }
+    return 0;
+}
 
-    offset = bfdev_textsearch_linear_find(
-        context, &linear, TEST_STRING,
-        sizeof(TEST_STRING) - 1
-    );
-    if (offset != TEST_OFFSET) {
-        printf("failed\n");
-        return 1;
-    }
+int main(int argc, const char *argv[])
+{
+    int retval;
 
-    printf("passed\n");
-    bfdev_textsearch_destroy(context);
+    retval = test_textsearch("kmp");
+    if (retval)
+        return retval;
 
-    printf("test sunday algorithm: ");
-    context = bfdev_textsearch_create(
-        NULL, "sunday", TEST_PATTERN,
-        sizeof(TEST_PATTERN) - 1, 0
-    );
-    if (!context) {
-        printf("failed\n");
-        return 1;
-    }
+    retval = test_textsearch("bm");
+    if (retval)
+        return retval;
 
-    offset = bfdev_textsearch_linear_find(
-        context, &linear, TEST_STRING,
-        sizeof(TEST_STRING) - 1
-    );
-    if (offset != TEST_OFFSET) {
-        printf("failed\n");
-        return 1;
-    }
-    printf("passed\n");
-    bfdev_textsearch_destroy(context);
+    retval = test_textsearch("sunday");
+    if (retval)
+        return retval;
 
     return 0;
 }

@@ -8,10 +8,10 @@
 #include <export.h>
 
 export bool
-bfdev_llist_split(struct bfdev_slist_head *head, struct bfdev_slist_head *node,
-                  struct bfdev_slist_head *end)
+bfdev_llist_split(bfdev_slist_head_t *head, bfdev_slist_head_t *node,
+                  bfdev_slist_head_t *end)
 {
-    struct bfdev_slist_head *first;
+    bfdev_slist_head_t *first;
 
     do first = end->next = BFDEV_READ_ONCE(head->next);
     while ((void *)bfdev_cmpxchg(
@@ -22,10 +22,10 @@ bfdev_llist_split(struct bfdev_slist_head *head, struct bfdev_slist_head *node,
     return !first;
 }
 
-export struct bfdev_slist_head *
-bfdev_llist_del(struct bfdev_slist_head *head)
+export bfdev_slist_head_t *
+bfdev_llist_del(bfdev_slist_head_t *head)
 {
-    struct bfdev_slist_head *old, *next, *entry;
+    bfdev_slist_head_t *old, *next, *entry;
 
     for (entry = BFDEV_READ_ONCE(head->next); (old = entry);) {
         next = BFDEV_READ_ONCE(entry->next);

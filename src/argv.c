@@ -32,7 +32,7 @@ bfdev_argv_count(const char *args)
 }
 
 export char **
-bfdev_argv_split(const struct bfdev_alloc *alloc, const char *args,
+bfdev_argv_split(const bfdev_alloc_t *alloc, const char *args,
                  unsigned int *argcp)
 {
     unsigned int count, argc;
@@ -64,7 +64,7 @@ bfdev_argv_split(const struct bfdev_alloc *alloc, const char *args,
 }
 
 export void
-bfdev_argv_destory(const struct bfdev_alloc *alloc, char **argv)
+bfdev_argv_destory(const bfdev_alloc_t *alloc, char **argv)
 {
     bfdev_free(alloc, argv);
 }

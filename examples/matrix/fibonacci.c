@@ -10,7 +10,7 @@
 #define TEST_BASE 1
 #define TEST_MAXN 46
 
-static struct bfdev_matrix
+static bfdev_matrix_t
 matrix_power = {
     .row = 2, .col = 2,
     .values = {
@@ -19,7 +19,7 @@ matrix_power = {
     },
 };
 
-static struct bfdev_matrix
+static bfdev_matrix_t
 matrix_fibonacci = {
     .row = 2, .col = 2,
     .values = {
@@ -28,11 +28,11 @@ matrix_fibonacci = {
     },
 };
 
-static struct bfdev_matrix *
-power(const struct bfdev_matrix *var, unsigned int pow)
+static bfdev_matrix_t *
+power(const bfdev_matrix_t *var, unsigned int pow)
 {
-    struct bfdev_matrix *result;
-    struct bfdev_matrix *tmp;
+    bfdev_matrix_t *result;
+    bfdev_matrix_t *tmp;
 
     result = bfdev_matrix_copy(NULL, &matrix_power);
     var = bfdev_matrix_copy(NULL, var);
@@ -62,7 +62,7 @@ power(const struct bfdev_matrix *var, unsigned int pow)
 
 int main(int argc, const char *argv[])
 {
-    struct bfdev_matrix *result;
+    bfdev_matrix_t *result;
     unsigned int count;
 
     for (count = TEST_BASE; count <= TEST_MAXN; ++count) {
