@@ -14,7 +14,7 @@ prandom_seed_minimum(uint32_t x, uint32_t m)
 }
 
 export uint32_t
-bfdev_prandom_value(struct bfdev_prandom_state *pstate)
+bfdev_prandom_value(bfdev_prandom_state_t *pstate)
 {
     pstate->s1 = BFDEV_TAUSWORTHE(pstate->s1,  6U, 13U, 4294967294U, 18U);
     pstate->s2 = BFDEV_TAUSWORTHE(pstate->s2,  2U, 27U, 4294967288U,  2U);
@@ -24,7 +24,7 @@ bfdev_prandom_value(struct bfdev_prandom_state *pstate)
 }
 
 static void
-bfdev_prandom_setup(struct bfdev_prandom_state *pstate, uint64_t seed)
+bfdev_prandom_setup(bfdev_prandom_state_t *pstate, uint64_t seed)
 {
     seed = bfdev_lower_32_bits((seed >> 32) ^ (seed << 10) ^ seed);
     pstate->s1 = prandom_seed_minimum(seed,   2U);
@@ -34,7 +34,7 @@ bfdev_prandom_setup(struct bfdev_prandom_state *pstate, uint64_t seed)
 }
 
 static __bfdev_always_inline void
-bfdev_prandom_warmup(struct bfdev_prandom_state *pstate)
+bfdev_prandom_warmup(bfdev_prandom_state_t *pstate)
 {
     unsigned int count;
     for (count = 0; count < 10; ++count)
@@ -42,7 +42,7 @@ bfdev_prandom_warmup(struct bfdev_prandom_state *pstate)
 }
 
 export void
-bfdev_prandom_seed(struct bfdev_prandom_state *pstate, uint64_t seed)
+bfdev_prandom_seed(bfdev_prandom_state_t *pstate, uint64_t seed)
 {
     bfdev_prandom_setup(pstate, seed);
     bfdev_prandom_warmup(pstate);
