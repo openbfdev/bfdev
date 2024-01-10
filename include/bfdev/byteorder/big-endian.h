@@ -3,18 +3,18 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
-#ifndef _BFDEV_BYTEORDER_LITTLE_ENDIAN_H_
-#define _BFDEV_BYTEORDER_LITTLE_ENDIAN_H_
-
-#ifndef __BFDEV_BIG_ENDIAN__
-# define __BFDEV_BIG_ENDIAN__
-#endif
+#ifndef _BFDEV_BYTEORDER_BIG_ENDIAN_H_
+#define _BFDEV_BYTEORDER_BIG_ENDIAN_H_
 
 #include <bfdev/config.h>
 #include <bfdev/types.h>
 #include <bfdev/swab.h>
 
 BFDEV_BEGIN_DECLS
+
+#ifndef __BFDEV_BIG_ENDIAN__
+# define __BFDEV_BIG_ENDIAN__
+#endif
 
 #define bfdev_htons_const(x) ((bfdev_be16)(uint16_t)(x))
 #define bfdev_htonl_const(x) ((bfdev_be32)(uint32_t)(x))
@@ -137,4 +137,4 @@ bfdev_be64_to_cpup(const bfdev_be64 *p)
 
 BFDEV_END_DECLS
 
-#endif /* _BFDEV_BYTEORDER_LITTLE_ENDIAN_H_ */
+#endif /* _BFDEV_BYTEORDER_BIG_ENDIAN_H_ */
