@@ -6,6 +6,13 @@
 #ifndef _BFDEV_ASM_GENERIC_BYTEORDER_H_
 #define _BFDEV_ASM_GENERIC_BYTEORDER_H_
 
-#include <bfdev/byteorder/little_endian.h>
+#include <bfdev/config.h>
+#include <bfdev/byteorder/little-endian.h>
+
+BFDEV_BEGIN_DECLS
+
+/* Nothing */
+
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_ASM_GENERIC_BYTEORDER_H_ */
