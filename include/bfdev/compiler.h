@@ -22,8 +22,13 @@ BFDEV_BEGIN_DECLS
  * Optimization barrier
  * The "volatile" is due to gcc bugs
  */
+#ifndef __bfdev_barrier
+# define __bfdev_barrier(carrier) __asm__ __volatile__("":carrier:"memory")
+#endif
+
 #ifndef bfdev_barrier
-# define bfdev_barrier() __asm__ __volatile__("": : :"memory")
+# define bfdev_barrier() __bfdev_barrier(:)
+# define bfdev_barrier_data(ptr) __bfdev_barrier(:"r"(ptr))
 #endif
 
 /* Not-quite-unique ID. */
