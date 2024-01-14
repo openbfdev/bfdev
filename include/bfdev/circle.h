@@ -14,8 +14,8 @@ typedef struct bfdev_circle bfdev_circle_t;
 
 struct bfdev_circle {
     void *buffer;
-    volatile unsigned long head;
-    volatile unsigned long tail;
+    unsigned long head;
+    unsigned long tail;
 };
 
 /* Return count in buffer */
