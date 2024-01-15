@@ -10,7 +10,7 @@ set(BFDEV_SOURCE
     ${CMAKE_CURRENT_LIST_DIR}/argv.c
     ${CMAKE_CURRENT_LIST_DIR}/array.c
     ${CMAKE_CURRENT_LIST_DIR}/bcd.c
-    ${CMAKE_CURRENT_LIST_DIR}/bitmap.c
+    ${CMAKE_CURRENT_LIST_DIR}/bintree.c
     ${CMAKE_CURRENT_LIST_DIR}/bitrev.c
     ${CMAKE_CURRENT_LIST_DIR}/bitwalk.c
     ${CMAKE_CURRENT_LIST_DIR}/bloom.c
