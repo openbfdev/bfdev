@@ -211,7 +211,7 @@ bfdev_heap_testing(struct test_pdata *hdata)
     }
 
     for (count = 0; count < TEST_LOOP; ++count) {
-        node = hpnode_to_test(root.node);
+        node = hpnode_to_test(BFDEV_HEAP_ROOT_NODE(&root));
         bfdev_log_info("'heap_delete' test: %u\n", node->num);
         bfdev_heap_delete(&root, &node->node, bfdev_heap_test_cmp, NULL);
     }
