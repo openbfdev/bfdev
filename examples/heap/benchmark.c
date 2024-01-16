@@ -99,7 +99,7 @@ int main(int argc, const char *argv[])
             bfdev_heap_insert(&bench_root, &bnode[count].node, bench_cmp, NULL);
         0;
     );
-    count = test_deepth(bench_root.node);
+    count = test_deepth(BFDEV_HEAP_ROOT_NODE(&bench_root));
     bfdev_log_info("\theap deepth: %u\n", count);
 
     count = 0;
@@ -115,7 +115,7 @@ int main(int argc, const char *argv[])
 
     bfdev_log_info("Deletion all nodes...\n");
     while (bench_root.count) {
-        bnode = bfdev_heap_to_bench(bench_root.node);
+        bnode = bfdev_heap_to_bench(BFDEV_HEAP_ROOT_NODE(&bench_root));
         node_dump(bnode);
         bfdev_heap_delete(&bench_root, &bnode->node, bench_cmp, NULL);
     }

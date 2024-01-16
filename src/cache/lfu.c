@@ -47,7 +47,7 @@ lfu_starving(bfdev_cache_head_t *head)
 {
     struct lfu_head *lfu_head;
     lfu_head = cache_to_lfu_head(head);
-    return BFDEV_HEAP_EMPTY_ROOT(&lfu_head->lfu);
+    return bfdev_heap_empty_root(&lfu_head->lfu);
 }
 
 static bfdev_cache_node_t *

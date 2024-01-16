@@ -8,39 +8,6 @@
 #include <bfdev/titer.h>
 #include <export.h>
 
-static __bfdev_always_inline void
-parent_swap(bfdev_heap_root_t *root, bfdev_heap_node_t *parent,
-            bfdev_heap_node_t *node)
-{
-    bfdev_heap_node_t *gparent = parent->parent;
-    bfdev_heap_node_t shadow = *node;
-
-    if (node->left)
-        node->left->parent = parent;
-    if (node->right)
-        node->right->parent = parent;
-
-    if (parent->left == node) {
-        node->left = parent;
-        if ((node->right = parent->right))
-            parent->right->parent = node;
-    } else { /* parent->right == node */
-        node->right = parent;
-        if ((node->left = parent->left))
-            parent->left->parent = node;
-    }
-
-    if (!(node->parent = gparent))
-        root->node = node;
-    else if (gparent->left == parent)
-        gparent->left = node;
-    else /* gparent->right == parent */
-        gparent->right = node;
-
-    *parent = shadow;
-    parent->parent = node;
-}
-
 export void
 bfdev_heap_fixup(bfdev_heap_root_t *root, bfdev_heap_node_t *node,
                  bfdev_heap_cmp_t cmp, void *pdata)
@@ -50,7 +17,7 @@ bfdev_heap_fixup(bfdev_heap_root_t *root, bfdev_heap_node_t *node,
     while ((parent = node->parent)) {
         if (cmp(node, parent, pdata) >= 0)
             break;
-        parent_swap(root, parent, node);
+        bfdev_bintree_inherit(&root->btree, node);
     }
 }
 
@@ -83,7 +50,8 @@ bfdev_heap_erase(bfdev_heap_root_t *root, bfdev_heap_node_t *node,
 
         if (cmp(node, successor, pdata) < 0)
             return;
-        parent_swap(root, node, successor);
+
+        bfdev_bintree_inherit(&root->btree, successor);
     }
 }
 
@@ -102,7 +70,7 @@ bfdev_heap_remove(bfdev_heap_root_t *root, bfdev_heap_node_t *node)
          *
          */
 
-        root->node = NULL;
+        root->btree.node = NULL;
         successor = NULL;
     } else {
         bfdev_heap_node_t *parent;
@@ -149,7 +117,7 @@ bfdev_heap_remove(bfdev_heap_root_t *root, bfdev_heap_node_t *node)
             node->right->parent = successor;
 
         if (!(parent = node->parent))
-            root->node = successor;
+            root->btree.node = successor;
         else {
             if (node == parent->left)
                 parent->left = successor;
@@ -170,7 +138,7 @@ bfdev_heap_parent(bfdev_heap_root_t *root, bfdev_heap_node_t **parentp,
     unsigned int depth = bfdev_flsuf(root->count + 1);
     bfdev_heap_node_t **link;
 
-    link = &root->node;
+    link = &root->btree.node;
     if (bfdev_unlikely(!*link)) {
         *parentp = NULL;
         return link;
@@ -191,7 +159,7 @@ export bfdev_heap_node_t *
 bfdev_heap_find(bfdev_heap_root_t *root, unsigned int index)
 {
     unsigned int depth = bfdev_flsuf(root->count);
-    bfdev_heap_node_t *node = root->node;
+    bfdev_heap_node_t *node = root->btree.node;
 
     while (node && depth--) {
         if ((root->count) & BFDEV_BIT(depth))
@@ -202,20 +170,3 @@ bfdev_heap_find(bfdev_heap_root_t *root, unsigned int index)
 
     return node;
 }
-
-BFDEV_TITER_BASE_DEFINE(
-    export, bfdev_heap,
-    bfdev_heap_node_t, left, right
-)
-
-BFDEV_TITER_LEVELORDER_DEFINE(
-    export, bfdev_heap, bfdev_heap,
-    bfdev_heap_root_t, node,
-    bfdev_heap_node_t, left, right
-)
-
-BFDEV_TITER_POSTORDER_DEFINE(
-    export, bfdev_heap_post, bfdev_heap,
-    bfdev_heap_root_t, node,
-    bfdev_heap_node_t, parent, left, right
-)
