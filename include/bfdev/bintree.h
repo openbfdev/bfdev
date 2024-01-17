@@ -57,6 +57,15 @@ struct bfdev_bintree_root {
 #define bfdev_bintree_entry_safe(ptr, type, member) \
     bfdev_container_of_safe(ptr, type, member)
 
+#ifdef BFDEV_DEBUG_BINTREE
+extern bool
+bfdev_bintree_check_link(bfdev_bintree_node_t *parent, bfdev_bintree_node_t **link,
+                         bfdev_bintree_node_t *node);
+
+extern bool
+bfdev_bintree_check_delete(bfdev_bintree_node_t *node);
+#endif
+
 static __bfdev_always_inline void
 bfdev_bintree_init(bfdev_bintree_root_t *root)
 {
@@ -125,9 +134,9 @@ bfdev_bintree_delete(bfdev_bintree_node_t *node)
 static inline void
 bfdev_bintree_clear(bfdev_bintree_node_t *node)
 {
-    node->left = BFDEV_POISON_HPNODE1;
-    node->right = BFDEV_POISON_HPNODE2;
-    node->parent = BFDEV_POISON_HPNODE3;
+    node->left = BFDEV_POISON_BINTREE1;
+    node->right = BFDEV_POISON_BINTREE2;
+    node->parent = BFDEV_POISON_BINTREE3;
 }
 
 extern bool
@@ -534,6 +543,7 @@ bfdev_bintree_level_next(const bfdev_bintree_root_t *root, unsigned long *index)
 /**
  * bfdev_bintree_level_for_each_from - preorder iterate over a bintree from the current point.
  * @pos: the &bfdev_bintree_node_t to use as a loop cursor.
+ * @root: the root for your bintree.
  */
 #define bfdev_bintree_level_for_each_from(pos, index, root) \
     for (; pos; pos = bfdev_bintree_level_next(root, index))
@@ -541,6 +551,7 @@ bfdev_bintree_level_next(const bfdev_bintree_root_t *root, unsigned long *index)
 /**
  * bfdev_bintree_level_for_each_continue - continue preorder iteration over a bintree.
  * @pos: the &bfdev_bintree_node_t to use as a loop cursor.
+ * @root: the root for your bintree.
  */
 #define bfdev_bintree_level_for_each_continue(pos, index, root) \
     for (pos = bfdev_bintree_level_next(root, index); \
@@ -559,6 +570,7 @@ bfdev_bintree_level_next(const bfdev_bintree_root_t *root, unsigned long *index)
 /**
  * bfdev_bintree_level_for_each_entry_from - preorder iterate over bintree of given type from the current point.
  * @pos: the type * to use as a loop cursor.
+ * @root: the root for your bintree.
  * @member: the name of the bfdev_bintree_node within the struct.
  */
 #define bfdev_bintree_level_for_each_entry_from(pos, index, root, member) \
@@ -567,6 +579,7 @@ bfdev_bintree_level_next(const bfdev_bintree_root_t *root, unsigned long *index)
 /**
  * bfdev_bintree_level_for_each_entry_continue - continue preorder iteration over bintree of given type.
  * @pos: the type * to use as a loop cursor.
+ * @root: the root for your bintree.
  * @member: the name of the bfdev_bintree_node within the struct.
  */
 #define bfdev_bintree_level_for_each_entry_continue(pos, index, root, member) \

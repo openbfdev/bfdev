@@ -31,6 +31,7 @@ BFDEV_BEGIN_DECLS
 #cmakedefine BFDEV_DEBUG_HLIST
 #cmakedefine BFDEV_DEBUG_ILIST
 #cmakedefine BFDEV_DEBUG_RBTREE
+#cmakedefine BFDEV_DEBUG_BINTREE
 #cmakedefine BFDEV_DEBUG_REFCNT
 
 #define BFDEV_VERSION_CHECK(major, minor, patch) (  \

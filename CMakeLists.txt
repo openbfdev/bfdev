@@ -53,6 +53,7 @@ option(BFDEV_DBGSLIST "Dynamic debug slist" ON)
 option(BFDEV_DBGHLIST "Dynamic debug hlist" ON)
 option(BFDEV_DBGILIST "Dynamic debug ilist" ON)
 option(BFDEV_DBGRBTREE "Dynamic debug rbtree" ON)
+option(BFDEV_DBGBINTREE "Dynamic debug bintree" ON)
 option(BFDEV_DBGREFCNT "Dynamic debug refcnt" ON)
 
 if(BFDEV_DEVEL)
@@ -81,8 +82,8 @@ if(BFDEV_DBGRBTREE)
     set(BFDEV_DEBUG_RBTREE ON)
 endif()
 
-if(BFDEV_DBGHEAP)
-    set(BFDEV_DEBUG_HEAP ON)
+if(BFDEV_DBGBINTREE)
+    set(BFDEV_DEBUG_BINTREE ON)
 endif()
 
 if(BFDEV_DBGREFCNT)
