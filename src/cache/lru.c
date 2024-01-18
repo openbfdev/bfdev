@@ -26,7 +26,9 @@ static bool
 lru_starving(bfdev_cache_head_t *head)
 {
     struct lru_head *lru_head;
+
     lru_head = cache_to_lru_head(head);
+
     return bfdev_list_check_empty(&lru_head->lru);
 }
 
@@ -47,7 +49,9 @@ static void
 lru_get(bfdev_cache_head_t *head, bfdev_cache_node_t *node)
 {
     struct lru_node *lru_node;
+
     lru_node = cache_to_lru_node(node);
+
     bfdev_list_del(&lru_node->node);
 }
 
@@ -67,7 +71,9 @@ static void
 lru_reset(bfdev_cache_head_t *head)
 {
     struct lru_head *lru_head;
+
     lru_head = cache_to_lru_head(head);
+
     bfdev_list_head_init(&lru_head->lru);
 }
 
