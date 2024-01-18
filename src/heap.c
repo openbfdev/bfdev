@@ -12,14 +12,14 @@ static __bfdev_always_inline void
 parent_swap(bfdev_heap_root_t *root, bfdev_heap_node_t *parent,
             bfdev_heap_node_t *node)
 {
-    bfdev_heap_node_t *gparent = parent->parent;
-    bfdev_heap_node_t shadow = *node;
+    bfdev_heap_node_t shadow, *gparent;
 
     if (node->left)
         node->left->parent = parent;
     if (node->right)
         node->right->parent = parent;
 
+    shadow = *node;
     if (parent->left == node) {
         node->left = parent;
         if ((node->right = parent->right))
@@ -30,7 +30,10 @@ parent_swap(bfdev_heap_root_t *root, bfdev_heap_node_t *parent,
             parent->left->parent = node;
     }
 
-    if (!(node->parent = gparent))
+    gparent = parent->parent;
+    node->parent = gparent;
+
+    if (!gparent)
         root->node = node;
     else if (gparent->left == parent)
         gparent->left = node;
@@ -58,9 +61,9 @@ export void
 bfdev_heap_erase(bfdev_heap_root_t *root, bfdev_heap_node_t *node,
                  bfdev_heap_cmp_t cmp, void *pdata)
 {
-    bfdev_heap_node_t *successor = node->parent;
-    bfdev_heap_node_t *child1, *child2;
+    bfdev_heap_node_t *child1, *child2, *successor;
 
+    successor = node->parent;
     if (successor && cmp(node, successor, pdata) < 0)
         bfdev_heap_fixup(root, node, cmp, pdata);
 
@@ -90,8 +93,9 @@ bfdev_heap_erase(bfdev_heap_root_t *root, bfdev_heap_node_t *node,
 export bfdev_heap_node_t *
 bfdev_heap_remove(bfdev_heap_root_t *root, bfdev_heap_node_t *node)
 {
-    bfdev_heap_node_t *successor = bfdev_heap_find(root, root->count);
+    bfdev_heap_node_t *successor;
 
+    successor = bfdev_heap_find(root, root->count);
     if (!successor->parent) {
         /*
          * Case 1: node to delete is root.
@@ -167,8 +171,8 @@ export bfdev_heap_node_t **
 bfdev_heap_parent(bfdev_heap_root_t *root, bfdev_heap_node_t **parentp,
                   bfdev_heap_node_t *node)
 {
-    unsigned int depth = bfdev_flsuf(root->count + 1);
     bfdev_heap_node_t **link;
+    unsigned int depth;
 
     link = &root->node;
     if (bfdev_unlikely(!*link)) {
@@ -176,6 +180,7 @@ bfdev_heap_parent(bfdev_heap_root_t *root, bfdev_heap_node_t **parentp,
         return link;
     }
 
+    depth = bfdev_flsuf(root->count + 1);
     while (depth--) {
         *parentp = *link;
         if ((root->count + 1) & BFDEV_BIT(depth))
@@ -188,13 +193,16 @@ bfdev_heap_parent(bfdev_heap_root_t *root, bfdev_heap_node_t **parentp,
 }
 
 export bfdev_heap_node_t *
-bfdev_heap_find(bfdev_heap_root_t *root, unsigned int index)
+bfdev_heap_find(bfdev_heap_root_t *root, unsigned long index)
 {
-    unsigned int depth = bfdev_flsuf(root->count);
-    bfdev_heap_node_t *node = root->node;
+    bfdev_heap_node_t *node;
+    unsigned int depth;
+
+    depth = bfdev_flsuf(root->count);
+    node = root->node;
 
     while (node && depth--) {
-        if ((root->count) & BFDEV_BIT(depth))
+        if (index & BFDEV_BIT(depth))
             node = node->right;
         else
             node = node->left;
