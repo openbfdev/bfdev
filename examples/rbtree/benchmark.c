@@ -69,7 +69,11 @@ test_deepth(bfdev_rb_node_t *node)
 
     left_deepth = test_deepth(node->left);
     right_deepth = test_deepth(node->right);
-    return left_deepth > right_deepth ? (left_deepth + 1) : (right_deepth + 1);
+
+    if (left_deepth > right_deepth)
+        left_deepth = right_deepth;
+
+    return right_deepth + 1;
 }
 
 static long
@@ -81,9 +85,7 @@ demo_cmp(const bfdev_rb_node_t *node1,
     test1 = rb_to_bench(node1);
     test2 = rb_to_bench(node2);
 
-    if (test1->data == test2->data)
-        return 0;
-
+    /* Ignoring conflicts */
     return test1->data < test2->data ? -1 : 1;
 }
 

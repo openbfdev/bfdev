@@ -21,11 +21,15 @@ struct simple_node {
     bfdev_rb_entry_safe(ptr, struct simple_node, node)
 
 static long
-demo_cmp(const bfdev_rb_node_t *a, const bfdev_rb_node_t *b, void *pdata)
+demo_cmp(const bfdev_rb_node_t *node1, const bfdev_rb_node_t *node2, void *pdata)
 {
-    struct simple_node *demo_a = rb_to_simple(a);
-    struct simple_node *demo_b = rb_to_simple(b);
-    return demo_a->data - demo_b->data;
+    struct simple_node *demo1, *demo2;
+
+    demo1 = rb_to_simple(node1);
+    demo2 = rb_to_simple(node2);
+
+    /* Ignoring conflicts */
+    return demo1->data < demo2->data ? -1 : 1;
 }
 
 int main(int argc, const char *argv[])
