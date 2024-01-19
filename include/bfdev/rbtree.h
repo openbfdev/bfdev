@@ -69,12 +69,6 @@ struct bfdev_rb_callbacks {
 #define BFDEV_RB_EMPTY_ROOT_CACHED(cached) \
     ((cached)->root.node == NULL)
 
-#define BFDEV_RB_EMPTY_NODE(node) \
-    ((node)->parent == (node))
-
-#define BFDEV_RB_CLEAR_NODE(node) \
-    ((node)->parent = (node))
-
 /**
  * bfdev_rb_entry - get the struct for this entry.
  * @ptr: the &bfdev_rb_node_t pointer.
@@ -209,24 +203,12 @@ bfdev_rb_find_last(bfdev_rb_root_t *root, void *key, bfdev_rb_find_t cmp,
  * @parentp: pointer used to modify the parent node pointer.
  * @node: new node to insert.
  * @cmp: operator defining the node order.
- * @leftmost: return whether it is the leftmost node.
+ * @leftmostp: return whether it is the leftmost node.
  */
 extern bfdev_rb_node_t **
 bfdev_rb_parent(bfdev_rb_root_t *root, bfdev_rb_node_t **parentp,
                 bfdev_rb_node_t *node, bfdev_rb_cmp_t cmp, void *pdata,
-                bool *leftmost);
-
-/**
- * bfdev_rb_parent_conflict() - find the parent node or conflict.
- * @root: rbtree want to search.
- * @parentp: pointer used to modify the parent node pointer.
- * @node: new node to insert.
- * @cmp: operator defining the node order.
- * @leftmost: return whether it is the leftmost node.
- */
-extern bfdev_rb_node_t **
-bfdev_rb_parent_conflict(bfdev_rb_root_t *root, bfdev_rb_node_t **parentp, bfdev_rb_node_t *node,
-                         bfdev_rb_cmp_t cmp, void *pdata, bool *leftmost);
+                bool *leftmostp);
 
 #define bfdev_rb_cached_erase_augmented(cached, parent, callbacks) \
     bfdev_rb_erase_augmented(&(cached)->root, parent, callbacks)
@@ -246,11 +228,8 @@ bfdev_rb_parent_conflict(bfdev_rb_root_t *root, bfdev_rb_node_t **parentp, bfdev
 #define bfdev_rb_cached_find_last(cached, key, cmp, parentp, linkp) \
     bfdev_rb_find_last(&(cached)->root, key, cmp, parentp, linkp)
 
-#define bfdev_rb_cached_parent(cached, parentp, node, cmp, pdata, leftmost) \
-    bfdev_rb_parent(&(cached)->root, parentp, node, cmp, pdata, leftmost)
-
-#define bfdev_rb_cached_parent_conflict(cached, parentp, node, cmp, pdata, leftmost) \
-    bfdev_rb_parent_conflict(&(cached)->root, parentp, node, cmp, pdata, leftmost)
+#define bfdev_rb_cached_parent(cached, parentp, node, cmp, pdata, leftmostp) \
+    bfdev_rb_parent(&(cached)->root, parentp, node, cmp, pdata, leftmostp)
 
 /* Base iteration - basic iteration helper */
 extern bfdev_rb_node_t *
@@ -669,26 +648,6 @@ bfdev_rb_insert(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
 }
 
 /**
- * bfdev_rb_insert_conflict - find the parent node and insert new node or conflict.
- * @root: rbtree root of node.
- * @node: new node to insert.
- * @cmp: operator defining the node order.
- */
-static inline bool
-bfdev_rb_insert_conflict(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
-                         bfdev_rb_cmp_t cmp, void *pdata)
-{
-    bfdev_rb_node_t *parent, **link;
-
-    link = bfdev_rb_parent_conflict(root, &parent, node, cmp, pdata, NULL);
-    if (!link)
-        return true;
-
-    bfdev_rb_insert_node(root, parent, link, node);
-    return false;
-}
-
-/**
  * bfdev_rb_delete - delete node and fixup rbtree.
  * @root: rbtree root of node.
  * @node: node to delete.
@@ -744,28 +703,6 @@ bfdev_rb_insert_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
 
     link = bfdev_rb_parent(root, &parent, node, cmp, pdata, NULL);
     bfdev_rb_insert_node_augmented(root, parent, link, node, callbacks);
-}
-
-/**
- * bfdev_rb_insert_conflict_augmented - augmented find the parent node and insert new node or conflict.
- * @root: rbtree root of node.
- * @node: new node to insert.
- * @cmp: operator defining the node order.
- * @callbacks: augmented callback function.
- */
-static inline bool
-bfdev_rb_insert_conflict_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
-                                   bfdev_rb_cmp_t cmp, void *pdata,
-                                   const struct bfdev_rb_callbacks *callbacks)
-{
-    bfdev_rb_node_t *parent, **link;
-
-    link = bfdev_rb_parent_conflict(root, &parent, node, cmp, pdata, NULL);
-    if (!link)
-        return true;
-
-    bfdev_rb_insert_node_augmented(root, parent, link, node, callbacks);
-    return false;
 }
 
 /**
@@ -940,31 +877,10 @@ bfdev_rb_cached_insert(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t *node,
                        bfdev_rb_cmp_t cmp, void *pdata)
 {
     bfdev_rb_node_t *parent, **link;
-    bool leftmost = true;
+    bool leftmost;
 
     link = bfdev_rb_cached_parent(cached, &parent, node, cmp, pdata, &leftmost);
     bfdev_rb_cached_insert_node(cached, parent, link, node, leftmost);
-}
-
-/**
- * bfdev_rb_cached_insert_conflict - find the parent node and insert new cached node or conflict.
- * @cached: rbtree cached root of node.
- * @node: new node to insert.
- * @cmp: operator defining the node order.
- */
-static inline bool
-bfdev_rb_cached_insert_conflict(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t *node,
-                                bfdev_rb_cmp_t cmp, void *pdata)
-{
-    bfdev_rb_node_t *parent, **link;
-    bool leftmost = true;
-
-    link = bfdev_rb_cached_parent_conflict(cached, &parent, node, cmp, pdata, &leftmost);
-    if (!link)
-        return true;
-
-    bfdev_rb_cached_insert_node(cached, parent, link, node, leftmost);
-    return false;
 }
 
 /**
@@ -975,10 +891,14 @@ bfdev_rb_cached_insert_conflict(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t 
 static inline bfdev_rb_node_t *
 bfdev_rb_cached_delete(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t *node)
 {
-    bfdev_rb_node_t *leftmost = NULL;
+    bfdev_rb_node_t *leftmost;
 
-    if (cached->leftmost == node)
-        leftmost = cached->leftmost = bfdev_rb_next(node);
+    if (cached->leftmost != node)
+        leftmost = NULL;
+    else {
+        leftmost = bfdev_rb_next(node);
+        cached->leftmost = leftmost;
+    }
 
     bfdev_rb_delete(&cached->root, node);
     return leftmost;
@@ -1032,33 +952,10 @@ bfdev_rb_cached_insert_augmented(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t
                                  const struct bfdev_rb_callbacks *callbacks)
 {
     bfdev_rb_node_t *parent, **link;
-    bool leftmost = true;
+    bool leftmost;
 
     link = bfdev_rb_cached_parent(cached, &parent, node, cmp, pdata, &leftmost);
     bfdev_rb_cached_insert_node_augmented(cached, parent, link, node, leftmost, callbacks);
-}
-
-/**
- * bfdev_rb_cached_insert_conflict - find the parent node and insert new cached node or conflict.
- * @cached: rbtree cached root of node.
- * @node: new node to insert.
- * @cmp: operator defining the node order.
- * @callbacks: augmented callback function.
- */
-static inline bool
-bfdev_rb_cached_insert_conflict_augmented(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t *node,
-                                          bfdev_rb_cmp_t cmp, void *pdata,
-                                          const struct bfdev_rb_callbacks *callbacks)
-{
-    bfdev_rb_node_t *parent, **link;
-    bool leftmost = true;
-
-    link = bfdev_rb_cached_parent_conflict(cached, &parent, node, cmp, pdata, &leftmost);
-    if (!link)
-        return true;
-
-    bfdev_rb_cached_insert_node_augmented(cached, parent, link, node, leftmost, callbacks);
-    return false;
 }
 
 /**
@@ -1071,10 +968,14 @@ static inline bfdev_rb_node_t *
 bfdev_rb_cached_delete_augmented(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t *node,
                                  const struct bfdev_rb_callbacks *callbacks)
 {
-    bfdev_rb_node_t *leftmost = NULL;
+    bfdev_rb_node_t *leftmost;
 
-    if (cached->leftmost == node)
-        leftmost = cached->leftmost = bfdev_rb_next(node);
+    if (cached->leftmost != node)
+        leftmost = NULL;
+    else {
+        leftmost = bfdev_rb_next(node);
+        cached->leftmost = leftmost;
+    }
 
     bfdev_rb_delete_augmented(&cached->root, node, callbacks);
     return leftmost;
