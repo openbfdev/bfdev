@@ -31,6 +31,13 @@ BFDEV_BEGIN_DECLS
 # define bfdev_barrier_data(ptr) __bfdev_barrier(:"r"(ptr))
 #endif
 
+/*
+ * Whether 'type' is a signed type or an unsigned type.
+ * Supports scalar types, bool and also pointer types.
+ */
+#define bfdev_is_signed(type) (((type)(-1)) < (type)1)
+#define bfdev_is_unsigned(type) (!bfdev_is_signed(type))
+
 /* Not-quite-unique ID. */
 #ifndef __BFDEV_UNIQUE_ID
 # define __BFDEV_UNIQUE_ID(prefix) __BFDEV_PASTE(__BFDEV_PASTE(__UNIQUE_ID_, prefix), __LINE__)
