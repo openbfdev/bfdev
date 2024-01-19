@@ -6,15 +6,15 @@
 #ifndef _BFDEV_BYTEORDER_LITTLE_ENDIAN_H_
 #define _BFDEV_BYTEORDER_LITTLE_ENDIAN_H_
 
-#ifndef __BFDEV_LITTLE_ENDIAN__
-# define __BFDEV_LITTLE_ENDIAN__
-#endif
-
 #include <bfdev/config.h>
 #include <bfdev/types.h>
 #include <bfdev/swab.h>
 
 BFDEV_BEGIN_DECLS
+
+#ifndef __BFDEV_LITTLE_ENDIAN__
+# define __BFDEV_LITTLE_ENDIAN__
+#endif
 
 #define bfdev_htons_const(x) ((bfdev_be16)bfdev_swab16_const((x)))
 #define bfdev_htonl_const(x) ((bfdev_be32)bfdev_swab32_const((x)))
