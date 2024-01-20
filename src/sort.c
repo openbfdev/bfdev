@@ -30,33 +30,38 @@ parent(size_t cells, unsigned int lsbit, size_t index)
 export int
 bfdev_qsort(void *base, size_t num, size_t cells, bfdev_cmp_t cmp, void *pdata)
 {
-    const unsigned int lsbit = cells & -cells;
-    size_t size = num * cells;
-    size_t ida, idb, idc, idd;
+    size_t size, idx1, idx2, idx3, idx4;
+    unsigned int lsbit;
 
-    ida = (num / 2) * cells;
-    if (!base || !cmp || !ida)
+    idx1 = (num >> 1) * cells;
+    if (bfdev_unlikely(!base || !cmp || !idx1))
         return -BFDEV_EINVAL;
 
+    size = num * cells;
+    lsbit = cells & -cells;
+
     for (;;) {
-        if (ida)
-            ida -= cells;
+        if (idx1)
+            idx1 -= cells;
         else if (size -= cells)
             sort_swap(cells, base, base + size);
         else
             break;
 
-        for (idb = ida; idc = 2 * idb + cells, (idd = idc + cells) < size;)
-            idb = cmp(base + idc, base + idd, pdata) >= 0 ? idc : idd;
-        if (idd == size)
-            idb = idc;
+        idx2 = idx1;
+        while (idx3 = 2 * idx2 + cells, (idx4 = idx3 + cells) < size)
+            idx2 = cmp(base + idx3, base + idx4, pdata) >= 0 ? idx3 : idx4;
 
-        while (ida != idb && cmp(base + ida, base + idb, pdata) >= 0)
-            idb = parent(cells, lsbit, idb);
+        if (idx4 == size)
+            idx2 = idx3;
 
-        for (idc = idb; ida != idb;) {
-            idb = parent(cells, lsbit, idb);
-            sort_swap(cells, base + idb, base + idc);
+        while (idx1 != idx2 && cmp(base + idx1, base + idx2, pdata) >= 0)
+            idx2 = parent(cells, lsbit, idx2);
+
+        idx3 = idx2;
+        while (idx1 != idx2) {
+            idx2 = parent(cells, lsbit, idx2);
+            sort_swap(cells, base + idx2, base + idx3);
         }
     }
 
