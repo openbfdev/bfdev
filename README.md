@@ -22,9 +22,8 @@ bfdev is a high-performance, aesthetically pleasing, and portable infrastructure
 - Offers a rich and well-organized set of APIs for users.
 - Conforms to the GNUC standard, ensuring strong cross-platform compatibility.
 
-### WARNING
-
-This project is not yet fully completed, so it is not recommended for use in a production environment.
+> [!NOTE]
+> We are seeking developers to collaborate with us on improve this project.
 
 View supported components: [Docs](docs/components.md)
 
@@ -83,6 +82,9 @@ graph LR
 ## Documentation Tutorial
 
 Quickly start, API manual, see [Bfdev Documentation Tutorial](https://openbfdev.github.io/bfdev-docs)
+
+> [!CAUTION]
+> This project is not yet fully completed, so it is not recommended for use in a production environment.
 
 ## License
 
