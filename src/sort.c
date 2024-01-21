@@ -8,15 +8,15 @@
 #include <export.h>
 
 static __bfdev_always_inline void
-sort_swap(size_t cells, void *cela, void *celb)
+sort_swap(size_t cells, void *cel1, void *cel2)
 {
-    uint8_t *buff;
+    void *buff;
 
     buff = bfdev_alloca(cells);
 
-    memcpy(buff, cela, cells);
-    memcpy(cela, celb, cells);
-    memcpy(celb, buff, cells);
+    memcpy(buff, cel1, cells);
+    memcpy(cel1, cel2, cells);
+    memcpy(cel2, buff, cells);
 }
 
 static __bfdev_attribute_const __bfdev_always_inline size_t
