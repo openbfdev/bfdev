@@ -7,11 +7,12 @@
 #include <bfdev/sort.h>
 #include <export.h>
 
-static __bfdev_always_inline void
+static __bfdev_noinline void
 sort_swap(size_t cells, void *cel1, void *cel2)
 {
     void *buff;
 
+    /* alloca hates inline */
     buff = bfdev_alloca(cells);
 
     memcpy(buff, cel1, cells);
