@@ -20,11 +20,10 @@ typedef bfdev_notifier_ret_t (*bfdev_notifier_entry_t)
 (bfdev_notifier_node_t *node, void *args);
 
 enum bfdev_notifier_ret {
-    __BFDEV_NOTIFI_RET_DONE = 0,
-    __BFDEV_NOTIFI_RET_REMOVE,
+    __BFDEV_NOTIFI_RET_REMOVE = 0,
     __BFDEV_NOTIFI_RET_STOP,
 
-    BFDEV_NOTIFI_RET_DONE   = BFDEV_BIT(__BFDEV_NOTIFI_RET_DONE),
+    BFDEV_NOTIFI_RET_DONE   = 0,
     BFDEV_NOTIFI_RET_REMOVE = BFDEV_BIT(__BFDEV_NOTIFI_RET_REMOVE),
     BFDEV_NOTIFI_RET_STOP   = BFDEV_BIT(__BFDEV_NOTIFI_RET_STOP),
 };

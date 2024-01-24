@@ -31,8 +31,9 @@ bfdev_notifier_call(bfdev_notifier_head_t *head, void *arg,
                     unsigned int call_num, unsigned int *called_num)
 {
     bfdev_notifier_node_t *node, *tmp;
-    bfdev_notifier_ret_t retval = BFDEV_NOTIFI_RET_DONE;
+    bfdev_notifier_ret_t retval;
 
+    retval = BFDEV_NOTIFI_RET_DONE;
     bfdev_ilist_for_each_entry_safe(node, tmp, &head->node, list) {
         if (!call_num--)
             break;
