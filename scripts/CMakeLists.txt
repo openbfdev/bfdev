@@ -21,11 +21,12 @@ macro(generate_crctbl proc path table rows poly trans)
     add_custom_command(
         TARGET ${proc}
         POST_BUILD COMMAND
-        mkdir -p ${BFDEV_GENERATED_PATH}/bfdev/crypto
-        POST_BUILD COMMAND
-        ${PROJECT_BINARY_DIR}/scripts/${proc}
-        ${table} ${rows} ${poly} ${trans} >
-        ${BFDEV_GENERATED_PATH}/bfdev/crypto/${path}
+        bash -c \"
+            mkdir -p ${BFDEV_GENERATED_PATH}/bfdev/crypto &&
+            ${PROJECT_BINARY_DIR}/scripts/${proc}
+                ${table} ${rows} ${poly} ${trans} >
+                ${BFDEV_GENERATED_PATH}/bfdev/crypto/${path}
+        \"
     )
 endmacro()
 
