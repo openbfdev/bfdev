@@ -6,10 +6,10 @@
 -----------
 Bfdev Designer Group
 
-Name        : ffashion
-Email       : helloworldffashion@gmail.com
-Represent   : global
-
 Name        : John Sanpe
 Email       : sanpeqf@gmail.com
-Represent   : global
+Represent   : framework
+
+Name        : ffashion
+Email       : helloworldffashion@gmail.com
+Represent   : array, cmake
