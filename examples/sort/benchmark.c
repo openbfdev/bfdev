@@ -23,12 +23,12 @@ for (count = 0; count < TEST_LOOP; ++count) {       \
         buffer[index] = rand();                     \
                                                     \
     EXAMPLE_TIME_LOOP(&loop, 1000,                  \
-        bfdev_qsort(buffer, size, sizeof(*buffer),  \
+        bfdev_sort(buffer, size, sizeof(*buffer),   \
                     test_cmp, NULL);                \
         0;                                          \
     );                                              \
                                                     \
-    bfdev_log_info("qsort " name " %u: %uops/s\n",  \
+    bfdev_log_info("sort " name " %u: %uops/s\n",   \
                    count, loop);                    \
 }
 

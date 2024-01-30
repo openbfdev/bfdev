@@ -29,7 +29,7 @@ parent(size_t cells, unsigned int lsbit, size_t index)
 }
 
 export int
-bfdev_qsort(void *base, size_t num, size_t cells, bfdev_cmp_t cmp, void *pdata)
+bfdev_sort(void *base, size_t num, size_t cells, bfdev_cmp_t cmp, void *pdata)
 {
     size_t size, idx1, idx2, idx3, idx4;
     unsigned int lsbit;

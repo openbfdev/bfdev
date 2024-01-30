@@ -40,7 +40,7 @@ sort_testing(struct sort_test *test)
                        count, test[count].value);
     }
 
-    bfdev_qsort(test, TEST_LOOP, sizeof(*test), sort_test_cmp, NULL);
+    bfdev_sort(test, TEST_LOOP, sizeof(*test), sort_test_cmp, NULL);
     for (count = 0; count < TEST_LOOP; ++count) {
         bfdev_log_info("sort qsort%02u: %02u = %u\n",
                        count, test[count].index, test[count].value);
