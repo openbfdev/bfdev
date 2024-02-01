@@ -10,7 +10,7 @@
 
 BFDEV_BEGIN_DECLS
 
-#ifdef __ASSEMBLY__
+#ifdef __BFDEV_ASSEMBLY__
 # define BFDEV_AC(X, Y) X
 # define BFDEV_AT(T, X) X
 #else
@@ -22,8 +22,8 @@ BFDEV_BEGIN_DECLS
 #define BFDEV_UL(x) (BFDEV_AC(x, UL))
 #define BFDEV_ULL(x) (BFDEV_AC(x, ULL))
 
-#define BFDEV_BITUL(x) (_BFDEV_UL(1) << (x))
-#define BFDEV_BITULL(x) (_BFDEV_ULL(1) << (x))
+#define BFDEV_BITUL(x) (BFDEV_UL(1) << (x))
+#define BFDEV_BITULL(x) (BFDEV_ULL(1) << (x))
 
 BFDEV_END_DECLS
 
