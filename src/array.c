@@ -9,7 +9,7 @@
 #include <bfdev/overflow.h>
 #include <export.h>
 
-static int
+static inline int
 array_resize(bfdev_array_t *array, unsigned long count)
 {
     const bfdev_alloc_t *alloc = array->alloc;
@@ -30,12 +30,30 @@ array_resize(bfdev_array_t *array, unsigned long count)
     return -BFDEV_ENOERR;
 }
 
-static int
+static inline int
 array_apply(bfdev_array_t *array, unsigned long count)
 {
     if (count > array->capacity)
         return array_resize(array, count);
     return -BFDEV_ENOERR;
+}
+
+static inline void *
+array_peek(bfdev_array_t *array, unsigned long num, unsigned long *indexp)
+{
+    unsigned long index;
+    uintptr_t offset;
+    bool overflow;
+
+    overflow = bfdev_overflow_check_sub(array->index, num, &index);
+    if (bfdev_unlikely(overflow))
+        return NULL;
+
+    offset = bfdev_array_offset(array, index);
+    if (indexp)
+        *indexp = index;
+
+    return array->data + offset;
 }
 
 export void *
@@ -64,18 +82,13 @@ bfdev_array_push(bfdev_array_t *array, unsigned long num)
 export void *
 bfdev_array_pop(bfdev_array_t *array, unsigned long num)
 {
-    unsigned long index;
-    uintptr_t offset;
-    bool overflow;
+    return array_peek(array, num, &array->index);
+}
 
-    overflow = bfdev_overflow_check_sub(array->index, num, &index);
-    if (bfdev_unlikely(overflow))
-        return NULL;
-
-    array->index = index;
-    offset = bfdev_array_offset(array, index);
-
-    return array->data + offset;
+export void *
+bfdev_array_peek(bfdev_array_t *array, unsigned long num)
+{
+    return array_peek(array, num, NULL);
 }
 
 export int

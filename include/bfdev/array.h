@@ -81,6 +81,9 @@ bfdev_array_push(bfdev_array_t *array, unsigned long num);
 extern void *
 bfdev_array_pop(bfdev_array_t *array, unsigned long num);
 
+extern void *
+bfdev_array_peek(bfdev_array_t *array, unsigned long num);
+
 extern int
 bfdev_array_reserve(bfdev_array_t *array, unsigned long num);
 
