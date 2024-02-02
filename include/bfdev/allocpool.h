@@ -57,7 +57,7 @@ bfdev_allocpool_reset(struct bfdev_allocpool *pool)
  * @size: size to allocation.
  * @align: align to allocation.
  */
-extern void *
+extern __bfdev_malloc void *
 bfdev_allocpool_alloc(struct bfdev_allocpool *pool, size_t size, size_t align);
 
 /**
@@ -66,7 +66,7 @@ bfdev_allocpool_alloc(struct bfdev_allocpool *pool, size_t size, size_t align);
  * @block: memory block to free.
  */
 extern void
-bfdev_allocpool_free(struct bfdev_allocpool *pool, const char *block);
+bfdev_allocpool_free(struct bfdev_allocpool *pool, const void *block);
 
 BFDEV_END_DECLS
 
