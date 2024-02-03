@@ -181,7 +181,7 @@ hashmap_shrink(bfdev_hashmap_t *hashmap)
 
 export int
 bfdev_hashmap_insert(bfdev_hashmap_t *hashmap, bfdev_hlist_node_t *node,
-                     bfdev_hlist_node_t **old, enum bfdev_hashmap_strategy strategy)
+                     bfdev_hlist_node_t **old, bfdev_hashmap_strategy_t strategy)
 {
     bfdev_hlist_node_t *exist;
     unsigned long value;
