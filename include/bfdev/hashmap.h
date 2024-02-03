@@ -19,6 +19,7 @@ BFDEV_BEGIN_DECLS
 
 typedef struct bfdev_hashmap bfdev_hashmap_t;
 typedef struct bfdev_hashmap_ops bfdev_hashmap_ops_t;
+typedef enum bfdev_hashmap_strategy bfdev_hashmap_strategy_t;
 
 /**
  * enum bfdev_hashmap_strategy - Hashmap insertion strategy.
@@ -88,7 +89,7 @@ bfdev_hashmap_init(bfdev_hashmap_t *hashmap, const bfdev_alloc_t *alloc,
  */
 extern int
 bfdev_hashmap_insert(bfdev_hashmap_t *hashmap, bfdev_hlist_node_t *node,
-                     bfdev_hlist_node_t **old, enum bfdev_hashmap_strategy strategy);
+                     bfdev_hlist_node_t **old, bfdev_hashmap_strategy_t strategy);
 
 /**
  * bfdev_hashmap_del() - delete a hashlist node from hashmap.
