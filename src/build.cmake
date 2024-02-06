@@ -45,35 +45,35 @@ set(BFDEV_SOURCE
     ${CMAKE_CURRENT_LIST_DIR}/stringhash.c
 )
 
-if(BFDEV_DBGLIST)
+if(BFDEV_DEBUG_LIST)
     set(BFDEV_SOURCE
         ${BFDEV_SOURCE}
         ${CMAKE_CURRENT_LIST_DIR}/list-debug.c
     )
 endif()
 
-if(BFDEV_DBGSLIST)
+if(BFDEV_DEBUG_SLIST)
     set(BFDEV_SOURCE
         ${BFDEV_SOURCE}
         ${CMAKE_CURRENT_LIST_DIR}/slist-debug.c
     )
 endif()
 
-if(BFDEV_DBGHLIST)
+if(BFDEV_DEBUG_HLIST)
     set(BFDEV_SOURCE
         ${BFDEV_SOURCE}
         ${CMAKE_CURRENT_LIST_DIR}/hlist-debug.c
     )
 endif()
 
-if(BFDEV_DBGRBTREE)
+if(BFDEV_DEBUG_RBTREE)
     set(BFDEV_SOURCE
         ${BFDEV_SOURCE}
         ${CMAKE_CURRENT_LIST_DIR}/rbtree-debug.c
     )
 endif()
 
-if(BFDEV_DBGHEAP)
+if(BFDEV_DEBUG_HEAP)
     set(BFDEV_SOURCE
         ${BFDEV_SOURCE}
         ${CMAKE_CURRENT_LIST_DIR}/heap-debug.c

@@ -5,6 +5,8 @@
 
 set(HOST_C_FLAGS
     ${HOST_C_FLAGS}
+    -Wall
+    -Wextra
     -I ${PROJECT_SOURCE_DIR}/include
     -I ${PROJECT_BINARY_DIR}/generated
 )
