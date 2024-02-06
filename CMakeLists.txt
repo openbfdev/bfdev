@@ -9,9 +9,6 @@ project(bfdev VERSION 1.0.0 LANGUAGES C)
 
 include(GNUInstallDirs)
 include(CheckIncludeFiles)
-include(CheckCXXSymbolExists)
-include(CheckFunctionExists)
-include(CheckCSourceCompiles)
 
 set(BFDEV_ARCH dummy)
 set(BFDEV_NAME sirius)
@@ -43,51 +40,23 @@ commit_hash(BFDEV_COMMITID)
 commit_branch(BFDEV_BRANCH)
 
 option(BFDEV_DEVEL "Enable development mode" OFF)
-option(BFDEV_EXAMPLES "Build examples" OFF)
 option(BFDEV_STRICT "Enable strict compilation" ON)
+option(BFDEV_EXAMPLES "Build examples" OFF)
 option(BFDEV_ASAN "Enable Address Sanitizer" OFF)
 option(BFDEV_UBSAN "Enable Undefined Behaviour Sanitizer" OFF)
 
-option(BFDEV_DBGLIST "Dynamic debug list" ON)
-option(BFDEV_DBGSLIST "Dynamic debug slist" ON)
-option(BFDEV_DBGHLIST "Dynamic debug hlist" ON)
-option(BFDEV_DBGILIST "Dynamic debug ilist" ON)
-option(BFDEV_DBGRBTREE "Dynamic debug rbtree" ON)
-option(BFDEV_DBGHEAP "Dynamic debug heap" ON)
-option(BFDEV_DBGREFCNT "Dynamic debug refcnt" ON)
+option(BFDEV_DEBUG_LIST "Dynamic debug list" ON)
+option(BFDEV_DEBUG_SLIST "Dynamic debug slist" ON)
+option(BFDEV_DEBUG_HLIST "Dynamic debug hlist" ON)
+option(BFDEV_DEBUG_ILIST "Dynamic debug ilist" ON)
+option(BFDEV_DEBUG_RBTREE "Dynamic debug rbtree" ON)
+option(BFDEV_DEBUG_HEAP "Dynamic debug heap" ON)
+option(BFDEV_DEBUG_REFCNT "Dynamic debug refcnt" ON)
 
 if(BFDEV_DEVEL)
     set(BFDEV_EXAMPLES ON)
     set(BFDEV_ASAN ON)
     set(BFDEV_UBSAN ON)
-endif()
-
-if(BFDEV_DBGLIST)
-    set(BFDEV_DEBUG_LIST ON)
-endif()
-
-if(BFDEV_DBGSLIST)
-    set(BFDEV_DEBUG_SLIST ON)
-endif()
-
-if(BFDEV_DBGHLIST)
-    set(BFDEV_DEBUG_HLIST ON)
-endif()
-
-if(BFDEV_DBGILIST)
-    set(BFDEV_DEBUG_ILIST ON)
-endif()
-
-if(BFDEV_DBGRBTREE)
-    set(BFDEV_DEBUG_RBTREE ON)
-endif()
-
-if(BFDEV_DBGHEAP)
-    set(BFDEV_DEBUG_HEAP ON)
-endif()
-
-if(BFDEV_DBGREFCNT)
-    set(BFDEV_DEBUG_REFCNT ON)
 endif()
 
 asm_generic(
@@ -105,22 +74,6 @@ configure_file(
 configure_file(
     ${BFDEV_MODULE_PATH}/bfdev-config.cmake.in
     ${BFDEV_CONFIGURE}
-)
-
-file(GLOB BFDEV_HEADER
-    ${BFDEV_HEADER_PATH}/bfdev/*.h
-)
-
-file(GLOB BFDEV_ASM_HEADER
-    ${BFDEV_HEADER_PATH}/bfdev/asm-generic/*.h
-)
-
-file(GLOB BFDEV_ARCH_ASM_HEADER
-    ${BFDEV_ARCH_HEADER_PATH}/bfdev/asm/*.h
-)
-
-file(GLOB BFDEV_GENERATED_HEADER
-    ${BFDEV_GENERATED_PATH}/*.h
 )
 
 add_compile_options(
@@ -262,9 +215,9 @@ if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
     )
 
     install(FILES
-        ${CMAKE_SOURCE_DIR}/README.md
-        ${CMAKE_SOURCE_DIR}/AUTHORS
-        ${CMAKE_SOURCE_DIR}/COPYING
+        ${PROJECT_SOURCE_DIR}/README.md
+        ${PROJECT_SOURCE_DIR}/AUTHORS
+        ${PROJECT_SOURCE_DIR}/COPYING
         DESTINATION ${CMAKE_INSTALL_DOCDIR}
     )
 
