@@ -4,7 +4,7 @@
  */
 
 #include <base.h>
-#include <bfdev/bitmap.h>
+#include <bfdev/bitmap-comp.h>
 #include <export.h>
 
 export bool
@@ -88,7 +88,7 @@ bfdev_bitmap_comp_and(unsigned long *dest, const unsigned long *src1,
 
     if (BFDEV_BITS_MOD_LONG(bits)) {
         value = src1[index] & src2[index];
-        result |= (dest[index] = value) & BFDEV_BIT_LOW_MASK(bits);
+        result |= (dest[index] = (value & BFDEV_BIT_LOW_MASK(bits)));
     }
 
     return !!result;
@@ -109,7 +109,7 @@ bfdev_bitmap_comp_andnot(unsigned long *dest, const unsigned long *src1,
 
     if (BFDEV_BITS_MOD_LONG(bits)) {
         value = src1[index] & ~src2[index];
-        result |= (dest[index] = value) & BFDEV_BIT_LOW_MASK(bits);
+        result |= (dest[index] = (value & BFDEV_BIT_LOW_MASK(bits)));
     }
 
     return !!result;
