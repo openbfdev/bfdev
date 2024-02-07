@@ -5,6 +5,7 @@
 
 add_subdirectory(action)
 add_subdirectory(allocator)
+add_subdirectory(arc4)
 add_subdirectory(array)
 add_subdirectory(base32)
 add_subdirectory(base64)
