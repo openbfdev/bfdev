@@ -52,6 +52,7 @@ option(BFDEV_DEBUG_ILIST "Dynamic debug ilist" ON)
 option(BFDEV_DEBUG_RBTREE "Dynamic debug rbtree" ON)
 option(BFDEV_DEBUG_HEAP "Dynamic debug heap" ON)
 option(BFDEV_DEBUG_REFCNT "Dynamic debug refcnt" ON)
+option(BFDEV_CRC_EXTEND "CRC loop unfolding optimize" ON)
 
 if(BFDEV_DEVEL)
     set(BFDEV_EXAMPLES ON)

@@ -32,56 +32,62 @@ macro(generate_crctbl proc path table rows poly trans)
     )
 endmacro()
 
+if(BFDEV_CRC_EXTEND)
+    set(CRC_ROWS 8)
+else()
+    set(CRC_ROWS 1)
+endif()
+
 generate_crctbl(
     gen-crc8 crc7-table.h
-    bfdev_crc7_table 8 0x12
-    ""
+    bfdev_crc7_table ${CRC_ROWS}
+    0x12 ""
 )
 
 generate_crctbl(
     gen-crc8 crc8-table.h
-    bfdev_crc8_table 8 0x07
-    ""
+    bfdev_crc8_table ${CRC_ROWS}
+    0x07 ""
 )
 
 generate_crctbl(
     gen-crc16 crc16-table.h
-    bfdev_crc16_table 8 0xa001
-    "bfdev_cpu_to_le16"
+    bfdev_crc16_table ${CRC_ROWS}
+    0xa001 "bfdev_cpu_to_le16"
 )
 
 generate_crctbl(
     gen-crc16 crc-ccitt-table.h
-    bfdev_crc_ccitt_table 8 0x8408
-    "bfdev_cpu_to_le16"
+    bfdev_crc_ccitt_table ${CRC_ROWS}
+    0x8408 "bfdev_cpu_to_le16"
 )
 
 generate_crctbl(
     gen-crc16be crc-itut-table.h
-    bfdev_crc_itut_table 8 0x1021
-    "bfdev_cpu_to_be16"
+    bfdev_crc_itut_table ${CRC_ROWS}
+    0x1021 "bfdev_cpu_to_be16"
 )
 
 generate_crctbl(
     gen-crc16be crc-t10dif-table.h
-    bfdev_crc_t10dif_table 8 0x8bb7
-    "bfdev_cpu_to_be16"
+    bfdev_crc_t10dif_table ${CRC_ROWS}
+    0x8bb7 "bfdev_cpu_to_be16"
 )
 
 generate_crctbl(
     gen-crc32 crc32-table.h
-    bfdev_crc32_table 8 0xedb88320
-    "bfdev_cpu_to_le32"
+    bfdev_crc32_table ${CRC_ROWS}
+    0xedb88320 "bfdev_cpu_to_le32"
 )
 
 generate_crctbl(
     gen-crc64be crc64-table.h
-    bfdev_crc64_table 8 0x42f0e1eba9ea3693
-    "bfdev_cpu_to_be64"
+    bfdev_crc64_table ${CRC_ROWS}
+    0x42f0e1eba9ea3693 "bfdev_cpu_to_be64"
 )
 
 generate_crctbl(
     gen-crc64 crc-rocksoft-table.h
-    bfdev_crc_rocksoft_table 8 0x9a6c9329ac4bc9b5
-    "bfdev_cpu_to_le64"
+    bfdev_crc_rocksoft_table ${CRC_ROWS}
+    0x9a6c9329ac4bc9b5 "bfdev_cpu_to_le64"
 )
