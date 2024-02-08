@@ -8,7 +8,7 @@
 #include <export.h>
 
 export __bfdev_malloc void *
-bfdev_allocpool_alloc(struct bfdev_allocpool *pool, size_t size, size_t align)
+bfdev_allocpool_alloc(bfdev_allocpool_t *pool, size_t size, size_t align)
 {
     uintptr_t offset;
     void *retval;
@@ -30,7 +30,7 @@ bfdev_allocpool_alloc(struct bfdev_allocpool *pool, size_t size, size_t align)
 }
 
 export void
-bfdev_allocpool_free(struct bfdev_allocpool *pool, const void *block)
+bfdev_allocpool_free(bfdev_allocpool_t *pool, const void *block)
 {
     if (!--pool->count)
         pool->last = 0;
