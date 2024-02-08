@@ -12,6 +12,8 @@
 
 BFDEV_BEGIN_DECLS
 
+typedef struct bfdev_allocpool bfdev_allocpool_t;
+
 struct bfdev_allocpool {
     void *block;
     size_t size;
@@ -23,10 +25,10 @@ struct bfdev_allocpool {
     {.block = (BLOCK), .size = (SIZE)}
 
 #define BFDEV_ALLOCPOOL_INIT(block, size) \
-    (struct bfdev_allocpool) BFDEV_ALLOCPOOL_STATIC(block, size)
+    (bfdev_allocpool_t) BFDEV_ALLOCPOOL_STATIC(block, size)
 
 #define BFDEV_DEFINE_ALLOCPOOL(name, block, size) \
-    struct bfdev_allocpool name = BFDEV_ALLOCPOOL_INIT(block, size)
+    bfdev_allocpool_t name = BFDEV_ALLOCPOOL_INIT(block, size)
 
 /**
  * bfdev_allocpool_init() - Allocation mempool initialize.
@@ -35,7 +37,7 @@ struct bfdev_allocpool {
  * @size: mempool array size.
  */
 static inline void
-bfdev_allocpool_init(struct bfdev_allocpool *pool, void *block, size_t size)
+bfdev_allocpool_init(bfdev_allocpool_t *pool, void *block, size_t size)
 {
     *pool = BFDEV_ALLOCPOOL_INIT(block, size);
 }
@@ -45,7 +47,7 @@ bfdev_allocpool_init(struct bfdev_allocpool *pool, void *block, size_t size)
  * @pool: the allocpool to reset.
  */
 static inline void
-bfdev_allocpool_reset(struct bfdev_allocpool *pool)
+bfdev_allocpool_reset(bfdev_allocpool_t *pool)
 {
     pool->last = 0;
     pool->count = 0;
@@ -58,7 +60,7 @@ bfdev_allocpool_reset(struct bfdev_allocpool *pool)
  * @align: align to allocation.
  */
 extern __bfdev_malloc void *
-bfdev_allocpool_alloc(struct bfdev_allocpool *pool, size_t size, size_t align);
+bfdev_allocpool_alloc(bfdev_allocpool_t *pool, size_t size, size_t align);
 
 /**
  * bfdev_allocpool_free() - Allocation mempool free.
@@ -66,7 +68,7 @@ bfdev_allocpool_alloc(struct bfdev_allocpool *pool, size_t size, size_t align);
  * @block: memory block to free.
  */
 extern void
-bfdev_allocpool_free(struct bfdev_allocpool *pool, const void *block);
+bfdev_allocpool_free(bfdev_allocpool_t *pool, const void *block);
 
 BFDEV_END_DECLS
 
