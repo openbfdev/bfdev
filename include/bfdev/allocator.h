@@ -23,6 +23,7 @@ struct bfdev_alloc {
 
 struct bfdev_alloc_ops {
     bfdev_malloc_t alloc;
+    bfdev_malloc_t zalloc;
     bfdev_realloc_t realloc;
     bfdev_free_t free;
 };
