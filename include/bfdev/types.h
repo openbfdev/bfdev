@@ -25,6 +25,16 @@ typedef uint16_t __bfdev_bitwise bfdev_be16;
 typedef uint32_t __bfdev_bitwise bfdev_be32;
 typedef uint64_t __bfdev_bitwise bfdev_be64;
 
+typedef unsigned long bfdev_uw_t;
+typedef unsigned int bfdev_uhw_t;
+
+typedef int bfdev_sw_t __attribute__((mode(SI)));
+typedef int bfdev_dw_t __attribute__((mode(DI)));
+typedef int bfdev_qw_t __attribute__((mode(QI)));
+typedef unsigned bfdev_usw_t __attribute__((mode(SI)));
+typedef unsigned bfdev_udw_t __attribute__((mode(DI)));
+typedef unsigned bfdev_uqw_t __attribute__((mode(QI)));
+
 typedef int bfdev_state_t;
 typedef intptr_t bfdev_atomic_t;
 
