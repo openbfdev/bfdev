@@ -50,25 +50,25 @@ bfdev_array_reset(bfdev_array_t *array)
 }
 
 static inline unsigned long
-bfdev_array_index(bfdev_array_t *array)
+bfdev_array_index(const bfdev_array_t *array)
 {
     return array->index;
 }
 
 static inline size_t
-bfdev_array_size(bfdev_array_t *array)
+bfdev_array_size(const bfdev_array_t *array)
 {
     return array->cells * array->index;
 }
 
 static inline uintptr_t
-bfdev_array_offset(bfdev_array_t *array, unsigned long index)
+bfdev_array_offset(const bfdev_array_t *array, unsigned long index)
 {
     return array->cells * index;
 }
 
 static inline void *
-bfdev_array_data(bfdev_array_t *array, unsigned long index)
+bfdev_array_data(const bfdev_array_t *array, unsigned long index)
 {
     if (bfdev_unlikely(index >= array->index))
         return NULL;
@@ -82,7 +82,7 @@ extern void *
 bfdev_array_pop(bfdev_array_t *array, unsigned long num);
 
 extern void *
-bfdev_array_peek(bfdev_array_t *array, unsigned long num);
+bfdev_array_peek(const bfdev_array_t *array, unsigned long num);
 
 extern int
 bfdev_array_reserve(bfdev_array_t *array, unsigned long num);
