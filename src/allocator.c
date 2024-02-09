@@ -45,6 +45,9 @@ bfdev_malloc(const bfdev_alloc_t *alloc, size_t size)
     const bfdev_alloc_ops_t *ops;
     void *pdata, *retval;
 
+    if (bfdev_unlikely(!size))
+        return NULL;
+
     ops = alloc_check(alloc);
     if (!ops || !ops->alloc)
         retval = generic_alloc(size);
@@ -61,6 +64,9 @@ bfdev_zalloc(const bfdev_alloc_t *alloc, size_t size)
 {
     const bfdev_alloc_ops_t *ops;
     void *pdata, *retval;
+
+    if (bfdev_unlikely(!size))
+        return NULL;
 
     ops = alloc_check(alloc);
     if (!ops || !ops->zalloc)
@@ -79,6 +85,14 @@ bfdev_realloc(const bfdev_alloc_t *alloc, const void *block, size_t resize)
     const bfdev_alloc_ops_t *ops;
     void *pdata, *retval;
 
+    if (!block)
+        return bfdev_malloc(alloc, resize);
+
+    if (!resize) {
+        bfdev_free(alloc, block);
+        return NULL;
+    }
+
     ops = alloc_check(alloc);
     if (!ops || !ops->realloc)
         retval = generic_realloc((void *)block, resize);
@@ -95,6 +109,9 @@ bfdev_free(const bfdev_alloc_t *alloc, const void *block)
 {
     const bfdev_alloc_ops_t *ops;
     void *pdata;
+
+    if (!block)
+        return;
 
     ops = alloc_check(alloc);
     if (!ops || !ops->free)
