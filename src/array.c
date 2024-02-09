@@ -17,7 +17,7 @@ array_resize(bfdev_array_t *array, unsigned long count)
     size_t size;
     void *data;
 
-    nalloc = bfdev_max(count << 1, BFDEV_ARRAY_MSIZE);
+    nalloc = bfdev_max(count, BFDEV_ARRAY_MSIZE);
     size = nalloc * array->cells;
 
     data = bfdev_realloc(alloc, array->data, size);
@@ -33,13 +33,15 @@ array_resize(bfdev_array_t *array, unsigned long count)
 static inline int
 array_apply(bfdev_array_t *array, unsigned long count)
 {
-    if (count > array->capacity)
-        return array_resize(array, count);
-    return -BFDEV_ENOERR;
+    if (count <= array->capacity)
+        return -BFDEV_ENOERR;
+
+    return array_resize(array, count << 1);
 }
 
 static inline void *
-array_peek(bfdev_array_t *array, unsigned long num, unsigned long *indexp)
+array_peek(const bfdev_array_t *array, unsigned long num,
+           unsigned long *indexp)
 {
     unsigned long index;
     uintptr_t offset;
@@ -86,7 +88,7 @@ bfdev_array_pop(bfdev_array_t *array, unsigned long num)
 }
 
 export void *
-bfdev_array_peek(bfdev_array_t *array, unsigned long num)
+bfdev_array_peek(const bfdev_array_t *array, unsigned long num)
 {
     return array_peek(array, num, NULL);
 }
