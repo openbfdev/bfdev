@@ -16,7 +16,7 @@
 BFDEV_BEGIN_DECLS
 
 #ifndef BFDEV_MPI_TYPE
-# define BFDEV_MPI_TYPE unsigned long
+# define BFDEV_MPI_TYPE bfdev_uw_t
 #endif
 
 typedef struct bfdev_mpi bfdev_mpi_t;
@@ -30,31 +30,35 @@ extern int
 bfdev_mpi_cmp(const bfdev_mpi_t *va, const bfdev_mpi_t *vb);
 
 extern int
-bfdev_mpi_add(bfdev_mpi_t *dest, const bfdev_mpi_t *va,
-              const bfdev_mpi_t *vb);
-
-extern int
-bfdev_mpi_sub(bfdev_mpi_t *dest, const bfdev_mpi_t *va,
-              const bfdev_mpi_t *vb);
-
-extern int
-bfdev_mpi_mul(bfdev_mpi_t *dest, const bfdev_mpi_t *va,
-              const bfdev_mpi_t *vb);
-
-extern int
 bfdev_mpi_cmpi(const bfdev_mpi_t *va, BFDEV_MPI_TYPE vi);
 
 extern int
-bfdev_mpi_addi(bfdev_mpi_t *dest, const bfdev_mpi_t *va,
-               BFDEV_MPI_TYPE vi);
+bfdev_mpi_add(bfdev_mpi_t *dest,
+              const bfdev_mpi_t *va, const bfdev_mpi_t *vb);
 
 extern int
-bfdev_mpi_subi(bfdev_mpi_t *dest, const bfdev_mpi_t *va,
-               BFDEV_MPI_TYPE vi);
+bfdev_mpi_sub(bfdev_mpi_t *dest,
+              const bfdev_mpi_t *va, const bfdev_mpi_t *vb);
 
 extern int
-bfdev_mpi_muli(bfdev_mpi_t *dest, const bfdev_mpi_t *va,
-               BFDEV_MPI_TYPE vi);
+bfdev_mpi_mul(bfdev_mpi_t *dest,
+              const bfdev_mpi_t *va, const bfdev_mpi_t *vb);
+
+extern int
+bfdev_mpi_addi(bfdev_mpi_t *dest,
+               const bfdev_mpi_t *va, BFDEV_MPI_TYPE vi);
+
+extern int
+bfdev_mpi_subi(bfdev_mpi_t *dest,
+               const bfdev_mpi_t *va, BFDEV_MPI_TYPE vi);
+
+extern int
+bfdev_mpi_muli(bfdev_mpi_t *dest,
+               const bfdev_mpi_t *va, BFDEV_MPI_TYPE vi);
+
+extern int
+bfdev_mpi_divi(bfdev_mpi_t *dest, BFDEV_MPI_TYPE *rem,
+               const bfdev_mpi_t *va, BFDEV_MPI_TYPE vi);
 
 extern int
 bfdev_mpi_set(bfdev_mpi_t *dest, BFDEV_MPI_TYPE val);
