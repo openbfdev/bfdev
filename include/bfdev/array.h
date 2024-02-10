@@ -85,6 +85,9 @@ extern void *
 bfdev_array_peek(const bfdev_array_t *array, unsigned long num);
 
 extern int
+bfdev_array_resize(bfdev_array_t *array, unsigned long num);
+
+extern int
 bfdev_array_reserve(bfdev_array_t *array, unsigned long num);
 
 extern void
