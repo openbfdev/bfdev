@@ -94,6 +94,20 @@ bfdev_array_peek(const bfdev_array_t *array, unsigned long num)
 }
 
 export int
+bfdev_array_resize(bfdev_array_t *array, unsigned long num)
+{
+    int retval;
+
+    retval = array_apply(array, num);
+    if (bfdev_unlikely(retval))
+        return retval;
+
+    array->index = num;
+
+    return -BFDEV_ENOERR;
+}
+
+export int
 bfdev_array_reserve(bfdev_array_t *array, unsigned long num)
 {
     unsigned long count;
