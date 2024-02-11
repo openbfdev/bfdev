@@ -45,6 +45,10 @@ bfdev_mpi_mul(bfdev_mpi_t *dest,
               const bfdev_mpi_t *va, const bfdev_mpi_t *vb);
 
 extern int
+bfdev_mpi_div(bfdev_mpi_t *quot, bfdev_mpi_t *rem,
+              const bfdev_mpi_t *va, const bfdev_mpi_t *vb);
+
+extern int
 bfdev_mpi_addi(bfdev_mpi_t *dest,
                const bfdev_mpi_t *va, BFDEV_MPI_TYPE vi);
 
@@ -57,7 +61,7 @@ bfdev_mpi_muli(bfdev_mpi_t *dest,
                const bfdev_mpi_t *va, BFDEV_MPI_TYPE vi);
 
 extern int
-bfdev_mpi_divi(bfdev_mpi_t *dest, BFDEV_MPI_TYPE *rem,
+bfdev_mpi_divi(bfdev_mpi_t *quot, bfdev_mpi_t *rem,
                const bfdev_mpi_t *va, BFDEV_MPI_TYPE vi);
 
 extern int
