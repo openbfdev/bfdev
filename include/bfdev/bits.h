@@ -9,7 +9,7 @@
 #include <bfdev/config.h>
 #include <bfdev/types.h>
 #include <bfdev/limits.h>
-#include <bfdev/bitsperlong.h>
+#include <bfdev/asm/bitsperlong.h>
 
 BFDEV_BEGIN_DECLS
 

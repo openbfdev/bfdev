@@ -3,8 +3,8 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
-#ifndef _BFDEV_BITSPERLONG_H_
-#define _BFDEV_BITSPERLONG_H_
+#ifndef _BFDEV_ASM_GENERIC_BITSPERLONG_H_
+#define _BFDEV_ASM_GENERIC_BITSPERLONG_H_
 
 #include <bfdev/config.h>
 
@@ -25,4 +25,4 @@ BFDEV_BEGIN_DECLS
 
 BFDEV_END_DECLS
 
-#endif /* _BFDEV_BITSPERLONG_H_ */
+#endif /* _BFDEV_ASM_GENERIC_BITSPERLONG_H_ */
