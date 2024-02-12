@@ -170,7 +170,7 @@ mpa_muli(BFDEV_MPI_TYPE *ptrs,
     BFDEV_MPI_TYPE vhigh, vlow;
 
     while (length--) {
-        bfdev_dword_umul(vhigh, vlow, *ptra++, vi);
+        bfdev_umul_ppmm(vhigh, vlow, *ptra++, vi);
         vlow += carry;
         carry = (vlow < carry) + vhigh;
         *ptrs++ = vlow;
@@ -187,7 +187,7 @@ mpa_maci(BFDEV_MPI_TYPE *ptrs,
     BFDEV_MPI_TYPE vhigh, vlow;
 
     while (length--) {
-        bfdev_dword_umul(vhigh, vlow, *ptra++, vi);
+        bfdev_umul_ppmm(vhigh, vlow, *ptra++, vi);
         vlow += carry;
         carry = (vlow < carry) + vhigh;
 
@@ -207,7 +207,7 @@ mpa_msui(BFDEV_MPI_TYPE *ptrs,
     BFDEV_MPI_TYPE vhigh, vlow;
 
     while (length--) {
-        bfdev_dword_umul(vhigh, vlow, *ptra++, vi);
+        bfdev_umul_ppmm(vhigh, vlow, *ptra++, vi);
         vlow += carry;
         carry = (vlow < carry) + vhigh;
 
@@ -269,16 +269,16 @@ mpa_divmodi(BFDEV_MPI_TYPE *ptrs,
             const BFDEV_MPI_TYPE *ptra, BFDEV_MPI_TYPE vi,
             unsigned long length)
 {
-    BFDEV_MPI_TYPE value, rem;
+    BFDEV_MPI_TYPE quot[2], dword[2];
     unsigned long index;
 
     index = length - 1;
     ptrs += index;
     ptra += index;
-    rem = *ptra;
+    dword[1] = *ptra;
 
-    if (rem >= vi)
-        rem = 0;
+    if (dword[1] >= vi)
+        dword[1] = 0;
     else {
         *ptrs-- = 0;
         ptra--;
@@ -286,38 +286,38 @@ mpa_divmodi(BFDEV_MPI_TYPE *ptrs,
     }
 
     while (length--) {
-        value = *ptra--;
-        bfdev_dword_udiv(*ptrs--, rem, rem, value, vi);
+        dword[0] = *ptra--;
+        bfdev_dword_udiv(quot, dword + 1, dword, vi);
+        *ptrs-- = quot[0];
     }
 
-    return rem;
+    return dword[1];
 }
 
 static inline BFDEV_MPI_TYPE
 mpa_modi(const BFDEV_MPI_TYPE *ptra, BFDEV_MPI_TYPE vi,
          unsigned long length)
 {
-    BFDEV_MPI_TYPE dummy __bfdev_maybe_unused;
-    BFDEV_MPI_TYPE value, rem;
+    BFDEV_MPI_TYPE dword[2];
     unsigned long index;
 
     index = length - 1;
     ptra += index;
-    rem = *ptra;
+    dword[1] = *ptra;
 
-    if (rem >= vi)
-        rem = 0;
+    if (dword[1] >= vi)
+        dword[1] = 0;
     else {
         ptra--;
         length--;
     }
 
     while (length--) {
-        value = *ptra--;
-        bfdev_dword_udiv(dummy, rem, rem, value, vi);
+        dword[0] = *ptra--;
+        bfdev_dword_udiv(NULL, dword + 1, dword, vi);
     }
 
-    return rem;
+    return dword[1];
 }
 
 static inline bool
@@ -365,10 +365,15 @@ mpa_divrem(BFDEV_MPI_TYPE *ptrs,
         if (value == dhigh)
             quot = ~(BFDEV_MPI_TYPE)0UL;
         else {
+            BFDEV_MPI_TYPE result[2], dword[2];
             BFDEV_MPI_TYPE rem;
 
-            bfdev_dword_udiv(quot, rem, value, ptra[cntb - 1], dhigh);
-            bfdev_dword_umul(v1, value, dlow, quot);
+            dword[0] = ptra[cntb - 1];
+            dword[1] = value;
+            bfdev_dword_udiv(result, &rem, dword, dhigh);
+
+            quot = result[0];
+            bfdev_umul_ppmm(v1, value, dlow, quot);
 
             while (v1 > rem || (v1 == rem && value > ptra[cntb - 2])) {
                 quot--;
@@ -693,7 +698,8 @@ mpi_divi(bfdev_mpi_t *quot, bfdev_mpi_t *rem,
     ptra = mpi_val(va);
 
     value = mpa_divmodi(ptrs, ptra, vi, length);
-    mpi_set(rem, value);
+    if (quot != rem)
+        mpi_set(rem, value);
     mpi_relocation(quot);
 
     return -BFDEV_ENOERR;
