@@ -9,6 +9,7 @@
 #include <bfdev/config.h>
 #include <bfdev/port/stdint.h>
 #include <bfdev/port/stddef.h>
+#include <bfdev/asm/bitsperlong.h>
 
 BFDEV_BEGIN_DECLS
 
@@ -25,15 +26,22 @@ typedef uint16_t __bfdev_bitwise bfdev_be16;
 typedef uint32_t __bfdev_bitwise bfdev_be32;
 typedef uint64_t __bfdev_bitwise bfdev_be64;
 
-typedef unsigned long bfdev_uw_t;
-typedef unsigned int bfdev_uhw_t;
+typedef int bfdev_qi_t __bfdev_mode(QI);
+typedef int bfdev_hi_t __bfdev_mode(HI);
+typedef int bfdev_si_t __bfdev_mode(SI);
+typedef int bfdev_di_t __bfdev_mode(DI);
+typedef unsigned bfdev_uqi_t __bfdev_mode(QI);
+typedef unsigned bfdev_uhi_t __bfdev_mode(HI);
+typedef unsigned bfdev_usi_t __bfdev_mode(SI);
+typedef unsigned bfdev_udi_t __bfdev_mode(DI);
 
-typedef int bfdev_sw_t __attribute__((mode(SI)));
-typedef int bfdev_dw_t __attribute__((mode(DI)));
-typedef int bfdev_qw_t __attribute__((mode(QI)));
-typedef unsigned bfdev_usw_t __attribute__((mode(SI)));
-typedef unsigned bfdev_udw_t __attribute__((mode(DI)));
-typedef unsigned bfdev_uqw_t __attribute__((mode(QI)));
+#if BFDEV_BITS_PER_LONG == 32
+typedef bfdev_uhi_t bfdev_uhw_t;
+typedef bfdev_usi_t bfdev_uw_t;
+#else /* BFDEV_BITS_PER_LONG == 64 */
+typedef bfdev_usi_t bfdev_uhw_t;
+typedef bfdev_udi_t bfdev_uw_t;
+#endif
 
 typedef int bfdev_state_t;
 typedef intptr_t bfdev_atomic_t;
