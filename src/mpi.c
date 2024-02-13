@@ -129,7 +129,7 @@ mpa_subi(BFDEV_MPI_TYPE *ptrs,
     borrow = *ptrs++ > *ptra++;
 
     while (--length) {
-        *ptrs = *ptra + borrow;
+        *ptrs = *ptra - borrow;
         borrow = *ptrs++ > *ptra++;
     }
 
