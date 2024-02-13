@@ -1313,6 +1313,42 @@ bfdev_mpi_copy(bfdev_mpi_t *dest, const bfdev_mpi_t *src)
     return -BFDEV_ENOERR;
 }
 
+export int
+bfdev_mpi_read(const bfdev_mpi_t *var, BFDEV_MPI_TYPE *buffer,
+               unsigned long length, bool *sign)
+{
+    BFDEV_MPI_TYPE *data;
+    unsigned long index;
+
+    index = mpi_len(var);
+    if (bfdev_unlikely(length > index))
+        return -BFDEV_EFBIG;
+
+    data = mpi_val(var);
+    mpa_copy(buffer, data, length);
+    *sign = var->plus;
+
+    return -BFDEV_ENOERR;
+}
+
+export int
+bfdev_mpi_write(bfdev_mpi_t *var, const BFDEV_MPI_TYPE *buffer,
+                unsigned long length, bool sign)
+{
+    BFDEV_MPI_TYPE *data;
+    int retval;
+
+    retval = bfdev_array_resize(&var->value, length);
+    if (bfdev_unlikely(retval))
+        return retval;
+
+    data = mpi_val(var);
+    mpa_copy(data, buffer, length);
+    var->plus = sign;
+
+    return -BFDEV_ENOERR;
+}
+
 export bfdev_mpi_t *
 bfdev_mpi_create(const bfdev_alloc_t *alloc)
 {
