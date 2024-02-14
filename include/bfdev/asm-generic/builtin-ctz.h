@@ -15,7 +15,7 @@ BFDEV_BEGIN_DECLS
 static __bfdev_always_inline unsigned int
 bfdev_arch_ctz(unsigned long value)
 {
-	return __builtin_ctzl(value);
+    return __builtin_ctzl(value);
 }
 
 BFDEV_END_DECLS

@@ -47,8 +47,8 @@ bfdev_arch_try_cmpxchg(bfdev_atomic_t *atomic, bfdev_atomic_t *old, bfdev_atomic
 
     prev = *old;
     result = bfdev_arch_cmpxchg(atomic, prev, value);
-	if (bfdev_unlikely(result != prev))
-		*old = result;
+    if (bfdev_unlikely(result != prev))
+        *old = result;
 
     return bfdev_likely(result == prev);
 }

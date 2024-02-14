@@ -25,7 +25,7 @@ struct bfdev_segtree_node {
  * @type: the type of the struct this is embedded in.
  * @member: the name of the bfdev_segtree_node within the struct.
  */
-#define	bfdev_segtree_entry(ptr, type, member) \
+#define bfdev_segtree_entry(ptr, type, member) \
     bfdev_container_of(ptr, type, member)
 
 /**

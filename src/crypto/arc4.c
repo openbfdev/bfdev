@@ -18,9 +18,9 @@ arc4_transform(bfdev_arc4_ctx_t *ctx, uint8_t *buff,
     proa = ctx->proa;
     prob = ctx->prob;
 
-	vx = ctx->box[proa];
-	prob += vx;
-	vy = ctx->box[prob];
+    vx = ctx->box[proa];
+    prob += vx;
+    vy = ctx->box[prob];
 
     for (;;) {
         ctx->box[prob] = vx;
@@ -36,9 +36,9 @@ arc4_transform(bfdev_arc4_ctx_t *ctx, uint8_t *buff,
         if (!--size)
             break;
 
-		prob = tb;
-		vx = tx;
-		vy = ty;
+        prob = tb;
+        vx = tx;
+        vy = ty;
     }
 
     ctx->proa = proa;

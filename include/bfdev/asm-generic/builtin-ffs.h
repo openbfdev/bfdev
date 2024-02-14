@@ -15,7 +15,7 @@ BFDEV_BEGIN_DECLS
 static __bfdev_always_inline unsigned int
 bfdev_arch_ffs(unsigned long value)
 {
-	return __builtin_ffsl(value);
+    return __builtin_ffsl(value);
 }
 
 BFDEV_END_DECLS

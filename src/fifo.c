@@ -173,7 +173,7 @@ bfdev_fifo_out_record(struct bfdev_fifo *fifo, void *buff,
     datalen = fifo_record_peek(fifo, record);
     bfdev_min_adj(len, datalen);
     fifo_out_copy(fifo, buff, len, fifo->out + record);
-	fifo->out += datalen + record;
+    fifo->out += datalen + record;
 
     return len;
 }

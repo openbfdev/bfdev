@@ -693,7 +693,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
  * @head: the head for your list.
- * @member:	the name of the list head within the struct.
+ * @member: the name of the list head within the struct.
  */
 #define bfdev_list_for_each_entry_reverse_safe(pos, tmp, head, member) \
     for ((pos) = bfdev_list_last_entry(head, typeof(*pos), member), \
@@ -706,7 +706,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
  * @head: the head for your list.
- * @member:	the name of the list head within the struct.
+ * @member: the name of the list head within the struct.
  */
 #define bfdev_list_for_each_entry_from_safe(pos, tmp, head, member) \
     for ((tmp) = bfdev_list_next_entry(pos, member); \
@@ -718,7 +718,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
  * @head: the head for your list.
- * @member:	the name of the list head within the struct.
+ * @member: the name of the list head within the struct.
  */
 #define bfdev_list_for_each_entry_reverse_from_safe(pos, tmp, head, member) \
     for ((tmp) = bfdev_list_prev_entry(pos, member); \
@@ -730,7 +730,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
  * @head: the head for your list.
- * @member:	the name of the list head within the struct.
+ * @member: the name of the list head within the struct.
  */
 #define bfdev_list_for_each_entry_continue_safe(pos, tmp, head, member) \
     for ((pos) = bfdev_list_next_entry(pos, member), \
@@ -743,7 +743,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
  * @head: the head for your list.
- * @member:	the name of the list head within the struct.
+ * @member: the name of the list head within the struct.
  */
 #define bfdev_list_for_each_entry_reverse_continue_safe(pos, tmp, head, member) \
     for ((pos) = bfdev_list_prev_entry(pos, member), \
@@ -756,7 +756,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
  * @head: the head for your list.
- * @member:	the name of the list head within the struct.
+ * @member: the name of the list head within the struct.
  */
 #define bfdev_list_for_each_entry_continue_check_safe(pos, tmp, head, member) \
     for ((void)(!bfdev_list_entry_check_head(pos, head, member) && \
@@ -770,7 +770,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
  * @head: the head for your list.
- * @member:	the name of the list head within the struct.
+ * @member: the name of the list head within the struct.
  */
 #define bfdev_list_for_each_entry_reverse_continue_check_safe(pos, tmp, head, member) \
     for ((void)(!bfdev_list_entry_check_head(pos, head, member) && \

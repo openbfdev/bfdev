@@ -115,7 +115,7 @@ bfdev_radix_root_alloc(bfdev_radix_root_t *root, uintptr_t offset)
         return NULL;
 
     for (level = root->level; level--;) {
-	    bfdev_radix_node_t **slot, *newn;
+        bfdev_radix_node_t **slot, *newn;
 
         slot = &node->child[radix_depth_index(level, offset)];
         offset &= BFDEV_BIT_LOW_MASK(radix_depth_shift(level));
@@ -186,8 +186,8 @@ bfdev_radix_root_charge(bfdev_radix_root_t *root,
         return -BFDEV_EOVERFLOW;
 
     while (offset < end) {
-		if (!bfdev_radix_root_alloc(root, offset))
-			return -BFDEV_ENOMEM;
+        if (!bfdev_radix_root_alloc(root, offset))
+            return -BFDEV_ENOMEM;
 
         offset += BFDEV_RADIX_BLOCK;
     }

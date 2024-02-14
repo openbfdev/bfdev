@@ -140,8 +140,9 @@ mpa_subi(BFDEV_MPI_TYPE *ptrs,
     *ptrs++ = value;
 
     while (--length) {
-        *ptrs = *ptra - borrow;
-        borrow = *ptrs++ > *ptra++;
+        value = *ptra - borrow;
+        borrow = value > *ptra++;
+        *ptrs++ = value;
     }
 
     return borrow;
@@ -804,12 +805,12 @@ mpi_div(bfdev_mpi_t *quot, bfdev_mpi_t *rem,
     ptra = mpi_val(rem);
 
     limb = mpa_divrem(ptrs, ptra, ptrb, cnta, cntb);
-	length = cnta - cntb;
+    length = cnta - cntb;
 
-	if (limb) {
-		ptrs[length] = limb;
-		length += 1;
-	}
+    if (limb) {
+        ptrs[length] = limb;
+        length += 1;
+    }
 
     if (nval) {
         bfdev_array_release(&quot->value);

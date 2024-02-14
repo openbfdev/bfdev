@@ -12,8 +12,8 @@
 #include <export.h>
 
 export bfdev_resnode_t *
-bfdev_respool_find(bfdev_respool_t *pool,
-             bfdev_respool_find_t find, const void *data)
+bfdev_respool_find(bfdev_respool_t *pool, bfdev_respool_find_t find,
+                   const void *data)
 {
     bfdev_resnode_t *walk;
 
