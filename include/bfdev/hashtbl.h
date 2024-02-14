@@ -112,11 +112,11 @@ bfdev_hashtbl_del(bfdev_hlist_node_t *node)
     bfdev_hlist_for_each_safe(pos, tmp, &head[index & BFDEV_HASHTBL_MASK(size)])
 
 /**
- * bfdev_hashtbl_for_each_entry	- iterate over hashtable index of given type.
+ * bfdev_hashtbl_for_each_entry - iterate over hashtable index of given type.
  * @pos: the type * to use as a loop cursor.
  * @head: the head for your hashtable.
  * @size: the size of your hashtable.
- * @member:	the name of the bfdev_hlist_node within the struct.
+ * @member: the name of the bfdev_hlist_node within the struct.
  * @index: index to for each.
  */
 #define bfdev_hashtbl_for_each_idx_entry(pos, head, size, member, index) \
@@ -158,11 +158,11 @@ bfdev_hashtbl_del(bfdev_hlist_node_t *node)
         bfdev_hashtbl_for_each_idx_safe(pos, tmp, head, size, index)
 
 /**
- * bfdev_hashtbl_for_each_entry	- iterate over hashtable of given type.
+ * bfdev_hashtbl_for_each_entry - iterate over hashtable of given type.
  * @pos: the type * to use as a loop cursor.
  * @head: the head for your hashtable.
  * @size: the size of your hashtable.
- * @member:	the name of the bfdev_hlist_node within the struct.
+ * @member: the name of the bfdev_hlist_node within the struct.
  * @index: index temporary storage.
  */
 #define bfdev_hashtbl_for_each_entry(pos, head, size, member, index) \

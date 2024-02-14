@@ -186,7 +186,7 @@ bfdev_ringbuf_out_record(struct bfdev_ringbuf *ringbuf, void *buff,
     datalen = ringbuf_record_peek(ringbuf, record);
     bfdev_min_adj(len, datalen);
     ringbuf_out_copy(ringbuf, buff, len, ringbuf->out + record);
-	ringbuf->out += datalen + record;
+    ringbuf->out += datalen + record;
 
     return len;
 }
@@ -205,7 +205,7 @@ bfdev_ringbuf_in_record(struct bfdev_ringbuf *ringbuf, const void *buff,
     overflow = ringbuf_overflow(ringbuf);
     while (overflow) {
         datalen = record + ringbuf_record_peek(ringbuf, record);
-	    ringbuf->out += datalen;
+        ringbuf->out += datalen;
         overflow -= bfdev_min(datalen, overflow);
     }
 

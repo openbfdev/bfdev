@@ -91,7 +91,7 @@ bm_compute_prefix(struct bm_context *bctx, unsigned long flags)
 
     for (index = 0; index < bctx->pattern_len - 1; ++index) {
         bctx->bad_shift[bctx->pattern[index]] = bctx->pattern_len - index - 1;
-		if (flags & BFDEV_TS_IGCASE) {
+        if (flags & BFDEV_TS_IGCASE) {
             bctx->bad_shift[tolower(bctx->pattern[index])] =
                 bctx->pattern_len - index - 1;
         }

@@ -159,7 +159,7 @@ bfdev_slist_replace(bfdev_slist_head_t *head, bfdev_slist_head_t *oldn,
  * bfdev_slist_first_entry - get the first element from a slist.
  * @ptr: the list head to take the element from.
  * @type: the type of the struct this is embedded in.
- * @member:	the name of the slist head within the struct.
+ * @member: the name of the slist head within the struct.
  */
 #define bfdev_slist_first_entry(ptr, type, member) \
     bfdev_slist_entry((ptr)->next, type, member)
@@ -265,7 +265,7 @@ bfdev_slist_replace(bfdev_slist_head_t *head, bfdev_slist_head_t *oldn,
  * bfdev_slist_for_each_entry_from_safe - iterate over slist from current point safe against removal.
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
- * @member:	the name of the slist head within the struct.
+ * @member: the name of the slist head within the struct.
  */
 #define bfdev_slist_for_each_entry_from_safe(pos, tmp, member) \
     for ((tmp) = bfdev_slist_next_entry(pos, member); (pos); (pos) = (tmp), \
@@ -275,7 +275,7 @@ bfdev_slist_replace(bfdev_slist_head_t *head, bfdev_slist_head_t *oldn,
  * bfdev_slist_for_each_entry_continue_safe - continue slist iteration safe against removal.
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
- * @member:	the name of the slist head within the struct.
+ * @member: the name of the slist head within the struct.
  */
 #define bfdev_slist_for_each_entry_continue_safe(pos, tmp, member) \
     for ((pos) = bfdev_slist_next_entry(pos, member), \

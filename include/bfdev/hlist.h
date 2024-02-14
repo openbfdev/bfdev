@@ -328,10 +328,10 @@ bfdev_hlist_del_init(bfdev_hlist_node_t *node)
          (pos) = (tmp), ((tmp) && ((tmp) = (tmp)->next)))
 
 /**
- * bfdev_hlist_for_each_entry	- iterate over hlist of given type.
+ * bfdev_hlist_for_each_entry - iterate over hlist of given type.
  * @pos: the type * to use as a loop cursor.
  * @head: the head for your hlist.
- * @member:	the name of the bfdev_hlist_node within the struct.
+ * @member: the name of the bfdev_hlist_node within the struct.
  */
 #define bfdev_hlist_for_each_entry(pos, head, member) \
     for ((pos) = bfdev_hlist_first_entry(head, typeof(*(pos)), member); \
@@ -370,7 +370,7 @@ bfdev_hlist_del_init(bfdev_hlist_node_t *node)
  * bfdev_hlist_for_each_entry_from_safe - iterate over hlist from current point safe against removal.
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
- * @member:	the name of the bfdev_hlist_node within the struct.
+ * @member: the name of the bfdev_hlist_node within the struct.
  */
 #define bfdev_hlist_for_each_entry_from_safe(pos, tmp, member) \
     for (; (pos) && ({(tmp) = bfdev_hlist_next_entry(pos, member); 1;}); \
@@ -380,7 +380,7 @@ bfdev_hlist_del_init(bfdev_hlist_node_t *node)
  * bfdev_hlist_for_each_entry_continue_safe - continue hlist iteration safe against removal.
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
- * @member:	the name of the bfdev_hlist_node within the struct.
+ * @member: the name of the bfdev_hlist_node within the struct.
  */
 #define bfdev_hlist_for_each_entry_continue_safe(pos, tmp, member) \
     for ((void)((pos) && ((pos) = bfdev_hlist_next_entry(pos, member))); \

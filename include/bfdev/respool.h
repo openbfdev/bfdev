@@ -56,8 +56,8 @@ bfdev_respool_check_empty(bfdev_respool_t *pool)
 }
 
 extern bfdev_resnode_t *
-bfdev_respool_find(bfdev_respool_t *pool,
-                   bfdev_respool_find_t find, const void *data);
+bfdev_respool_find(bfdev_respool_t *pool, bfdev_respool_find_t find,
+                   const void *data);
 
 extern void
 bfdev_respool_insert(bfdev_respool_t *pool, bfdev_resnode_t *res);

@@ -13,10 +13,10 @@ linear_next(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss,
 {
     bfdev_ts_linear_t *linear = tss->pdata;
 
-	if (bfdev_likely(consumed < linear->len)) {
-		*dest = linear->data + consumed;
-		return linear->len - consumed;
-	}
+    if (bfdev_likely(consumed < linear->len)) {
+        *dest = linear->data + consumed;
+        return linear->len - consumed;
+    }
 
     return 0;
 }

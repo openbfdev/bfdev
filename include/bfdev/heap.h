@@ -49,7 +49,7 @@ struct bfdev_heap_root {
  * @type: the type of the struct this is embedded in.
  * @member: the name of the bfdev_heap_node within the struct.
  */
-#define	bfdev_heap_entry(ptr, type, member) \
+#define bfdev_heap_entry(ptr, type, member) \
     bfdev_container_of(ptr, type, member)
 
 /**

@@ -79,7 +79,7 @@ static inline bool
 bfdev_refcnt_fetch_sub_test(bfdev_refcnt_t *ref, bfdev_atomic_t nr,
                             bfdev_atomic_t *oldp)
 {
-	bfdev_atomic_t prev;
+    bfdev_atomic_t prev;
 
     prev = bfdev_atomic_fetch_sub(&ref->count, nr);
     if (oldp)

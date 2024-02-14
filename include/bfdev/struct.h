@@ -36,7 +36,7 @@ BFDEV_BEGIN_DECLS
  * @name: The identifier name of the mirrored sub-struct.
  * @members: The member declarations for the mirrored structs.
  */
-#define bfdev_struct_group(NAME, MEMBERS...)	\
+#define bfdev_struct_group(NAME, MEMBERS...) \
     __bfdev_struct_group(/* no tag */, NAME, /* no attrs */, MEMBERS)
 
 /**

@@ -12,8 +12,12 @@ bnode_get_value(struct bfdev_btree_root *root, struct bfdev_btree_node *node,
                 unsigned int index)
 {
     struct bfdev_btree_layout *layout;
+    unsigned int offset;
+
     layout = root->layout;
-    return (void *)node->block[layout->ptrindex + index];
+    offset = layout->ptrindex + index;
+
+    return (void *)node->block[offset];
 }
 
 static __bfdev_always_inline void
@@ -21,8 +25,12 @@ bnode_set_value(struct bfdev_btree_root *root, struct bfdev_btree_node *node,
                 unsigned int index, void *value)
 {
     struct bfdev_btree_layout *layout;
+    unsigned int offset;
+
     layout = root->layout;
-    node->block[layout->ptrindex + index] = (uintptr_t)value;
+    offset = layout->ptrindex + index;
+
+    node->block[offset] = (uintptr_t)value;
 }
 
 static __bfdev_always_inline uintptr_t *
@@ -30,8 +38,12 @@ bnode_get_key(struct bfdev_btree_root *root, struct bfdev_btree_node *node,
               unsigned int index)
 {
     struct bfdev_btree_layout *layout;
+    unsigned int offset;
+
     layout = root->layout;
-    return &node->block[layout->keylen * index];
+    offset = layout->keylen * index;
+
+    return &node->block[offset];
 }
 
 static __bfdev_always_inline void
@@ -450,7 +462,7 @@ remove_rebalance(struct bfdev_btree_root *root, unsigned int level,
     if (index) {
         node = bnode_get_value(root, parent, index - 1);
         nfill = bnode_fill_index(root, node, 0);
-		if (fill + nfill <= layout->keynum) {
+        if (fill + nfill <= layout->keynum) {
             rebalance_merge(
                 root, level, node, nfill,
                 child, fill, parent, index - 1
@@ -462,7 +474,7 @@ remove_rebalance(struct bfdev_btree_root *root, unsigned int level,
     if (index + 1 < bnode_fill_index(root, parent, index)) {
         node = bnode_get_value(root, parent, index + 1);
         nfill = bnode_fill_index(root, node, 0);
-		if (fill + nfill <= layout->keynum) {
+        if (fill + nfill <= layout->keynum) {
             rebalance_merge(
                 root, level, child, fill,
                 node, nfill, parent, index

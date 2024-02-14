@@ -302,7 +302,7 @@ bfdev_ilist_node_empty(bfdev_ilist_node_t *inode)
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
  * @head: the head for your list.
- * @member:	the name of the bfdev_list_head within the struct.
+ * @member: the name of the bfdev_list_head within the struct.
  */
 #define bfdev_ilist_for_each_entry_reverse_safe(pos, tmp, head, member) \
     bfdev_list_for_each_entry_reverse_safe(pos, tmp, &(head)->node_list, member.node_list)
@@ -312,7 +312,7 @@ bfdev_ilist_node_empty(bfdev_ilist_node_t *inode)
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
  * @head: the head for your list.
- * @member:	the name of the bfdev_list_head within the struct.
+ * @member: the name of the bfdev_list_head within the struct.
  */
 #define bfdev_ilist_for_each_entry_from_safe(pos, tmp, head, member) \
     bfdev_list_for_each_entry_from_safe(pos, tmp, &(head)->node_list, member.node_list)
@@ -322,7 +322,7 @@ bfdev_ilist_node_empty(bfdev_ilist_node_t *inode)
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
  * @head: the head for your list.
- * @member:	the name of the bfdev_list_head within the struct.
+ * @member: the name of the bfdev_list_head within the struct.
  */
 #define bfdev_ilist_for_each_entry_reverse_from_safe(pos, tmp, head, member) \
     bfdev_list_for_each_entry_reverse_from_safe(pos, tmp, &(head)->node_list, member.node_list)
@@ -332,7 +332,7 @@ bfdev_ilist_node_empty(bfdev_ilist_node_t *inode)
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
  * @head: the head for your list.
- * @member:	the name of the bfdev_list_head within the struct.
+ * @member: the name of the bfdev_list_head within the struct.
  */
 #define bfdev_ilist_for_each_entry_continue_safe(pos, tmp, head, member) \
     bfdev_list_for_each_entry_continue_safe(pos, tmp, &(head)->node_list, member.node_list)
@@ -342,7 +342,7 @@ bfdev_ilist_node_empty(bfdev_ilist_node_t *inode)
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
  * @head: the head for your list.
- * @member:	the name of the bfdev_list_head within the struct.
+ * @member: the name of the bfdev_list_head within the struct.
  */
 #define bfdev_ilist_for_each_entry_reverse_continue_safe(pos, tmp, head, member) \
     bfdev_list_for_each_entry_reverse_continue_safe(pos, tmp, &(head)->node_list, member.node_list)
