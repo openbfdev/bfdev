@@ -3,7 +3,7 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
-#define MODULE_NAME "mpi-pi"
+#define MODULE_NAME "mpi-marchin"
 #define bfdev_log_fmt(fmt) MODULE_NAME ": " fmt
 
 #include <stdio.h>
@@ -38,7 +38,7 @@ int main(int argc, const char *argv[])
             return retval;
     }
 
-    bfdev_log_info("Calculate PI %d:\n", TEST_LEN);
+    bfdev_log_info("Calculate Marchin %d:\n", TEST_LEN);
     EXAMPLE_TIME_STATISTICAL(
         for (k = 1; k <= TEST_LOOP; ++k) {
             if ((retval = bfdev_mpi_divi(vw, vw, vw, 25)) ||
