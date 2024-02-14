@@ -15,9 +15,9 @@
 
 BFDEV_BEGIN_DECLS
 
-#ifndef BFDEV_MPI_TYPE
-# define BFDEV_MPI_TYPE bfdev_uw_t
-#endif
+#define BFDEV_MPI_TYPE bfdev_uw_t
+#define BFDEV_MPI_BITS BFDEV_BITS_PER_LONG
+#define BFDEV_MPI_SIZE BFDEV_BYTES_PER_LONG
 
 typedef struct bfdev_mpi bfdev_mpi_t;
 
@@ -85,10 +85,10 @@ bfdev_mpi_modi(bfdev_mpi_t *rem,
                const bfdev_mpi_t *va, BFDEV_MPI_TYPE vi);
 
 extern int __bfdev_nonnull(1)
-bfdev_mpi_set(bfdev_mpi_t *dest, BFDEV_MPI_TYPE val);
+bfdev_mpi_seti(bfdev_mpi_t *dest, BFDEV_MPI_TYPE val);
 
 extern int __bfdev_nonnull(1, 2)
-bfdev_mpi_copy(bfdev_mpi_t *dest, const bfdev_mpi_t *src);
+bfdev_mpi_set(bfdev_mpi_t *dest, const bfdev_mpi_t *src);
 
 extern int __bfdev_nonnull(1, 2, 4)
 bfdev_mpi_read(const bfdev_mpi_t *var, BFDEV_MPI_TYPE *buffer,

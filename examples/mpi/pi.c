@@ -27,9 +27,9 @@ int main(int argc, const char *argv[])
           (vq = bfdev_mpi_create(NULL))))
         return 1;
 
-    if ((retval = bfdev_mpi_set(vw,  16 * 5)) ||
-        (retval = bfdev_mpi_set(vv, 239 * 4)) ||
-        (retval = bfdev_mpi_set(vq, 10000)))
+    if ((retval = bfdev_mpi_seti(vw, 16 * 5)) ||
+        (retval = bfdev_mpi_seti(vv, 239 * 4)) ||
+        (retval = bfdev_mpi_seti(vq, 10000)))
         return retval;
 
     for (k = 0; k < TEST_SIZE; ++k) {
