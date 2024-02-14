@@ -85,6 +85,12 @@ bfdev_mpi_modi(bfdev_mpi_t *rem,
                const bfdev_mpi_t *va, BFDEV_MPI_TYPE vi);
 
 extern int __bfdev_nonnull(1)
+bfdev_mpi_bseti(bfdev_mpi_t *dest, BFDEV_MPI_TYPE bit);
+
+extern int __bfdev_nonnull(1)
+bfdev_mpi_bclri(bfdev_mpi_t *dest, BFDEV_MPI_TYPE bit);
+
+extern int __bfdev_nonnull(1)
 bfdev_mpi_seti(bfdev_mpi_t *dest, BFDEV_MPI_TYPE val);
 
 extern int __bfdev_nonnull(1, 2)
