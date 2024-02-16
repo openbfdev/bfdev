@@ -40,6 +40,14 @@ bfdev_bitmap_comp_xor(unsigned long *dest, const unsigned long *src1,
                       const unsigned long *src2, unsigned int bits);
 
 extern void
+bfdev_bitmap_comp_shl(unsigned long *dest, const unsigned long *src,
+                      unsigned int shift, unsigned int bits);
+
+extern void
+bfdev_bitmap_comp_shr(unsigned long *dest, const unsigned long *src,
+                      unsigned int shift, unsigned int bits);
+
+extern void
 bfdev_bitmap_comp_complement(unsigned long *dest, const unsigned long *src,
                              unsigned int bits);
 
