@@ -96,6 +96,17 @@ extern int __bfdev_nonnull(1, 2, 3)
 bfdev_mpi_xor(bfdev_mpi_t *dest,
               const bfdev_mpi_t *va, const bfdev_mpi_t *vb);
 
+extern int __bfdev_nonnull(1, 2)
+bfdev_mpi_shli(bfdev_mpi_t *dest,
+               const bfdev_mpi_t *va, BFDEV_MPI_TYPE shift);
+
+extern int __bfdev_nonnull(1, 2)
+bfdev_mpi_shri(bfdev_mpi_t *dest,
+               const bfdev_mpi_t *va, BFDEV_MPI_TYPE shift);
+
+extern bool __bfdev_nonnull(1)
+bfdev_mpi_btesti(bfdev_mpi_t *dest, BFDEV_MPI_TYPE bit);
+
 extern int __bfdev_nonnull(1)
 bfdev_mpi_bseti(bfdev_mpi_t *dest, BFDEV_MPI_TYPE bit);
 
