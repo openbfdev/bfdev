@@ -154,6 +154,100 @@ bfdev_bitmap_comp_xor(unsigned long *dest, const unsigned long *src1,
 }
 
 export void
+bfdev_bitmap_comp_shl(unsigned long *dest, const unsigned long *src,
+                      unsigned int shift, unsigned int bits)
+{
+    unsigned int length, offset, rem, index;
+    unsigned long value, vlow, vhigh;
+
+    length = BFDEV_BITS_TO_LONG(bits);
+    offset = BFDEV_BITS_DIV_LONG(shift);
+
+    if (length <= offset) {
+        memset(dest, 0, length * sizeof(*dest));
+        return;
+    }
+
+    /* length > offset */
+    rem = BFDEV_BITS_MOD_LONG(shift);
+    index = length - offset - 1;
+
+    if (BFDEV_BITS_MOD_LONG(bits)) {
+        vhigh = src[index] << rem;
+
+        if (rem && index)
+            vlow = src[--index] >> (BFDEV_BITS_PER_LONG - rem);
+        else
+            vlow = 0;
+
+        value = vhigh | vlow;
+        dest[--length] = value & BFDEV_BIT_LOW_MASK(bits);
+    }
+
+    while (length) {
+        vhigh = src[index] << rem;
+
+        if (rem && index)
+            vlow = src[--index] >> (BFDEV_BITS_PER_LONG - rem);
+        else
+            vlow = 0;
+
+        value = vhigh | vlow;
+        dest[--length] = value;
+    }
+
+    if (offset)
+        memset(dest, 0, offset * sizeof(*dest));
+}
+
+export void
+bfdev_bitmap_comp_shr(unsigned long *dest, const unsigned long *src,
+                      unsigned int shift, unsigned int bits)
+{
+    unsigned int index, length, offset, rem;
+    unsigned long value, vlow, vhigh;
+
+    length = BFDEV_BITS_TO_LONG(bits);
+    offset = BFDEV_BITS_DIV_LONG(shift);
+
+    if (length <= offset) {
+        memset(dest, 0, length * sizeof(*dest));
+        return;
+    }
+
+    /* length > offset */
+    rem = BFDEV_BITS_MOD_LONG(shift);
+    index = 0;
+
+    while (index < BFDEV_BITS_DIV_LONG(bits) - offset) {
+        vlow = src[index + offset] >> rem;
+
+        if (rem && index + offset + 1 < length)
+            vhigh = src[index + offset + 1] << (BFDEV_BITS_PER_LONG - rem);
+        else
+            vhigh = 0;
+
+        value = vhigh | vlow;
+        dest[index++] = value;
+    }
+
+    if (BFDEV_BITS_MOD_LONG(bits)) {
+        vlow = src[index] << rem;
+
+        if (rem && index + offset + 1 < length)
+            vhigh = src[index + offset + 1] << (BFDEV_BITS_PER_LONG - rem);
+        else
+            vhigh = 0;
+
+        value = vhigh | vlow;
+        dest[index + offset] = value & BFDEV_BIT_LOW_MASK(bits);
+    }
+
+    if (offset)
+        memset(dest + length - offset, 0, offset * sizeof(*dest));
+}
+
+export void
 bfdev_bitmap_comp_complement(unsigned long *dest, const unsigned long *src,
                              unsigned int bits)
 {

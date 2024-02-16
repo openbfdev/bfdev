@@ -69,7 +69,7 @@ static __bfdev_always_inline bool
 bfdev_bitmap_or_equal(const unsigned long *src1, const unsigned long *src2,
                       const unsigned long *src3, unsigned int bits)
 {
-    unsigned int value;
+    unsigned long value;
 
     if (!bfdev_const_small_nbits(bits))
         return bfdev_bitmap_comp_or_equal(src1, src2, src3, bits);
@@ -82,7 +82,7 @@ static __bfdev_always_inline bool
 bfdev_bitmap_intersects(const unsigned long *src1, const unsigned long *src2,
                         unsigned int bits)
 {
-    unsigned int value;
+    unsigned long value;
 
     if (!bfdev_const_small_nbits(bits))
         return bfdev_bitmap_comp_intersects(src1, src2, bits);
@@ -95,7 +95,7 @@ static __bfdev_always_inline bool
 bfdev_bitmap_and(unsigned long *dest, const unsigned long *src1,
                  const unsigned long *src2, unsigned int bits)
 {
-    unsigned int value;
+    unsigned long value;
 
     if (!bfdev_const_small_nbits(bits))
         return bfdev_bitmap_comp_and(dest, src1, src2, bits);
@@ -108,7 +108,7 @@ static __bfdev_always_inline bool
 bfdev_bitmap_andnot(unsigned long *dest, const unsigned long *src1,
                     const unsigned long *src2, unsigned int bits)
 {
-    unsigned int value;
+    unsigned long value;
 
     if (!bfdev_const_small_nbits(bits))
         return bfdev_bitmap_comp_andnot(dest, src1, src2, bits);
@@ -121,7 +121,7 @@ static __bfdev_always_inline void
 bfdev_bitmap_or(unsigned long *dest, const unsigned long *src1,
                 const unsigned long *src2, unsigned int bits)
 {
-    unsigned int value;
+    unsigned long value;
 
     if (!bfdev_const_small_nbits(bits))
         return bfdev_bitmap_comp_or(dest, src1, src2, bits);
@@ -134,7 +134,7 @@ static __bfdev_always_inline void
 bfdev_bitmap_xor(unsigned long *dest, const unsigned long *src1,
                  const unsigned long *src2, unsigned int bits)
 {
-    unsigned int value;
+    unsigned long value;
 
     if (!bfdev_const_small_nbits(bits))
         return bfdev_bitmap_comp_xor(dest, src1, src2, bits);
@@ -144,10 +144,36 @@ bfdev_bitmap_xor(unsigned long *dest, const unsigned long *src1,
 }
 
 static __bfdev_always_inline void
+bfdev_bitmap_shl(unsigned long *dest, const unsigned long *src,
+                 unsigned int shift, unsigned int bits)
+{
+    unsigned long value;
+
+    if (!bfdev_const_small_nbits(bits))
+        return bfdev_bitmap_comp_shl(dest, src, shift, bits);
+
+    value = *src << shift;
+    *dest = value & BFDEV_BIT_LOW_MASK(bits);
+}
+
+static __bfdev_always_inline void
+bfdev_bitmap_shr(unsigned long *dest, const unsigned long *src,
+                 unsigned int shift, unsigned int bits)
+{
+    unsigned long value;
+
+    if (!bfdev_const_small_nbits(bits))
+        return bfdev_bitmap_comp_shr(dest, src, shift, bits);
+
+    value = *src & BFDEV_BIT_LOW_MASK(bits);
+    *dest = value >> shift;
+}
+
+static __bfdev_always_inline void
 bfdev_bitmap_complement(unsigned long *dest, const unsigned long *src,
                         unsigned int bits)
 {
-    unsigned int value;
+    unsigned long value;
 
     if (!bfdev_const_small_nbits(bits))
         return bfdev_bitmap_comp_complement(dest, src, bits);
