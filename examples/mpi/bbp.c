@@ -10,8 +10,10 @@
 #include <bfdev/mpi.h>
 #include <bfdev/log.h>
 #include "../time.h"
+#include "helper.h"
 
 #define TEST_LEN 10000
+#define PRINT_RESULT 0
 
 static BFDEV_MPI_TYPE
 factor1[] = {
@@ -36,7 +38,7 @@ int main(int argc, const char *argv[])
           (vq = bfdev_mpi_create(NULL))))
         return 1;
 
-    bfdev_log_info("Calculate BBP %d:\n", TEST_LEN);
+    bfdev_log_info("Convergence BBP %d:\n", TEST_LEN);
     EXAMPLE_TIME_STATISTICAL(
         for (i = 0; i < 4; ++i) {
             retval = bfdev_mpi_seti(vv[i], 0);
@@ -89,6 +91,18 @@ int main(int argc, const char *argv[])
         }
         0;
     );
+
+#if PRINT_RESULT
+    char *result;
+
+    result = print_num(vq, 16);
+    if (!result)
+        return 1;
+
+    printf("%c.", *result);
+    puts(result + 1);
+    free(result);
+#endif
 
     bfdev_mpi_destory(vv[0]);
     bfdev_mpi_destory(vv[1]);
