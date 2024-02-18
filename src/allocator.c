@@ -7,35 +7,54 @@
 #include <bfdev/allocator.h>
 #include <export.h>
 
+export bfdev_alloc_ops_t
+bfdev_alloc_default;
+
 static __bfdev_always_inline void *
-generic_alloc(size_t size)
+generic_alloc(size_t size, void *pdata)
 {
-    return malloc(size);
+    if (!bfdev_alloc_default.alloc)
+        return malloc(size);
+
+    return bfdev_alloc_default.alloc(size, pdata);
 }
 
 static __bfdev_always_inline void *
-generic_zalloc(size_t size)
+generic_zalloc(size_t size, void *pdata)
 {
-    return calloc(1, size);
+    if (!bfdev_alloc_default.zalloc)
+        return calloc(1, size);
+
+    return bfdev_alloc_default.zalloc(size, pdata);
 }
 
 static __bfdev_always_inline void *
-generic_realloc(const void *block, size_t resize)
+generic_realloc(void *block, size_t resize, void *pdata)
 {
-    return realloc((void *)block, resize);
+    if (!bfdev_alloc_default.realloc)
+        return realloc(block, resize);
+
+    return bfdev_alloc_default.realloc(block, resize, pdata);
 }
 
 static __bfdev_always_inline void
-generic_free(const void *block)
+generic_free(void *block, void *pdata)
 {
-    free((void *)block);
+    if (!bfdev_alloc_default.free)
+        return free((void *)block);
+
+    return bfdev_alloc_default.free(block, pdata);
 }
 
 static inline const bfdev_alloc_ops_t *
-alloc_check(const bfdev_alloc_t *alloc)
+alloc_check(const bfdev_alloc_t *alloc, void **pdata)
 {
-    if (!alloc)
+    if (!alloc) {
+        *pdata = NULL;
         return NULL;
+    }
+
+    *pdata = alloc->pdata;
     return alloc->ops;
 }
 
@@ -48,13 +67,11 @@ bfdev_malloc(const bfdev_alloc_t *alloc, size_t size)
     if (bfdev_unlikely(!size))
         return NULL;
 
-    ops = alloc_check(alloc);
+    ops = alloc_check(alloc, &pdata);
     if (!ops || !ops->alloc)
-        retval = generic_alloc(size);
-    else {
-        pdata = alloc->pdata;
+        retval = generic_alloc(size, pdata);
+    else
         retval = ops->alloc(size, pdata);
-    }
 
     return retval;
 }
@@ -68,13 +85,11 @@ bfdev_zalloc(const bfdev_alloc_t *alloc, size_t size)
     if (bfdev_unlikely(!size))
         return NULL;
 
-    ops = alloc_check(alloc);
+    ops = alloc_check(alloc, &pdata);
     if (!ops || !ops->zalloc)
-        retval = generic_zalloc(size);
-    else {
-        pdata = alloc->pdata;
+        return generic_zalloc(size, pdata);
+    else
         retval = ops->zalloc(size, pdata);
-    }
 
     return retval;
 }
@@ -93,13 +108,11 @@ bfdev_realloc(const bfdev_alloc_t *alloc, const void *block, size_t resize)
         return NULL;
     }
 
-    ops = alloc_check(alloc);
+    ops = alloc_check(alloc, &pdata);
     if (!ops || !ops->realloc)
-        retval = generic_realloc((void *)block, resize);
-    else {
-        pdata = alloc->pdata;
+        retval = generic_realloc((void *)block, resize, pdata);
+    else
         retval = ops->realloc((void *)block, resize, pdata);
-    }
 
     return retval;
 }
@@ -113,11 +126,9 @@ bfdev_free(const bfdev_alloc_t *alloc, const void *block)
     if (!block)
         return;
 
-    ops = alloc_check(alloc);
+    ops = alloc_check(alloc, &pdata);
     if (!ops || !ops->free)
-        generic_free(block);
-    else {
-        pdata = alloc->pdata;
+        generic_free((void *)block, pdata);
+    else
         ops->free((void *)block, pdata);
-    }
 }
