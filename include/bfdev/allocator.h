@@ -46,6 +46,9 @@ struct bfdev_alloc_ops {
 #define BFDEV_DEFINE_ALLOC(name, alloc, realloc, free, pdata) \
     bfdev_alloc_t name = BFDEV_ALLOC_INIT(alloc, realloc, free, pdata)
 
+extern bfdev_alloc_ops_t
+bfdev_alloc_default;
+
 static inline void
 bfdev_alloc_init(bfdev_alloc_t *allocator, bfdev_malloc_t alloc,
                  bfdev_realloc_t realloc, bfdev_free_t free, void *pdata)
