@@ -10,10 +10,12 @@
 #include <bfdev/mpi.h>
 #include <bfdev/log.h>
 #include "../time.h"
+#include "helper.h"
 
 #define TEST_LEN 10000
 #define TEST_SIZE (TEST_LEN / 4 + 1)
 #define TEST_LOOP (TEST_LEN / 1.39793 + 1)
+#define PRINT_RESULT 0
 
 int main(int argc, const char *argv[])
 {
@@ -47,7 +49,7 @@ int main(int argc, const char *argv[])
             return retval;
     }
 
-    bfdev_log_info("Calculate Machin %d:\n", TEST_LEN);
+    bfdev_log_info("Convergence Machin %d:\n", TEST_LEN);
     EXAMPLE_TIME_STATISTICAL(
         for (k = 1; k <= TEST_LOOP; ++k) {
             if ((retval = bfdev_mpi_divi(vw, vw, vw, 5 * 5)) ||
@@ -66,6 +68,18 @@ int main(int argc, const char *argv[])
         }
         0;
     );
+
+#if PRINT_RESULT
+    char *result;
+
+    result = print_num(vs, 10);
+    if (!result)
+        return 1;
+
+    printf("%c.", *result);
+    puts(result + 1);
+    free(result);
+#endif
 
     bfdev_mpi_destory(vw);
     bfdev_mpi_destory(vs);
