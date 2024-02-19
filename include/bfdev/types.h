@@ -46,6 +46,10 @@ typedef bfdev_udi_t bfdev_uw_t;
 typedef int bfdev_state_t;
 typedef intptr_t bfdev_atomic_t;
 
+#define BFDEV_EQ 0
+#define BFDEV_BT 1
+#define BFDEV_LT -1
+
 #define BFDEV_BYTES_PER_CHAR        sizeof(char)
 #define BFDEV_BYTES_PER_SHORT       sizeof(short)
 #define BFDEV_BYTES_PER_INT         sizeof(int)
