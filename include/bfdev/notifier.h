@@ -16,8 +16,8 @@ typedef struct bfdev_notifier_head bfdev_notifier_head_t;
 typedef struct bfdev_notifier_node bfdev_notifier_node_t;
 typedef enum bfdev_notifier_ret bfdev_notifier_ret_t;
 
-typedef bfdev_notifier_ret_t (*bfdev_notifier_entry_t)
-(bfdev_notifier_node_t *node, void *args);
+typedef bfdev_notifier_ret_t
+(*bfdev_notifier_entry_t)(void *args, void *pdata);
 
 enum bfdev_notifier_ret {
     __BFDEV_NOTIFI_RET_REMOVE = 0,
@@ -31,14 +31,15 @@ enum bfdev_notifier_ret {
 /**
  * struct bfdev_notifier_node - describe a notification chain node.
  * @list: node for hanging notification chain.
- * @entry: callback function of notification chain.
  * @priority: priority of notification chain node.
+ * @entry: callback function of notification chain.
  * @pdata: private data of notification chain node.
  */
 struct bfdev_notifier_node {
     bfdev_ilist_node_t list;
-    bfdev_notifier_entry_t entry;
     int priority;
+
+    bfdev_notifier_entry_t entry;
     void *pdata;
 };
 
@@ -52,8 +53,21 @@ struct bfdev_notifier_head {
     const char *name;
 };
 
-#define bfdev_ilist_to_notifier(ptr) \
-    bfdev_ilist_entry(ptr, bfdev_notifier_node_t, list)
+#define BFDEV_NOTIFIER_STATIC(HEAD, NAME) { \
+    BFDEV_ILIST_HEAD_STATIC((HEAD).node), .name = (NAME) \
+}
+
+#define BFDEV_NOTIFIER_INIT(head, name) \
+    (bfdev_notifier_head_t) BFDEV_NOTIFIER_STATIC(head, name)
+
+#define BFDEV_DEFINE_NOTIFIER(head, name) \
+    bfdev_notifier_head_t head = BFDEV_NOTIFIER_INIT(head, name)
+
+static inline void
+bfdev_notifier_init(bfdev_notifier_head_t *head, const char *name)
+{
+    *head = BFDEV_NOTIFIER_INIT(*head, name);
+}
 
 /**
  * bfdev_notifier_call - call the callback function of node on notification chain.
@@ -72,7 +86,8 @@ bfdev_notifier_call(bfdev_notifier_head_t *head, void *args,
  * @node: notification chain node to register.
  */
 extern int
-bfdev_notifier_register(bfdev_notifier_head_t *head, bfdev_notifier_node_t *node);
+bfdev_notifier_register(bfdev_notifier_head_t *head,
+                        bfdev_notifier_node_t *node);
 
 /**
  * bfdev_notifier_unregister - unregister a node from the notification chain.
@@ -80,7 +95,8 @@ bfdev_notifier_register(bfdev_notifier_head_t *head, bfdev_notifier_node_t *node
  * @node: notification chain node to unregister.
  */
 extern void
-bfdev_notifier_unregister(bfdev_notifier_head_t *head, bfdev_notifier_node_t *node);
+bfdev_notifier_unregister(bfdev_notifier_head_t *head,
+                          bfdev_notifier_node_t *node);
 
 BFDEV_BEGIN_DECLS
 
