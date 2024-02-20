@@ -7,10 +7,12 @@
 #include <bfdev/mpi.h>
 #include <bfdev/dword.h>
 #include <bfdev/bitmap.h>
+#include <bfdev/bug.h>
 #include <export.h>
 
 #define mpi_len(mpi) bfdev_array_index(&(mpi)->value)
 #define mpi_val(mpi) bfdev_array_data(&(mpi)->value, 0)
+#define mpi_resize(mpi, size) bfdev_array_resize(&(mpi)->value, size)
 
 /**
  * Multi Precision Array Computing.
@@ -459,7 +461,7 @@ mpi_extend(bfdev_mpi_t *var, unsigned long length)
     if (index >= length)
         return -BFDEV_ENOERR;
 
-    retval = bfdev_array_resize(&var->value, length);
+    retval = mpi_resize(var, length);
     if (bfdev_unlikely(retval))
         return retval;
 
@@ -480,7 +482,7 @@ mpi_copy(bfdev_mpi_t *dest, const bfdev_mpi_t *src)
         return -BFDEV_EINVAL;
 
     length = mpi_len(src);
-    retval = bfdev_array_resize(&dest->value, length);
+    retval = mpi_resize(dest, length);
     if (bfdev_unlikely(retval))
         return retval;
 
@@ -530,7 +532,7 @@ mpi_addi(bfdev_mpi_t *dest,
 
     length = mpi_len(va);
 
-    retval = bfdev_array_resize(&dest->value, length + 1);
+    retval = mpi_resize(dest, length + 1);
     if (bfdev_unlikely(retval))
         return retval;
 
@@ -563,7 +565,7 @@ mpi_add(bfdev_mpi_t *dest,
     cnta = mpi_len(va);
     length = bfdev_max(cnta, cntb);
 
-    retval = bfdev_array_resize(&dest->value, length + 1);
+    retval = mpi_resize(dest, length + 1);
     if (bfdev_unlikely(retval))
         return retval;
 
@@ -588,7 +590,7 @@ mpi_subi(bfdev_mpi_t *dest,
 
     length = mpi_len(va);
 
-    retval = bfdev_array_resize(&dest->value, length);
+    retval = mpi_resize(dest, length);
     if (bfdev_unlikely(retval))
         return retval;
 
@@ -623,7 +625,7 @@ mpi_sub(bfdev_mpi_t *dest,
     if (bfdev_unlikely(cnta < cntb))
         return -BFDEV_EOVERFLOW;
 
-    retval = bfdev_array_resize(&dest->value, cnta);
+    retval = mpi_resize(dest, cnta);
     if (bfdev_unlikely(retval))
         return retval;
 
@@ -649,7 +651,7 @@ mpi_muli(bfdev_mpi_t *dest,
 
     length = mpi_len(va);
 
-    retval = bfdev_array_resize(&dest->value, length + 1);
+    retval = mpi_resize(dest, length + 1);
     if (bfdev_unlikely(retval))
         return retval;
 
@@ -723,7 +725,7 @@ mpi_divi(bfdev_mpi_t *quot, bfdev_mpi_t *rem,
 
     length = mpi_len(va);
 
-    retval = bfdev_array_resize(&quot->value, length);
+    retval = mpi_resize(quot, length);
     if (bfdev_unlikely(retval))
         return retval;
 
@@ -817,9 +819,7 @@ mpi_div(bfdev_mpi_t *quot, bfdev_mpi_t *rem,
         quot->value = array;
     }
 
-    bfdev_array_resize(&quot->value, length);
-    bfdev_array_resize(&rem->value, cntb);
-
+    BFDEV_BUG_ON(mpi_resize(rem, cntb));
     mpi_relocation(quot);
     mpi_relocation(rem);
 
@@ -855,8 +855,161 @@ mpi_mod(bfdev_mpi_t *rem,
     ptra = mpi_val(rem);
 
     mpa_divrem(NULL, ptra, ptrb, cnta, cntb);
-    bfdev_array_resize(&rem->value, cntb);
+
+    BFDEV_BUG_ON(mpi_resize(rem, cntb));
     mpi_relocation(rem);
+
+    return -BFDEV_ENOERR;
+}
+
+static inline int
+mpi_and(bfdev_mpi_t *dest,
+        const bfdev_mpi_t *va, const bfdev_mpi_t *vb)
+{
+    BFDEV_MPI_TYPE *ptrs, *ptra, *ptrb;
+    unsigned long cnta, cntb, length;
+    int retval;
+
+    cnta = mpi_len(va);
+    cntb = mpi_len(vb);
+    length = bfdev_min(cnta, cntb);
+
+    retval = mpi_resize(dest, length);
+    if (bfdev_unlikely(retval))
+        return retval;
+
+    ptrs = mpi_val(dest);
+    ptra = mpi_val(va);
+    ptrb = mpi_val(vb);
+
+    bfdev_bitmap_and(ptrs, ptra, ptrb, length * BFDEV_MPI_BITS);
+    mpi_relocation(dest);
+
+    return -BFDEV_ENOERR;
+}
+
+static inline int
+mpi_or(bfdev_mpi_t *dest,
+       const bfdev_mpi_t *va, const bfdev_mpi_t *vb)
+{
+    BFDEV_MPI_TYPE *ptrs, *ptra, *ptrb;
+    unsigned long cnta, cntb, length;
+    int retval;
+
+    cnta = mpi_len(va);
+    cntb = mpi_len(vb);
+    length = bfdev_max(cnta, cntb);
+
+    retval = mpi_resize(dest, length);
+    if (bfdev_unlikely(retval))
+        return retval;
+
+    ptrs = mpi_val(dest);
+    ptra = mpi_val(va);
+    ptrb = mpi_val(vb);
+
+    length = bfdev_min(cnta, cntb);
+    bfdev_bitmap_or(ptrs, ptra, ptrb, length * BFDEV_MPI_BITS);
+
+    if (cnta < cntb) {
+        bfdev_swap(ptra, ptrb);
+        bfdev_swap(cnta, cntb);
+    }
+
+    length = cnta - cntb;
+    mpa_copy(ptrs + cntb, ptra + cntb, length);
+
+    return -BFDEV_ENOERR;
+}
+
+static inline int
+mpi_xor(bfdev_mpi_t *dest,
+        const bfdev_mpi_t *va, const bfdev_mpi_t *vb)
+{
+    BFDEV_MPI_TYPE *ptrs, *ptra, *ptrb;
+    unsigned long cnta, cntb, length;
+    int retval;
+
+    cnta = mpi_len(va);
+    cntb = mpi_len(vb);
+    length = bfdev_max(cnta, cntb);
+
+    retval = mpi_resize(dest, length);
+    if (bfdev_unlikely(retval))
+        return retval;
+
+    ptrs = mpi_val(dest);
+    ptra = mpi_val(va);
+    ptrb = mpi_val(vb);
+
+    length = bfdev_min(cnta, cntb);
+    bfdev_bitmap_xor(ptrs, ptra, ptrb, length * BFDEV_MPI_BITS);
+
+    if (cnta < cntb) {
+        bfdev_swap(ptra, ptrb);
+        bfdev_swap(cnta, cntb);
+    }
+
+    length = cnta - cntb;
+    mpa_copy(ptrs + cntb, ptra + cntb, length);
+    mpi_relocation(dest);
+
+    return -BFDEV_ENOERR;
+}
+
+static inline int
+mpi_shli(bfdev_mpi_t *dest,
+         const bfdev_mpi_t *va, BFDEV_MPI_TYPE shift)
+{
+    BFDEV_MPI_TYPE *ptrs, *ptra;
+    unsigned long length, cnta;
+    int retval;
+
+    if (dest == va && !shift)
+        return -BFDEV_ENOERR;
+
+    cnta = mpi_len(va);
+    length = cnta + BFDEV_BITS_TO_LONG(shift);
+
+    retval = mpi_resize(dest, length);
+    if (bfdev_unlikely(retval))
+        return retval;
+
+    ptrs = mpi_val(dest);
+
+    if (dest != va) {
+        ptra = mpi_val(va);
+        mpa_copy(ptrs, ptra, cnta);
+    }
+
+    bfdev_bitmap_shl(ptrs, ptrs, shift, length * BFDEV_MPI_BITS);
+    mpi_relocation(dest);
+
+    return -BFDEV_ENOERR;
+}
+
+static inline int
+mpi_shri(bfdev_mpi_t *dest,
+         const bfdev_mpi_t *va, BFDEV_MPI_TYPE shift)
+{
+    BFDEV_MPI_TYPE *ptrs, *ptra;
+    unsigned long length;
+    int retval;
+
+    if (dest == va && !shift)
+        return -BFDEV_ENOERR;
+
+    length = mpi_len(va);
+
+    retval = mpi_resize(dest, length);
+    if (bfdev_unlikely(retval))
+        return retval;
+
+    ptrs = mpi_val(dest);
+    ptra = mpi_val(va);
+
+    bfdev_bitmap_shr(ptrs, ptra, shift, length * BFDEV_MPI_BITS);
+    mpi_relocation(dest);
 
     return -BFDEV_ENOERR;
 }
@@ -1309,24 +1462,13 @@ export int
 bfdev_mpi_and(bfdev_mpi_t *dest,
               const bfdev_mpi_t *va, const bfdev_mpi_t *vb)
 {
-    BFDEV_MPI_TYPE *ptrs, *ptra, *ptrb;
-    unsigned long cnta, cntb, length;
     int retval;
 
-    cnta = mpi_len(va);
-    cntb = mpi_len(vb);
-    length = bfdev_min(cnta, cntb);
-
-    retval = bfdev_array_resize(&dest->value, length);
+    retval = mpi_and(dest, va, vb);
     if (bfdev_unlikely(retval))
         return retval;
 
-    ptrs = mpi_val(dest);
-    ptra = mpi_val(va);
-    ptrb = mpi_val(vb);
-
-    bfdev_bitmap_and(ptrs, ptra, ptrb, length * BFDEV_MPI_BITS);
-    mpi_relocation(dest);
+    dest->plus = true;
 
     return -BFDEV_ENOERR;
 }
@@ -1335,32 +1477,13 @@ export int
 bfdev_mpi_or(bfdev_mpi_t *dest,
              const bfdev_mpi_t *va, const bfdev_mpi_t *vb)
 {
-    BFDEV_MPI_TYPE *ptrs, *ptra, *ptrb;
-    unsigned long cnta, cntb, length;
     int retval;
 
-    cnta = mpi_len(va);
-    cntb = mpi_len(vb);
-    length = bfdev_max(cnta, cntb);
-
-    retval = bfdev_array_resize(&dest->value, length);
+    retval = mpi_or(dest, va, vb);
     if (bfdev_unlikely(retval))
         return retval;
 
-    ptrs = mpi_val(dest);
-    ptra = mpi_val(va);
-    ptrb = mpi_val(vb);
-
-    length = bfdev_min(cnta, cntb);
-    bfdev_bitmap_or(ptrs, ptra, ptrb, length * BFDEV_MPI_BITS);
-
-    if (cnta < cntb) {
-        bfdev_swap(ptra, ptrb);
-        bfdev_swap(cnta, cntb);
-    }
-
-    length = cnta - cntb;
-    mpa_copy(ptrs + cntb, ptra + cntb, length);
+    dest->plus = true;
 
     return -BFDEV_ENOERR;
 }
@@ -1369,33 +1492,13 @@ export int
 bfdev_mpi_xor(bfdev_mpi_t *dest,
               const bfdev_mpi_t *va, const bfdev_mpi_t *vb)
 {
-    BFDEV_MPI_TYPE *ptrs, *ptra, *ptrb;
-    unsigned long cnta, cntb, length;
     int retval;
 
-    cnta = mpi_len(va);
-    cntb = mpi_len(vb);
-    length = bfdev_max(cnta, cntb);
-
-    retval = bfdev_array_resize(&dest->value, length);
+    retval = mpi_xor(dest, va, vb);
     if (bfdev_unlikely(retval))
         return retval;
 
-    ptrs = mpi_val(dest);
-    ptra = mpi_val(va);
-    ptrb = mpi_val(vb);
-
-    length = bfdev_min(cnta, cntb);
-    bfdev_bitmap_xor(ptrs, ptra, ptrb, length * BFDEV_MPI_BITS);
-
-    if (cnta < cntb) {
-        bfdev_swap(ptra, ptrb);
-        bfdev_swap(cnta, cntb);
-    }
-
-    length = cnta - cntb;
-    mpa_copy(ptrs + cntb, ptra + cntb, length);
-    mpi_relocation(dest);
+    dest->plus = true;
 
     return -BFDEV_ENOERR;
 }
@@ -1404,29 +1507,16 @@ export int
 bfdev_mpi_shli(bfdev_mpi_t *dest,
                const bfdev_mpi_t *va, BFDEV_MPI_TYPE shift)
 {
-    BFDEV_MPI_TYPE *ptrs, *ptra;
-    unsigned long length, cnta;
     int retval;
 
-	if (dest == va && !shift)
-		return -BFDEV_ENOERR;
+    if (dest == va && !shift)
+        return -BFDEV_ENOERR;
 
-    cnta = mpi_len(va);
-    length = cnta + BFDEV_BITS_TO_LONG(shift);
-
-    retval = bfdev_array_resize(&dest->value, length);
+    retval = mpi_shli(dest, va, shift);
     if (bfdev_unlikely(retval))
         return retval;
 
-    ptrs = mpi_val(dest);
-
-    if (dest != va) {
-        ptra = mpi_val(va);
-        mpa_copy(ptrs, ptra, cnta);
-    }
-
-    bfdev_bitmap_shl(ptrs, ptrs, shift, length * BFDEV_MPI_BITS);
-    mpi_relocation(dest);
+    dest->plus = va->plus;
 
     return -BFDEV_ENOERR;
 }
@@ -1435,24 +1525,16 @@ export int
 bfdev_mpi_shri(bfdev_mpi_t *dest,
                const bfdev_mpi_t *va, BFDEV_MPI_TYPE shift)
 {
-    BFDEV_MPI_TYPE *ptrs, *ptra;
-    unsigned long length;
     int retval;
 
-	if (dest == va && !shift)
-		return -BFDEV_ENOERR;
+    if (dest == va && !shift)
+        return -BFDEV_ENOERR;
 
-    length = mpi_len(va);
-
-    retval = bfdev_array_resize(&dest->value, length);
+    retval = mpi_shri(dest, va, shift);
     if (bfdev_unlikely(retval))
         return retval;
 
-    ptrs = mpi_val(dest);
-    ptra = mpi_val(va);
-
-    bfdev_bitmap_shr(ptrs, ptra, shift, length * BFDEV_MPI_BITS);
-    mpi_relocation(dest);
+    dest->plus = va->plus;
 
     return -BFDEV_ENOERR;
 }
@@ -1563,7 +1645,7 @@ bfdev_mpi_write(bfdev_mpi_t *var, const BFDEV_MPI_TYPE *buffer,
     BFDEV_MPI_TYPE *data;
     int retval;
 
-    retval = bfdev_array_resize(&var->value, length);
+    retval = mpi_resize(var, length);
     if (bfdev_unlikely(retval))
         return retval;
 
