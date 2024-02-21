@@ -11,6 +11,9 @@
 #include <bfdev/log.h>
 #include <export.h>
 
+#define bfdev_ilist_to_notifier(ptr) \
+    bfdev_ilist_entry(ptr, bfdev_notifier_node_t, list)
+
 static long
 notifier_chain_cmp(const bfdev_ilist_node_t *node1,
                    const bfdev_ilist_node_t *node2, void *pdata)
@@ -39,7 +42,7 @@ bfdev_notifier_call(bfdev_notifier_head_t *head, void *arg,
             break;
 
         bfdev_log_debug("chain '%s' calling (%p)\n", head->name, node);
-        retval = node->entry(node, arg);
+        retval = node->entry(arg, node->pdata);
 
         if (called_num)
             (*called_num)++;
@@ -57,7 +60,8 @@ bfdev_notifier_call(bfdev_notifier_head_t *head, void *arg,
 }
 
 export int
-bfdev_notifier_register(bfdev_notifier_head_t *head, bfdev_notifier_node_t *node)
+bfdev_notifier_register(bfdev_notifier_head_t *head,
+                        bfdev_notifier_node_t *node)
 {
     if (!node->entry)
         return -BFDEV_EINVAL;
@@ -70,7 +74,8 @@ bfdev_notifier_register(bfdev_notifier_head_t *head, bfdev_notifier_node_t *node
 }
 
 export void
-bfdev_notifier_unregister(bfdev_notifier_head_t *head, bfdev_notifier_node_t *node)
+bfdev_notifier_unregister(bfdev_notifier_head_t *head,
+                          bfdev_notifier_node_t *node)
 {
     bfdev_ilist_del(&head->node, &node->list);
     bfdev_log_debug("chain '%s' unregister (%p)\n", head->name, node);
