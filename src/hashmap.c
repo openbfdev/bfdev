@@ -247,10 +247,9 @@ bfdev_hashmap_find(bfdev_hashmap_t *hashmap, const void *key)
     unsigned long value;
 
     value = hashmap_hash_key(hashmap, key);
-    if ((exist = hashmap_find_key(hashmap, key, value)))
-        return exist;
+    exist = hashmap_find_key(hashmap, key, value);
 
-    return NULL;
+    return exist;
 }
 
 export void
