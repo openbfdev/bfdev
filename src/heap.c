@@ -22,11 +22,13 @@ parent_swap(bfdev_heap_root_t *root, bfdev_heap_node_t *parent,
     shadow = *node;
     if (parent->left == node) {
         node->left = parent;
-        if ((node->right = parent->right))
+        node->right = parent->right;
+        if (node->right)
             parent->right->parent = node;
     } else { /* parent->right == node */
         node->right = parent;
-        if ((node->left = parent->left))
+        node->left = parent->left;
+        if (node->left)
             parent->left->parent = node;
     }
 

@@ -74,7 +74,8 @@ bfdev_minpool_best_fit(struct bfdev_minpool_head *head, size_t size)
     size_t walk, bsize = BFDEV_SIZE_MAX;
 
     bfdev_list_for_each_entry(node, &head->free_list, free) {
-        if ((walk = minnode_get_size(node)) >= size) {
+        walk = minnode_get_size(node);
+        if (walk >= size) {
             if (walk == size)
                 return node;
             else if (walk >= bsize)
@@ -95,7 +96,8 @@ bfdev_minpool_worst_fit(struct bfdev_minpool_head *head, size_t size)
     size_t walk, bsize = BFDEV_SIZE_MIN;
 
     bfdev_list_for_each_entry(node, &head->free_list, free) {
-        if ((walk = minnode_get_size(node)) >= size) {
+        walk = minnode_get_size(node);
+        if (walk >= size) {
             if (walk == head->avail)
                 return node;
             else if (walk <= bsize)

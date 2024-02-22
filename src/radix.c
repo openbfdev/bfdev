@@ -204,7 +204,8 @@ radix_destory_recurse(const bfdev_alloc_t *alloc,
 
     if (level) {
         for (index = 0; index < BFDEV_RADIX_ARY; ++index) {
-            if ((child = node->child[index]))
+            child = node->child[index];
+            if (child)
                 radix_destory_recurse(alloc, child, level - 1);
         }
     }
