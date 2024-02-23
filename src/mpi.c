@@ -3,6 +3,9 @@
  * Copyright(c) 2024 John Sanpe <sanpeqf@gmail.com>
  */
 
+#define MODULE_NAME "bfdev-mpi"
+#define bfdev_log_fmt(fmt) MODULE_NAME ": " fmt
+
 #include <base.h>
 #include <bfdev/mpi.h>
 #include <bfdev/dword.h>
