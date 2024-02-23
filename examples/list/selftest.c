@@ -11,7 +11,7 @@
 #define TEST_LOOP 10
 
 struct test_node {
-    struct bfdev_list_head list;
+    bfdev_list_head_t list;
     unsigned long num;
 };
 
@@ -23,8 +23,8 @@ struct test_pdata {
     bfdev_list_entry(ptr, struct test_node, list)
 
 static long
-list_test_sort(const struct bfdev_list_head *node1,
-               const struct bfdev_list_head *node2, void *pdata)
+list_test_sort(const bfdev_list_head_t *node1,
+               const bfdev_list_head_t *node2, void *pdata)
 {
     struct test_node *tnode1, *tnode2;
 
@@ -41,7 +41,7 @@ static int
 list_selftest(struct test_pdata *ldata)
 {
     struct test_node *node, *nnode, *tnode;
-    struct bfdev_list_head *list, *nlist, *tlist;
+    bfdev_list_head_t *list, *nlist, *tlist;
     unsigned int count;
 
     BFDEV_LIST_HEAD(test_head);

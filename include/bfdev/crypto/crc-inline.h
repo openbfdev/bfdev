@@ -14,14 +14,29 @@
 
 BFDEV_BEGIN_DECLS
 
-#define BFDEV_CRC_INLINE(name, type, table, bswap)                  \
-static inline type                                                  \
-name##_byte(type crc, const uint8_t data)                           \
-{                                                                   \
-    unsigned int index = (crc ^ data) & 0xff;                       \
-    return table[0][index] ^ (crc >> 8);                            \
-}                                                                   \
-                                                                    \
+#define BFDEV_CRC_BYTE(name, type, table)       \
+static inline type                              \
+name##_byte(type crc, const uint8_t data)       \
+{                                               \
+    unsigned int index = (crc ^ data) & 0xff;   \
+    return table[0][index] ^ (crc >> 8);        \
+}
+
+#ifndef BFDEV_CRC_EXTEND
+# define BFDEV_CRC_INLINE(name, type, table, bswap)         \
+BFDEV_CRC_BYTE(name, type, table)                           \
+static inline type                                          \
+name##_inline(const uint8_t *src, size_t len, type crc)     \
+{                                                           \
+    crc = bswap(crc);                                       \
+    while (len--)                                           \
+        crc = name##_byte(crc, *src++);                     \
+                                                            \
+    return bswap(crc);                                      \
+}
+#else
+# define BFDEV_CRC_INLINE(name, type, table, bswap)                 \
+BFDEV_CRC_BYTE(name, type, table)                                   \
 static inline type                                                  \
 name##_inline(const uint8_t *src, size_t len, type crc)             \
 {                                                                   \
@@ -55,6 +70,7 @@ name##_inline(const uint8_t *src, size_t len, type crc)             \
                                                                     \
     return bswap(crc);                                              \
 }
+#endif
 
 BFDEV_END_DECLS
 

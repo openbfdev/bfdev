@@ -22,9 +22,21 @@ BFDEV_BEGIN_DECLS
  * Optimization barrier
  * The "volatile" is due to gcc bugs
  */
-#ifndef bfdev_barrier
-# define bfdev_barrier() __asm__ __volatile__("": : :"memory")
+#ifndef __bfdev_barrier
+# define __bfdev_barrier(carrier) __asm__ __volatile__("":carrier:"memory")
 #endif
+
+#ifndef bfdev_barrier
+# define bfdev_barrier() __bfdev_barrier(:)
+# define bfdev_barrier_data(ptr) __bfdev_barrier(:"r"(ptr))
+#endif
+
+/*
+ * Whether 'type' is a signed type or an unsigned type.
+ * Supports scalar types, bool and also pointer types.
+ */
+#define bfdev_is_signed(type) (((type)(-1)) < (type)1)
+#define bfdev_is_unsigned(type) (!bfdev_is_signed(type))
 
 /* Not-quite-unique ID. */
 #ifndef __BFDEV_UNIQUE_ID

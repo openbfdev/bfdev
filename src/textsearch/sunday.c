@@ -7,7 +7,7 @@
 #include <bfdev/textsearch.h>
 
 struct sunday_context {
-    struct bfdev_ts_context tsc;
+    bfdev_ts_context_t tsc;
     unsigned int pattern_len;
     unsigned int shift_table[UINT8_MAX];
     uint8_t pattern[0];
@@ -17,21 +17,21 @@ struct sunday_context {
     bfdev_container_of(ptr, struct sunday_context, tsc)
 
 static const void *
-sunday_pattern_get(struct bfdev_ts_context *tsc)
+sunday_pattern_get(bfdev_ts_context_t *tsc)
 {
     struct sunday_context *sctx = ts_to_sunday(tsc);
     return sctx->pattern;
 }
 
 static unsigned int
-sunday_pattern_len(struct bfdev_ts_context *tsc)
+sunday_pattern_len(bfdev_ts_context_t *tsc)
 {
     struct sunday_context *sctx = ts_to_sunday(tsc);
     return sctx->pattern_len;
 }
 
 static unsigned int
-sunday_find(struct bfdev_ts_context *tsc, struct bfdev_ts_state *tss)
+sunday_find(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss)
 {
     #define find_pattern() (icase ? toupper(text[shift + index]) : text[shift + index])
     bool icase = bfdev_ts_test_igcase(tsc);
@@ -62,10 +62,12 @@ sunday_find(struct bfdev_ts_context *tsc, struct bfdev_ts_state *tss)
 
         consumed += length;
     }
+
+    #undef find_pattern
 }
 
 static inline void
-compute_prefix(struct sunday_context *sctx, unsigned int flags)
+sunday_compute_prefix(struct sunday_context *sctx, unsigned int flags)
 {
     unsigned int index;
 
@@ -81,8 +83,8 @@ compute_prefix(struct sunday_context *sctx, unsigned int flags)
     }
 }
 
-static struct bfdev_ts_context *
-sunday_prepare(const struct bfdev_alloc *alloc, const void *pattern,
+static bfdev_ts_context_t *
+sunday_prepare(const bfdev_alloc_t *alloc, const void *pattern,
                size_t len, unsigned long flags)
 {
     struct sunday_context *sctx;
@@ -99,19 +101,19 @@ sunday_prepare(const struct bfdev_alloc *alloc, const void *pattern,
         memcpy(sctx->pattern, pattern, len);
     else for (index = 0; index < len; ++index)
         sctx->pattern[index] = toupper(((char *)pattern)[index]);
-    compute_prefix(sctx, flags);
+    sunday_compute_prefix(sctx, flags);
 
     return &sctx->tsc;
 }
 
 static void
-sunday_destroy(struct bfdev_ts_context *tsc)
+sunday_destroy(bfdev_ts_context_t *tsc)
 {
     struct sunday_context *sctx = ts_to_sunday(tsc);
     bfdev_free(tsc->alloc, sctx);
 }
 
-static struct bfdev_ts_algorithm
+static bfdev_ts_algorithm_t
 sunday_algorithm = {
     .name = "sunday",
     .find = sunday_find,

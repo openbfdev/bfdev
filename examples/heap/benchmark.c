@@ -16,7 +16,7 @@
 #define TEST_LEN 1000000
 
 struct bench_node {
-    struct bfdev_heap_node node;
+    bfdev_heap_node_t node;
     unsigned int num;
     unsigned int data;
 };
@@ -40,7 +40,7 @@ node_dump(struct bench_node *node)
 #endif
 
 static unsigned int
-test_deepth(struct bfdev_heap_node *node)
+test_deepth(bfdev_heap_node_t *node)
 {
     unsigned int left_deepth, right_deepth;
 
@@ -54,8 +54,8 @@ test_deepth(struct bfdev_heap_node *node)
 }
 
 static long
-bench_cmp(const struct bfdev_heap_node *hpa,
-          const struct bfdev_heap_node *hpb, void *pdata)
+bench_cmp(const bfdev_heap_node_t *hpa,
+          const bfdev_heap_node_t *hpb, void *pdata)
 {
     struct bench_node *node1, *node2;
 

@@ -12,7 +12,7 @@
     BFDEV_##errnum, "-" #errnum, infos \
 }
 
-export const struct bfdev_errname
+export const bfdev_errname_t
 bfdev_errname_table[] = {
     ERRNAME(ENOERR, "No error"),
     ERRNAME(EPERM, "Operation not permitted"),
@@ -132,14 +132,14 @@ bfdev_errname_table[] = {
 static long
 errname_search(const void *key, void *pdata)
 {
-    const struct bfdev_errname *entry = key;
-    return entry->errnum - (long)pdata;
+    const bfdev_errname_t *entry = key;
+    return entry->errnum - (intptr_t)pdata;
 }
 
-export struct bfdev_errname *
+export bfdev_errname_t *
 bfdev_errname_find(int error)
 {
-    struct bfdev_errname *entry;
+    bfdev_errname_t *entry;
 
     if (error < 0)
         error = -error;
@@ -155,7 +155,7 @@ bfdev_errname_find(int error)
 export const char *
 bfdev_errname(int error, const char **infop)
 {
-    struct bfdev_errname *entry;
+    bfdev_errname_t *entry;
     const char *name;
 
     entry = bfdev_errname_find(error);

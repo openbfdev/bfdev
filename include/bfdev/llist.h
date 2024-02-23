@@ -22,15 +22,15 @@ BFDEV_BEGIN_DECLS
  * Return whether list is empty before adding.
  */
 extern bool
-bfdev_llist_split(struct bfdev_slist_head *head, struct bfdev_slist_head *node,
-                  struct bfdev_slist_head *end);
+bfdev_llist_split(bfdev_slist_head_t *head, bfdev_slist_head_t *node,
+                  bfdev_slist_head_t *end);
 
 /**
  * bfdev_llist_del() - delete the first entry of lock-less list.
  * @head: the head for your lock-less list.
  */
-extern struct bfdev_slist_head *
-bfdev_llist_del(struct bfdev_slist_head *head);
+extern bfdev_slist_head_t *
+bfdev_llist_del(bfdev_slist_head_t *head);
 
 /**
  * bfdev_llist_add() - add a new entry.
@@ -40,7 +40,7 @@ bfdev_llist_del(struct bfdev_slist_head *head);
  * Return whether list is empty before adding.
  */
 static inline bool
-bfdev_llist_add(struct bfdev_slist_head *head, struct bfdev_slist_head *node)
+bfdev_llist_add(bfdev_slist_head_t *head, bfdev_slist_head_t *node)
 {
     return bfdev_llist_split(head, node, node);
 }
@@ -49,8 +49,8 @@ bfdev_llist_add(struct bfdev_slist_head *head, struct bfdev_slist_head *node)
  * bfdev_llist_destroy() - delete all entries from lock-less list.
  * @head: the head of lock-less list to delete all entries
  */
-static inline struct bfdev_slist_head *
-bfdev_llist_destroy(struct bfdev_slist_head *head)
+static inline bfdev_slist_head_t *
+bfdev_llist_destroy(bfdev_slist_head_t *head)
 {
     return (void *)bfdev_xchg((bfdev_atomic_t *)&head->next, (bfdev_atomic_t)NULL);
 }

@@ -4,18 +4,18 @@
  */
 
 #define MODULE_NAME "bfdev-respool"
-#define pr_fmt(fmt) MODULE_NAME ": " fmt
+#define bfdev_log_fmt(fmt) MODULE_NAME ": " fmt
 
 #include <base.h>
 #include <bfdev/respool.h>
 #include <bfdev/log.h>
 #include <export.h>
 
-export struct bfdev_resnode *
-respool_find(struct bfdev_respool *pool,
-             bfdev_respool_find_t find, const void *data)
+export bfdev_resnode_t *
+bfdev_respool_find(bfdev_respool_t *pool, bfdev_respool_find_t find,
+                   const void *data)
 {
-    struct bfdev_resnode *walk;
+    bfdev_resnode_t *walk;
 
     bfdev_list_for_each_entry(walk, &pool->node, list) {
         if (!find(pool, walk, data))
@@ -26,7 +26,7 @@ respool_find(struct bfdev_respool *pool,
 }
 
 export void
-respool_insert(struct bfdev_respool *pool, struct bfdev_resnode *node)
+bfdev_respool_insert(bfdev_respool_t *pool, bfdev_resnode_t *node)
 {
     bfdev_list_add_prev(&pool->node, &node->list);
     bfdev_log_debug("%s: insert %p '%s'\n",
@@ -34,7 +34,7 @@ respool_insert(struct bfdev_respool *pool, struct bfdev_resnode *node)
 }
 
 export void
-respool_remove(struct bfdev_respool *pool, struct bfdev_resnode *node)
+bfdev_respool_remove(bfdev_respool_t *pool, bfdev_resnode_t *node)
 {
     bfdev_list_del(&node->list);
     bfdev_log_debug("%s: remove %p '%s'\n",
@@ -42,7 +42,7 @@ respool_remove(struct bfdev_respool *pool, struct bfdev_resnode *node)
 }
 
 export void
-respool_release(struct bfdev_respool *pool, struct bfdev_resnode *node)
+bfdev_respool_release(bfdev_respool_t *pool, bfdev_resnode_t *node)
 {
     bfdev_list_del(&node->list);
     node->release(pool, node);
@@ -50,13 +50,13 @@ respool_release(struct bfdev_respool *pool, struct bfdev_resnode *node)
                     pool->name, node, node->name);
 }
 
-export struct bfdev_resnode *
-respool_find_remove(struct bfdev_respool *pool, bfdev_respool_find_t find,
-                    const void *data)
+export bfdev_resnode_t *
+bfdev_respool_find_remove(bfdev_respool_t *pool, bfdev_respool_find_t find,
+                          const void *data)
 {
-    struct bfdev_resnode *match;
+    bfdev_resnode_t *match;
 
-    match = respool_find(pool, find, data);
+    match = bfdev_respool_find(pool, find, data);
     if (bfdev_likely(match))
         bfdev_list_del(&match->list);
 
@@ -68,13 +68,13 @@ respool_find_remove(struct bfdev_respool *pool, bfdev_respool_find_t find,
     return match;
 }
 
-export struct bfdev_resnode *
-respool_find_release(struct bfdev_respool *pool, bfdev_respool_find_t find,
-                     const void *data)
+export bfdev_resnode_t *
+bfdev_respool_find_release(bfdev_respool_t *pool, bfdev_respool_find_t find,
+                           const void *data)
 {
-    struct bfdev_resnode *match;
+    bfdev_resnode_t *match;
 
-    match = respool_find(pool, find, data);
+    match = bfdev_respool_find(pool, find, data);
     if (bfdev_likely(match)) {
         bfdev_list_del(&match->list);
         match->release(pool, match);
@@ -89,9 +89,9 @@ respool_find_release(struct bfdev_respool *pool, bfdev_respool_find_t find,
 }
 
 export void
-respool_release_all(struct bfdev_respool *pool)
+bfdev_respool_release_all(bfdev_respool_t *pool)
 {
-    struct bfdev_resnode *node;
+    bfdev_resnode_t *node;
 
     bfdev_list_for_each_entry(node, &pool->node, list) {
         node->release(pool, node);

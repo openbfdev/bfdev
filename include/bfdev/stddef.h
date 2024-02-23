@@ -7,12 +7,8 @@
 #define _BFDEV_STDDEF_H_
 
 #include <bfdev/config.h>
-
-#if defined(__FreeBSD__) && defined(_KERNEL)
-# include <sys/stddef.h>
-#else
-# include <stddef.h>
-#endif
+#include <bfdev/port/stddef.h>
+#include <bfdev/port/stdbool.h>
 
 BFDEV_BEGIN_DECLS
 

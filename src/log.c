@@ -6,10 +6,11 @@
 #include <base.h>
 #include <bfdev/log.h>
 #include <bfdev/scnprintf.h>
+#include <bfdev/bug.h>
 #include <export.h>
 
 static const unsigned int
-bfdev_level_color[] = {
+level_color[] = {
     [BFDEV_LEVEL_EMERG   ] = BFDEV_COLR_RED,
     [BFDEV_LEVEL_ALERT   ] = BFDEV_COLR_DARK_MAGENTA,
     [BFDEV_LEVEL_CRIT    ] = BFDEV_COLR_MAGENTA,
@@ -22,7 +23,7 @@ bfdev_level_color[] = {
 };
 
 static const char * const
-bfdev_level_name[] = {
+level_name[] = {
     [BFDEV_LEVEL_EMERG   ] = "emerg",
     [BFDEV_LEVEL_ALERT   ] = "alert",
     [BFDEV_LEVEL_CRIT    ] = "crit",
@@ -41,11 +42,8 @@ bfdev_log_default = {
     .flags = BFDEV_LOG_COLOR | BFDEV_LOG_COMMIT,
 };
 
-static void
-generic_write(const char *buff)
-{
-    printf("%s", buff);
-}
+#define __INSIDE_LOG__
+#include <port/log.h>
 
 static inline char
 log_get_level(const char *str)
@@ -85,8 +83,10 @@ export int
 bfdev_log_state_vprint(struct bfdev_log *log, const char *fmt, va_list args)
 {
     char buff[BFDEV_LOG_BUFF_SIZE];
-    int retval, offset = 0;
+    bfdev_log_message_t msg;
     unsigned int level;
+    size_t offset = 0;
+    int retval;
 
     level = bfdev_log_level(fmt, &fmt);
     if (level >= BFDEV_LEVEL_DEFAULT)
@@ -98,7 +98,7 @@ bfdev_log_state_vprint(struct bfdev_log *log, const char *fmt, va_list args)
     if (bfdev_log_test_commit(log)) {
         retval = bfdev_scnprintf(
             buff + offset, BFDEV_LOG_BUFF_SIZE - offset,
-            "[%s] ", bfdev_level_name[level]
+            "[%s] ", level_name[level]
         );
         offset += retval;
     }
@@ -106,7 +106,7 @@ bfdev_log_state_vprint(struct bfdev_log *log, const char *fmt, va_list args)
     if (bfdev_log_test_color(log)) {
         retval = bfdev_scnprintf(
             buff + offset, BFDEV_LOG_BUFF_SIZE - offset,
-            "\e[%dm", bfdev_level_color[level]
+            "\e[%dm", level_color[level]
         );
         offset += retval;
     }
@@ -115,6 +115,9 @@ bfdev_log_state_vprint(struct bfdev_log *log, const char *fmt, va_list args)
         buff + offset, BFDEV_LOG_BUFF_SIZE - offset,
         fmt, args
     );
+
+    if (retval < 0)
+        return retval;
     offset += retval;
 
     if (bfdev_log_test_color(log)) {
@@ -125,9 +128,14 @@ bfdev_log_state_vprint(struct bfdev_log *log, const char *fmt, va_list args)
         offset += retval;
     }
 
+    msg.data = buff;
+    msg.length = offset;
+    msg.level = level;
+
     if (log->write)
-        return log->write(buff, offset, log->pdata);
-    generic_write(buff);
+        offset = log->write(&msg, log->pdata);
+    else
+        generic_log_write(&msg);
 
     return offset;
 }

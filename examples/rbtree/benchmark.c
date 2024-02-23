@@ -17,7 +17,7 @@
 #define TEST_LEN 1000000
 
 struct bench_node {
-    struct bfdev_rb_node node;
+    bfdev_rb_node_t node;
     unsigned int num;
     unsigned long data;
 };
@@ -60,7 +60,7 @@ static BFDEV_RB_ROOT(bench_root);
 #endif
 
 static unsigned int
-test_deepth(struct bfdev_rb_node *node)
+test_deepth(bfdev_rb_node_t *node)
 {
     unsigned int left_deepth, right_deepth;
 
@@ -69,21 +69,23 @@ test_deepth(struct bfdev_rb_node *node)
 
     left_deepth = test_deepth(node->left);
     right_deepth = test_deepth(node->right);
-    return left_deepth > right_deepth ? (left_deepth + 1) : (right_deepth + 1);
+
+    if (left_deepth > right_deepth)
+        left_deepth = right_deepth;
+
+    return right_deepth + 1;
 }
 
 static long
-demo_cmp(const struct bfdev_rb_node *node1,
-         const struct bfdev_rb_node *node2, void *pdata)
+demo_cmp(const bfdev_rb_node_t *node1,
+         const bfdev_rb_node_t *node2, void *pdata)
 {
     struct bench_node *test1, *test2;
 
     test1 = rb_to_bench(node1);
     test2 = rb_to_bench(node2);
 
-    if (test1->data == test2->data)
-        return 0;
-
+    /* Ignoring conflicts */
     return test1->data < test2->data ? -1 : 1;
 }
 

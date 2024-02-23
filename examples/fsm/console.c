@@ -18,40 +18,40 @@ enum {
 };
 
 static int
-enter_print(struct bfdev_fsm_event *event, void *data)
+enter_print(bfdev_fsm_event_t *event, void *data)
 {
    printf( "Enter: %s\n", (char *)data);
    return 0;
 }
 
 static int
-exit_print(struct bfdev_fsm_event *event, void *data)
+exit_print(bfdev_fsm_event_t *event, void *data)
 {
    printf( "Exit: %s\n", (char *)data);
    return 0;
 }
 
 static long
-trans_guard(struct bfdev_fsm_event *event, const void *cond)
+trans_guard(bfdev_fsm_event_t *event, const void *cond)
 {
     return event->pdata - cond;
 }
 
 static int
-trans_active(struct bfdev_fsm_event *event, void *data,
+trans_active(bfdev_fsm_event_t *event, void *data,
              void *curr, void *next)
 {
     printf("Active: %s\n", (char *)data);
     return 0;
 }
 
-static struct bfdev_fsm_state
+static bfdev_fsm_state_t
 test_state[] = {
     [TEST_IDLE] = {
         .parent = &test_state[TEST_CHECK],
         .data = "idle",
         .tnum = 2,
-        .trans = (struct bfdev_fsm_transition[]) {
+        .trans = (bfdev_fsm_transition_t[]) {
             {
                 .cond = (void *)(intptr_t)'h',
                 .next = &test_state[TEST_HSTATE],
@@ -70,7 +70,7 @@ test_state[] = {
         .parent = &test_state[TEST_CHECK],
         .data = "h-state",
         .tnum = 2,
-        .trans = (struct bfdev_fsm_transition[]) {
+        .trans = (bfdev_fsm_transition_t[]) {
             {
                 .cond = (void *)(intptr_t)'i',
                 .next = &test_state[TEST_ISTATE],
@@ -89,7 +89,7 @@ test_state[] = {
         .parent = &test_state[TEST_CHECK],
         .data = "i-state",
         .tnum = 2,
-        .trans = (struct bfdev_fsm_transition[]) {
+        .trans = (bfdev_fsm_transition_t[]) {
             {
                 .cond = (void *)(intptr_t)'\n',
                 .next = &test_state[TEST_IDLE],
@@ -111,7 +111,7 @@ test_state[] = {
         .parent = &test_state[TEST_CHECK],
         .data = "a-state",
         .tnum = 2,
-        .trans = (struct bfdev_fsm_transition[]) {
+        .trans = (bfdev_fsm_transition_t[]) {
             {
                 .cond = (void *)(intptr_t)'\n',
                 .next = &test_state[TEST_IDLE],
@@ -133,7 +133,7 @@ test_state[] = {
         .parent = &test_state[TEST_CHECK],
         .data = "stack",
         .tnum = 1,
-        .trans = (struct bfdev_fsm_transition[]) {
+        .trans = (bfdev_fsm_transition_t[]) {
             {
                 .action = trans_active,
                 .data = "state pop",
@@ -148,7 +148,7 @@ test_state[] = {
         .entry = &test_state[TEST_IDLE],
         .data = "check",
         .tnum = 2,
-        .trans = (struct bfdev_fsm_transition[]) {
+        .trans = (bfdev_fsm_transition_t[]) {
             {
                 .cond = (void *)(intptr_t)'!',
                 .next = &test_state[TEST_IDLE],
@@ -182,7 +182,7 @@ int main(int argc, const char *argv[])
 
     while ((ch = getc(stdin)) != EOF) {
         retval = bfdev_fsm_handle(&test_fsm,
-            &(struct bfdev_fsm_event) {
+            &(bfdev_fsm_event_t) {
                 .pdata = (void *)(intptr_t)ch,
             }
         );

@@ -3,10 +3,8 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
-#include <bfdev/stdbool.h>
-#include <bfdev/string.h>
+#include <base.h>
 #include <bfdev/log2.h>
-#include <bfdev/minmax.h>
 #include <bfdev/ringbuf.h>
 #include <bfdev/bits.h>
 #include <export.h>
@@ -188,7 +186,7 @@ bfdev_ringbuf_out_record(struct bfdev_ringbuf *ringbuf, void *buff,
     datalen = ringbuf_record_peek(ringbuf, record);
     bfdev_min_adj(len, datalen);
     ringbuf_out_copy(ringbuf, buff, len, ringbuf->out + record);
-	ringbuf->out += datalen + record;
+    ringbuf->out += datalen + record;
 
     return len;
 }
@@ -207,7 +205,7 @@ bfdev_ringbuf_in_record(struct bfdev_ringbuf *ringbuf, const void *buff,
     overflow = ringbuf_overflow(ringbuf);
     while (overflow) {
         datalen = record + ringbuf_record_peek(ringbuf, record);
-	    ringbuf->out += datalen;
+        ringbuf->out += datalen;
         overflow -= bfdev_min(datalen, overflow);
     }
 
@@ -218,7 +216,7 @@ bfdev_ringbuf_in_record(struct bfdev_ringbuf *ringbuf, const void *buff,
 }
 
 export int
-bfdev_ringbuf_dynamic_alloc(struct bfdev_ringbuf *ringbuf, const struct bfdev_alloc *alloc,
+bfdev_ringbuf_dynamic_alloc(struct bfdev_ringbuf *ringbuf, const bfdev_alloc_t *alloc,
                             size_t esize, size_t size)
 {
     size = bfdev_pow2_roundup(size);
@@ -241,7 +239,7 @@ bfdev_ringbuf_dynamic_alloc(struct bfdev_ringbuf *ringbuf, const struct bfdev_al
 export void
 bfdev_ringbuf_dynamic_free(struct bfdev_ringbuf *ringbuf)
 {
-    const struct bfdev_alloc *alloc = ringbuf->alloc;
+    const bfdev_alloc_t *alloc = ringbuf->alloc;
 
     ringbuf->in = 0;
     ringbuf->out = 0;

@@ -8,25 +8,25 @@
 #include <export.h>
 
 static unsigned int
-linear_next(struct bfdev_ts_context *tsc, struct bfdev_ts_state *tss,
+linear_next(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss,
             unsigned int consumed, const void **dest)
 {
-    struct bfdev_ts_linear *linear = tss->pdata;
+    bfdev_ts_linear_t *linear = tss->pdata;
 
-	if (bfdev_likely(consumed < linear->len)) {
-		*dest = linear->data + consumed;
-		return linear->len - consumed;
-	}
+    if (bfdev_likely(consumed < linear->len)) {
+        *dest = linear->data + consumed;
+        return linear->len - consumed;
+    }
 
     return 0;
 }
 
 export unsigned int
-bfdev_textsearch_linear_find(struct bfdev_ts_context *tsc,
-                             struct bfdev_ts_linear *linear,
+bfdev_textsearch_linear_find(bfdev_ts_context_t *tsc,
+                             bfdev_ts_linear_t *linear,
                              const void *data, unsigned int len)
 {
-    struct bfdev_ts_algorithm *algo = tsc->algo;
+    bfdev_ts_algorithm_t *algo = tsc->algo;
 
     linear->data = data;
     linear->len = len;
@@ -38,9 +38,9 @@ bfdev_textsearch_linear_find(struct bfdev_ts_context *tsc,
 }
 
 export unsigned int
-bfdev_textsearch_linear_next(struct bfdev_ts_context *tsc,
-                             struct bfdev_ts_linear *linear)
+bfdev_textsearch_linear_next(bfdev_ts_context_t *tsc,
+                             bfdev_ts_linear_t *linear)
 {
-    struct bfdev_ts_algorithm *algo = tsc->algo;
+    bfdev_ts_algorithm_t *algo = tsc->algo;
     return algo->find(tsc, &linear->tss);
 }

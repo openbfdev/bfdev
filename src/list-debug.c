@@ -12,8 +12,8 @@
 #include <export.h>
 
 export bool
-bfdev_list_check_add(struct bfdev_list_head *prev, struct bfdev_list_head *next,
-                     struct bfdev_list_head *newn)
+bfdev_list_check_add(bfdev_list_head_t *prev, bfdev_list_head_t *next,
+                     bfdev_list_head_t *newn)
 {
     if (bfdev_unlikely(prev->next != next)) {
         bfdev_log_err(
@@ -46,7 +46,7 @@ bfdev_list_check_add(struct bfdev_list_head *prev, struct bfdev_list_head *next,
 }
 
 export bool
-bfdev_list_check_del(struct bfdev_list_head *node)
+bfdev_list_check_del(bfdev_list_head_t *node)
 {
     if (bfdev_unlikely(node->next == BFDEV_POISON_LIST1)) {
         bfdev_log_err(

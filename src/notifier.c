@@ -11,11 +11,14 @@
 #include <bfdev/log.h>
 #include <export.h>
 
+#define bfdev_ilist_to_notifier(ptr) \
+    bfdev_ilist_entry(ptr, bfdev_notifier_node_t, list)
+
 static long
-notifier_chain_cmp(const struct bfdev_ilist_node *node1,
-                   const struct bfdev_ilist_node *node2, void *pdata)
+notifier_chain_cmp(const bfdev_ilist_node_t *node1,
+                   const bfdev_ilist_node_t *node2, void *pdata)
 {
-    struct bfdev_notifier_node *nnode1, *nnode2;
+    bfdev_notifier_node_t *nnode1, *nnode2;
 
     nnode1 = bfdev_ilist_to_notifier(node1);
     nnode2 = bfdev_ilist_to_notifier(node2);
@@ -27,18 +30,19 @@ notifier_chain_cmp(const struct bfdev_ilist_node *node1,
 }
 
 export bfdev_notifier_ret_t
-bfdev_notifier_call(struct bfdev_notifier_head *head, void *arg,
+bfdev_notifier_call(bfdev_notifier_head_t *head, void *arg,
                     unsigned int call_num, unsigned int *called_num)
 {
-    struct bfdev_notifier_node *node, *tmp;
-    bfdev_notifier_ret_t retval = BFDEV_NOTIFI_RET_DONE;
+    bfdev_notifier_node_t *node, *tmp;
+    bfdev_notifier_ret_t retval;
 
+    retval = BFDEV_NOTIFI_RET_DONE;
     bfdev_ilist_for_each_entry_safe(node, tmp, &head->node, list) {
         if (!call_num--)
             break;
 
         bfdev_log_debug("chain '%s' calling (%p)\n", head->name, node);
-        retval = node->entry(node, arg);
+        retval = node->entry(arg, node->pdata);
 
         if (called_num)
             (*called_num)++;
@@ -56,7 +60,8 @@ bfdev_notifier_call(struct bfdev_notifier_head *head, void *arg,
 }
 
 export int
-bfdev_notifier_register(struct bfdev_notifier_head *head, struct bfdev_notifier_node *node)
+bfdev_notifier_register(bfdev_notifier_head_t *head,
+                        bfdev_notifier_node_t *node)
 {
     if (!node->entry)
         return -BFDEV_EINVAL;
@@ -69,7 +74,8 @@ bfdev_notifier_register(struct bfdev_notifier_head *head, struct bfdev_notifier_
 }
 
 export void
-bfdev_notifier_unregister(struct bfdev_notifier_head *head, struct bfdev_notifier_node *node)
+bfdev_notifier_unregister(bfdev_notifier_head_t *head,
+                          bfdev_notifier_node_t *node)
 {
     bfdev_ilist_del(&head->node, &node->list);
     bfdev_log_debug("chain '%s' unregister (%p)\n", head->name, node);

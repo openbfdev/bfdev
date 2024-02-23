@@ -7,6 +7,7 @@
 #define _BFDEV_TITER_H_
 
 #include <bfdev/config.h>
+#include <bfdev/types.h>
 #include <bfdev/stddef.h>
 #include <bfdev/bitops.h>
 
@@ -222,7 +223,7 @@ TISTATIC TISTRUCT *                                                             
 TINAME##_next(const TIROOT *root, unsigned long *index)                         \
 {                                                                               \
     unsigned int depth = bfdev_flsuf(++*index + 1);                             \
-    TISTRUCT *node = root->node;                                                \
+    TISTRUCT *node = root->TINODE;                                              \
                                                                                 \
     while (node && depth--) {                                                   \
         if ((*index + 1) & BFDEV_BIT(depth))                                    \

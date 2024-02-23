@@ -26,7 +26,7 @@ struct bfdev_btree_node {
 };
 
 struct bfdev_btree_root {
-    const struct bfdev_alloc *alloc;
+    const bfdev_alloc_t *alloc;
     struct bfdev_btree_layout *layout;
     struct bfdev_btree_node *node;
     unsigned int height;

@@ -5,13 +5,10 @@
 #
 
 cmake_minimum_required(VERSION 3.12)
-project(bfdev VERSION 1.0.0 LANGUAGES C)
+project(bfdev VERSION 1.0.1 LANGUAGES C)
 
 include(GNUInstallDirs)
 include(CheckIncludeFiles)
-include(CheckCXXSymbolExists)
-include(CheckFunctionExists)
-include(CheckCSourceCompiles)
 
 set(BFDEV_ARCH dummy)
 set(BFDEV_NAME sirius)
@@ -36,24 +33,26 @@ set(BFDEV_CONFIGURE ${BFDEV_GENERATED_PATH}/bfdev-config.cmake)
 include(scripts/asm-generic.cmake)
 include(scripts/hostrule.cmake)
 include(scripts/packed-header.cmake)
+include(scripts/packed-source.cmake)
 include(scripts/commit.cmake)
 
 commit_hash(BFDEV_COMMITID)
 commit_branch(BFDEV_BRANCH)
 
 option(BFDEV_DEVEL "Enable development mode" OFF)
-option(BFDEV_EXAMPLES "Build examples" OFF)
 option(BFDEV_STRICT "Enable strict compilation" ON)
+option(BFDEV_EXAMPLES "Build examples" OFF)
 option(BFDEV_ASAN "Enable Address Sanitizer" OFF)
 option(BFDEV_UBSAN "Enable Undefined Behaviour Sanitizer" OFF)
 
-option(BFDEV_DBGLIST "Dynamic debug list" ON)
-option(BFDEV_DBGSLIST "Dynamic debug slist" ON)
-option(BFDEV_DBGHLIST "Dynamic debug hlist" ON)
-option(BFDEV_DBGILIST "Dynamic debug ilist" ON)
-option(BFDEV_DBGRBTREE "Dynamic debug rbtree" ON)
-option(BFDEV_DBGHEAP "Dynamic debug heap" ON)
-option(BFDEV_DBGREFCNT "Dynamic debug refcnt" ON)
+option(BFDEV_DEBUG_LIST "Dynamic debug list" ON)
+option(BFDEV_DEBUG_SLIST "Dynamic debug slist" ON)
+option(BFDEV_DEBUG_HLIST "Dynamic debug hlist" ON)
+option(BFDEV_DEBUG_ILIST "Dynamic debug ilist" ON)
+option(BFDEV_DEBUG_RBTREE "Dynamic debug rbtree" ON)
+option(BFDEV_DEBUG_HEAP "Dynamic debug heap" ON)
+option(BFDEV_DEBUG_REFCNT "Dynamic debug refcnt" ON)
+option(BFDEV_CRC_EXTEND "CRC loop unfolding optimize" ON)
 
 if(BFDEV_DEVEL)
     set(BFDEV_EXAMPLES ON)
@@ -61,46 +60,11 @@ if(BFDEV_DEVEL)
     set(BFDEV_UBSAN ON)
 endif()
 
-if(BFDEV_DBGLIST)
-    set(BFDEV_DEBUG_LIST ON)
-endif()
-
-if(BFDEV_DBGSLIST)
-    set(BFDEV_DEBUG_SLIST ON)
-endif()
-
-if(BFDEV_DBGHLIST)
-    set(BFDEV_DEBUG_HLIST ON)
-endif()
-
-if(BFDEV_DBGILIST)
-    set(BFDEV_DEBUG_ILIST ON)
-endif()
-
-if(BFDEV_DBGRBTREE)
-    set(BFDEV_DEBUG_RBTREE ON)
-endif()
-
-if(BFDEV_DBGHEAP)
-    set(BFDEV_DEBUG_HEAP ON)
-endif()
-
-if(BFDEV_DBGREFCNT)
-    set(BFDEV_DEBUG_REFCNT ON)
-endif()
-
 asm_generic(
     bfdev/asm-generic/
     ${BFDEV_GENERATED_PATH}/bfdev/asm
     ${BFDEV_ARCH_HEADER_PATH}/bfdev/asm
     ${BFDEV_HEADER_PATH}/bfdev/asm-generic
-)
-
-packed_header(
-    bfdev/
-    _BFDEV_H_
-    ${BFDEV_GENERATED_PATH}/bfdev.h
-    ${BFDEV_HEADER_PATH}/bfdev
 )
 
 configure_file(
@@ -113,22 +77,6 @@ configure_file(
     ${BFDEV_CONFIGURE}
 )
 
-file(GLOB BFDEV_HEADER
-    ${BFDEV_HEADER_PATH}/bfdev/*.h
-)
-
-file(GLOB BFDEV_ASM_HEADER
-    ${BFDEV_HEADER_PATH}/bfdev/asm-generic/*.h
-)
-
-file(GLOB BFDEV_ARCH_ASM_HEADER
-    ${BFDEV_ARCH_HEADER_PATH}/bfdev/asm/*.h
-)
-
-file(GLOB BFDEV_GENERATED_HEADER
-    ${BFDEV_GENERATED_PATH}/*.h
-)
-
 add_compile_options(
     -std=gnu11
     -Wall
@@ -138,6 +86,8 @@ add_compile_options(
     -Wno-sign-compare
     -Wno-pointer-sign
     -Wno-null-pointer-arithmetic
+    -Wmissing-prototypes
+    -Wmissing-declarations
     -fvisibility=hidden
 )
 
@@ -185,14 +135,21 @@ include_directories(${PROJECT_BINARY_DIR}/generated)
 add_subdirectory(${PROJECT_SOURCE_DIR}/scripts)
 include(${PROJECT_SOURCE_DIR}/build.cmake)
 
-set(BFDEV_LIBRARY
+set(BFDEV_LIBRARY_HEADER
     ${BFDEV_HEADER}
     ${BFDEV_ASM_HEADER}
     ${BFDEV_ARCH_ASM_HEADER}
     ${BFDEV_GENERATED_HEADER}
-    ${BFDEV_INCLUDE}
+)
+
+set(BFDEV_LIBRARY_SOURCE
     ${BFDEV_SOURCE}
     ${BFDEV_ARCH_SOURCE}
+)
+
+set(BFDEV_LIBRARY
+    ${BFDEV_LIBRARY_HEADER}
+    ${BFDEV_LIBRARY_SOURCE}
 )
 
 macro(bfdev_dependencies target)
@@ -207,6 +164,20 @@ macro(bfdev_dependencies target)
         gen-crc64be
     )
 endmacro()
+
+packed_header(
+    bfdev/
+    _BFDEV_H_
+    ${BFDEV_GENERATED_PATH}/bfdev.h
+    ${BFDEV_HEADER_PATH}/bfdev
+)
+
+packed_source(
+    ${PROJECT_BINARY_DIR}/bfdev.c
+    "${BFDEV_LIBRARY_SOURCE}"
+    "#undef MODULE_NAME\n"
+    "#undef bfdev_log_fmt\n"
+)
 
 add_library(bfdev_object OBJECT ${BFDEV_LIBRARY})
 bfdev_dependencies(bfdev_object)
@@ -245,9 +216,9 @@ if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
     )
 
     install(FILES
-        ${CMAKE_SOURCE_DIR}/README.md
-        ${CMAKE_SOURCE_DIR}/AUTHORS
-        ${CMAKE_SOURCE_DIR}/COPYING
+        ${PROJECT_SOURCE_DIR}/README.md
+        ${PROJECT_SOURCE_DIR}/AUTHORS
+        ${PROJECT_SOURCE_DIR}/COPYING
         DESTINATION ${CMAKE_INSTALL_DOCDIR}
     )
 

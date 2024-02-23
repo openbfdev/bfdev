@@ -3,10 +3,8 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
-#include <bfdev/stdbool.h>
-#include <bfdev/string.h>
+#include <base.h>
 #include <bfdev/log2.h>
-#include <bfdev/minmax.h>
 #include <bfdev/fifo.h>
 #include <bfdev/bits.h>
 #include <export.h>
@@ -175,7 +173,7 @@ bfdev_fifo_out_record(struct bfdev_fifo *fifo, void *buff,
     datalen = fifo_record_peek(fifo, record);
     bfdev_min_adj(len, datalen);
     fifo_out_copy(fifo, buff, len, fifo->out + record);
-	fifo->out += datalen + record;
+    fifo->out += datalen + record;
 
     return len;
 }
@@ -195,7 +193,7 @@ bfdev_fifo_in_record(struct bfdev_fifo *fifo, const void *buff,
 }
 
 export int
-bfdev_fifo_dynamic_alloc(struct bfdev_fifo *fifo, const struct bfdev_alloc *alloc,
+bfdev_fifo_dynamic_alloc(struct bfdev_fifo *fifo, const bfdev_alloc_t *alloc,
                          size_t esize, size_t size)
 {
     size = bfdev_pow2_roundup(size);
@@ -218,7 +216,7 @@ bfdev_fifo_dynamic_alloc(struct bfdev_fifo *fifo, const struct bfdev_alloc *allo
 export void
 bfdev_fifo_dynamic_free(struct bfdev_fifo *fifo)
 {
-    const struct bfdev_alloc *alloc = fifo->alloc;
+    const bfdev_alloc_t *alloc = fifo->alloc;
 
     fifo->in = 0;
     fifo->out = 0;

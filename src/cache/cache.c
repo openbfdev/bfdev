@@ -9,14 +9,14 @@
 #include <bfdev/cache.h>
 #include <export.h>
 
-static BFDEV_LIST_HEAD(algorithms);
+static BFDEV_LIST_HEAD(cache_algorithms);
 
-static struct bfdev_cache_algo *
-algorithm_find(const char *name)
+static bfdev_cache_algo_t *
+cache_algorithm_find(const char *name)
 {
-    struct bfdev_cache_algo *algo;
+    bfdev_cache_algo_t *algo;
 
-    bfdev_list_for_each_entry(algo, &algorithms, list) {
+    bfdev_list_for_each_entry(algo, &cache_algorithms, list) {
         if (!strcmp(algo->name, name))
             return algo;
     }
@@ -25,17 +25,17 @@ algorithm_find(const char *name)
 }
 
 static __bfdev_always_inline bool
-cache_starving(struct bfdev_cache_head *head)
+cache_starving(bfdev_cache_head_t *head)
 {
     return bfdev_list_check_empty(&head->freed) &&
            head->algo->starving(head);
 }
 
 /* Find in changing, using or algos */
-static struct bfdev_cache_node *
-cache_find(struct bfdev_cache_head *head, unsigned long tag, bool change)
+static bfdev_cache_node_t *
+cache_find(bfdev_cache_head_t *head, unsigned long tag, bool change)
 {
-    struct bfdev_cache_node *walk;
+    bfdev_cache_node_t *walk;
     unsigned long index;
 
     index = bfdev_hashtbl_index(head->size, tag);
@@ -51,11 +51,11 @@ cache_find(struct bfdev_cache_head *head, unsigned long tag, bool change)
 }
 
 /* Obtain in freed or algos */
-static struct bfdev_cache_node *
-cache_obtain(struct bfdev_cache_head *head, unsigned long tag)
+static bfdev_cache_node_t *
+cache_obtain(bfdev_cache_head_t *head, unsigned long tag)
 {
-    const struct bfdev_cache_algo *algo;
-    struct bfdev_cache_node *node;
+    const bfdev_cache_algo_t *algo;
+    bfdev_cache_node_t *node;
 
     algo = head->algo;
     if (bfdev_list_check_empty(&head->freed)) {
@@ -65,7 +65,7 @@ cache_obtain(struct bfdev_cache_head *head, unsigned long tag)
     } else {
         /* Get form freed */
         node = bfdev_list_first_entry(
-            &head->freed, struct bfdev_cache_node, list
+            &head->freed, bfdev_cache_node_t, list
         );
     }
 
@@ -81,18 +81,18 @@ cache_obtain(struct bfdev_cache_head *head, unsigned long tag)
     return node;
 }
 
-export struct bfdev_cache_node *
-bfdev_cache_find(struct bfdev_cache_head *head, unsigned long tag)
+export bfdev_cache_node_t *
+bfdev_cache_find(bfdev_cache_head_t *head, unsigned long tag)
 {
     return cache_find(head, tag, false);
 }
 
-export struct bfdev_cache_node *
-bfdev_cache_obtain(struct bfdev_cache_head *head, unsigned long tag,
+export bfdev_cache_node_t *
+bfdev_cache_obtain(bfdev_cache_head_t *head, unsigned long tag,
                    unsigned long flags)
 {
-    const struct bfdev_cache_algo *algo;
-    struct bfdev_cache_node *node;
+    const bfdev_cache_algo_t *algo;
+    bfdev_cache_node_t *node;
 
     if (bfdev_unlikely(tag == BFDEV_CACHE_FREE_TAG))
         return NULL;
@@ -154,7 +154,7 @@ bfdev_cache_obtain(struct bfdev_cache_head *head, unsigned long tag,
 }
 
 export unsigned long
-bfdev_cache_put(struct bfdev_cache_head *head, struct bfdev_cache_node *node)
+bfdev_cache_put(bfdev_cache_head_t *head, bfdev_cache_node_t *node)
 {
     if (bfdev_unlikely(node->status != BFDEV_CACHE_USING))
         return -BFDEV_EINVAL;
@@ -172,10 +172,10 @@ bfdev_cache_put(struct bfdev_cache_head *head, struct bfdev_cache_node *node)
 }
 
 export int
-bfdev_cache_set(struct bfdev_cache_head *head, struct bfdev_cache_node *node,
+bfdev_cache_set(bfdev_cache_head_t *head, bfdev_cache_node_t *node,
                 unsigned long tag)
 {
-    const struct bfdev_cache_algo *algo;
+    const bfdev_cache_algo_t *algo;
 
     if (bfdev_unlikely(tag == BFDEV_CACHE_FREE_TAG))
         return -BFDEV_EINVAL;
@@ -198,9 +198,9 @@ bfdev_cache_set(struct bfdev_cache_head *head, struct bfdev_cache_node *node,
 }
 
 export int
-bfdev_cache_del(struct bfdev_cache_head *head, struct bfdev_cache_node *node)
+bfdev_cache_del(bfdev_cache_head_t *head, bfdev_cache_node_t *node)
 {
-    const struct bfdev_cache_algo *algo;
+    const bfdev_cache_algo_t *algo;
 
     if (bfdev_unlikely(node->status != BFDEV_CACHE_MANAGED))
         return -BFDEV_EBUSY;
@@ -217,9 +217,9 @@ bfdev_cache_del(struct bfdev_cache_head *head, struct bfdev_cache_node *node)
 }
 
 export void
-bfdev_cache_committed(struct bfdev_cache_head *head)
+bfdev_cache_committed(bfdev_cache_head_t *head)
 {
-    struct bfdev_cache_node *node, *tmp;
+    bfdev_cache_node_t *node, *tmp;
 
     bfdev_list_for_each_entry_safe(node, tmp, &head->changing, list) {
         bfdev_list_move(&head->using, &node->list);
@@ -231,9 +231,9 @@ bfdev_cache_committed(struct bfdev_cache_head *head)
 }
 
 export void
-bfdev_cache_reset(struct bfdev_cache_head *head)
+bfdev_cache_reset(bfdev_cache_head_t *head)
 {
-    struct bfdev_cache_node *node;
+    bfdev_cache_node_t *node;
     unsigned long count;
 
     head->flags = 0;
@@ -246,6 +246,8 @@ bfdev_cache_reset(struct bfdev_cache_head *head)
     bfdev_list_head_init(&head->using);
     bfdev_list_head_init(&head->freed);
     bfdev_list_head_init(&head->changing);
+
+    head->algo->reset(head);
     memset(head->taghash, 0, sizeof(*head->taghash) * head->size);
 
     for (count = 0; count < head->size; ++count) {
@@ -258,19 +260,19 @@ bfdev_cache_reset(struct bfdev_cache_head *head)
     }
 }
 
-export struct bfdev_cache_head *
-bfdev_cache_create(const char *name, const struct bfdev_alloc *alloc,
+export bfdev_cache_head_t *
+bfdev_cache_create(const char *name, const bfdev_alloc_t *alloc,
                    unsigned long size, unsigned long maxpend)
 {
-    const struct bfdev_cache_algo *algo;
-    struct bfdev_cache_head *head;
+    const bfdev_cache_algo_t *algo;
+    bfdev_cache_head_t *head;
     unsigned long count;
 
     size = bfdev_pow2_roundup(size);
     if (bfdev_unlikely(size < 2))
         return NULL;
 
-    algo = algorithm_find(name);
+    algo = cache_algorithm_find(name);
     if (bfdev_unlikely(!algo))
         return NULL;
 
@@ -294,7 +296,7 @@ bfdev_cache_create(const char *name, const struct bfdev_alloc *alloc,
     bfdev_list_head_init(&head->changing);
 
     for (count = 0; count < size; ++count) {
-        struct bfdev_cache_node *node;
+        bfdev_cache_node_t *node;
 
         node = head->nodes[count];
         node->index = count;
@@ -306,10 +308,10 @@ bfdev_cache_create(const char *name, const struct bfdev_alloc *alloc,
 }
 
 export void
-bfdev_cache_destroy(struct bfdev_cache_head *head)
+bfdev_cache_destroy(bfdev_cache_head_t *head)
 {
-    const struct bfdev_cache_algo *algo;
-    const struct bfdev_alloc *alloc;
+    const bfdev_cache_algo_t *algo;
+    const bfdev_alloc_t *alloc;
 
     algo = head->algo;
     alloc = head->alloc;
@@ -319,24 +321,24 @@ bfdev_cache_destroy(struct bfdev_cache_head *head)
 }
 
 export int
-bfdev_cache_register(struct bfdev_cache_algo *algo)
+bfdev_cache_register(bfdev_cache_algo_t *algo)
 {
     if (!(algo->name && algo->create && algo->destroy &&
           algo->reset && algo->starving && algo->obtain &&
           algo->get && algo->put))
         return -BFDEV_EINVAL;
 
-    if (algorithm_find(algo->name))
+    if (cache_algorithm_find(algo->name))
         return -BFDEV_EALREADY;
 
-    bfdev_list_add(&algorithms, &algo->list);
+    bfdev_list_add(&cache_algorithms, &algo->list);
     return -BFDEV_ENOERR;
 }
 
 export void
-bfdev_cache_unregister(struct bfdev_cache_algo *algo)
+bfdev_cache_unregister(bfdev_cache_algo_t *algo)
 {
-    if (algorithm_find(algo->name))
+    if (cache_algorithm_find(algo->name))
         return;
 
     bfdev_list_del(&algo->list);

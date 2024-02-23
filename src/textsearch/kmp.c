@@ -7,7 +7,7 @@
 #include <bfdev/textsearch.h>
 
 struct kmp_context {
-    struct bfdev_ts_context tsc;
+    bfdev_ts_context_t tsc;
     char *pattern;
     unsigned int pattern_len;
     unsigned int prefix_table[0];
@@ -17,21 +17,21 @@ struct kmp_context {
     bfdev_container_of(ptr, struct kmp_context, tsc)
 
 static const void *
-kmp_pattern_get(struct bfdev_ts_context *tsc)
+kmp_pattern_get(bfdev_ts_context_t *tsc)
 {
     struct kmp_context *kctx = ts_to_kmp(tsc);
     return kctx->pattern;
 }
 
 static unsigned int
-kmp_pattern_len(struct bfdev_ts_context *tsc)
+kmp_pattern_len(bfdev_ts_context_t *tsc)
 {
     struct kmp_context *kctx = ts_to_kmp(tsc);
     return kctx->pattern_len;
 }
 
 static unsigned int
-kmp_find(struct bfdev_ts_context *tsc, struct bfdev_ts_state *tss)
+kmp_find(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss)
 {
     #define find_pattern() (icase ? toupper(text[index]) : text[index])
     bool icase = bfdev_ts_test_igcase(tsc);
@@ -60,10 +60,12 @@ kmp_find(struct bfdev_ts_context *tsc, struct bfdev_ts_state *tss)
 
         consumed += length;
     }
+
+    #undef find_pattern
 }
 
 static inline void
-compute_prefix(struct kmp_context *kctx)
+kmp_compute_prefix(struct kmp_context *kctx)
 {
     unsigned int index, match;
 
@@ -78,8 +80,8 @@ compute_prefix(struct kmp_context *kctx)
     }
 }
 
-static struct bfdev_ts_context *
-kmp_prepare(const struct bfdev_alloc *alloc, const void *pattern,
+static bfdev_ts_context_t *
+kmp_prepare(const bfdev_alloc_t *alloc, const void *pattern,
             size_t len, unsigned long flags)
 {
     unsigned int prefix_size = sizeof(unsigned int) * len;
@@ -98,19 +100,19 @@ kmp_prepare(const struct bfdev_alloc *alloc, const void *pattern,
         memcpy(kctx->pattern, pattern, len);
     else for (index = 0; index < len; ++index)
         kctx->pattern[index] = toupper(((char *)pattern)[index]);
-    compute_prefix(kctx);
+    kmp_compute_prefix(kctx);
 
     return &kctx->tsc;
 }
 
 static void
-kmp_destroy(struct bfdev_ts_context *tsc)
+kmp_destroy(bfdev_ts_context_t *tsc)
 {
     struct kmp_context *kctx = ts_to_kmp(tsc);
     bfdev_free(tsc->alloc, kctx);
 }
 
-struct bfdev_ts_algorithm
+static bfdev_ts_algorithm_t
 kmp_algorithm = {
     .name = "kmp",
     .find = kmp_find,

@@ -10,17 +10,20 @@
 #include <bfdev/config.h>
 #include <bfdev/types.h>
 #include <bfdev/stddef.h>
-#include <bfdev/stdlib.h>
 
 BFDEV_BEGIN_DECLS
 
+typedef struct bfdev_alloc bfdev_alloc_t;
+typedef struct bfdev_alloc_ops bfdev_alloc_ops_t;
+
 struct bfdev_alloc {
-    const struct bfdev_alloc_ops *ops;
+    const bfdev_alloc_ops_t *ops;
     void *pdata;
 };
 
 struct bfdev_alloc_ops {
-    bfdev_alloc_t alloc;
+    bfdev_malloc_t alloc;
+    bfdev_malloc_t zalloc;
     bfdev_realloc_t realloc;
     bfdev_free_t free;
 };
@@ -29,38 +32,41 @@ struct bfdev_alloc_ops {
     {.alloc = (ALLOC), .realloc = (REALLOC), .free = (FREE)}
 
 #define BFDEV_ALLOC_OPS_INIT(alloc, realloc, free) \
-    (struct bfdev_alloc_ops) BFDEV_ALLOC_OPS_STATIC(alloc, realloc, free)
+    (bfdev_alloc_ops_t) BFDEV_ALLOC_OPS_STATIC(alloc, realloc, free)
 
 #define BFDEV_DEFINE_ALLOC_OPS(name, alloc, realloc, free) \
-    struct bfdev_alloc_ops name = BFDEV_ALLOC_OPS_INIT(alloc, realloc, free)
+    bfdev_alloc_ops_t name = BFDEV_ALLOC_OPS_INIT(alloc, realloc, free)
 
 #define BFDEV_ALLOC_STATIC(ALLOC, REALLOC, FREE, PDATA) \
     {.ops = &BFDEV_ALLOC_OPS_INIT(ALLOC, REALLOC, FREE), .pdata = (PDATA)}
 
 #define BFDEV_ALLOC_INIT(alloc, realloc, free, pdata) \
-    (struct bfdev_alloc) BFDEV_ALLOC_STATIC(alloc, realloc, free, pdata)
+    (bfdev_alloc_t) BFDEV_ALLOC_STATIC(alloc, realloc, free, pdata)
 
 #define BFDEV_DEFINE_ALLOC(name, alloc, realloc, free, pdata) \
-    struct bfdev_alloc name = BFDEV_ALLOC_INIT(alloc, realloc, free, pdata)
+    bfdev_alloc_t name = BFDEV_ALLOC_INIT(alloc, realloc, free, pdata)
+
+extern bfdev_alloc_ops_t
+bfdev_alloc_default;
 
 static inline void
-bfdev_alloc_init(struct bfdev_alloc *allocator, bfdev_alloc_t alloc,
+bfdev_alloc_init(bfdev_alloc_t *allocator, bfdev_malloc_t alloc,
                  bfdev_realloc_t realloc, bfdev_free_t free, void *pdata)
 {
     *allocator = BFDEV_ALLOC_INIT(alloc, realloc, free, pdata);
 }
 
 extern __bfdev_malloc void *
-bfdev_malloc(const struct bfdev_alloc *alloc, size_t size);
+bfdev_malloc(const bfdev_alloc_t *alloc, size_t size);
 
 extern __bfdev_malloc void *
-bfdev_zalloc(const struct bfdev_alloc *alloc, size_t size);
+bfdev_zalloc(const bfdev_alloc_t *alloc, size_t size);
 
 extern __bfdev_malloc void *
-bfdev_realloc(const struct bfdev_alloc *alloc, const void *block, size_t resize);
+bfdev_realloc(const bfdev_alloc_t *alloc, const void *block, size_t resize);
 
 extern void
-bfdev_free(const struct bfdev_alloc *alloc, const void *block);
+bfdev_free(const bfdev_alloc_t *alloc, const void *block);
 
 /**
  * bfdev_malloc_array - allocate memory for an array.
@@ -68,7 +74,7 @@ bfdev_free(const struct bfdev_alloc *alloc, const void *block);
  * @size: single element size.
  */
 static __bfdev_always_inline __bfdev_malloc void *
-bfdev_malloc_array(const struct bfdev_alloc *alloc,
+bfdev_malloc_array(const bfdev_alloc_t *alloc,
                    size_t nr, size_t size)
 {
     return bfdev_malloc(alloc, size * nr);
@@ -80,7 +86,7 @@ bfdev_malloc_array(const struct bfdev_alloc *alloc,
  * @size: single element size.
  */
 static __bfdev_always_inline __bfdev_malloc void *
-bfdev_zalloc_array(const struct bfdev_alloc *alloc,
+bfdev_zalloc_array(const bfdev_alloc_t *alloc,
                    size_t nr, size_t size)
 {
     return bfdev_zalloc(alloc, size * nr);
@@ -93,7 +99,7 @@ bfdev_zalloc_array(const struct bfdev_alloc *alloc,
  * @size: single element size.
  */
 static __bfdev_always_inline __bfdev_malloc void *
-bfdev_realloc_array(const struct bfdev_alloc *alloc,
+bfdev_realloc_array(const bfdev_alloc_t *alloc,
                     void *block, size_t nr, size_t size)
 {
     return bfdev_realloc(alloc, block, size * nr);

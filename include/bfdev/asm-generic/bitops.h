@@ -8,7 +8,7 @@
 
 #include <bfdev/config.h>
 #include <bfdev/types.h>
-#include <bfdev/stdbool.h>
+#include <bfdev/stddef.h>
 #include <bfdev/bits.h>
 #include <bfdev/asm/atomic.h>
 

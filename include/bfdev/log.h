@@ -7,6 +7,7 @@
 #define _BFDEV_LOG_H_
 
 #include <bfdev/config.h>
+#include <bfdev/types.h>
 #include <bfdev/stddef.h>
 #include <bfdev/stdarg.h>
 #include <bfdev/level.h>
@@ -23,8 +24,11 @@ BFDEV_BEGIN_DECLS
 # define BFDEV_LOGLEVEL_MAX BFDEV_LEVEL_DEBUG
 #endif
 
+typedef struct bfdev_log bfdev_log_t;
+typedef struct bfdev_log_message bfdev_log_message_t;
+
 typedef int (*bfdev_log_write_t)
-(const char *buff, int size, void *pdata);
+(bfdev_log_message_t *msg, void *pdata);
 
 enum bfdev_log_flags {
     __BFDEV_LOG_COLOR = 0,
@@ -43,6 +47,12 @@ struct bfdev_log {
     void *pdata;
 };
 
+struct bfdev_log_message {
+    unsigned int level;
+    const char *data;
+    size_t length;
+};
+
 BFDEV_BITFLAGS_STRUCT(bfdev_log,
     struct bfdev_log, flags
 )
@@ -57,7 +67,8 @@ BFDEV_BITFLAGS_STRUCT_FLAG(bfdev_log,
     commit, __BFDEV_LOG_COMMIT
 )
 
-extern struct bfdev_log bfdev_log_default;
+extern struct bfdev_log
+bfdev_log_default;
 
 extern unsigned int
 bfdev_log_level(const char *str, const char **endptr);

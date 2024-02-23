@@ -7,36 +7,39 @@
 #define _BFDEV_HLIST_H_
 
 #include <bfdev/config.h>
+#include <bfdev/types.h>
 #include <bfdev/stddef.h>
-#include <bfdev/stdbool.h>
 #include <bfdev/poison.h>
 #include <bfdev/container.h>
 
 BFDEV_BEGIN_DECLS
 
+typedef struct bfdev_hlist_head bfdev_hlist_head_t;
+typedef struct bfdev_hlist_node bfdev_hlist_node_t;
+
 struct bfdev_hlist_node {
-    struct bfdev_hlist_node *next;
-    struct bfdev_hlist_node **pprev;
+    bfdev_hlist_node_t *next;
+    bfdev_hlist_node_t **pprev;
 };
 
 struct bfdev_hlist_head {
-    struct bfdev_hlist_node *node;
+    bfdev_hlist_node_t *node;
 };
 
 #define BFDEV_HLIST_HEAD_STATIC \
     {NULL}
 
 #define BFDEV_HLIST_HEAD_INIT \
-    (struct bfdev_hlist_head) BFDEV_HLIST_HEAD_STATIC
+    (bfdev_hlist_head_t) BFDEV_HLIST_HEAD_STATIC
 
 #define BFDEV_HLIST_HEAD(name) \
-    struct bfdev_hlist_head name = BFDEV_HLIST_HEAD_INIT
+    bfdev_hlist_head_t name = BFDEV_HLIST_HEAD_INIT
 
 #ifdef BFDEV_DEBUG_HLIST
-extern bool bfdev_hlist_check_head_add(struct bfdev_hlist_head *head, struct bfdev_hlist_node *newn);
-extern bool bfdev_hlist_check_next_add(struct bfdev_hlist_node *next, struct bfdev_hlist_node *newn);
-extern bool bfdev_hlist_check_prev_add(struct bfdev_hlist_node *prev, struct bfdev_hlist_node *newn);
-extern bool bfdev_hlist_check_del(struct bfdev_hlist_node *node);
+extern bool bfdev_hlist_check_head_add(bfdev_hlist_head_t *head, bfdev_hlist_node_t *newn);
+extern bool bfdev_hlist_check_next_add(bfdev_hlist_node_t *next, bfdev_hlist_node_t *newn);
+extern bool bfdev_hlist_check_prev_add(bfdev_hlist_node_t *prev, bfdev_hlist_node_t *newn);
+extern bool bfdev_hlist_check_del(bfdev_hlist_node_t *node);
 #endif
 
 /**
@@ -44,7 +47,7 @@ extern bool bfdev_hlist_check_del(struct bfdev_hlist_node *node);
  * @head: hlist_head structure to be initialized.
  */
 static inline void
-bfdev_hlist_head_init(struct bfdev_hlist_head *head)
+bfdev_hlist_head_init(bfdev_hlist_head_t *head)
 {
     head->node = NULL;
 }
@@ -54,7 +57,7 @@ bfdev_hlist_head_init(struct bfdev_hlist_head *head)
  * @node: bfdev_hlist_node structure to be initialized.
  */
 static inline void
-bfdev_hlist_node_init(struct bfdev_hlist_node *node)
+bfdev_hlist_node_init(bfdev_hlist_node_t *node)
 {
     node->pprev = NULL;
     node->next = NULL;
@@ -66,7 +69,7 @@ bfdev_hlist_node_init(struct bfdev_hlist_node *node)
  * @newn: new entry to be added.
  */
 static inline void
-bfdev_hlist_head_add(struct bfdev_hlist_head *head, struct bfdev_hlist_node *newn)
+bfdev_hlist_head_add(bfdev_hlist_head_t *head, bfdev_hlist_node_t *newn)
 {
 #ifdef BFDEV_DEBUG_HLIST
     if (bfdev_unlikely(!bfdev_hlist_check_head_add(head, newn)))
@@ -87,7 +90,7 @@ bfdev_hlist_head_add(struct bfdev_hlist_head *head, struct bfdev_hlist_node *new
  * @newn: new entry to be added.
  */
 static inline void
-bfdev_hlist_next_add(struct bfdev_hlist_node *node, struct bfdev_hlist_node *newn)
+bfdev_hlist_next_add(bfdev_hlist_node_t *node, bfdev_hlist_node_t *newn)
 {
 #ifdef BFDEV_DEBUG_HLIST
     if (bfdev_unlikely(!bfdev_hlist_check_next_add(node, newn)))
@@ -108,7 +111,7 @@ bfdev_hlist_next_add(struct bfdev_hlist_node *node, struct bfdev_hlist_node *new
  * @newn: new entry to be added.
  */
 static inline void
-bfdev_hlist_prev_add(struct bfdev_hlist_node *node, struct bfdev_hlist_node *newn)
+bfdev_hlist_prev_add(bfdev_hlist_node_t *node, bfdev_hlist_node_t *newn)
 {
 #ifdef BFDEV_DEBUG_HLIST
     if (bfdev_unlikely(!bfdev_hlist_check_prev_add(node, newn)))
@@ -126,10 +129,10 @@ bfdev_hlist_prev_add(struct bfdev_hlist_node *node, struct bfdev_hlist_node *new
  * @node: the element to delete from the hlist.
  */
 static inline void
-bfdev_hlist_deluf(struct bfdev_hlist_node *node)
+bfdev_hlist_deluf(bfdev_hlist_node_t *node)
 {
-    struct bfdev_hlist_node **pprev = node->pprev;
-    struct bfdev_hlist_node *next = node->next;
+    bfdev_hlist_node_t **pprev = node->pprev;
+    bfdev_hlist_node_t *next = node->next;
 
     if (next)
         next->pprev = pprev;
@@ -141,7 +144,7 @@ bfdev_hlist_deluf(struct bfdev_hlist_node *node)
  * @node: the element to delete from the hlist.
  */
 static inline void
-bfdev_hlist_del(struct bfdev_hlist_node *node)
+bfdev_hlist_del(bfdev_hlist_node_t *node)
 {
 #ifdef BFDEV_DEBUG_HLIST
     if (bfdev_unlikely(!bfdev_hlist_check_del(node)))
@@ -158,7 +161,7 @@ bfdev_hlist_del(struct bfdev_hlist_node *node)
  * @head: hlist head to check.
  */
 static inline bool
-bfdev_hlist_check_empty(const struct bfdev_hlist_head *head)
+bfdev_hlist_check_empty(const bfdev_hlist_head_t *head)
 {
     return !head->node;
 }
@@ -169,8 +172,8 @@ bfdev_hlist_check_empty(const struct bfdev_hlist_head *head)
  * @node: the entry to test.
  */
 static inline bool
-bfdev_hlist_check_first(const struct bfdev_hlist_head *head,
-                        const struct bfdev_hlist_node *node)
+bfdev_hlist_check_first(const bfdev_hlist_head_t *head,
+                        const bfdev_hlist_node_t *node)
 {
     return head->node == node;
 }
@@ -180,7 +183,7 @@ bfdev_hlist_check_first(const struct bfdev_hlist_head *head,
  * @node: the entry to test.
  */
 static inline bool
-bfdev_hlist_check_end(const struct bfdev_hlist_node *node)
+bfdev_hlist_check_end(const bfdev_hlist_node_t *node)
 {
     return !node->next;
 }
@@ -191,8 +194,8 @@ bfdev_hlist_check_end(const struct bfdev_hlist_node *node)
  * @node: the unique node.
  */
 static inline bool
-bfdev_hlist_check_another(const struct bfdev_hlist_head *head,
-                          const struct bfdev_hlist_node *node)
+bfdev_hlist_check_another(const bfdev_hlist_head_t *head,
+                          const bfdev_hlist_node_t *node)
 {
     return head->node == node && node->next == NULL;
 }
@@ -202,7 +205,7 @@ bfdev_hlist_check_another(const struct bfdev_hlist_head *head,
  * @node: hlist node to check.
  */
 static inline bool
-bfdev_hlist_check_unhashed(const struct bfdev_hlist_node *node)
+bfdev_hlist_check_unhashed(const bfdev_hlist_node_t *node)
 {
     return !node->pprev;
 }
@@ -213,7 +216,7 @@ bfdev_hlist_check_unhashed(const struct bfdev_hlist_node *node)
  * @newn: bfdev_hlist_head for new hlist.
  */
 static inline void
-bfdev_hlist_head_replace(struct bfdev_hlist_head *oldn, struct bfdev_hlist_head *newn)
+bfdev_hlist_head_replace(bfdev_hlist_head_t *oldn, bfdev_hlist_head_t *newn)
 {
     newn->node = oldn->node;
     oldn->node = NULL;
@@ -227,7 +230,7 @@ bfdev_hlist_head_replace(struct bfdev_hlist_head *oldn, struct bfdev_hlist_head 
  * @newn: bfdev_hlist_head for new hlist.
  */
 static inline void
-bfdev_hlist_replace(struct bfdev_hlist_node *oldn, struct bfdev_hlist_node *newn)
+bfdev_hlist_replace(bfdev_hlist_node_t *oldn, bfdev_hlist_node_t *newn)
 {
     newn->next = oldn->next;
     newn->pprev = oldn->pprev;
@@ -241,7 +244,7 @@ bfdev_hlist_replace(struct bfdev_hlist_node *oldn, struct bfdev_hlist_node *newn
  * @node: the element to delete from the hlist.
  */
 static inline void
-bfdev_hlist_del_init(struct bfdev_hlist_node *node)
+bfdev_hlist_del_init(bfdev_hlist_node_t *node)
 {
     bfdev_hlist_deluf(node);
     bfdev_hlist_node_init(node);
@@ -249,7 +252,7 @@ bfdev_hlist_del_init(struct bfdev_hlist_node *node)
 
 /**
  * bfdev_hlist_entry - get the struct for this entry.
- * @ptr: the &struct bfdev_hlist_node pointer.
+ * @ptr: the &bfdev_hlist_node_t pointer.
  * @type: the type of the struct this is embedded in.
  * @member: the name of the hlist_head within the struct.
  */
@@ -275,7 +278,7 @@ bfdev_hlist_del_init(struct bfdev_hlist_node *node)
 
 /**
  * bfdev_hlist_for_each - iterate over a hlist.
- * @pos: the &struct bfdev_hlist_node to use as a loop cursor.
+ * @pos: the &bfdev_hlist_node_t to use as a loop cursor.
  * @head: the head for your hlist.
  */
 #define bfdev_hlist_for_each(pos, head) \
@@ -283,21 +286,21 @@ bfdev_hlist_del_init(struct bfdev_hlist_node *node)
 
 /**
  * bfdev_hlist_for_each_from - iterate over a hlist from the current point.
- * @pos: the &struct bfdev_hlist_node to use as a loop cursor.
+ * @pos: the &bfdev_hlist_node_t to use as a loop cursor.
  */
 #define bfdev_hlist_for_each_from(pos) \
     for (; (pos); (pos) = (pos)->next)
 
 /**
  * bfdev_hlist_for_each_continue - continue iteration over a hlist.
- * @pos: the &struct bfdev_hlist_node to use as a loop cursor.
+ * @pos: the &bfdev_hlist_node_t to use as a loop cursor.
  */
 #define bfdev_hlist_for_each_continue(pos) \
     for ((void)((pos) && ((pos) = (pos)->next)); (pos); (pos) = (pos)->next)
 
 /**
  * bfdev_hlist_for_each_safe - iterate over a hlist safe against removal of hlist entry.
- * @pos: the &struct bfdev_hlist_node to use as a loop cursor.
+ * @pos: the &bfdev_hlist_node_t to use as a loop cursor.
  * @tmp: another bfdev_hlist_node to use as temporary storage.
  * @head: the head for your hlist.
  */
@@ -307,7 +310,7 @@ bfdev_hlist_del_init(struct bfdev_hlist_node *node)
 
 /**
  * bfdev_hlist_for_each_from_safe - iterate over a hlist safe against removal of hlist entry from the current point.
- * @pos: the &struct bfdev_hlist_node to use as a loop cursor.
+ * @pos: the &bfdev_hlist_node_t to use as a loop cursor.
  * @tmp: another bfdev_hlist_node to use as temporary storage.
  */
 #define bfdev_hlist_for_each_from_safe(pos, tmp) \
@@ -316,7 +319,7 @@ bfdev_hlist_del_init(struct bfdev_hlist_node *node)
 
 /**
  * bfdev_hlist_for_each_continue_safe - continue hlist iteration safe against removal.
- * @pos: the &struct bfdev_hlist_node to use as a loop cursor.
+ * @pos: the &bfdev_hlist_node_t to use as a loop cursor.
  * @tmp: another bfdev_hlist_node to use as temporary storage.
  */
 #define bfdev_hlist_for_each_continue_safe(pos, tmp) \
@@ -325,10 +328,10 @@ bfdev_hlist_del_init(struct bfdev_hlist_node *node)
          (pos) = (tmp), ((tmp) && ((tmp) = (tmp)->next)))
 
 /**
- * bfdev_hlist_for_each_entry	- iterate over hlist of given type.
+ * bfdev_hlist_for_each_entry - iterate over hlist of given type.
  * @pos: the type * to use as a loop cursor.
  * @head: the head for your hlist.
- * @member:	the name of the bfdev_hlist_node within the struct.
+ * @member: the name of the bfdev_hlist_node within the struct.
  */
 #define bfdev_hlist_for_each_entry(pos, head, member) \
     for ((pos) = bfdev_hlist_first_entry(head, typeof(*(pos)), member); \
@@ -367,7 +370,7 @@ bfdev_hlist_del_init(struct bfdev_hlist_node *node)
  * bfdev_hlist_for_each_entry_from_safe - iterate over hlist from current point safe against removal.
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
- * @member:	the name of the bfdev_hlist_node within the struct.
+ * @member: the name of the bfdev_hlist_node within the struct.
  */
 #define bfdev_hlist_for_each_entry_from_safe(pos, tmp, member) \
     for (; (pos) && ({(tmp) = bfdev_hlist_next_entry(pos, member); 1;}); \
@@ -377,7 +380,7 @@ bfdev_hlist_del_init(struct bfdev_hlist_node *node)
  * bfdev_hlist_for_each_entry_continue_safe - continue hlist iteration safe against removal.
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
- * @member:	the name of the bfdev_hlist_node within the struct.
+ * @member: the name of the bfdev_hlist_node within the struct.
  */
 #define bfdev_hlist_for_each_entry_continue_safe(pos, tmp, member) \
     for ((void)((pos) && ((pos) = bfdev_hlist_next_entry(pos, member))); \

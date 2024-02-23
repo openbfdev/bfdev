@@ -21,10 +21,9 @@ bfdev_comp_find_first_bit(const unsigned long *block, unsigned int bits, bool sw
         else
             value = *block;
 
-        if (value == BFDEV_ULONG_MIN)
-            block++;
-        else
+        if (value != BFDEV_ULONG_MIN)
             return base + bfdev_ffsuf(value);
+        block++;
     }
 
     return bits;
@@ -47,7 +46,6 @@ bfdev_comp_find_last_bit(const unsigned long *block, unsigned int bits, bool swa
 
             if ((value ^ BFDEV_ULONG_MIN) & val)
                 return idx * BFDEV_BITS_PER_LONG + bfdev_flsuf(value);
-
             val = BFDEV_ULONG_MAX;
         } while (idx--);
     }
@@ -68,10 +66,9 @@ bfdev_comp_find_first_zero(const unsigned long *block, unsigned int bits, bool s
         else
             value = *block;
 
-        if (value == BFDEV_ULONG_MAX)
-            block++;
-        else
+        if (value != BFDEV_ULONG_MAX)
             return base + bfdev_ffzuf(value);
+        block++;
     }
 
     return bits;

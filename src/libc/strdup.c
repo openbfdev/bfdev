@@ -8,7 +8,7 @@
 #include <export.h>
 
 export char *
-bfdev_strdup(const struct bfdev_alloc *alloc,
+bfdev_strdup(const bfdev_alloc_t *alloc,
              const char *string)
 {
     size_t length;
@@ -27,7 +27,7 @@ bfdev_strdup(const struct bfdev_alloc *alloc,
 }
 
 export char *
-bfdev_strndup(const struct bfdev_alloc *alloc,
+bfdev_strndup(const bfdev_alloc_t *alloc,
               const char *string, size_t len)
 {
     size_t length;

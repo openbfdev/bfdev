@@ -7,6 +7,7 @@
 #define bfdev_log_fmt(fmt) MODULE_NAME ": " fmt
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <bfdev/log.h>
 #include <bfdev/matrix.h>
 #include "../time.h"
@@ -30,8 +31,8 @@ for (count = 0; count < TEST_LOOP; ++count) {   \
 int main(int argc, char const *argv[])
 {
     unsigned int count, loop;
-    struct bfdev_matrix *vara, *varb;
-    struct bfdev_matrix *result;
+    bfdev_matrix_t *vara, *varb;
+    bfdev_matrix_t *result;
 
     vara = bfdev_matrix_create(NULL, TEST_SIZE, TEST_SIZE);
     if (!vara)

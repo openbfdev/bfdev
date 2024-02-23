@@ -7,8 +7,9 @@
 #define _BFDEV_TYPES_H_
 
 #include <bfdev/config.h>
-#include <bfdev/stdint.h>
-#include <bfdev/stddef.h>
+#include <bfdev/port/stdint.h>
+#include <bfdev/port/stddef.h>
+#include <bfdev/asm/bitsperlong.h>
 
 BFDEV_BEGIN_DECLS
 
@@ -25,7 +26,24 @@ typedef uint16_t __bfdev_bitwise bfdev_be16;
 typedef uint32_t __bfdev_bitwise bfdev_be32;
 typedef uint64_t __bfdev_bitwise bfdev_be64;
 
-typedef long bfdev_atomic_t;
+typedef int bfdev_qi_t __bfdev_mode(QI);
+typedef int bfdev_hi_t __bfdev_mode(HI);
+typedef int bfdev_si_t __bfdev_mode(SI);
+typedef int bfdev_di_t __bfdev_mode(DI);
+typedef unsigned bfdev_uqi_t __bfdev_mode(QI);
+typedef unsigned bfdev_uhi_t __bfdev_mode(HI);
+typedef unsigned bfdev_usi_t __bfdev_mode(SI);
+typedef unsigned bfdev_udi_t __bfdev_mode(DI);
+typedef unsigned long bfdev_uw_t;
+
+#if BFDEV_BITS_PER_LONG == 32
+typedef bfdev_uhi_t bfdev_uhw_t;
+#else /* BFDEV_BITS_PER_LONG == 64 */
+typedef bfdev_usi_t bfdev_uhw_t;
+#endif
+
+typedef int bfdev_state_t;
+typedef intptr_t bfdev_atomic_t;
 
 #define BFDEV_BYTES_PER_CHAR        sizeof(char)
 #define BFDEV_BYTES_PER_SHORT       sizeof(short)
@@ -54,7 +72,7 @@ BFDEV_CALLBACK_FIND(bfdev_find_t, const void *);
 BFDEV_CALLBACK_CMP(bfdev_cmp_t, const void *);
 BFDEV_CALLBACK_RELEASE(bfdev_release_t);
 
-typedef void *(*bfdev_alloc_t)(size_t size, void *pdata);
+typedef void *(*bfdev_malloc_t)(size_t size, void *pdata);
 typedef void *(*bfdev_realloc_t)(void *block, size_t resize, void *pdata);
 typedef void (*bfdev_free_t)(void *block, void *pdata);
 

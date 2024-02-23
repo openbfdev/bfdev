@@ -8,34 +8,36 @@
 #include <export.h>
 
 export bool
-bfdev_llist_split(struct bfdev_slist_head *head, struct bfdev_slist_head *node,
-                  struct bfdev_slist_head *end)
+bfdev_llist_split(bfdev_slist_head_t *head, bfdev_slist_head_t *node,
+                  bfdev_slist_head_t *end)
 {
-    struct bfdev_slist_head *first;
+    bfdev_slist_head_t *entry;
 
-    do first = end->next = BFDEV_READ_ONCE(head->next);
-    while ((void *)bfdev_cmpxchg(
-        (bfdev_atomic_t *)&head->next, (bfdev_atomic_t)first,
-        (bfdev_atomic_t)node) != first
+    entry = BFDEV_READ_ONCE(head->next);
+    do {
+        end->next = entry;
+    } while (!bfdev_try_cmpxchg(
+        (bfdev_atomic_t *)&head->next, (bfdev_atomic_t *)&entry,
+        (bfdev_atomic_t)node)
     );
 
-    return !first;
+    return !entry;
 }
 
-export struct bfdev_slist_head *
-bfdev_llist_del(struct bfdev_slist_head *head)
+export bfdev_slist_head_t *
+bfdev_llist_del(bfdev_slist_head_t *head)
 {
-    struct bfdev_slist_head *old, *next, *entry;
+    bfdev_slist_head_t *next, *entry;
 
-    for (entry = BFDEV_READ_ONCE(head->next); (old = entry);) {
+    entry = BFDEV_READ_ONCE(head->next);
+    do {
+        if (!entry)
+            return NULL;
         next = BFDEV_READ_ONCE(entry->next);
-        entry = (void *)bfdev_cmpxchg(
-            (bfdev_atomic_t *)&head->next, (bfdev_atomic_t)old,
-            (bfdev_atomic_t)next
-        );
-        if (old == entry)
-            break;
-    }
+    } while (!bfdev_try_cmpxchg(
+        (bfdev_atomic_t *)&head->next, (bfdev_atomic_t *)&entry,
+        (bfdev_atomic_t)next)
+    );
 
     return entry;
 }

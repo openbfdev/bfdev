@@ -10,6 +10,6 @@
 #define SEGTREE_END(segnode) ((segnode)->end)
 
 BFDEV_SEGTREE_DEFINE(
-    export, bfdev_segtree, struct bfdev_segtree_node,
+    export, bfdev_segtree, bfdev_segtree_node_t,
     node, unsigned long, subtree, SEGTREE_START, SEGTREE_END
 );

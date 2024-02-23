@@ -7,7 +7,8 @@
 #define _BFDEV_BITOPS_H_
 
 #include <bfdev/config.h>
-#include <bfdev/stdbool.h>
+#include <bfdev/types.h>
+#include <bfdev/stddef.h>
 #include <bfdev/math.h>
 #include <bfdev/bits.h>
 #include <bfdev/asm/bitops.h>

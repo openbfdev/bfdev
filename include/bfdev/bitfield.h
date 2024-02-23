@@ -17,7 +17,8 @@ BFDEV_BEGIN_DECLS
  * @reg: value of entire bitfield.
  */
 #define BFDEV_FIELD_GET(mask, reg) ({ \
-    (typeof(mask))(((reg) & (mask)) >> bfdev_ffs(mask)); \
+    typeof(mask) _mask = (mask); \
+    (typeof(mask))(((reg) & (_mask)) >> bfdev_ffsuf(_mask)); \
 })
 
 /**
@@ -26,24 +27,27 @@ BFDEV_BEGIN_DECLS
  * @val: value to put in the field.
  */
 #define BFDEV_FIELD_PREP(mask, val) ({ \
-    ((typeof(mask))(val) << bfdev_ffs(mask)) & (mask); \
+    typeof(mask) _mask = (mask); \
+    ((typeof(mask))(val) << bfdev_ffsuf(_mask)) & (_mask); \
 })
 
 /**
  * BFDEV_FIELD_FIT() - check if value fits in the field.
- * @_mask: shifted mask defining the field's length and position.
- * @_val:  value to test against the field.
+ * @mask: shifted mask defining the field's length and position.
+ * @val: value to test against the field.
  */
 #define BFDEV_FIELD_FIT(mask, val) ({ \
-    !((((typeof(mask))(val)) << bfdev_ffs(mask)) & ~(mask)); \
+    typeof(mask) _mask = (mask); \
+    !((((typeof(mask))(val)) << bfdev_ffsuf(_mask)) & ~(_mask)); \
 })
 
 /**
  * BFDEV_FIELD_MAX() - produce the maximum value representable by a field.
- * @_mask: shifted mask defining the field's length and position.
+ * @mask: shifted mask defining the field's length and position.
  */
 #define BFDEV_FIELD_MAX(mask) ({ \
-    (typeof(mask))((mask) >> bfdev_ffs(mask)); \
+    typeof(mask) _mask = (mask); \
+    (typeof(mask))((_mask) >> bfdev_ffsuf(_mask)); \
 })
 
 BFDEV_END_DECLS

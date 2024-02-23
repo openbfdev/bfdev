@@ -12,8 +12,8 @@
 #include <export.h>
 
 export bool
-bfdev_heap_check_link(struct bfdev_heap_node *parent, struct bfdev_heap_node **link,
-                      struct bfdev_heap_node *node)
+bfdev_heap_check_link(bfdev_heap_node_t *parent, bfdev_heap_node_t **link,
+                      bfdev_heap_node_t *node)
 {
     if (bfdev_unlikely(*link == node)) {
         bfdev_log_err(
@@ -28,7 +28,7 @@ bfdev_heap_check_link(struct bfdev_heap_node *parent, struct bfdev_heap_node **l
 }
 
 export bool
-bfdev_heap_check_delete(struct bfdev_heap_node *node)
+bfdev_heap_check_delete(bfdev_heap_node_t *node)
 {
     if (bfdev_unlikely(node->left == BFDEV_POISON_HPNODE1)) {
         bfdev_log_err(

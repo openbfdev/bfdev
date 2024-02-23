@@ -11,35 +11,37 @@
 
 BFDEV_BEGIN_DECLS
 
+typedef struct bfdev_segtree_node bfdev_segtree_node_t;
+
 struct bfdev_segtree_node {
-    struct bfdev_rb_node node;
+    bfdev_rb_node_t node;
     unsigned long start, end;
     unsigned long subtree;
 };
 
 /**
  * bfdev_segtree_entry - get the struct for this entry.
- * @ptr: the &struct bfdev_segtree_node pointer.
+ * @ptr: the &bfdev_segtree_node_t pointer.
  * @type: the type of the struct this is embedded in.
  * @member: the name of the bfdev_segtree_node within the struct.
  */
-#define	bfdev_segtree_entry(ptr, type, member) \
+#define bfdev_segtree_entry(ptr, type, member) \
     bfdev_container_of(ptr, type, member)
 
 /**
  * bfdev_segtree_entry_safe - get the struct for this entry or null.
- * @ptr: the &struct bfdev_segtree_node pointer.
+ * @ptr: the &bfdev_segtree_node_t pointer.
  * @type: the type of the struct this is embedded in.
  * @member: the name of the bfdev_segtree_node within the struct.
  */
 #define bfdev_segtree_entry_safe(ptr, type, member) \
     bfdev_container_of_safe(ptr, type, member)
 
-extern void bfdev_segtree_insert(struct bfdev_rb_root_cached *root, struct bfdev_segtree_node *node);
-extern void bfdev_segtree_delete(struct bfdev_rb_root_cached *root, struct bfdev_segtree_node *node);
-extern struct bfdev_segtree_node *bfdev_segtree_search(struct bfdev_segtree_node *node, unsigned long start, unsigned long end);
-extern struct bfdev_segtree_node *bfdev_segtree_first(struct bfdev_rb_root_cached *root, unsigned long start, unsigned long end);
-extern struct bfdev_segtree_node *bfdev_segtree_next(struct bfdev_segtree_node *node, unsigned long start, unsigned long end);
+extern void bfdev_segtree_insert(bfdev_rb_root_cached_t *root, bfdev_segtree_node_t *node);
+extern void bfdev_segtree_delete(bfdev_rb_root_cached_t *root, bfdev_segtree_node_t *node);
+extern bfdev_segtree_node_t *bfdev_segtree_search(bfdev_segtree_node_t *node, unsigned long start, unsigned long end);
+extern bfdev_segtree_node_t *bfdev_segtree_first(bfdev_rb_root_cached_t *root, unsigned long start, unsigned long end);
+extern bfdev_segtree_node_t *bfdev_segtree_next(bfdev_segtree_node_t *node, unsigned long start, unsigned long end);
 
 /**
  * bfdev_segtree_first_entry - get the first element from a segtree.
@@ -64,7 +66,7 @@ extern struct bfdev_segtree_node *bfdev_segtree_next(struct bfdev_segtree_node *
 
 /**
  * bfdev_segtree_for_each - iterate over a segtree.
- * @pos: the &struct bfdev_segtree_node to use as a loop cursor.
+ * @pos: the &bfdev_segtree_node_t to use as a loop cursor.
  * @start: start endpoint of segtree element.
  * @end: end endpoint of segtree element.
  * @root: the root for your segtree.
@@ -75,7 +77,7 @@ extern struct bfdev_segtree_node *bfdev_segtree_next(struct bfdev_segtree_node *
 
 /**
  * bfdev_segtree_for_each_form - iterate over a segtree from the current point.
- * @pos: the &struct bfdev_rb_node to use as a loop cursor.
+ * @pos: the &bfdev_rb_node_t to use as a loop cursor.
  * @start: start endpoint of segtree element.
  * @end: end endpoint of segtree element.
  */
@@ -84,7 +86,7 @@ extern struct bfdev_segtree_node *bfdev_segtree_next(struct bfdev_segtree_node *
 
 /**
  * bfdev_segtree_for_each_continue - continue iteration over a segtree.
- * @pos: the &struct bfdev_segtree_node to use as a loop cursor.
+ * @pos: the &bfdev_segtree_node_t to use as a loop cursor.
  * @start: start endpoint of segtree element.
  * @end: end endpoint of segtree element.
  */
@@ -127,9 +129,9 @@ extern struct bfdev_segtree_node *bfdev_segtree_next(struct bfdev_segtree_node *
 
 #define BFDEV_SEGTREE_DEFINE(STSTATIC, STNAME, STSTRUCT, STRB, STTYPE, STSUBTREE, STSTART, STEND)       \
 BFDEV_RB_DECLARE_CALLBACKS_MAX(static, STNAME##_callbacks, STSTRUCT, STRB, STTYPE, STSUBTREE, STEND);   \
-STSTATIC void STNAME##_insert(struct bfdev_rb_root_cached *cached, STSTRUCT *node)                      \
+STSTATIC void STNAME##_insert(bfdev_rb_root_cached_t *cached, STSTRUCT *node)                           \
 {                                                                                                       \
-    struct bfdev_rb_node **link = &cached->root.node;                                                   \
+    bfdev_rb_node_t **link = &cached->root.node;                                                        \
     STSTRUCT *parent = NULL;                                                                            \
     STTYPE start, end;                                                                                  \
     bool leftmost = true;                                                                               \
@@ -154,7 +156,7 @@ STSTATIC void STNAME##_insert(struct bfdev_rb_root_cached *cached, STSTRUCT *nod
     node->STSUBTREE = end;                                                                              \
 }                                                                                                       \
                                                                                                         \
-STSTATIC void STNAME##_delete(struct bfdev_rb_root_cached *cached, STSTRUCT *node)                      \
+STSTATIC void STNAME##_delete(bfdev_rb_root_cached_t *cached, STSTRUCT *node)                           \
 {                                                                                                       \
     bfdev_rb_cached_delete_augmented(cached, &node->STRB, &STNAME##_callbacks);                         \
 }                                                                                                       \
@@ -184,7 +186,7 @@ STSTATIC STSTRUCT *STNAME##_search(STSTRUCT *node, STTYPE start, STTYPE end)    
     }                                                                                                   \
 }                                                                                                       \
                                                                                                         \
-STSTATIC STSTRUCT *STNAME##_first(struct bfdev_rb_root_cached *cached, STTYPE start, STTYPE end)        \
+STSTATIC STSTRUCT *STNAME##_first(bfdev_rb_root_cached_t *cached, STTYPE start, STTYPE end)             \
 {                                                                                                       \
     STSTRUCT *node, *leftmost;                                                                          \
                                                                                                         \
@@ -203,7 +205,7 @@ STSTATIC STSTRUCT *STNAME##_first(struct bfdev_rb_root_cached *cached, STTYPE st
                                                                                                         \
 STSTATIC STSTRUCT *STNAME##_next(STSTRUCT *node, STTYPE start, STTYPE end)                              \
 {                                                                                                       \
-    struct bfdev_rb_node *prev, *walk = node->STRB.right;                                               \
+    bfdev_rb_node_t *prev, *walk = node->STRB.right;                                                    \
     STSTRUCT *right;                                                                                    \
                                                                                                         \
     for (;;) {                                                                                          \

@@ -13,7 +13,7 @@
 static BFDEV_SLIST_HEAD(demo_list);
 
 struct list_simple {
-    struct bfdev_slist_head list;
+    bfdev_slist_head_t list;
     unsigned int num;
     unsigned long data;
 };
