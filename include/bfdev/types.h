@@ -34,13 +34,12 @@ typedef unsigned bfdev_uqi_t __bfdev_mode(QI);
 typedef unsigned bfdev_uhi_t __bfdev_mode(HI);
 typedef unsigned bfdev_usi_t __bfdev_mode(SI);
 typedef unsigned bfdev_udi_t __bfdev_mode(DI);
+typedef unsigned long bfdev_uw_t;
 
 #if BFDEV_BITS_PER_LONG == 32
 typedef bfdev_uhi_t bfdev_uhw_t;
-typedef bfdev_usi_t bfdev_uw_t;
 #else /* BFDEV_BITS_PER_LONG == 64 */
 typedef bfdev_usi_t bfdev_uhw_t;
-typedef bfdev_udi_t bfdev_uw_t;
 #endif
 
 typedef int bfdev_state_t;
