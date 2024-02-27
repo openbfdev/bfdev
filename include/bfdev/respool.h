@@ -31,22 +31,20 @@ struct bfdev_respool {
     bfdev_list_head_t node;
 };
 
-#define BFDEV_RESPOOL_STATIC(name) {                \
-    .name = __bfdev_stringify(name),                \
-    .node = BFDEV_LIST_HEAD_STATIC((name).list),    \
+#define BFDEV_RESPOOL_STATIC(HEAD, NAME) { \
+    .node = BFDEV_LIST_HEAD_STATIC(&(HEAD)->node), .name = (NAME), \
 }
 
-#define BFDEV_RESPOOL_INIT(name) \
-    (bfdev_respool_t) BFDEV_RESPOOL_STATIC(name)
+#define BFDEV_RESPOOL_INIT(head, name) \
+    (bfdev_respool_t) BFDEV_RESPOOL_STATIC(head, name)
 
-#define BFDEV_DEFINE_RESPOOL(name) \
-    bfdev_respool_t name = BFDEV_RESPOOL_INIT(name)
+#define BFDEV_DEFINE_RESPOOL(head, name) \
+    bfdev_respool_t head = BFDEV_RESPOOL_INIT(head, name)
 
 static inline void
 bfdev_respool_init(bfdev_respool_t *pool, const char *name)
 {
-    pool->name = name;
-    bfdev_list_head_init(&pool->node);
+    *pool = BFDEV_RESPOOL_INIT(pool, name);
 }
 
 static inline bool

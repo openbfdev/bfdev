@@ -28,14 +28,15 @@ struct bfdev_heap_root {
     unsigned long count;
 };
 
-#define BFDEV_HEAP_STATIC \
-    {NULL, 0}
+#define BFDEV_HEAP_STATIC() { \
+    .node = NULL, .count = 0, \
+}
 
-#define BFDEV_HEAP_INIT \
-    (bfdev_heap_root_t) BFDEV_HEAP_STATIC
+#define BFDEV_HEAP_INIT() \
+    (bfdev_heap_root_t) BFDEV_HEAP_STATIC()
 
 #define BFDEV_HEAP_ROOT(name) \
-    bfdev_heap_root_t name = BFDEV_HEAP_INIT
+    bfdev_heap_root_t name = BFDEV_HEAP_INIT()
 
 #define BFDEV_HEAP_ROOT_NODE(root) \
     ((root)->node)
@@ -78,7 +79,7 @@ BFDEV_CALLBACK_CMP(
 static inline void
 bfdev_heap_init(bfdev_heap_root_t *root)
 {
-    *root = BFDEV_HEAP_INIT;
+    *root = BFDEV_HEAP_INIT();
 }
 
 static inline bool

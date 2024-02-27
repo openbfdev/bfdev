@@ -16,16 +16,16 @@ BFDEV_BEGIN_DECLS
  * @b: second value.
  */
 #define bfdev_swap(a, b) ({ \
-    typeof(a) _a = (a);     \
-    (a) = (b); (b) = _a;    \
+    typeof(a) __a = (a); \
+    (a) = (b); (b) = __a; \
 })
 
 /**
  * BFDEV_ARRAY_SIZE() - get the number of elements in array.
  * @arr: array to be sized.
  */
-#define BFDEV_ARRAY_SIZE(arr) (     \
-    sizeof(arr) / sizeof((arr)[0])  \
+#define BFDEV_ARRAY_SIZE(arr) ( \
+    sizeof(arr) / sizeof((arr)[0]) \
 )
 
 /* This counts to 12. Any more, it will return 13th argument. */

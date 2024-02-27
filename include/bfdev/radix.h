@@ -54,8 +54,9 @@ struct bfdev_radix_node {
         char check[BFDEV_RADIX_CHECK(datatype)];    \
     }
 
-#define BFDEV_RADIX_STATIC(ALLOC) \
-    {.tree = {.alloc = (ALLOC)}}
+#define BFDEV_RADIX_STATIC(ALLOC) { \
+    .tree = {.alloc = (ALLOC)}, \
+}
 
 #define BFDEV_RADIX_INIT(name, alloc) \
     (typeof(name)) BFDEV_RADIX_STATIC(alloc)

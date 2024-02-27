@@ -23,7 +23,7 @@ BFDEV_BEGIN_DECLS
 #define BFDEV_DEFINE_HASHTBL(name, size)        \
     BFDEV_DECLARE_HASHTBL(name, size) = {       \
         [0 ... BFDEV_HASHTBL_CHECK(size) - 1]   \
-        = BFDEV_HLIST_HEAD_STATIC               \
+        = BFDEV_HLIST_HEAD_STATIC()             \
     }
 
 #define BFDEV_HASHTBL_BITS(size) bfdev_ilog2(size)

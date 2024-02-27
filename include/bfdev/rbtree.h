@@ -45,23 +45,26 @@ struct bfdev_rb_callbacks {
     void (*propagate)(bfdev_rb_node_t *node, bfdev_rb_node_t *stop);
 };
 
-#define BFDEV_RB_STATIC \
-    {NULL}
+#define BFDEV_RB_STATIC() { \
+    .node = NULL, \
+}
 
-#define BFDEV_RB_CACHED_STATIC \
-    {{NULL}, NULL}
+#define BFDEV_RB_CACHED_STATIC() { \
+    .root = BFDEV_RB_STATIC(), \
+    .leftmost = NULL, \
+}
 
-#define BFDEV_RB_INIT \
-    (bfdev_rb_root_t) BFDEV_RB_STATIC
+#define BFDEV_RB_INIT() \
+    (bfdev_rb_root_t) BFDEV_RB_STATIC()
 
-#define BFDEV_RB_CACHED_INIT \
-    (bfdev_rb_root_cached_t) BFDEV_RB_CACHED_STATIC
+#define BFDEV_RB_CACHED_INIT() \
+    (bfdev_rb_root_cached_t) BFDEV_RB_CACHED_STATIC()
 
 #define BFDEV_RB_ROOT(name) \
-    bfdev_rb_root_t name = BFDEV_RB_INIT
+    bfdev_rb_root_t name = BFDEV_RB_INIT()
 
 #define BFDEV_RB_ROOT_CACHED(name) \
-    bfdev_rb_root_cached_t name = BFDEV_RB_CACHED_INIT
+    bfdev_rb_root_cached_t name = BFDEV_RB_CACHED_INIT()
 
 #define BFDEV_RB_EMPTY_ROOT(root) \
     ((root)->node == NULL)
@@ -109,7 +112,13 @@ BFDEV_CALLBACK_CMP(
 static inline void
 bfdev_rb_init(bfdev_rb_root_t *root)
 {
-    *root = BFDEV_RB_INIT;
+    *root = BFDEV_RB_INIT();
+}
+
+static inline void
+bfdev_rb_cache_init(bfdev_rb_root_cached_t *root)
+{
+    *root = BFDEV_RB_CACHED_INIT();
 }
 
 /**

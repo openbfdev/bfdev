@@ -8,10 +8,10 @@
 #include <export.h>
 
 static __bfdev_always_inline void *
-bnode_get_value(struct bfdev_btree_root *root, struct bfdev_btree_node *node,
+bnode_get_value(bfdev_btree_root_t *root, bfdev_btree_node_t *node,
                 unsigned int index)
 {
-    struct bfdev_btree_layout *layout;
+    bfdev_btree_layout_t *layout;
     unsigned int offset;
 
     layout = root->layout;
@@ -21,10 +21,10 @@ bnode_get_value(struct bfdev_btree_root *root, struct bfdev_btree_node *node,
 }
 
 static __bfdev_always_inline void
-bnode_set_value(struct bfdev_btree_root *root, struct bfdev_btree_node *node,
+bnode_set_value(bfdev_btree_root_t *root, bfdev_btree_node_t *node,
                 unsigned int index, void *value)
 {
-    struct bfdev_btree_layout *layout;
+    bfdev_btree_layout_t *layout;
     unsigned int offset;
 
     layout = root->layout;
@@ -34,10 +34,10 @@ bnode_set_value(struct bfdev_btree_root *root, struct bfdev_btree_node *node,
 }
 
 static __bfdev_always_inline uintptr_t *
-bnode_get_key(struct bfdev_btree_root *root, struct bfdev_btree_node *node,
+bnode_get_key(bfdev_btree_root_t *root, bfdev_btree_node_t *node,
               unsigned int index)
 {
-    struct bfdev_btree_layout *layout;
+    bfdev_btree_layout_t *layout;
     unsigned int offset;
 
     layout = root->layout;
@@ -47,10 +47,10 @@ bnode_get_key(struct bfdev_btree_root *root, struct bfdev_btree_node *node,
 }
 
 static __bfdev_always_inline void
-bnode_set_key(struct bfdev_btree_root *root, struct bfdev_btree_node *node,
+bnode_set_key(bfdev_btree_root_t *root, bfdev_btree_node_t *node,
               unsigned int index, uintptr_t *key)
 {
-    struct bfdev_btree_layout *layout;
+    bfdev_btree_layout_t *layout;
     uintptr_t *slot;
     size_t size;
 
@@ -62,10 +62,10 @@ bnode_set_key(struct bfdev_btree_root *root, struct bfdev_btree_node *node,
 }
 
 static inline long
-bnode_cmp_key(struct bfdev_btree_root *root, struct bfdev_btree_node *node,
+bnode_cmp_key(bfdev_btree_root_t *root, bfdev_btree_node_t *node,
               unsigned int index, uintptr_t *key)
 {
-    const struct bfdev_btree_ops *ops;
+    const bfdev_btree_ops_t *ops;
     uintptr_t *slot;
 
     ops = root->ops;
@@ -75,10 +75,10 @@ bnode_cmp_key(struct bfdev_btree_root *root, struct bfdev_btree_node *node,
 }
 
 static inline void
-bnode_takeout_key(struct bfdev_btree_root *root, struct bfdev_btree_node *node,
+bnode_takeout_key(bfdev_btree_root_t *root, bfdev_btree_node_t *node,
                   unsigned int index, uintptr_t *key)
 {
-    struct bfdev_btree_layout *layout;
+    bfdev_btree_layout_t *layout;
     uintptr_t *slot;
     size_t size;
 
@@ -90,10 +90,10 @@ bnode_takeout_key(struct bfdev_btree_root *root, struct bfdev_btree_node *node,
 }
 
 static inline void
-bnode_clear_index(struct bfdev_btree_root *root, struct bfdev_btree_node *node,
+bnode_clear_index(bfdev_btree_root_t *root, bfdev_btree_node_t *node,
                   unsigned int index)
 {
-    struct bfdev_btree_layout *layout;
+    bfdev_btree_layout_t *layout;
     uintptr_t *slot;
     size_t size;
 
@@ -106,9 +106,9 @@ bnode_clear_index(struct bfdev_btree_root *root, struct bfdev_btree_node *node,
 }
 
 static inline bool
-btree_empty_key(struct bfdev_btree_root *root, uintptr_t *key)
+btree_empty_key(bfdev_btree_root_t *root, uintptr_t *key)
 {
-    struct bfdev_btree_layout *layout;
+    bfdev_btree_layout_t *layout;
     unsigned int count;
 
     layout = root->layout;
@@ -121,9 +121,9 @@ btree_empty_key(struct bfdev_btree_root *root, uintptr_t *key)
 }
 
 static inline void
-bnode_migrate(struct bfdev_btree_root *root,
-              struct bfdev_btree_node *nnode, unsigned nindex,
-              struct bfdev_btree_node *onode, unsigned oindex)
+bnode_migrate(bfdev_btree_root_t *root,
+              bfdev_btree_node_t *nnode, unsigned nindex,
+              bfdev_btree_node_t *onode, unsigned oindex)
 {
     void *slot;
 
@@ -134,12 +134,12 @@ bnode_migrate(struct bfdev_btree_root *root,
     bnode_set_value(root, nnode, nindex, slot);
 }
 
-static inline struct bfdev_btree_node *
-bnode_alloc(struct bfdev_btree_root *root)
+static inline bfdev_btree_node_t *
+bnode_alloc(bfdev_btree_root_t *root)
 {
-    const struct bfdev_btree_ops *ops;
-    struct bfdev_btree_layout *layout;
-    struct bfdev_btree_node *node;
+    const bfdev_btree_ops_t *ops;
+    bfdev_btree_layout_t *layout;
+    bfdev_btree_node_t *node;
 
     layout = root->layout;
     ops = root->ops;
@@ -152,18 +152,20 @@ bnode_alloc(struct bfdev_btree_root *root)
 }
 
 static inline void
-bnode_free(struct bfdev_btree_root *root, struct bfdev_btree_node *node)
+bnode_free(bfdev_btree_root_t *root, bfdev_btree_node_t *node)
 {
-    const struct bfdev_btree_ops *ops;
+    const bfdev_btree_ops_t *ops;
+
     ops = root->ops;
+
     return ops->free(root, node);
 }
 
 static unsigned int
-bnode_fill_index(struct bfdev_btree_root *root, struct bfdev_btree_node *node,
+bnode_fill_index(bfdev_btree_root_t *root, bfdev_btree_node_t *node,
                  unsigned int start)
 {
-    struct bfdev_btree_layout *layout;
+    bfdev_btree_layout_t *layout;
     unsigned int index;
 
     layout = root->layout;
@@ -176,10 +178,10 @@ bnode_fill_index(struct bfdev_btree_root *root, struct bfdev_btree_node *node,
 }
 
 static unsigned int
-bnode_key_index(struct bfdev_btree_root *root, struct bfdev_btree_node *node,
+bnode_key_index(bfdev_btree_root_t *root, bfdev_btree_node_t *node,
                 uintptr_t *key)
 {
-    struct bfdev_btree_layout *layout;
+    bfdev_btree_layout_t *layout;
     unsigned int index;
     long retval;
 
@@ -195,12 +197,11 @@ bnode_key_index(struct bfdev_btree_root *root, struct bfdev_btree_node *node,
     return layout->keynum;
 }
 
-static struct bfdev_btree_node *
-bnode_find_parent(struct bfdev_btree_root *root, uintptr_t *key,
-                  unsigned int level)
+static bfdev_btree_node_t *
+bnode_find_parent(bfdev_btree_root_t *root, uintptr_t *key, unsigned int level)
 {
-    struct bfdev_btree_layout *layout;
-    struct bfdev_btree_node *node;
+    bfdev_btree_layout_t *layout;
+    bfdev_btree_node_t *node;
     unsigned int height, index;
 
     layout = root->layout;
@@ -222,10 +223,10 @@ bnode_find_parent(struct bfdev_btree_root *root, uintptr_t *key,
 }
 
 static unsigned int
-bnode_find_index(struct bfdev_btree_root *root, struct bfdev_btree_node *node,
+bnode_find_index(bfdev_btree_root_t *root, bfdev_btree_node_t *node,
                  uintptr_t *key)
 {
-    struct bfdev_btree_layout *layout;
+    bfdev_btree_layout_t *layout;
     unsigned int index;
 
     layout = root->layout;
@@ -237,11 +238,11 @@ bnode_find_index(struct bfdev_btree_root *root, struct bfdev_btree_node *node,
     return index;
 }
 
-static struct bfdev_btree_node *
-bnode_lookup(struct bfdev_btree_root *root, uintptr_t *key)
+static bfdev_btree_node_t *
+bnode_lookup(bfdev_btree_root_t *root, uintptr_t *key)
 {
-    struct bfdev_btree_layout *layout;
-    struct bfdev_btree_node *node;
+    bfdev_btree_layout_t *layout;
+    bfdev_btree_node_t *node;
     unsigned int height, index;
 
     height = root->height;
@@ -269,10 +270,10 @@ bnode_lookup(struct bfdev_btree_root *root, uintptr_t *key)
 }
 
 export void *
-bfdev_btree_lookup(struct bfdev_btree_root *root, uintptr_t *key)
+bfdev_btree_lookup(bfdev_btree_root_t *root, uintptr_t *key)
 {
-    struct bfdev_btree_layout *layout;
-    struct bfdev_btree_node *node;
+    bfdev_btree_layout_t *layout;
+    bfdev_btree_node_t *node;
     unsigned int index;
 
     node = bnode_lookup(root, key);
@@ -289,10 +290,10 @@ bfdev_btree_lookup(struct bfdev_btree_root *root, uintptr_t *key)
 }
 
 export int
-bfdev_btree_update(struct bfdev_btree_root *root, uintptr_t *key, void *value)
+bfdev_btree_update(bfdev_btree_root_t *root, uintptr_t *key, void *value)
 {
-    struct bfdev_btree_layout *layout;
-    struct bfdev_btree_node *node;
+    bfdev_btree_layout_t *layout;
+    bfdev_btree_node_t *node;
     unsigned int index;
 
     node = bnode_lookup(root, key);
@@ -310,9 +311,9 @@ bfdev_btree_update(struct bfdev_btree_root *root, uintptr_t *key, void *value)
 }
 
 static int
-btree_extend(struct bfdev_btree_root *root)
+btree_extend(bfdev_btree_root_t *root)
 {
-    struct bfdev_btree_node *node;
+    bfdev_btree_node_t *node;
     unsigned int index;
     uintptr_t *slot;
 
@@ -334,9 +335,9 @@ btree_extend(struct bfdev_btree_root *root)
 }
 
 static void
-btree_shrink(struct bfdev_btree_root *root)
+btree_shrink(bfdev_btree_root_t *root)
 {
-    struct bfdev_btree_node *node;
+    bfdev_btree_node_t *node;
 
     if (root->height < 2)
         return;
@@ -349,12 +350,12 @@ btree_shrink(struct bfdev_btree_root *root)
 }
 
 static int
-insert_level(struct bfdev_btree_root *root, unsigned int level,
+insert_level(bfdev_btree_root_t *root, unsigned int level,
              uintptr_t *key, void *value)
 {
-    const struct bfdev_btree_ops *ops;
-    struct bfdev_btree_layout *layout;
-    struct bfdev_btree_node *node, *newn;
+    const bfdev_btree_ops_t *ops;
+    bfdev_btree_layout_t *layout;
+    bfdev_btree_node_t *node, *newn;
     unsigned int index, fill, count;
     uintptr_t *halfkey;
     int retval;
@@ -420,13 +421,13 @@ insert_level(struct bfdev_btree_root *root, unsigned int level,
 }
 
 static void *
-remove_level(struct bfdev_btree_root *root, unsigned int level, uintptr_t *key);
+remove_level(bfdev_btree_root_t *root, unsigned int level, uintptr_t *key);
 
 static void
-rebalance_merge(struct bfdev_btree_root *root, unsigned int level,
-                struct bfdev_btree_node *lnode, unsigned int lfill,
-                struct bfdev_btree_node *rnode, unsigned int rfill,
-                struct bfdev_btree_node *parent, unsigned int index)
+rebalance_merge(bfdev_btree_root_t *root, unsigned int level,
+                bfdev_btree_node_t *lnode, unsigned int lfill,
+                bfdev_btree_node_t *rnode, unsigned int rfill,
+                bfdev_btree_node_t *parent, unsigned int index)
 {
     unsigned int count;
 
@@ -441,12 +442,11 @@ rebalance_merge(struct bfdev_btree_root *root, unsigned int level,
 }
 
 static void
-remove_rebalance(struct bfdev_btree_root *root, unsigned int level,
-                 uintptr_t *key, struct bfdev_btree_node *child,
-                 unsigned int fill)
+remove_rebalance(bfdev_btree_root_t *root, unsigned int level, uintptr_t *key,
+                 bfdev_btree_node_t *child, unsigned int fill)
 {
-    struct bfdev_btree_layout *layout;
-    struct bfdev_btree_node *parent, *node;
+    bfdev_btree_layout_t *layout;
+    bfdev_btree_node_t *parent, *node;
     unsigned int index, nfill;
 
     if (!fill) {
@@ -485,14 +485,13 @@ remove_rebalance(struct bfdev_btree_root *root, unsigned int level,
 }
 
 static void *
-remove_level(struct bfdev_btree_root *root, unsigned int level,
-             uintptr_t *key)
+remove_level(bfdev_btree_root_t *root, unsigned int level, uintptr_t *key)
 {
-    const struct bfdev_btree_ops *ops;
-    struct bfdev_btree_layout *layout;
-    struct bfdev_btree_node *node;
+    const bfdev_btree_ops_t *ops;
+    bfdev_btree_layout_t *layout;
+    bfdev_btree_node_t *node;
     unsigned int index, last, count;
-    void *clash, *value = NULL;
+    void *clash, *value;
 
     if (level > root->height) {
         root->height = 0;
@@ -507,6 +506,7 @@ remove_level(struct bfdev_btree_root *root, unsigned int level,
     index = bnode_find_index(root, node, key);
     last = bnode_fill_index(root, node, index) - 1;
 
+    value = NULL;
     if (level == 1) {
         if (bnode_cmp_key(root, node, index, key))
             return NULL;
@@ -536,25 +536,27 @@ remove_level(struct bfdev_btree_root *root, unsigned int level,
 }
 
 export int
-bfdev_btree_insert(struct bfdev_btree_root *root, uintptr_t *key, void *value)
+bfdev_btree_insert(bfdev_btree_root_t *root, uintptr_t *key, void *value)
 {
     if (bfdev_unlikely(!value))
         return -BFDEV_EINVAL;
+
     return insert_level(root, 1, key, value);
 }
 
 export void *
-bfdev_btree_remove(struct bfdev_btree_root *root, uintptr_t *key)
+bfdev_btree_remove(bfdev_btree_root_t *root, uintptr_t *key)
 {
     if (bfdev_unlikely(!root->height))
         return NULL;
+
     return remove_level(root, 1, key);
 }
 
 export void
-bfdev_btree_destroy(struct bfdev_btree_root *root)
+bfdev_btree_destroy(bfdev_btree_root_t *root)
 {
-    struct bfdev_btree_layout *layout;
+    bfdev_btree_layout_t *layout;
     uintptr_t *key, *tkey;
     void *value, *tval;
 
@@ -571,18 +573,18 @@ bfdev_btree_destroy(struct bfdev_btree_root *root)
 }
 
 export void
-bfdev_btree_key_copy(struct bfdev_btree_root *root,
-                    uintptr_t *dest, uintptr_t *src)
+bfdev_btree_key_copy(bfdev_btree_root_t *root, uintptr_t *dest, uintptr_t *src)
 {
-    struct bfdev_btree_layout *layout;
+    bfdev_btree_layout_t *layout;
+
     layout = root->layout;
     memcpy(dest, src, layout->keylen * sizeof(uintptr_t));
 }
 
 export void *
-bfdev_btree_first(struct bfdev_btree_root *root, uintptr_t *key)
+bfdev_btree_first(bfdev_btree_root_t *root, uintptr_t *key)
 {
-    struct bfdev_btree_node *node;
+    bfdev_btree_node_t *node;
     unsigned int height;
 
     height = root->height;
@@ -598,9 +600,9 @@ bfdev_btree_first(struct bfdev_btree_root *root, uintptr_t *key)
 }
 
 export void *
-bfdev_btree_last(struct bfdev_btree_root *root, uintptr_t *key)
+bfdev_btree_last(bfdev_btree_root_t *root, uintptr_t *key)
 {
-    struct bfdev_btree_node *node;
+    bfdev_btree_node_t *node;
     unsigned int last, height;
 
     height = root->height;
@@ -619,9 +621,9 @@ bfdev_btree_last(struct bfdev_btree_root *root, uintptr_t *key)
 }
 
 export void *
-bfdev_btree_next(struct bfdev_btree_root *root, uintptr_t *key)
+bfdev_btree_next(bfdev_btree_root_t *root, uintptr_t *key)
 {
-    struct bfdev_btree_node *node;
+    bfdev_btree_node_t *node;
     unsigned int depth, index, fill;
 
     if (btree_empty_key(root, key))
@@ -648,9 +650,9 @@ bfdev_btree_next(struct bfdev_btree_root *root, uintptr_t *key)
 }
 
 export void *
-bfdev_btree_prev(struct bfdev_btree_root *root, uintptr_t *key)
+bfdev_btree_prev(bfdev_btree_root_t *root, uintptr_t *key)
 {
-    struct bfdev_btree_node *node;
+    bfdev_btree_node_t *node;
     unsigned int depth, index;
 
     if (btree_empty_key(root, key))
