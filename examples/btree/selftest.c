@@ -21,7 +21,7 @@ struct test_node {
 };
 
 static int
-test_clash(struct bfdev_btree_root *root, void *value, void *clash)
+test_clash(bfdev_btree_root_t *root, void *value, void *clash)
 {
     struct test_node *vnode = value;
     struct test_node *cnode = clash;
@@ -30,7 +30,7 @@ test_clash(struct bfdev_btree_root *root, void *value, void *clash)
 }
 
 static void *
-test_remove(struct bfdev_btree_root *root, void *value)
+test_remove(bfdev_btree_root_t *root, void *value)
 {
     struct test_node *vnode = value;
     struct test_node *remove;
@@ -45,14 +45,14 @@ test_remove(struct bfdev_btree_root *root, void *value)
 }
 
 static long
-test_strfind(struct bfdev_btree_root *root, uintptr_t *node, uintptr_t *key)
+test_strfind(bfdev_btree_root_t *root, uintptr_t *node, uintptr_t *key)
 {
     const char *nstring = (void *)*node ?: "";
     const char *kstring = (void *)*key ?: "";
     return strcmp(nstring, kstring);
 }
 
-static const struct bfdev_btree_ops
+static const bfdev_btree_ops_t
 test_value_ops = {
     .alloc = bfdev_btree_alloc,
     .free = bfdev_btree_free,
@@ -62,7 +62,7 @@ test_value_ops = {
 
 };
 
-static const struct bfdev_btree_ops
+static const bfdev_btree_ops_t
 test_string_ops = {
     .alloc = bfdev_btree_alloc,
     .free = bfdev_btree_free,

@@ -8,11 +8,11 @@
 #include <export.h>
 
 #define BLOCK_SIZE 128
-#define NODE_SIZE (BLOCK_SIZE - sizeof(struct bfdev_btree_node))
+#define NODE_SIZE (BLOCK_SIZE - sizeof(bfdev_btree_node_t))
 #define UINTPTR_PER_U32 BFDEV_DIV_ROUND_UP(BFDEV_BYTES_PER_U32, BFDEV_BYTES_PER_UINTPTR)
 #define UINTPTR_PER_U64 BFDEV_DIV_ROUND_UP(BFDEV_BYTES_PER_U64, BFDEV_BYTES_PER_UINTPTR)
 
-export struct bfdev_btree_layout
+export bfdev_btree_layout_t
 bfdev_btree_layout32 = {
     .keylen = UINTPTR_PER_U32,
     .keynum = NODE_SIZE / sizeof(uintptr_t) / (UINTPTR_PER_U32 + 1),
@@ -20,7 +20,7 @@ bfdev_btree_layout32 = {
     .nodesize = NODE_SIZE,
 };
 
-export struct bfdev_btree_layout
+export bfdev_btree_layout_t
 bfdev_btree_layout64 = {
     .keylen = UINTPTR_PER_U64,
     .keynum = NODE_SIZE / sizeof(uintptr_t) / (UINTPTR_PER_U64 + 1),
@@ -28,7 +28,7 @@ bfdev_btree_layout64 = {
     .nodesize = NODE_SIZE,
 };
 
-export struct bfdev_btree_layout
+export bfdev_btree_layout_t
 bfdev_btree_layoutptr = {
     .keylen = 1,
     .keynum = NODE_SIZE / sizeof(uintptr_t) / 2,
@@ -37,9 +37,9 @@ bfdev_btree_layoutptr = {
 };
 
 export long
-bfdev_btree_key_find(struct bfdev_btree_root *root, uintptr_t *node, uintptr_t *key)
+bfdev_btree_key_find(bfdev_btree_root_t *root, uintptr_t *node, uintptr_t *key)
 {
-    struct bfdev_btree_layout *layout;
+    bfdev_btree_layout_t *layout;
     unsigned int index;
 
     layout = root->layout;
@@ -54,10 +54,10 @@ bfdev_btree_key_find(struct bfdev_btree_root *root, uintptr_t *node, uintptr_t *
 }
 
 export void *
-bfdev_btree_alloc(struct bfdev_btree_root *root)
+bfdev_btree_alloc(bfdev_btree_root_t *root)
 {
     const bfdev_alloc_t *alloc;
-    struct bfdev_btree_layout *layout;
+    bfdev_btree_layout_t *layout;
 
     alloc = root->alloc;
     layout = root->layout;
@@ -66,7 +66,7 @@ bfdev_btree_alloc(struct bfdev_btree_root *root)
 }
 
 export void
-bfdev_btree_free(struct bfdev_btree_root *root, void *node)
+bfdev_btree_free(bfdev_btree_root_t *root, void *node)
 {
     const bfdev_alloc_t *alloc;
     alloc = root->alloc;

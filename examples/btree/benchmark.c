@@ -32,7 +32,7 @@ node_dump(struct bench_node *node)
 # define node_dump(node) ((void)(node))
 #endif
 
-static const struct bfdev_btree_ops
+static const bfdev_btree_ops_t
 bench_ops = {
     .alloc = bfdev_btree_alloc,
     .free = bfdev_btree_free,
