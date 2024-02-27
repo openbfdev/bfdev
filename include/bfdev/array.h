@@ -28,8 +28,9 @@ struct bfdev_array {
     void *data;
 };
 
-#define BFDEV_ARRAY_STATIC(ALLOC, CELLS) \
-    {.alloc = (ALLOC), .cells = (CELLS)}
+#define BFDEV_ARRAY_STATIC(ALLOC, CELLS) { \
+    .alloc = (ALLOC), .cells = (CELLS), \
+}
 
 #define BFDEV_ARRAY_INIT(alloc, cells) \
     (bfdev_array_t) BFDEV_ARRAY_STATIC(alloc, cells)

@@ -24,20 +24,20 @@ struct bfdev_ilist_node {
     bfdev_list_head_t index_list;
 };
 
-#define BFDEV_ILIST_HEAD_STATIC(name) \
-    {BFDEV_LIST_HEAD_STATIC((name).node_list)}
+#define BFDEV_ILIST_HEAD_STATIC(HEAD) { \
+    .node_list = BFDEV_LIST_HEAD_STATIC(&(HEAD)->node_list), \
+}
 
-#define BFDEV_ILIST_HEAD_INIT(name) \
-    (bfdev_ilist_head_t) BFDEV_ILIST_HEAD_STATIC(name)
+#define BFDEV_ILIST_HEAD_INIT(head) \
+    (bfdev_ilist_head_t) BFDEV_ILIST_HEAD_STATIC(head)
 
 #define BFDEV_ILIST_HEAD(name) \
-    bfdev_ilist_head_t name = BFDEV_ILIST_HEAD_STATIC(name)
+    bfdev_ilist_head_t name = BFDEV_ILIST_HEAD_STATIC(&name)
 
-#define BFDEV_ILISI_NODE_INIT(name, index)                      \
-    (bfdev_ilist_node_t) {                                      \
-        .node_list = BFDEV_LIST_HEAD_INIT((node).node_list),    \
-        .index_list = BFDEV_LIST_HEAD_INIT((node).index_list),  \
-    }
+#define BFDEV_ILIST_NODE_INIT(node) (bfdev_ilist_node_t) {      \
+    .node_list = BFDEV_LIST_HEAD_INIT(&(node)->node_list),      \
+    .index_list = BFDEV_LIST_HEAD_INIT(&(node)->index_list),    \
+}
 
 BFDEV_CALLBACK_CMP(
     bfdev_ilist_cmp_t,
@@ -68,18 +68,17 @@ bfdev_ilist_del(bfdev_ilist_head_t *ihead, bfdev_ilist_node_t *inode);
 static inline void
 bfdev_ilist_head_init(bfdev_ilist_head_t *ihead)
 {
-    bfdev_list_head_init(&ihead->node_list);
+    *ihead = BFDEV_ILIST_HEAD_INIT(ihead);
 }
 
 /**
  * bfdev_ilist_node_init() - initialize a bfdev_ilist_node structure.
- * @head: bfdev_ilist_node structure to be initialized.
+ * @inode: bfdev_ilist_node structure to be initialized.
  */
 static inline void
 bfdev_ilist_node_init(bfdev_ilist_node_t *inode)
 {
-    bfdev_list_head_init(&inode->node_list);
-    bfdev_list_head_init(&inode->index_list);
+    *inode = BFDEV_ILIST_NODE_INIT(inode);
 }
 
 /**

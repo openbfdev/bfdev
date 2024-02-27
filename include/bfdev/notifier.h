@@ -54,19 +54,19 @@ struct bfdev_notifier_head {
 };
 
 #define BFDEV_NOTIFIER_STATIC(HEAD, NAME) { \
-    BFDEV_ILIST_HEAD_STATIC((HEAD).node), .name = (NAME) \
+    BFDEV_ILIST_HEAD_STATIC(&(HEAD)->node), .name = (NAME), \
 }
 
 #define BFDEV_NOTIFIER_INIT(head, name) \
     (bfdev_notifier_head_t) BFDEV_NOTIFIER_STATIC(head, name)
 
 #define BFDEV_DEFINE_NOTIFIER(head, name) \
-    bfdev_notifier_head_t head = BFDEV_NOTIFIER_INIT(head, name)
+    bfdev_notifier_head_t head = BFDEV_NOTIFIER_INIT(&head, name)
 
 static inline void
 bfdev_notifier_init(bfdev_notifier_head_t *head, const char *name)
 {
-    *head = BFDEV_NOTIFIER_INIT(*head, name);
+    *head = BFDEV_NOTIFIER_INIT(head, name);
 }
 
 /**

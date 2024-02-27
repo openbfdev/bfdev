@@ -26,20 +26,28 @@ struct bfdev_hlist_head {
     bfdev_hlist_node_t *node;
 };
 
-#define BFDEV_HLIST_HEAD_STATIC \
-    {NULL}
+#define BFDEV_HLIST_HEAD_STATIC() { \
+    .node = NULL, \
+}
 
-#define BFDEV_HLIST_HEAD_INIT \
-    (bfdev_hlist_head_t) BFDEV_HLIST_HEAD_STATIC
+#define BFDEV_HLIST_HEAD_INIT() \
+    (bfdev_hlist_head_t) BFDEV_HLIST_HEAD_STATIC()
 
 #define BFDEV_HLIST_HEAD(name) \
-    bfdev_hlist_head_t name = BFDEV_HLIST_HEAD_INIT
+    bfdev_hlist_head_t name = BFDEV_HLIST_HEAD_INIT()
 
 #ifdef BFDEV_DEBUG_HLIST
-extern bool bfdev_hlist_check_head_add(bfdev_hlist_head_t *head, bfdev_hlist_node_t *newn);
-extern bool bfdev_hlist_check_next_add(bfdev_hlist_node_t *next, bfdev_hlist_node_t *newn);
-extern bool bfdev_hlist_check_prev_add(bfdev_hlist_node_t *prev, bfdev_hlist_node_t *newn);
-extern bool bfdev_hlist_check_del(bfdev_hlist_node_t *node);
+extern bool
+bfdev_hlist_check_head_add(bfdev_hlist_head_t *head, bfdev_hlist_node_t *newn);
+
+extern bool
+bfdev_hlist_check_next_add(bfdev_hlist_node_t *next, bfdev_hlist_node_t *newn);
+
+extern bool
+bfdev_hlist_check_prev_add(bfdev_hlist_node_t *prev, bfdev_hlist_node_t *newn);
+
+extern bool
+bfdev_hlist_check_del(bfdev_hlist_node_t *node);
 #endif
 
 /**
@@ -49,7 +57,7 @@ extern bool bfdev_hlist_check_del(bfdev_hlist_node_t *node);
 static inline void
 bfdev_hlist_head_init(bfdev_hlist_head_t *head)
 {
-    head->node = NULL;
+    *head = BFDEV_HLIST_HEAD_INIT();
 }
 
 /**

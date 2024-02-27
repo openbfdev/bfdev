@@ -20,18 +20,22 @@ struct bfdev_slist_head {
     bfdev_slist_head_t *next;
 };
 
-#define BFDEV_SLIST_HEAD_STATIC \
-    {NULL}
+#define BFDEV_SLIST_HEAD_STATIC() { \
+    .next = NULL, \
+}
 
-#define BFDEV_SLIST_HEAD_INIT \
-    (bfdev_slist_head_t) BFDEV_SLIST_HEAD_STATIC
+#define BFDEV_SLIST_HEAD_INIT() \
+    (bfdev_slist_head_t) BFDEV_SLIST_HEAD_STATIC()
 
 #define BFDEV_SLIST_HEAD(name) \
-    bfdev_slist_head_t name = BFDEV_SLIST_HEAD_INIT
+    bfdev_slist_head_t name = BFDEV_SLIST_HEAD_INIT()
 
 #ifdef BFDEV_DEBUG_SLIST
-extern bool bfdev_slist_check_add(bfdev_slist_head_t *node, bfdev_slist_head_t *newn);
-extern bool bfdev_slist_check_del(bfdev_slist_head_t *node);
+extern bool
+bfdev_slist_check_add(bfdev_slist_head_t *node, bfdev_slist_head_t *newn);
+
+extern bool
+bfdev_slist_check_del(bfdev_slist_head_t *node);
 #endif
 
 /**
@@ -41,7 +45,7 @@ extern bool bfdev_slist_check_del(bfdev_slist_head_t *node);
 static inline void
 bfdev_slist_head_init(bfdev_slist_head_t *head)
 {
-    head->next = NULL;
+    *head = BFDEV_SLIST_HEAD_INIT();
 }
 
 /**
@@ -64,7 +68,7 @@ bfdev_slist_add(bfdev_slist_head_t *node, bfdev_slist_head_t *newn)
 /**
  * bfdev_slist_del - delete a node from slist.
  * @head: the head of the slist.
- * @entry: the element to delete from the slist.
+ * @node: the element to delete from the slist.
  */
 static inline void
 bfdev_slist_del(bfdev_slist_head_t *head, bfdev_slist_head_t *node)

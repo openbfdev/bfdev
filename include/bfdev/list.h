@@ -21,14 +21,15 @@ struct bfdev_list_head {
     bfdev_list_head_t *next;
 };
 
-#define BFDEV_LIST_HEAD_STATIC(name) \
-    {&(name), &(name)}
+#define BFDEV_LIST_HEAD_STATIC(HEAD) { \
+    .prev = (HEAD), .next = (HEAD), \
+}
 
-#define BFDEV_LIST_HEAD_INIT(name) \
-    (bfdev_list_head_t) BFDEV_LIST_HEAD_STATIC(name)
+#define BFDEV_LIST_HEAD_INIT(head) \
+    (bfdev_list_head_t) BFDEV_LIST_HEAD_STATIC(head)
 
 #define BFDEV_LIST_HEAD(name) \
-    bfdev_list_head_t name = BFDEV_LIST_HEAD_INIT(name)
+    bfdev_list_head_t name = BFDEV_LIST_HEAD_INIT(&name)
 
 BFDEV_CALLBACK_CMP(
     bfdev_list_cmp_t,
@@ -70,8 +71,7 @@ bfdev_list_insert(bfdev_list_head_t *prev, bfdev_list_head_t *next,
 static inline void
 bfdev_list_head_init(bfdev_list_head_t *head)
 {
-    head->prev = head;
-    head->next = head;
+    *head = BFDEV_LIST_HEAD_INIT(head);
 }
 
 /**
@@ -386,9 +386,9 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
  * @member: the name of the list head within the struct.
  */
 #define bfdev_list_first_entry_or_null(ptr, type, member) ({ \
-    bfdev_list_head_t *head__ = (ptr); \
-    bfdev_list_head_t *pos__ = head__->next; \
-    pos__ != head__ ? bfdev_list_entry(pos__, type, member) : NULL; \
+    bfdev_list_head_t *__head = (ptr); \
+    bfdev_list_head_t *__pos = __head->next; \
+    __pos != __head ? bfdev_list_entry(__pos, type, member) : NULL; \
 })
 
 /**
@@ -398,9 +398,9 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
  * @member: the name of the list head within the struct.
  */
 #define bfdev_list_last_entry_or_null(ptr, type, member) ({ \
-    bfdev_list_head_t *head__ = (ptr); \
-    bfdev_list_head_t *pos__ = head__->prev; \
-    pos__ != head__ ? bfdev_list_entry(pos__, type, member) : NULL; \
+    bfdev_list_head_t *__head = (ptr); \
+    bfdev_list_head_t *__pos = __head->prev; \
+    __pos != __head ? bfdev_list_entry(__pos, type, member) : NULL; \
 })
 
 /**
@@ -410,9 +410,9 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
  * @member: the name of the list head within the struct.
  */
 #define bfdev_list_next_entry_or_null(pos, head, member) ({ \
-    typeof(*(pos)) *pos__; \
-    pos__ = bfdev_list_entry((pos)->member.next, typeof(*(pos)), member); \
-    bfdev_list_entry_check_head(pos__, head, member) ? NULL : pos__; \
+    typeof(*(pos)) *__pos; \
+    __pos = bfdev_list_entry((pos)->member.next, typeof(*(pos)), member); \
+    bfdev_list_entry_check_head(__pos, head, member) ? NULL : __pos; \
 })
 
 /**
@@ -422,9 +422,9 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
  * @member: the name of the list head within the struct.
  */
 #define bfdev_list_prev_entry_or_null(pos, head, member) ({ \
-    typeof(*(pos)) *pos__; \
-    pos__ = bfdev_list_entry((pos)->member.prev, typeof(*(pos)), member); \
-    bfdev_list_entry_check_head(pos__, head, member) ? NULL : pos__; \
+    typeof(*(pos)) *__pos; \
+    __pos = bfdev_list_entry((pos)->member.prev, typeof(*(pos)), member); \
+    bfdev_list_entry_check_head(__pos, head, member) ? NULL : __pos; \
 })
 
 /**

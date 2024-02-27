@@ -111,7 +111,7 @@ BFDEV_BEGIN_DECLS
         if (__r1 >= __div) {                                    \
             if (__r1 < __m) {                                   \
                 __q1--;                                         \
-                __r1 += (__div);                                \
+                __r1 += __div;                                  \
             }                                                   \
         }                                                       \
     }                                                           \
@@ -124,7 +124,7 @@ BFDEV_BEGIN_DECLS
                                                                 \
     if (__r0 < __m) {                                           \
         __q0--;                                                 \
-        __r0 += (__div);                                        \
+        __r0 += __div;                                          \
                                                                 \
         if (__r0 >= __div) {                                    \
             if (__r0 < __m) {                                   \
