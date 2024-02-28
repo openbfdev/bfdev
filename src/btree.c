@@ -625,11 +625,16 @@ bfdev_btree_next(bfdev_btree_root_t *root, uintptr_t *key)
 {
     bfdev_btree_node_t *node;
     unsigned int depth, index, fill;
+    unsigned int height;
+
+    height = root->height;
+    if (bfdev_unlikely(!height))
+        return NULL;
 
     if (btree_empty_key(root, key))
         return NULL;
 
-    for (depth = 1; depth <= root->height; ++depth) {
+    for (depth = 1; depth <= height; ++depth) {
         node = bnode_find_parent(root, key, depth);
         index = bnode_find_index(root, node, key);
         fill = bnode_fill_index(root, node, index);
@@ -637,7 +642,7 @@ bfdev_btree_next(bfdev_btree_root_t *root, uintptr_t *key)
             break;
     }
 
-    if (depth > root->height)
+    if (depth > height)
         return NULL;
 
     while (--depth) {
@@ -654,18 +659,23 @@ bfdev_btree_prev(bfdev_btree_root_t *root, uintptr_t *key)
 {
     bfdev_btree_node_t *node;
     unsigned int depth, index;
+    unsigned int height;
+
+    height = root->height;
+    if (bfdev_unlikely(!height))
+        return NULL;
 
     if (btree_empty_key(root, key))
         return NULL;
 
-    for (depth = 1; depth <= root->height; ++depth) {
+    for (depth = 1; depth <= height; ++depth) {
         node = bnode_find_parent(root, key, depth);
         index = bnode_find_index(root, node, key);
         if (index--)
             break;
     }
 
-    if (depth > root->height)
+    if (depth > height)
         return NULL;
 
     while (--depth) {

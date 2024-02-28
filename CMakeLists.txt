@@ -42,8 +42,10 @@ commit_branch(BFDEV_BRANCH)
 option(BFDEV_DEVEL "Enable development mode" OFF)
 option(BFDEV_STRICT "Enable strict compilation" ON)
 option(BFDEV_EXAMPLES "Build examples" OFF)
+
 option(BFDEV_ASAN "Enable Address Sanitizer" OFF)
 option(BFDEV_UBSAN "Enable Undefined Behaviour Sanitizer" OFF)
+option(BFDEV_GCOV "Enable Code Coverage Test" OFF)
 
 option(BFDEV_DEBUG_LIST "Dynamic debug list" ON)
 option(BFDEV_DEBUG_SLIST "Dynamic debug slist" ON)
@@ -58,6 +60,7 @@ if(BFDEV_DEVEL)
     set(BFDEV_EXAMPLES ON)
     set(BFDEV_ASAN ON)
     set(BFDEV_UBSAN ON)
+    set(BFDEV_GCOV ON)
 endif()
 
 asm_generic(
@@ -129,28 +132,16 @@ if(BFDEV_UBSAN)
     )
 endif()
 
-include_directories(${PROJECT_SOURCE_DIR}/include)
-include_directories(${PROJECT_BINARY_DIR}/generated)
+if(BFDEV_GCOV)
+    set(CMAKE_C_FLAGS
+        "${CMAKE_C_FLAGS} \
+         -fprofile-arcs \
+         -ftest-coverage"
+    )
+endif()
 
-add_subdirectory(${PROJECT_SOURCE_DIR}/scripts)
 include(${PROJECT_SOURCE_DIR}/build.cmake)
-
-set(BFDEV_LIBRARY_HEADER
-    ${BFDEV_HEADER}
-    ${BFDEV_ASM_HEADER}
-    ${BFDEV_ARCH_ASM_HEADER}
-    ${BFDEV_GENERATED_HEADER}
-)
-
-set(BFDEV_LIBRARY_SOURCE
-    ${BFDEV_SOURCE}
-    ${BFDEV_ARCH_SOURCE}
-)
-
-set(BFDEV_LIBRARY
-    ${BFDEV_LIBRARY_HEADER}
-    ${BFDEV_LIBRARY_SOURCE}
-)
+add_subdirectory(${PROJECT_SOURCE_DIR}/scripts)
 
 macro(bfdev_dependencies target)
     add_dependencies(
