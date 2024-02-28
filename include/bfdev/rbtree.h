@@ -22,6 +22,7 @@ BFDEV_BEGIN_DECLS
 typedef struct bfdev_rb_node bfdev_rb_node_t;
 typedef struct bfdev_rb_root bfdev_rb_root_t;
 typedef struct bfdev_rb_root_cached bfdev_rb_root_cached_t;
+typedef struct bfdev_rb_callbacks bfdev_rb_callbacks_t;
 
 struct bfdev_rb_node {
     bfdev_rb_node_t *parent;
@@ -129,7 +130,7 @@ bfdev_rb_cache_init(bfdev_rb_root_cached_t *root)
  */
 extern void
 bfdev_rb_fixup_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
-                         const struct bfdev_rb_callbacks *callbacks);
+                         const bfdev_rb_callbacks_t *callbacks);
 
 /**
  * bfdev_rb_erase_augmented() - augmented balance after remove node.
@@ -139,7 +140,7 @@ bfdev_rb_fixup_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
  */
 extern void
 bfdev_rb_erase_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *parent,
-                         const struct bfdev_rb_callbacks *callbacks);
+                         const bfdev_rb_callbacks_t *callbacks);
 
 /**
  * bfdev_rb_remove_augmented() - augmented remove node form rbtree.
@@ -149,7 +150,7 @@ bfdev_rb_erase_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *parent,
  */
 extern bfdev_rb_node_t *
 bfdev_rb_remove_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
-                          const struct bfdev_rb_callbacks *callbacks);
+                          const bfdev_rb_callbacks_t *callbacks);
 
 /**
  * bfdev_rb_fixup() - balance after insert node.
@@ -690,7 +691,7 @@ bfdev_rb_delete(bfdev_rb_root_t *root, bfdev_rb_node_t *node)
 static inline void
 bfdev_rb_insert_node_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *parent,
                                bfdev_rb_node_t **link, bfdev_rb_node_t *node,
-                               const struct bfdev_rb_callbacks *callbacks)
+                               const bfdev_rb_callbacks_t *callbacks)
 {
     bfdev_rb_link(parent, link, node);
     bfdev_rb_fixup_augmented(root, node, callbacks);
@@ -706,7 +707,7 @@ bfdev_rb_insert_node_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *parent,
 static inline void
 bfdev_rb_insert_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
                           bfdev_rb_cmp_t cmp, void *pdata,
-                          const struct bfdev_rb_callbacks *callbacks)
+                          const bfdev_rb_callbacks_t *callbacks)
 {
     bfdev_rb_node_t *parent, **link;
 
@@ -722,7 +723,7 @@ bfdev_rb_insert_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
  */
 static inline void
 bfdev_rb_delete_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
-                          const struct bfdev_rb_callbacks *callbacks)
+                          const bfdev_rb_callbacks_t *callbacks)
 {
     bfdev_rb_node_t *rebalance;
 
@@ -922,7 +923,7 @@ bfdev_rb_cached_delete(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t *node)
  */
 static inline void
 bfdev_rb_cached_fixup_augmented(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t *node,
-                                bool leftmost, const struct bfdev_rb_callbacks *callbacks)
+                                bool leftmost, const bfdev_rb_callbacks_t *callbacks)
 {
     if (leftmost)
         cached->leftmost = node;
@@ -942,7 +943,7 @@ bfdev_rb_cached_fixup_augmented(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t 
 static inline void
 bfdev_rb_cached_insert_node_augmented(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t *parent,
                                       bfdev_rb_node_t **link, bfdev_rb_node_t *node,
-                                      bool leftmost, const struct bfdev_rb_callbacks *callbacks)
+                                      bool leftmost, const bfdev_rb_callbacks_t *callbacks)
 {
     bfdev_rb_link(parent, link, node);
     bfdev_rb_cached_fixup_augmented(cached, node, leftmost, callbacks);
@@ -958,7 +959,7 @@ bfdev_rb_cached_insert_node_augmented(bfdev_rb_root_cached_t *cached, bfdev_rb_n
 static inline void
 bfdev_rb_cached_insert_augmented(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t *node,
                                  bfdev_rb_cmp_t cmp, void *pdata,
-                                 const struct bfdev_rb_callbacks *callbacks)
+                                 const bfdev_rb_callbacks_t *callbacks)
 {
     bfdev_rb_node_t *parent, **link;
     bool leftmost;
@@ -975,7 +976,7 @@ bfdev_rb_cached_insert_augmented(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t
  */
 static inline bfdev_rb_node_t *
 bfdev_rb_cached_delete_augmented(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t *node,
-                                 const struct bfdev_rb_callbacks *callbacks)
+                                 const bfdev_rb_callbacks_t *callbacks)
 {
     bfdev_rb_node_t *leftmost;
 
@@ -1032,7 +1033,7 @@ static void RBNAME##_propagate(bfdev_rb_node_t *rb_node, bfdev_rb_node_t *rb_sto
     }                                                                                           \
 }                                                                                               \
                                                                                                 \
-RBSTATIC struct bfdev_rb_callbacks RBNAME = {                                                   \
+RBSTATIC bfdev_rb_callbacks_t RBNAME = {                                                   \
     .rotate = RBNAME##_rotate,                                                                  \
     .copy = RBNAME##_copy,                                                                      \
     .propagate = RBNAME##_propagate,                                                            \
