@@ -3,9 +3,13 @@
  * Copyright(c) 2024 John Sanpe <sanpeqf@gmail.com>
  */
 
+#define MODULE_NAME "bfdev-dword"
+#define bfdev_log_fmt(fmt) MODULE_NAME ": " fmt
+
 #include <base.h>
 #include <bfdev/dword.h>
 #include <bfdev/bitops.h>
+#include <bfdev/bug.h>
 #include <export.h>
 
 export void
@@ -33,8 +37,7 @@ bfdev_dword_generic_udiv(bfdev_uw_t *quot, bfdev_uw_t *rem,
         q1 = 0;
     } else {
         /* divide by zero */
-        if (!div)
-            div = 1 / div;
+        BFDEV_BUG_ON(!div);
 
         bm = bfdev_clz(div);
         if (bm == 0) {

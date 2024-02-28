@@ -566,6 +566,12 @@ mpi_add(bfdev_mpi_t *dest,
         return mpi_addi(dest, va, *ptrb);
 
     cnta = mpi_len(va);
+    ptra = mpi_val(va);
+
+    /* satisfy commutative law */
+    if (cnta == 1)
+        return mpi_addi(dest, vb, *ptra);
+
     length = bfdev_max(cnta, cntb);
 
     retval = mpi_resize(dest, length + 1);
@@ -573,7 +579,6 @@ mpi_add(bfdev_mpi_t *dest,
         return retval;
 
     ptrs = mpi_val(dest);
-    ptra = mpi_val(va);
 
     carry = mpa_add(ptrs, ptra, ptrb, cnta, cntb, false);
     *(ptrs + length) = carry;
@@ -601,8 +606,7 @@ mpi_subi(bfdev_mpi_t *dest,
     ptra = mpi_val(va);
 
     borrow = mpa_subi(ptrs, ptra, vi, length, false);
-    if (bfdev_unlikely(borrow))
-        return -BFDEV_EOVERFLOW;
+    BFDEV_BUG_ON(borrow);
     mpi_relocation(dest);
 
     return -BFDEV_ENOERR;
@@ -625,8 +629,7 @@ mpi_sub(bfdev_mpi_t *dest,
         return mpi_subi(dest, va, *ptrb);
 
     cnta = mpi_len(va);
-    if (bfdev_unlikely(cnta < cntb))
-        return -BFDEV_EOVERFLOW;
+    BFDEV_BUG_ON(cnta < cntb);
 
     retval = mpi_resize(dest, cnta);
     if (bfdev_unlikely(retval))
@@ -636,8 +639,7 @@ mpi_sub(bfdev_mpi_t *dest,
     ptra = mpi_val(va);
 
     borrow = mpa_sub(ptrs, ptra, ptrb, cnta, cntb, false);
-    if (bfdev_unlikely(borrow))
-        return -BFDEV_EOVERFLOW;
+    BFDEV_BUG_ON(borrow);
     mpi_relocation(dest);
 
     return -BFDEV_ENOERR;
@@ -685,6 +687,13 @@ mpi_mul(bfdev_mpi_t *dest,
     if (cntb == 1)
         return mpi_muli(dest, va, *ptrb);
 
+    cnta = mpi_len(va);
+    ptra = mpi_val(va);
+
+    /* satisfy commutative law */
+    if (cnta == 1)
+        return mpi_muli(dest, vb, *ptra);
+
     nval = false;
     if (dest != va && dest != vb)
         buffer = &dest->value;
@@ -694,7 +703,6 @@ mpi_mul(bfdev_mpi_t *dest,
         nval = true;
     }
 
-    cnta = mpi_len(va);
     length = cnta + cntb;
 
     retval = bfdev_array_resize(buffer, length);
@@ -702,9 +710,9 @@ mpi_mul(bfdev_mpi_t *dest,
         return retval;
 
     ptrs = bfdev_array_data(buffer, 0);
-    ptra = mpi_val(va);
 
     mpa_mul(ptrs, ptra, ptrb, cnta, cntb);
+
     if (nval) {
         bfdev_array_release(&dest->value);
         dest->value = array;
