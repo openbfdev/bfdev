@@ -40,7 +40,7 @@ child_change(bfdev_rb_root_t *root, bfdev_rb_node_t *parent,
 static __bfdev_always_inline void
 rotate_set(bfdev_rb_root_t *root, bfdev_rb_node_t *node, bfdev_rb_node_t *newn,
            bfdev_rb_node_t *child, unsigned int color, unsigned int ccolor,
-           const struct bfdev_rb_callbacks *callbacks)
+           const bfdev_rb_callbacks_t *callbacks)
 {
     bfdev_rb_node_t *parent;
 
@@ -74,7 +74,7 @@ rotate_set(bfdev_rb_root_t *root, bfdev_rb_node_t *node, bfdev_rb_node_t *newn,
 static __bfdev_always_inline bfdev_rb_node_t *
 left_rotate(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
             unsigned int color, unsigned int ccolor,
-            const struct bfdev_rb_callbacks *callbacks)
+            const bfdev_rb_callbacks_t *callbacks)
 {
     bfdev_rb_node_t *child, *successor;
 
@@ -100,7 +100,7 @@ left_rotate(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
 static __bfdev_always_inline bfdev_rb_node_t *
 right_rotate(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
              unsigned int color, unsigned int ccolor,
-             const struct bfdev_rb_callbacks *callbacks)
+             const bfdev_rb_callbacks_t *callbacks)
 {
     bfdev_rb_node_t *child, *successor;
 
@@ -117,7 +117,7 @@ right_rotate(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
 
 export void
 bfdev_rb_fixup_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
-                         const struct bfdev_rb_callbacks *callbacks)
+                         const bfdev_rb_callbacks_t *callbacks)
 {
     bfdev_rb_node_t *parent, *gparent, *tmp;
 
@@ -227,7 +227,7 @@ bfdev_rb_fixup_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
 
 export void
 bfdev_rb_erase_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *parent,
-                         const struct bfdev_rb_callbacks *callbacks)
+                         const bfdev_rb_callbacks_t *callbacks)
 {
     bfdev_rb_node_t *sibling, *node = NULL;
     bfdev_rb_node_t *tmp1, *tmp2;
@@ -377,7 +377,7 @@ bfdev_rb_erase_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *parent,
 
 export bfdev_rb_node_t *
 bfdev_rb_remove_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
-                          const struct bfdev_rb_callbacks *callbacks)
+                          const bfdev_rb_callbacks_t *callbacks)
 {
     bfdev_rb_node_t *parent, *rebalance = NULL;
     bfdev_rb_node_t *child1, *child2;
@@ -499,7 +499,8 @@ bfdev_rb_remove_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
     return rebalance;
 }
 
-static const struct bfdev_rb_callbacks dummy_callbacks = {
+static const bfdev_rb_callbacks_t
+dummy_callbacks = {
     .rotate = bfdev_dummy_noop,
     .copy = bfdev_dummy_noop,
     .propagate = bfdev_dummy_noop,
