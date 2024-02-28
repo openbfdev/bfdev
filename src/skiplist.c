@@ -128,8 +128,7 @@ bfdev_skiplist_find(bfdev_skip_head_t *head,
 }
 
 static void
-bfdev_skiplist_release(bfdev_skip_head_t *head,
-                       bfdev_release_t relse)
+skiplist_release(bfdev_skip_head_t *head, bfdev_release_t relse)
 {
     const bfdev_alloc_t *alloc = head->alloc;
     bfdev_skip_node_t *node, *tmp;
@@ -147,7 +146,7 @@ bfdev_skiplist_reset(bfdev_skip_head_t *head,
 {
     unsigned int count;
 
-    bfdev_skiplist_release(head, relse);
+    skiplist_release(head, relse);
     for (count = 0; count < head->levels; ++count)
         bfdev_list_head_init(&head->nodes[count]);
 
@@ -160,7 +159,7 @@ bfdev_skiplist_destroy(bfdev_skip_head_t *head,
 {
     const bfdev_alloc_t *alloc = head->alloc;
 
-    bfdev_skiplist_release(head, relse);
+    skiplist_release(head, relse);
     bfdev_free(alloc, head);
 }
 
