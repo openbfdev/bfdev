@@ -11,6 +11,8 @@
 #include <bfdev/errno.h>
 #include <bfdev/allocator.h>
 
+BFDEV_BEGIN_DECLS
+
 struct bfdev_fifo {
     const bfdev_alloc_t *alloc;
     unsigned long in;
@@ -425,13 +427,37 @@ struct bfdev_fifo {
     bfdev_fifo_in_flat(__fifo, __tbuff, __tlen);                    \
 })
 
-extern unsigned long bfdev_fifo_peek_flat(struct bfdev_fifo *fifo, void *buff, unsigned long len);
-extern unsigned long bfdev_fifo_out_flat(struct bfdev_fifo *fifo, void *buff, unsigned long len);
-extern unsigned long bfdev_fifo_in_flat(struct bfdev_fifo *fifo, const void *buff, unsigned long len);
-extern unsigned long bfdev_fifo_peek_record(struct bfdev_fifo *fifo, void *buff, unsigned long len, unsigned long record);
-extern unsigned long bfdev_fifo_out_record(struct bfdev_fifo *fifo, void *buff, unsigned long len, unsigned long record);
-extern unsigned long bfdev_fifo_in_record(struct bfdev_fifo *fifo, const void *buff, unsigned long len, unsigned long record);
-extern int bfdev_fifo_dynamic_alloc(struct bfdev_fifo *fifo, const bfdev_alloc_t *alloc, size_t esize, size_t size);
-extern void bfdev_fifo_dynamic_free(struct bfdev_fifo *fifo);
+extern unsigned long
+bfdev_fifo_peek_flat(struct bfdev_fifo *fifo, void *buff,
+                     unsigned long len);
+
+extern unsigned long
+bfdev_fifo_out_flat(struct bfdev_fifo *fifo, void *buff,
+                    unsigned long len);
+
+extern unsigned long
+bfdev_fifo_in_flat(struct bfdev_fifo *fifo, const void *buff,
+                   unsigned long len);
+
+extern unsigned long
+bfdev_fifo_peek_record(struct bfdev_fifo *fifo, void *buff,
+                       unsigned long len, unsigned long record);
+
+extern unsigned long
+bfdev_fifo_out_record(struct bfdev_fifo *fifo, void *buff,
+                      unsigned long len, unsigned long record);
+
+extern unsigned long
+bfdev_fifo_in_record(struct bfdev_fifo *fifo, const void *buff,
+                     unsigned long len, unsigned long record);
+
+extern int
+bfdev_fifo_dynamic_alloc(struct bfdev_fifo *fifo, const bfdev_alloc_t *alloc,
+                         size_t esize, size_t size);
+
+extern void
+bfdev_fifo_dynamic_free(struct bfdev_fifo *fifo);
+
+BFDEV_END_DECLS
 
 #endif  /* _BFDEV_FIFO_H_ */
