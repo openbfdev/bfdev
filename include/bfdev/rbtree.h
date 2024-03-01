@@ -1007,59 +1007,81 @@ bfdev_rb_cached_replace(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t *oldn,
     bfdev_rb_replace(&cached->root, oldn, newn);
 }
 
-#define BFDEV_RB_DECLARE_CALLBACKS(RBSTATIC, RBNAME, RBSTRUCT, RBFIELD, RBAUGMENTED, RBCOMPUTE) \
-static void RBNAME##_rotate(bfdev_rb_node_t *rb_node, bfdev_rb_node_t *rb_successor)            \
-{                                                                                               \
-    RBSTRUCT *node = bfdev_rb_entry(rb_node, RBSTRUCT, RBFIELD);                                \
-    RBSTRUCT *successor = bfdev_rb_entry(rb_successor, RBSTRUCT, RBFIELD);                      \
-    successor->RBAUGMENTED = node->RBAUGMENTED;                                                 \
-    RBCOMPUTE(node, false);                                                                     \
-}                                                                                               \
-                                                                                                \
-static void RBNAME##_copy(bfdev_rb_node_t *rb_node, bfdev_rb_node_t *rb_successor)              \
-{                                                                                               \
-    RBSTRUCT *node = bfdev_rb_entry(rb_node, RBSTRUCT, RBFIELD);                                \
-    RBSTRUCT *successor = bfdev_rb_entry(rb_successor, RBSTRUCT, RBFIELD);                      \
-    successor->RBAUGMENTED = node->RBAUGMENTED;                                                 \
-}                                                                                               \
-                                                                                                \
-static void RBNAME##_propagate(bfdev_rb_node_t *rb_node, bfdev_rb_node_t *rb_stop)              \
-{                                                                                               \
-    while (rb_node != rb_stop) {                                                                \
-        RBSTRUCT *node = bfdev_rb_entry(rb_node, RBSTRUCT, RBFIELD);                            \
-        if (RBCOMPUTE(node, true))                                                              \
-            break;                                                                              \
-        rb_node = node->RBFIELD.parent;                                                         \
-    }                                                                                           \
-}                                                                                               \
-                                                                                                \
-RBSTATIC bfdev_rb_callbacks_t RBNAME = {                                                   \
-    .rotate = RBNAME##_rotate,                                                                  \
-    .copy = RBNAME##_copy,                                                                      \
-    .propagate = RBNAME##_propagate,                                                            \
+#define BFDEV_RB_DECLARE_CALLBACKS(RBSTATIC, RBNAME, RBSTRUCT,              \
+                                   RBFIELD, RBAUGMENTED, RBCOMPUTE)         \
+static void                                                                 \
+RBNAME##_rotate(bfdev_rb_node_t *rb_node, bfdev_rb_node_t *rb_successor)    \
+{                                                                           \
+    RBSTRUCT *node, *successor;                                             \
+                                                                            \
+    node = bfdev_rb_entry(rb_node, RBSTRUCT, RBFIELD);                      \
+    successor = bfdev_rb_entry(rb_successor, RBSTRUCT, RBFIELD);            \
+                                                                            \
+    successor->RBAUGMENTED = node->RBAUGMENTED;                             \
+    RBCOMPUTE(node, false);                                                 \
+}                                                                           \
+                                                                            \
+static void                                                                 \
+RBNAME##_copy(bfdev_rb_node_t *rb_node, bfdev_rb_node_t *rb_successor)      \
+{                                                                           \
+    RBSTRUCT *node, *successor;                                             \
+                                                                            \
+    node = bfdev_rb_entry(rb_node, RBSTRUCT, RBFIELD);                      \
+    successor = bfdev_rb_entry(rb_successor, RBSTRUCT, RBFIELD);            \
+                                                                            \
+    successor->RBAUGMENTED = node->RBAUGMENTED;                             \
+}                                                                           \
+                                                                            \
+static void                                                                 \
+RBNAME##_propagate(bfdev_rb_node_t *rb_node, bfdev_rb_node_t *rb_stop)      \
+{                                                                           \
+    RBSTRUCT *node;                                                         \
+                                                                            \
+    while (rb_node != rb_stop) {                                            \
+        node = bfdev_rb_entry(rb_node, RBSTRUCT, RBFIELD);                  \
+        if (RBCOMPUTE(node, true))                                          \
+            break;                                                          \
+        rb_node = node->RBFIELD.parent;                                     \
+    }                                                                       \
+}                                                                           \
+                                                                            \
+RBSTATIC bfdev_rb_callbacks_t RBNAME = {                                    \
+    .rotate = RBNAME##_rotate,                                              \
+    .copy = RBNAME##_copy,                                                  \
+    .propagate = RBNAME##_propagate,                                        \
 }
 
-#define BFDEV_RB_DECLARE_CALLBACKS_MAX(RBSTATIC, RBNAME, RBSTRUCT, RBFIELD, RBTYPE, RBAUGMENTED, RBCOMPUTE) \
-static inline bool RBNAME##_compute_max(RBSTRUCT *node, bool exit)                                          \
-{                                                                                                           \
-    RBSTRUCT *child;                                                                                        \
-    RBTYPE max = RBCOMPUTE(node);                                                                           \
-    if (node->RBFIELD.left) {                                                                               \
-        child = bfdev_rb_entry(node->RBFIELD.left, RBSTRUCT, RBFIELD);                                      \
-        if (child->RBAUGMENTED > max)                                                                       \
-            max = child->RBAUGMENTED;                                                                       \
-    }                                                                                                       \
-    if (node->RBFIELD.right) {                                                                              \
-        child = bfdev_rb_entry(node->RBFIELD.right, RBSTRUCT, RBFIELD);                                     \
-        if (child->RBAUGMENTED > max)                                                                       \
-            max = child->RBAUGMENTED;                                                                       \
-    }                                                                                                       \
-    if (exit && node->RBAUGMENTED == max)                                                                   \
-        return true;                                                                                        \
-    node->RBAUGMENTED = max;                                                                                \
-    return false;                                                                                           \
-}                                                                                                           \
-BFDEV_RB_DECLARE_CALLBACKS(RBSTATIC, RBNAME, RBSTRUCT, RBFIELD, RBAUGMENTED, RBNAME##_compute_max)
+#define BFDEV_RB_DECLARE_CALLBACKS_MAX(RBSTATIC, RBNAME, RBSTRUCT, RBFIELD, \
+                                       RBTYPE, RBAUGMENTED, RBCOMPUTE)      \
+static inline bool                                                          \
+RBNAME##_compute_max(RBSTRUCT *node, bool exit)                             \
+{                                                                           \
+    RBSTRUCT *child;                                                        \
+    RBTYPE max;                                                             \
+                                                                            \
+    max = RBCOMPUTE(node);                                                  \
+    if (node->RBFIELD.left) {                                               \
+        child = bfdev_rb_entry(node->RBFIELD.left, RBSTRUCT, RBFIELD);      \
+        if (child->RBAUGMENTED > max)                                       \
+            max = child->RBAUGMENTED;                                       \
+    }                                                                       \
+    if (node->RBFIELD.right) {                                              \
+        child = bfdev_rb_entry(node->RBFIELD.right, RBSTRUCT, RBFIELD);     \
+        if (child->RBAUGMENTED > max)                                       \
+            max = child->RBAUGMENTED;                                       \
+    }                                                                       \
+                                                                            \
+    if (exit && node->RBAUGMENTED == max)                                   \
+        return true;                                                        \
+    node->RBAUGMENTED = max;                                                \
+                                                                            \
+    return false;                                                           \
+}                                                                           \
+                                                                            \
+BFDEV_RB_DECLARE_CALLBACKS(                                                 \
+    RBSTATIC, RBNAME, RBSTRUCT, RBFIELD,                                    \
+    RBAUGMENTED, RBNAME##_compute_max                                       \
+)
 
 BFDEV_END_DECLS
 

@@ -15,6 +15,7 @@
 BFDEV_BEGIN_DECLS
 
 typedef struct bfdev_refcnt bfdev_refcnt_t;
+typedef enum bfdev_refcnt_saturation bfdev_refcnt_saturation_t;
 
 struct bfdev_refcnt {
     bfdev_atomic_t count;
@@ -43,7 +44,7 @@ enum bfdev_refcnt_saturation {
 
 #ifdef BFDEV_DEBUG_REFCNT
 extern void
-bfdev_refcnt_report(bfdev_refcnt_t *ref, enum bfdev_refcnt_saturation type);
+bfdev_refcnt_report(bfdev_refcnt_t *ref, bfdev_refcnt_saturation_t type);
 #endif
 
 static inline bfdev_atomic_t
