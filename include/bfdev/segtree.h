@@ -3,8 +3,8 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
-#ifndef _BFDEV_SEGTREE_
-#define _BFDEV_SEGTREE_
+#ifndef _BFDEV_SEGTREE_H_
+#define _BFDEV_SEGTREE_H_
 
 #include <bfdev/config.h>
 #include <bfdev/rbtree.h>
@@ -37,11 +37,23 @@ struct bfdev_segtree_node {
 #define bfdev_segtree_entry_safe(ptr, type, member) \
     bfdev_container_of_safe(ptr, type, member)
 
-extern void bfdev_segtree_insert(bfdev_rb_root_cached_t *root, bfdev_segtree_node_t *node);
-extern void bfdev_segtree_delete(bfdev_rb_root_cached_t *root, bfdev_segtree_node_t *node);
-extern bfdev_segtree_node_t *bfdev_segtree_search(bfdev_segtree_node_t *node, unsigned long start, unsigned long end);
-extern bfdev_segtree_node_t *bfdev_segtree_first(bfdev_rb_root_cached_t *root, unsigned long start, unsigned long end);
-extern bfdev_segtree_node_t *bfdev_segtree_next(bfdev_segtree_node_t *node, unsigned long start, unsigned long end);
+extern void
+bfdev_segtree_insert(bfdev_rb_root_cached_t *root, bfdev_segtree_node_t *node);
+
+extern void
+bfdev_segtree_delete(bfdev_rb_root_cached_t *root, bfdev_segtree_node_t *node);
+
+extern bfdev_segtree_node_t *
+bfdev_segtree_search(bfdev_segtree_node_t *node, unsigned long start,
+                     unsigned long end);
+
+extern bfdev_segtree_node_t *
+bfdev_segtree_first(bfdev_rb_root_cached_t *root, unsigned long start,
+                    unsigned long end);
+
+extern bfdev_segtree_node_t *
+bfdev_segtree_next(bfdev_segtree_node_t *node, unsigned long start,
+                   unsigned long end);
 
 /**
  * bfdev_segtree_first_entry - get the first element from a segtree.
@@ -251,4 +263,4 @@ STNAME##_next(STSTRUCT *node, STTYPE start, STTYPE end)                     \
 
 BFDEV_END_DECLS
 
-#endif /* _BFDEV_SEGTREE_ */
+#endif /* _BFDEV_SEGTREE_H_ */

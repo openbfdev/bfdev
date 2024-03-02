@@ -10,61 +10,18 @@
 #include <bfdev/types.h>
 #include <bfdev/stddef.h>
 #include <bfdev/bitops.h>
+#include <bfdev/bitwalk-comp.h>
 
 BFDEV_BEGIN_DECLS
 
 /**
- * bfdev_comp_find_first_bit - complex find first bit in a region.
+ * bfdev_find_first_bit() - complex find first bit in a region.
  * @block: the block to find.
  * @bits: number of bits in the block.
- * @swap: byte swap in the block.
+ *
+ * Returns the bit number of the first set bit.
+ * If no bits are set, returns @bits.
  */
-extern unsigned int
-bfdev_comp_find_first_bit(const unsigned long *block, unsigned int bits, bool swap);
-
-/**
- * bfdev_comp_find_last_bit - complex find last bit in a region.
- * @block: the block to find.
- * @bits: number of bits in the block.
- * @swap: byte swap in the block.
- */
-extern unsigned int
-bfdev_comp_find_last_bit(const unsigned long *block, unsigned int bits, bool swap);
-
-/**
- * bfdev_comp_find_first_zero - complex find first zero in a region.
- * @block: the block to find.
- * @bits: number of bits in the block.
- * @swap: byte swap in the block.
- */
-extern unsigned int
-bfdev_comp_find_first_zero(const unsigned long *block, unsigned int bits, bool swap);
-
-/**
- * bfdev_comp_find_last_zero - complex find last zero in a region.
- * @block: the block to find.
- * @bits: number of bits in the block.
- * @swap: byte swap in the block.
- */
-extern unsigned int
-bfdev_comp_find_last_zero(const unsigned long *block, unsigned int bits, bool swap);
-
-/**
- * bfdev_comp_find_last_zero - complex find last zero in a region.
- * @block: the block to find.
- * @bits: number of bits in the block.
- * @swap: byte swap in the block.
- */
-extern unsigned int
-bfdev_comp_find_next_bit(const unsigned long *addr1, const unsigned long *addr2,
-                         unsigned int bits, unsigned int start,
-                         unsigned long invert, bool swap);
-
-extern unsigned int
-bfdev_comp_find_prev_bit(const unsigned long *addr1, const unsigned long *addr2,
-                         unsigned int bits, unsigned int start,
-                         unsigned long invert, bool swap);
-
 #ifndef bfdev_find_first_bit
 static inline unsigned int
 bfdev_find_first_bit(const unsigned long *addr, unsigned int bits)
@@ -87,6 +44,14 @@ bfdev_find_last_bit(const unsigned long *addr, unsigned int bits)
 }
 #endif
 
+/**
+ * bfdev_comp_find_first_zero - find first zero in a region.
+ * @block: the block to find.
+ * @bits: number of bits in the block.
+ *
+ * Returns the bit number of the first cleared bit.
+ * If no bits are zero, returns @bits.
+ */
 #ifndef bfdev_find_first_zero
 static inline unsigned int
 bfdev_find_first_zero(const unsigned long *addr, unsigned int bits)
@@ -109,18 +74,28 @@ bfdev_find_last_zero(const unsigned long *addr, unsigned int bits)
 }
 #endif
 
+/**
+ * bfdev_find_next_bit() - find next bit in a region.
+ * @block: the block to find.
+ * @bits: number of bits in the block.
+ * @offset: The bitnumber to start searching at.
+ *
+ * Returns the bit number for the next set bit
+ * If no bits are set, returns @bits.
+ */
 #ifndef bfdev_find_next_bit
 static inline unsigned int
-bfdev_find_next_bit(const unsigned long *addr, unsigned int bits, unsigned int offset)
+bfdev_find_next_bit(const unsigned long *addr,
+                    unsigned int bits, unsigned int offset)
 {
-    if (bfdev_const_small_nbits(bits)) {
-        unsigned long val;
+    unsigned long value;
 
+    if (bfdev_const_small_nbits(bits)) {
         if (bfdev_unlikely(offset >= bits))
             return bits;
 
-        val = *addr & BFDEV_BIT_RANGE(bits - 1, offset);
-        return val ? bfdev_ffsuf(val) : bits;
+        value = *addr & BFDEV_BIT_RANGE(bits - 1, offset);
+        return value ? bfdev_ffsuf(value) : bits;
     }
 
     return bfdev_comp_find_next_bit(addr, NULL, bits, offset, 0UL, false);
@@ -129,34 +104,45 @@ bfdev_find_next_bit(const unsigned long *addr, unsigned int bits, unsigned int o
 
 #ifndef bfdev_find_prev_bit
 static inline unsigned int
-bfdev_find_prev_bit(const unsigned long *addr, unsigned int bits, unsigned int offset)
+bfdev_find_prev_bit(const unsigned long *addr,
+                    unsigned int bits, unsigned int offset)
 {
-    if (bfdev_const_small_nbits(bits)) {
-        unsigned long val;
+    unsigned long value;
 
+    if (bfdev_const_small_nbits(bits)) {
         if (bfdev_unlikely(offset >= bits))
             return bits;
 
-        val = *addr & BFDEV_BIT_RANGE(bits - 1, offset);
-        return val ? bfdev_flsuf(val) : bits;
+        value = *addr & BFDEV_BIT_RANGE(bits - 1, offset);
+        return value ? bfdev_flsuf(value) : bits;
     }
 
     return bfdev_comp_find_prev_bit(addr, NULL, bits, offset, 0UL, false);
 }
 #endif
 
+/**
+ * bfdev_find_next_bit() - find next zero in a region.
+ * @block: the block to find.
+ * @bits: number of bits in the block.
+ * @offset: the bitnumber to start searching at.
+ *
+ * Returns the bit number for the next set bit
+ * If no bits are set, returns @bits.
+ */
 #ifndef bfdev_find_next_zero
 static inline unsigned int
-bfdev_find_next_zero(const unsigned long *addr, unsigned int bits, unsigned int offset)
+bfdev_find_next_zero(const unsigned long *addr,
+                     unsigned int bits, unsigned int offset)
 {
-    if (bfdev_const_small_nbits(bits)) {
-        unsigned long val;
+    unsigned long value;
 
+    if (bfdev_const_small_nbits(bits)) {
         if (bfdev_unlikely(offset >= bits))
             return bits;
 
-        val = *addr | ~BFDEV_BIT_RANGE(bits - 1, offset);
-        return val ? bfdev_ffzuf(val) : bits;
+        value = *addr | ~BFDEV_BIT_RANGE(bits - 1, offset);
+        return value ? bfdev_ffzuf(value) : bits;
     }
 
     return bfdev_comp_find_next_bit(addr, NULL, bits, offset, ~0UL, false);
@@ -165,35 +151,46 @@ bfdev_find_next_zero(const unsigned long *addr, unsigned int bits, unsigned int 
 
 #ifndef bfdev_find_prev_zero
 static inline unsigned int
-bfdev_find_prev_zero(const unsigned long *addr, unsigned int bits, unsigned int offset)
+bfdev_find_prev_zero(const unsigned long *addr,
+                     unsigned int bits, unsigned int offset)
 {
-    if (bfdev_const_small_nbits(bits)) {
-        unsigned long val;
+    unsigned long value;
 
+    if (bfdev_const_small_nbits(bits)) {
         if (bfdev_unlikely(offset >= bits))
             return bits;
 
-        val = *addr | ~BFDEV_BIT_RANGE(bits - 1, offset);
-        return val ? bfdev_flzuf(val) : bits;
+        value = *addr | ~BFDEV_BIT_RANGE(bits - 1, offset);
+        return value ? bfdev_flzuf(value) : bits;
     }
 
     return bfdev_comp_find_prev_bit(addr, NULL, bits, offset, ~0UL, false);
 }
 #endif
 
+/**
+ * bfdev_find_next_and_bit() - find the next set bit in both memory regions.
+ * @addr1: the first address to base the search on.
+ * @addr2: the second address to base the search on.
+ * @bits: number of bits in the block.
+ * @offset: the bitnumber to start searching at.
+ *
+ * Returns the bit number for the next set bit, or first set bit up to @offset
+ * If no bits are set, returns @bits.
+ */
 #ifndef bfdev_find_next_and_bit
 static inline unsigned int
 bfdev_find_next_and_bit(const unsigned long *addr1, const unsigned long *addr2,
                         unsigned int bits, unsigned int offset)
 {
-    if (bfdev_const_small_nbits(bits)) {
-        unsigned long val;
+    unsigned long value;
 
+    if (bfdev_const_small_nbits(bits)) {
         if (bfdev_unlikely(offset >= bits))
             return bits;
 
-        val = *addr1 & *addr2 & BFDEV_BIT_RANGE(bits - 1, offset);
-        return val ? bfdev_ffsuf(val) : bits;
+        value = *addr1 & *addr2 & BFDEV_BIT_RANGE(bits - 1, offset);
+        return value ? bfdev_ffsuf(value) : bits;
     }
 
     return bfdev_comp_find_next_bit(addr1, addr2, bits, offset, 0UL, false);
@@ -205,14 +202,14 @@ static inline unsigned int
 bfdev_find_prev_and_bit(const unsigned long *addr1, const unsigned long *addr2,
                         unsigned int bits, unsigned int offset)
 {
-    if (bfdev_const_small_nbits(bits)) {
-        unsigned long val;
+    unsigned long value;
 
+    if (bfdev_const_small_nbits(bits)) {
         if (bfdev_unlikely(offset >= bits))
             return bits;
 
-        val = *addr1 & *addr2 & BFDEV_BIT_RANGE(bits - 1, offset);
-        return val ? bfdev_flsuf(val) : bits;
+        value = *addr1 & *addr2 & BFDEV_BIT_RANGE(bits - 1, offset);
+        return value ? bfdev_flsuf(value) : bits;
     }
 
     return bfdev_comp_find_prev_bit(addr1, addr2, bits, offset, 0UL, false);
