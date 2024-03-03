@@ -29,6 +29,7 @@ BFDEV_BEGIN_DECLS
 /**
  * BFDEV_BIT_LOW_MASK - create a low position mask.
  * @nbits: mask length.
+ *
  * For example:
  * BFDEV_BIT_LOW_MASK(8) gives us the vector 0x000000ff.
  */
@@ -40,6 +41,7 @@ BFDEV_BEGIN_DECLS
 /**
  * BFDEV_BIT_HIGH_MASK - create a high position mask.
  * @nbits: mask length.
+ *
  * For example:
  * BFDEV_BIT_HIGH_MASK(8) gives us the vector 0xffffff00.
  */

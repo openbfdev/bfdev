@@ -156,7 +156,7 @@ bfdev_comp_find_prev_bit(const unsigned long *addr1, const unsigned long *addr2,
         value &= addr2[BFDEV_BITS_DIV_LONG(start)];
     value ^= invert;
 
-    mask = BFDEV_BIT_HIGH_MASK(start);
+    mask = BFDEV_BIT_LOW_MASK(start + 1);
     if (swap)
         mask = bfdev_swab(mask);
 
