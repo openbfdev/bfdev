@@ -80,7 +80,7 @@ int main(int argc, const char *argv[])
     }
 
     bfdev_log_info("Done.\n");
-    bfdev_radix_destory(&bench_root);
+    bfdev_radix_release(&bench_root);
     free(data);
 
     return 0;
