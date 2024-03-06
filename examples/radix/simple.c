@@ -46,6 +46,6 @@ int main(int argc, const char *argv[])
         printf("passed\n");
     }
 
-    bfdev_radix_destory(&simple_root);
+    bfdev_radix_release(&simple_root);
     return 0;
 }
