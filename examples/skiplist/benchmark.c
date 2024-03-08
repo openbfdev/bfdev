@@ -83,7 +83,7 @@ int main(int argc, const char *argv[])
         0;
     );
 
-    bfdev_skiplist_destroy(head, NULL);
+    bfdev_skiplist_destroy(head, NULL, NULL);
     free(record);
 
     return 0;

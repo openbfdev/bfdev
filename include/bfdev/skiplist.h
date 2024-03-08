@@ -30,8 +30,8 @@ struct bfdev_skip_head {
 };
 
 extern int
-bfdev_skiplist_insert(bfdev_skip_head_t *head, void *key,
-                      bfdev_cmp_t cmp, void *pdata);
+bfdev_skiplist_insert(bfdev_skip_head_t *head, void *key, bfdev_cmp_t cmp,
+                      void *pdata);
 
 extern void
 bfdev_skiplist_delete(bfdev_skip_head_t *head, bfdev_find_t find, void *pdata);
@@ -40,13 +40,15 @@ extern bfdev_skip_node_t *
 bfdev_skiplist_find(bfdev_skip_head_t *head, bfdev_find_t find, void *pdata);
 
 extern void
-bfdev_skiplist_reset(bfdev_skip_head_t *head, bfdev_release_t relse);
-
-extern void
-bfdev_skiplist_destroy(bfdev_skip_head_t *head, bfdev_release_t relse);
+bfdev_skiplist_reset(bfdev_skip_head_t *head, bfdev_release_t release,
+                     void *pdata);
 
 extern bfdev_skip_head_t *
 bfdev_skiplist_create(const bfdev_alloc_t *alloc, unsigned int levels);
+
+extern void
+bfdev_skiplist_destroy(bfdev_skip_head_t *head, bfdev_release_t release,
+                       void *pdata);
 
 /**
  * bfdev_skiplist_for_each - iterate over list of given type.

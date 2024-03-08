@@ -69,12 +69,12 @@ typedef intptr_t bfdev_atomic_t;
 #define BFDEV_CALLBACK_CMP(name, type) \
     typedef long (*name)(type key1, type key2, void *pdata)
 
-#define BFDEV_CALLBACK_RELEASE(name) \
-    typedef void (*name)(void *pdata)
+#define BFDEV_CALLBACK_RELEASE(name, type) \
+    typedef void (*name)(type *value, void *pdata)
 
 BFDEV_CALLBACK_FIND(bfdev_find_t, const void *);
 BFDEV_CALLBACK_CMP(bfdev_cmp_t, const void *);
-BFDEV_CALLBACK_RELEASE(bfdev_release_t);
+BFDEV_CALLBACK_RELEASE(bfdev_release_t, void *);
 
 typedef void *(*bfdev_malloc_t)(size_t size, void *pdata);
 typedef void *(*bfdev_realloc_t)(void *block, size_t resize, void *pdata);

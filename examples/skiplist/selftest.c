@@ -51,7 +51,7 @@ skiplist_testing(struct test_node *test)
     uintptr_t value;
     int retval;
 
-    bfdev_skiplist_reset(test->head, NULL);
+    bfdev_skiplist_reset(test->head, NULL, NULL);
     for (count = 0; count < TEST_LOOP; ++count)
         test->values[count] = rand() | 1;
 
@@ -104,7 +104,7 @@ int main(int argc, const char *argv[])
     }
 
     retval = skiplist_testing(test);
-    bfdev_skiplist_destroy(test->head, NULL);
+    bfdev_skiplist_destroy(test->head, NULL, NULL);
     free(test);
 
     return retval;

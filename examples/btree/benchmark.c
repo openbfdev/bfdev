@@ -97,7 +97,7 @@ int main(int argc, const char *argv[])
     bfdev_log_info("\ttotal num: %u\n", count);
 
     bfdev_log_info("Done.\n");
-    bfdev_btree_destroy(&bench_root);
+    bfdev_btree_release(&bench_root, NULL, NULL);
     free(block);
 
     return 0;

@@ -77,6 +77,9 @@ bfdev_btree_init(bfdev_btree_root_t *root, bfdev_btree_layout_t *layout,
 extern long
 bfdev_btree_key_find(bfdev_btree_root_t *root, uintptr_t *node, uintptr_t *key);
 
+extern void
+bfdev_btree_key_copy(bfdev_btree_root_t *root, uintptr_t *dest, uintptr_t *src);
+
 extern void *
 bfdev_btree_alloc(bfdev_btree_root_t *root);
 
@@ -96,10 +99,8 @@ extern void *
 bfdev_btree_remove(bfdev_btree_root_t *root, uintptr_t *key);
 
 extern void
-bfdev_btree_destroy(bfdev_btree_root_t *root);
-
-extern void
-bfdev_btree_key_copy(bfdev_btree_root_t *root, uintptr_t *dest, uintptr_t *src);
+bfdev_btree_release(bfdev_btree_root_t *root, bfdev_release_t release,
+                    void *pdata);
 
 extern void *
 bfdev_btree_first(bfdev_btree_root_t *root, uintptr_t *key);

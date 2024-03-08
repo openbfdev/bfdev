@@ -554,7 +554,8 @@ bfdev_btree_remove(bfdev_btree_root_t *root, uintptr_t *key)
 }
 
 export void
-bfdev_btree_destroy(bfdev_btree_root_t *root)
+bfdev_btree_release(bfdev_btree_root_t *root, bfdev_release_t release,
+                    void *pdata)
 {
     bfdev_btree_layout_t *layout;
     uintptr_t *key, *tkey;
@@ -564,8 +565,11 @@ bfdev_btree_destroy(bfdev_btree_root_t *root)
     key = bfdev_alloca(sizeof(uintptr_t) * layout->keylen);
     tkey = bfdev_alloca(sizeof(uintptr_t) * layout->keylen);
 
-    bfdev_btree_for_each_safe(root, key, value, tkey, tval)
+    bfdev_btree_for_each_safe(root, key, value, tkey, tval) {
+        if (release)
+            release(value, pdata);
         bfdev_btree_remove(root, key);
+    }
 
     bnode_free(root, root->node);
     root->node = NULL;

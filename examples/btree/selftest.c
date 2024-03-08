@@ -124,7 +124,7 @@ test_testing(struct test_node *nodes)
         printf("btree random remove test%d\n", count);
     }
 
-    bfdev_btree_destroy(&root32);
+    bfdev_btree_release(&root32, NULL, NULL);
 
     BFDEV_BTREE_ROOT(
         rootstr, &bfdev_btree_layout32,
@@ -173,7 +173,7 @@ test_testing(struct test_node *nodes)
         printf("btree string remove test%d\n", count);
     }
 
-    bfdev_btree_destroy(&rootstr);
+    bfdev_btree_release(&rootstr, NULL, NULL);
 
     return 0;
 }
