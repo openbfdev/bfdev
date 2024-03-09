@@ -566,18 +566,13 @@ mpi_add(bfdev_mpi_t *dest,
         return mpi_addi(dest, va, *ptrb);
 
     cnta = mpi_len(va);
-    ptra = mpi_val(va);
-
-    /* satisfy commutative law */
-    if (cnta == 1)
-        return mpi_addi(dest, vb, *ptra);
-
     length = bfdev_max(cnta, cntb);
 
     retval = mpi_resize(dest, length + 1);
     if (bfdev_unlikely(retval))
         return retval;
 
+    ptra = mpi_val(va);
     ptrs = mpi_val(dest);
 
     carry = mpa_add(ptrs, ptra, ptrb, cnta, cntb, false);
@@ -687,13 +682,6 @@ mpi_mul(bfdev_mpi_t *dest,
     if (cntb == 1)
         return mpi_muli(dest, va, *ptrb);
 
-    cnta = mpi_len(va);
-    ptra = mpi_val(va);
-
-    /* satisfy commutative law */
-    if (cnta == 1)
-        return mpi_muli(dest, vb, *ptra);
-
     nval = false;
     if (dest != va && dest != vb)
         buffer = &dest->value;
@@ -703,12 +691,14 @@ mpi_mul(bfdev_mpi_t *dest,
         nval = true;
     }
 
+    cnta = mpi_len(va);
     length = cnta + cntb;
 
     retval = bfdev_array_resize(buffer, length);
     if (bfdev_unlikely(retval))
         return retval;
 
+    ptra = mpi_val(va);
     ptrs = bfdev_array_data(buffer, 0);
 
     mpa_mul(ptrs, ptra, ptrb, cnta, cntb);
@@ -830,7 +820,9 @@ mpi_div(bfdev_mpi_t *quot, bfdev_mpi_t *rem,
         quot->value = array;
     }
 
+    BFDEV_BUG_ON(mpi_resize(quot, length));
     BFDEV_BUG_ON(mpi_resize(rem, cntb));
+
     mpi_relocation(quot);
     mpi_relocation(rem);
 
@@ -1072,7 +1064,15 @@ export int
 bfdev_mpi_add(bfdev_mpi_t *dest,
               const bfdev_mpi_t *va, const bfdev_mpi_t *vb)
 {
+    unsigned long cnta, cntb;
     int diff, retval;
+
+    cnta = mpi_len(va);
+    cntb = mpi_len(vb);
+
+    /* satisfy commutative law */
+    if (cnta < cntb)
+        bfdev_swap(va, vb);
 
     if (va->plus == vb->plus) {
         retval = mpi_add(dest, va, vb);
@@ -1262,10 +1262,9 @@ bfdev_mpi_mul(bfdev_mpi_t *dest,
     cnta = mpi_len(va);
     cntb = mpi_len(vb);
 
-    if (cnta < cntb) {
+    /* satisfy commutative law */
+    if (cnta < cntb)
         bfdev_swap(va, vb);
-        bfdev_swap(cnta, cntb);
-    }
 
     retval = mpi_mul(dest, va, vb);
     if (bfdev_unlikely(retval))
