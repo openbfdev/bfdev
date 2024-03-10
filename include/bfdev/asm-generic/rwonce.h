@@ -10,13 +10,17 @@
 
 BFDEV_BEGIN_DECLS
 
-#define BFDEV_READ_ONCE(x) ({ \
+#ifndef BFDEV_READ_ONCE
+# define BFDEV_READ_ONCE(x) ({ \
     *(volatile typeof(x) *)&(x); \
 })
+#endif
 
-#define BFDEV_WRITE_ONCE(x, val) ({ \
+#ifndef BFDEV_WRITE_ONCE
+# define BFDEV_WRITE_ONCE(x, val) ({ \
     *(volatile typeof(x) *)&(x) = (val); \
 })
+#endif
 
 BFDEV_END_DECLS
 
