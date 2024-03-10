@@ -39,6 +39,7 @@ BFDEV_BEGIN_DECLS
 #endif
 
 #ifndef bfdev_arch_unaligned_get_uint
+# define bfdev_arch_unaligned_get_uint bfdev_arch_unaligned_get_uint
 static __bfdev_always_inline unsigned int
 bfdev_arch_unaligned_get_uint(const void *p)
 {
@@ -47,6 +48,7 @@ bfdev_arch_unaligned_get_uint(const void *p)
 #endif
 
 #ifndef bfdev_arch_unaligned_get_ulong
+# define bfdev_arch_unaligned_get_ulong bfdev_arch_unaligned_get_ulong
 static __bfdev_always_inline unsigned long
 bfdev_arch_unaligned_get_ulong(const void *p)
 {
@@ -55,6 +57,7 @@ bfdev_arch_unaligned_get_ulong(const void *p)
 #endif
 
 #ifndef bfdev_arch_unaligned_set_uint
+# define bfdev_arch_unaligned_set_uint bfdev_arch_unaligned_set_uint
 static __bfdev_always_inline void
 bfdev_arch_unaligned_set_uint(void *p, unsigned int val)
 {
@@ -63,6 +66,7 @@ bfdev_arch_unaligned_set_uint(void *p, unsigned int val)
 #endif
 
 #ifndef bfdev_arch_unaligned_set_ulong
+# define bfdev_arch_unaligned_set_ulong bfdev_arch_unaligned_set_ulong
 static __bfdev_always_inline void
 bfdev_arch_unaligned_set_ulong(void *p, unsigned long val)
 {
@@ -71,6 +75,7 @@ bfdev_arch_unaligned_set_ulong(void *p, unsigned long val)
 #endif
 
 #ifndef bfdev_arch_unaligned_get_u16
+# define bfdev_arch_unaligned_get_u16 bfdev_arch_unaligned_get_u16
 static __bfdev_always_inline uint16_t
 bfdev_arch_unaligned_get_u16(const void *p)
 {
@@ -79,6 +84,7 @@ bfdev_arch_unaligned_get_u16(const void *p)
 #endif
 
 #ifndef bfdev_arch_unaligned_get_u32
+# define bfdev_arch_unaligned_get_u32 bfdev_arch_unaligned_get_u32
 static __bfdev_always_inline uint32_t
 bfdev_arch_unaligned_get_u32(const void *p)
 {
@@ -87,6 +93,7 @@ bfdev_arch_unaligned_get_u32(const void *p)
 #endif
 
 #ifndef bfdev_arch_unaligned_get_u64
+# define bfdev_arch_unaligned_get_u64 bfdev_arch_unaligned_get_u64
 static __bfdev_always_inline uint64_t
 bfdev_arch_unaligned_get_u64(const void *p)
 {
@@ -95,6 +102,7 @@ bfdev_arch_unaligned_get_u64(const void *p)
 #endif
 
 #ifndef bfdev_arch_unaligned_set_u16
+# define bfdev_arch_unaligned_set_u16 bfdev_arch_unaligned_set_u16
 static __bfdev_always_inline void
 bfdev_arch_unaligned_set_u16(void *p, uint16_t val)
 {
@@ -103,6 +111,7 @@ bfdev_arch_unaligned_set_u16(void *p, uint16_t val)
 #endif
 
 #ifndef bfdev_arch_unaligned_set_u32
+# define bfdev_arch_unaligned_set_u32 bfdev_arch_unaligned_set_u32
 static __bfdev_always_inline void
 bfdev_arch_unaligned_set_u32(void *p, uint32_t val)
 {
@@ -111,6 +120,7 @@ bfdev_arch_unaligned_set_u32(void *p, uint32_t val)
 #endif
 
 #ifndef bfdev_arch_unaligned_set_u64
+# define bfdev_arch_unaligned_set_u64 bfdev_arch_unaligned_set_u64
 static __bfdev_always_inline void
 bfdev_arch_unaligned_set_u64(void *p, uint64_t val)
 {
@@ -119,6 +129,7 @@ bfdev_arch_unaligned_set_u64(void *p, uint64_t val)
 #endif
 
 #ifndef bfdev_arch_unaligned_get_le16
+# define bfdev_arch_unaligned_get_le16 bfdev_arch_unaligned_get_le16
 static __bfdev_always_inline uint16_t
 bfdev_arch_unaligned_get_le16(const void *p)
 {
@@ -127,6 +138,7 @@ bfdev_arch_unaligned_get_le16(const void *p)
 #endif
 
 #ifndef bfdev_arch_unaligned_get_le32
+# define bfdev_arch_unaligned_get_le32 bfdev_arch_unaligned_get_le32
 static __bfdev_always_inline uint32_t
 bfdev_arch_unaligned_get_le32(const void *p)
 {
@@ -135,6 +147,7 @@ bfdev_arch_unaligned_get_le32(const void *p)
 #endif
 
 #ifndef bfdev_arch_unaligned_get_le64
+# define bfdev_arch_unaligned_get_le64 bfdev_arch_unaligned_get_le64
 static __bfdev_always_inline uint64_t
 bfdev_arch_unaligned_get_le64(const void *p)
 {
@@ -143,6 +156,7 @@ bfdev_arch_unaligned_get_le64(const void *p)
 #endif
 
 #ifndef bfdev_arch_unaligned_set_le16
+# define bfdev_arch_unaligned_set_le16 bfdev_arch_unaligned_set_le16
 static __bfdev_always_inline void
 bfdev_arch_unaligned_set_le16(void *p, uint16_t val)
 {
@@ -151,6 +165,7 @@ bfdev_arch_unaligned_set_le16(void *p, uint16_t val)
 #endif
 
 #ifndef bfdev_arch_unaligned_set_le32
+# define bfdev_arch_unaligned_set_le32 bfdev_arch_unaligned_set_le32
 static __bfdev_always_inline void
 bfdev_arch_unaligned_set_le32(void *p, uint32_t val)
 {
@@ -159,6 +174,7 @@ bfdev_arch_unaligned_set_le32(void *p, uint32_t val)
 #endif
 
 #ifndef bfdev_arch_unaligned_set_le64
+# define bfdev_arch_unaligned_set_le64 bfdev_arch_unaligned_set_le64
 static __bfdev_always_inline void
 bfdev_arch_unaligned_set_le64(void *p, uint64_t val)
 {
@@ -167,6 +183,7 @@ bfdev_arch_unaligned_set_le64(void *p, uint64_t val)
 #endif
 
 #ifndef bfdev_arch_unaligned_get_be16
+# define bfdev_arch_unaligned_get_be16 bfdev_arch_unaligned_get_be16
 static __bfdev_always_inline uint16_t
 bfdev_arch_unaligned_get_be16(const void *p)
 {
@@ -175,6 +192,7 @@ bfdev_arch_unaligned_get_be16(const void *p)
 #endif
 
 #ifndef bfdev_arch_unaligned_get_be32
+# define bfdev_arch_unaligned_get_be32 bfdev_arch_unaligned_get_be32
 static __bfdev_always_inline uint32_t
 bfdev_arch_unaligned_get_be32(const void *p)
 {
@@ -183,6 +201,7 @@ bfdev_arch_unaligned_get_be32(const void *p)
 #endif
 
 #ifndef bfdev_arch_unaligned_get_be64
+# define bfdev_arch_unaligned_get_be64 bfdev_arch_unaligned_get_be64
 static __bfdev_always_inline uint64_t
 bfdev_arch_unaligned_get_be64(const void *p)
 {
@@ -191,6 +210,7 @@ bfdev_arch_unaligned_get_be64(const void *p)
 #endif
 
 #ifndef bfdev_arch_unaligned_set_be16
+# define bfdev_arch_unaligned_set_be16 bfdev_arch_unaligned_set_be16
 static __bfdev_always_inline void
 bfdev_arch_unaligned_set_be16(void *p, uint16_t val)
 {
@@ -199,6 +219,7 @@ bfdev_arch_unaligned_set_be16(void *p, uint16_t val)
 #endif
 
 #ifndef bfdev_arch_unaligned_set_be32
+# define bfdev_arch_unaligned_set_be32 bfdev_arch_unaligned_set_be32
 static __bfdev_always_inline void
 bfdev_arch_unaligned_set_be32(void *p, uint32_t val)
 {
@@ -207,6 +228,7 @@ bfdev_arch_unaligned_set_be32(void *p, uint32_t val)
 #endif
 
 #ifndef bfdev_arch_unaligned_set_be64
+# define bfdev_arch_unaligned_set_be64 bfdev_arch_unaligned_set_be64
 static __bfdev_always_inline void
 bfdev_arch_unaligned_set_be64(void *p, uint64_t val)
 {

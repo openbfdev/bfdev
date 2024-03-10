@@ -10,15 +10,15 @@ project(bfdev VERSION 1.0.1 LANGUAGES C)
 include(GNUInstallDirs)
 include(CheckIncludeFiles)
 
-set(BFDEV_ARCH dummy)
 set(BFDEV_NAME sirius)
-
-set(BFDEV_EXTREVERSION -devel)
 set(BFDEV_VERSION ${PROJECT_VERSION})
+set(BFDEV_EXTREVERSION -devel)
 
 if(BFDEV_EXTREVERSION)
     string(APPEND BFDEV_VERSION ${BFDEV_EXTREVERSION})
 endif()
+
+set(BFDEV_ARCH generic)
 
 set(BFDEV_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 set(BFDEV_HEADER_PATH ${PROJECT_SOURCE_DIR}/include)
