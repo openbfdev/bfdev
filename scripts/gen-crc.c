@@ -28,9 +28,9 @@ table_generic(unsigned int rows, GENCRC_TYPE poly,
               GENCRC_TYPE (*table)[CRC_TABLE_SIZE])
 {
     unsigned int count, index;
-    GENCRC_TYPE crc = 1;
+    GENCRC_TYPE crc;
 
-    table[0][0] = 0;
+    crc = 1;
     for (count = CRC_TABLE_SIZE >> 1; count; count >>= 1) {
         crc = (crc >> 1) ^ ((crc & 1) ? poly : 0);
         for (index = 0; index < CRC_TABLE_SIZE; index += 2 * count)
@@ -51,9 +51,9 @@ table_generic(unsigned int rows, GENCRC_TYPE poly,
               GENCRC_TYPE (*table)[CRC_TABLE_SIZE])
 {
     unsigned int count, index;
-    GENCRC_TYPE crc = 1ULL << (GENCRC_BITS - 1);
+    GENCRC_TYPE crc;
 
-    table[0][0] = 0;
+    crc = 1ULL << (GENCRC_BITS - 1);
     for (count = 1; count < CRC_TABLE_SIZE; count <<= 1) {
         crc = (crc << 1) ^ ((crc & (1ULL << (GENCRC_BITS - 1))) ? poly : 0);
         for (index = 0; index < count; ++index)
@@ -81,8 +81,16 @@ table_dump(unsigned int rows, const char *trans,
         for (count = 0; count < CRC_TABLE_SIZE; ++count) {
             if (count % ENTRIES_PER_LINE == 0)
                 printf("\n\t\t");
-            printf("%s((" TYPE_STRING ")0x%" WIDE_STRING "." WIDE_STRING "llxULL), ",
-                    trans, (unsigned long long)table[index][count]);
+
+            if (trans) {
+                printf("%s((" TYPE_STRING ")0x%" WIDE_STRING "."
+                       WIDE_STRING "llxULL), ", trans,
+                       (unsigned long long)table[index][count]);
+            } else {
+                printf("(" TYPE_STRING ")0x%" WIDE_STRING
+                       "." WIDE_STRING "llxULL, ",
+                       (unsigned long long)table[index][count]);
+            }
         }
         printf("\n\t},\n");
     }
@@ -90,20 +98,32 @@ table_dump(unsigned int rows, const char *trans,
 
 int main(int argc, char *argv[])
 {
-    GENCRC_TYPE poly, table[8][256];
-    const char *trans = "";
+    const char *trans, *name;
     unsigned int rows;
+    GENCRC_TYPE poly;
+    void *table;
 
-    if (argc < 4) {
-        printf("gen-" NAME_STRING ": name rows poly trans\n");
+    if (argc != 4 && argc != 5) {
+        printf("usage: %s name rows poly [trans]\n", argv[0]);
         return -1;
     }
 
-    if (argc > 4)
+    trans = NULL;
+    if (argc == 5)
         trans = argv[4];
 
+    name = argv[1];
     rows = (unsigned int)strtoul(argv[2], NULL, 0);
     poly = (GENCRC_TYPE)strtoull(argv[3], NULL, 0);
+
+    if (!rows) {
+        fprintf(stderr, "error: rows cannot be zero\n");
+        return -1;
+    }
+
+    table = calloc(1, sizeof(GENCRC_TYPE) * CRC_TABLE_SIZE * rows);
+    if (!table)
+        return -1;
 
     printf("/*\n");
     printf(" * Automatically generated file; DO NOT EDIT.\n");
@@ -111,12 +131,15 @@ int main(int argc, char *argv[])
     printf(" */\n\n");
 
     printf("/* The poly is 0x%" WIDE_STRING "." WIDE_STRING "llx */\n",
-            (unsigned long long)poly);
+           (unsigned long long)poly);
     printf("static const " TYPE_STRING " %s[%d][%d] = {\n",
-            argv[1], rows, CRC_TABLE_SIZE);
+           name, rows, CRC_TABLE_SIZE);
+
     table_generic(rows, poly, table);
     table_dump(rows, trans, table);
+
     printf("};\n");
+    free(table);
 
     return 0;
 }
