@@ -199,10 +199,10 @@ struct bfdev_fifo {
 #define bfdev_fifo_initialized(ptr) ((ptr)->fifo.mask)
 
 /**
- * bfdev_fifo_recsize - get the size of the record length fie.
- * @ptr: pointer of the fifo to get __recsi.
+ * bfdev_fifo_recsize - get the size of the record length field.
+ * @ptr: pointer of the fifo to get field length.
  */
-#define bfdev_fifo_recsize(ptr) (sizeof(*(ptr)->rectyp))
+#define bfdev_fifo_recsize(ptr) (sizeof(*(ptr)->rectype))
 
 /**
  * bfdev_fifo_size - get the size of the element managed by the fifo.
