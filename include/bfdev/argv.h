@@ -21,8 +21,8 @@ bfdev_argv_count(const char *string);
  * @argcp: returned argument count.
  */
 extern char **
-bfdev_argv_split(const bfdev_alloc_t *alloc,
-                 const char *string, unsigned int *argcp);
+bfdev_argv_split(const bfdev_alloc_t *alloc, const char *string,
+                 unsigned int *argcp);
 
 /**
  * bfdev_argv_destory() - destory an argv.
@@ -30,8 +30,7 @@ bfdev_argv_split(const bfdev_alloc_t *alloc,
  * @argv: the argument vector to be freed.
  */
 extern void
-bfdev_argv_destory(const bfdev_alloc_t *alloc,
-                   char **argv);
+bfdev_argv_destory(const bfdev_alloc_t *alloc, char **argv);
 
 BFDEV_END_DECLS
 

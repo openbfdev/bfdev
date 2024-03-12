@@ -26,19 +26,23 @@ typedef uint16_t __bfdev_bitwise bfdev_be16;
 typedef uint32_t __bfdev_bitwise bfdev_be32;
 typedef uint64_t __bfdev_bitwise bfdev_be64;
 
-typedef int bfdev_qi_t __bfdev_mode(QI);
-typedef int bfdev_hi_t __bfdev_mode(HI);
-typedef int bfdev_si_t __bfdev_mode(SI);
-typedef int bfdev_di_t __bfdev_mode(DI);
+typedef int bfdev_sqi_t __bfdev_mode(QI);
+typedef int bfdev_shi_t __bfdev_mode(HI);
+typedef int bfdev_ssi_t __bfdev_mode(SI);
+typedef int bfdev_sdi_t __bfdev_mode(DI);
 typedef unsigned bfdev_uqi_t __bfdev_mode(QI);
 typedef unsigned bfdev_uhi_t __bfdev_mode(HI);
 typedef unsigned bfdev_usi_t __bfdev_mode(SI);
 typedef unsigned bfdev_udi_t __bfdev_mode(DI);
+
+typedef long bfdev_sw_t;
 typedef unsigned long bfdev_uw_t;
 
 #if BFDEV_BITS_PER_LONG == 32
+typedef bfdev_shi_t bfdev_shw_t;
 typedef bfdev_uhi_t bfdev_uhw_t;
 #else /* BFDEV_BITS_PER_LONG == 64 */
+typedef bfdev_ssi_t bfdev_shw_t;
 typedef bfdev_usi_t bfdev_uhw_t;
 #endif
 
