@@ -201,10 +201,10 @@ struct bfdev_ringbuf {
 #define bfdev_ringbuf_initialized(ptr) ((ptr)->ringbuf.mask)
 
 /**
- * bfdev_ringbuf_recsize - get the size of the record length fie.
- * @ptr: pointer of the ringbuf to get __recsi.
+ * bfdev_ringbuf_recsize - returns the size of the record length field.
+ * @ptr: pointer of the ringbuf to get field length.
  */
-#define bfdev_ringbuf_recsize(ptr) (sizeof(*(ptr)->rectyp))
+#define bfdev_ringbuf_recsize(ptr) (sizeof(*(ptr)->rectype))
 
 /**
  * bfdev_ringbuf_size - get the size of the element managed by the ringbuf.
