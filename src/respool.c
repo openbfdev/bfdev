@@ -11,14 +11,14 @@
 #include <bfdev/log.h>
 #include <export.h>
 
-export bfdev_resnode_t *
+export bfdev_respool_node_t *
 bfdev_respool_find(bfdev_respool_t *pool, bfdev_respool_find_t find,
-                   const void *data)
+                   void *data)
 {
-    bfdev_resnode_t *walk;
+    bfdev_respool_node_t *walk;
 
     bfdev_list_for_each_entry(walk, &pool->node, list) {
-        if (!find(pool, walk, data))
+        if (!find(walk, data))
             return walk;
     }
 
@@ -26,76 +26,72 @@ bfdev_respool_find(bfdev_respool_t *pool, bfdev_respool_find_t find,
 }
 
 export void
-bfdev_respool_insert(bfdev_respool_t *pool, bfdev_resnode_t *node)
+bfdev_respool_insert(bfdev_respool_t *pool, bfdev_respool_node_t *node)
 {
+    bfdev_log_debug("%s: insert %p '%s'\n", pool->name, node, node->name);
     bfdev_list_add_prev(&pool->node, &node->list);
-    bfdev_log_debug("%s: insert %p '%s'\n",
-                    pool->name, node, node->name);
 }
 
 export void
-bfdev_respool_remove(bfdev_respool_t *pool, bfdev_resnode_t *node)
+bfdev_respool_remove(bfdev_respool_t *pool, bfdev_respool_node_t *node)
 {
+    bfdev_log_debug("%s: remove %p '%s'\n", pool->name, node, node->name);
     bfdev_list_del(&node->list);
-    bfdev_log_debug("%s: remove %p '%s'\n",
-                    pool->name, node, node->name);
 }
 
 export void
-bfdev_respool_release(bfdev_respool_t *pool, bfdev_resnode_t *node)
+bfdev_respool_release(bfdev_respool_t *pool, bfdev_respool_node_t *node,
+                      void *pdata)
 {
+    bfdev_log_debug("%s: release %p '%s'\n", pool->name, node, node->name);
     bfdev_list_del(&node->list);
-    node->release(pool, node);
-    bfdev_log_debug("%s: release %p '%s'\n",
-                    pool->name, node, node->name);
+    node->release(node, pdata);
 }
 
-export bfdev_resnode_t *
+export bfdev_respool_node_t *
 bfdev_respool_find_remove(bfdev_respool_t *pool, bfdev_respool_find_t find,
-                          const void *data)
+                          void *data)
 {
-    bfdev_resnode_t *match;
+    bfdev_respool_node_t *match;
 
     match = bfdev_respool_find(pool, find, data);
-    if (bfdev_likely(match))
-        bfdev_list_del(&match->list);
-
     if (bfdev_likely(match)) {
         bfdev_log_debug("%s: find-remove %p '%s'\n",
                         pool->name, match, match->name);
+
+        bfdev_list_del(&match->list);
     }
 
     return match;
 }
 
-export bfdev_resnode_t *
+export bfdev_respool_node_t *
 bfdev_respool_find_release(bfdev_respool_t *pool, bfdev_respool_find_t find,
-                           const void *data)
+                           void *pdata)
 {
-    bfdev_resnode_t *match;
+    bfdev_respool_node_t *match;
 
-    match = bfdev_respool_find(pool, find, data);
-    if (bfdev_likely(match)) {
-        bfdev_list_del(&match->list);
-        match->release(pool, match);
-    }
-
+    match = bfdev_respool_find(pool, find, pdata);
     if (bfdev_likely(match)) {
         bfdev_log_debug("%s: find-release %p '%s'\n",
                         pool->name, match, match->name);
+
+        bfdev_list_del(&match->list);
+        match->release(match, pdata);
     }
 
     return match;
 }
 
 export void
-bfdev_respool_release_all(bfdev_respool_t *pool)
+bfdev_respool_release_all(bfdev_respool_t *pool, void *pdata)
 {
-    bfdev_resnode_t *node;
+    bfdev_respool_node_t *node;
 
     bfdev_list_for_each_entry(node, &pool->node, list) {
-        node->release(pool, node);
         bfdev_log_debug("%s: release-all %p '%s'\n",
                         pool->name, node, node->name);
+
+        node->release(node, pdata);
     }
 }

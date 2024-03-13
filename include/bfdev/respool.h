@@ -11,24 +11,28 @@
 
 BFDEV_BEGIN_DECLS
 
-typedef struct bfdev_resnode bfdev_resnode_t;
 typedef struct bfdev_respool bfdev_respool_t;
+typedef struct bfdev_respool_node bfdev_respool_node_t;
 
-typedef void (*bfdev_respool_release_t)
-(bfdev_respool_t *pool, bfdev_resnode_t *res);
+BFDEV_CALLBACK_FIND(
+    bfdev_respool_find_t,
+    bfdev_respool_node_t *
+);
 
-typedef long (*bfdev_respool_find_t)
-(bfdev_respool_t *pool, bfdev_resnode_t *res, const void *data);
-
-struct bfdev_resnode {
-    const char *name;
-    bfdev_list_head_t list;
-    bfdev_respool_release_t release;
-};
+BFDEV_CALLBACK_RELEASE(
+    bfdev_respool_release_t,
+    bfdev_respool_node_t *
+);
 
 struct bfdev_respool {
     const char *name;
     bfdev_list_head_t node;
+};
+
+struct bfdev_respool_node {
+    const char *name;
+    bfdev_list_head_t list;
+    bfdev_respool_release_t release;
 };
 
 #define BFDEV_RESPOOL_STATIC(HEAD, NAME) { \
@@ -53,29 +57,32 @@ bfdev_respool_check_empty(bfdev_respool_t *pool)
     return bfdev_list_check_empty(&pool->node);
 }
 
-extern bfdev_resnode_t *
-bfdev_respool_find(bfdev_respool_t *pool, bfdev_respool_find_t find,
-                   const void *data);
+extern bfdev_respool_node_t *
+bfdev_respool_find(bfdev_respool_t *pool,
+                   bfdev_respool_find_t find, void *pdata);
 
 extern void
-bfdev_respool_insert(bfdev_respool_t *pool, bfdev_resnode_t *res);
+bfdev_respool_insert(bfdev_respool_t *pool,
+                     bfdev_respool_node_t *node);
 
 extern void
-bfdev_respool_remove(bfdev_respool_t *pool, bfdev_resnode_t *res);
+bfdev_respool_remove(bfdev_respool_t *pool,
+                     bfdev_respool_node_t *node);
 
 extern void
-bfdev_respool_release(bfdev_respool_t *pool, bfdev_resnode_t *res);
+bfdev_respool_release(bfdev_respool_t *pool,
+                      bfdev_respool_node_t *node, void *pdata);
 
-extern bfdev_resnode_t *
-bfdev_respool_find_remove(bfdev_respool_t *pool, bfdev_respool_find_t find,
-                          const void *data);
+extern bfdev_respool_node_t *
+bfdev_respool_find_remove(bfdev_respool_t *pool,
+                          bfdev_respool_find_t find, void *pdata);
 
-extern bfdev_resnode_t *
-bfdev_respool_find_release(bfdev_respool_t *pool, bfdev_respool_find_t find,
-                           const void *data);
+extern bfdev_respool_node_t *
+bfdev_respool_find_release(bfdev_respool_t *pool,
+                           bfdev_respool_find_t find, void *pdata);
 
 extern void
-bfdev_respool_release_all(bfdev_respool_t *pool);
+bfdev_respool_release_all(bfdev_respool_t *pool, void *pdata);
 
 BFDEV_END_DECLS
 
