@@ -15,9 +15,9 @@
 
 BFDEV_BEGIN_DECLS
 
-#define BFDEV_RB_RED    (0)
-#define BFDEV_RB_BLACK  (1)
-#define BFDEV_RB_NSET   (2)
+#define BFDEV_RB_RED 0
+#define BFDEV_RB_BLACK 1
+#define BFDEV_RB_NSET 2
 
 typedef struct bfdev_rb_node bfdev_rb_node_t;
 typedef struct bfdev_rb_root bfdev_rb_root_t;
@@ -193,7 +193,7 @@ bfdev_rb_replace(bfdev_rb_root_t *root, bfdev_rb_node_t *oldn,
  * @cmp: operator defining the node order.
  */
 extern bfdev_rb_node_t *
-bfdev_rb_find(const bfdev_rb_root_t *root, void *key, bfdev_rb_find_t cmp);
+bfdev_rb_find(const bfdev_rb_root_t *root, void *key, bfdev_rb_find_t find);
 
 /**
  * bfdev_rb_find_last() - find @key in tree @root and return parent.
@@ -202,10 +202,12 @@ bfdev_rb_find(const bfdev_rb_root_t *root, void *key, bfdev_rb_find_t cmp);
  * @cmp: operator defining the node order.
  * @parentp: pointer used to modify the parent node pointer.
  * @linkp: pointer used to modify the point to pointer to child node.
+ * @leftmostp: return whether it is the leftmost node.
  */
 extern bfdev_rb_node_t *
-bfdev_rb_find_last(bfdev_rb_root_t *root, void *key, bfdev_rb_find_t cmp,
-                   bfdev_rb_node_t **parentp, bfdev_rb_node_t ***linkp);
+bfdev_rb_find_last(bfdev_rb_root_t *root, void *key, bfdev_rb_find_t find,
+                   bfdev_rb_node_t **parentp, bfdev_rb_node_t ***linkp,
+                   bool *leftmostp);
 
 /**
  * bfdev_rb_parent() - find the parent node.
@@ -647,14 +649,18 @@ bfdev_rb_insert_node(bfdev_rb_root_t *root, bfdev_rb_node_t *parent,
  * @node: new node to insert.
  * @cmp: operator defining the node order.
  */
-static inline void
+static inline bool
 bfdev_rb_insert(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
                 bfdev_rb_cmp_t cmp, void *pdata)
 {
     bfdev_rb_node_t *parent, **link;
 
     link = bfdev_rb_parent(root, &parent, node, cmp, pdata, NULL);
+    if (bfdev_unlikely(!link))
+        return false;
+
     bfdev_rb_insert_node(root, parent, link, node);
+    return true;
 }
 
 /**
@@ -704,7 +710,7 @@ bfdev_rb_insert_node_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *parent,
  * @cmp: operator defining the node order.
  * @callbacks: augmented callback function.
  */
-static inline void
+static inline bool
 bfdev_rb_insert_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
                           bfdev_rb_cmp_t cmp, void *pdata,
                           const bfdev_rb_callbacks_t *callbacks)
@@ -712,7 +718,11 @@ bfdev_rb_insert_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
     bfdev_rb_node_t *parent, **link;
 
     link = bfdev_rb_parent(root, &parent, node, cmp, pdata, NULL);
+    if (bfdev_unlikely(!link))
+        return false;
+
     bfdev_rb_insert_node_augmented(root, parent, link, node, callbacks);
+    return true;
 }
 
 /**
@@ -882,7 +892,7 @@ bfdev_rb_cached_insert_node(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t *par
  * @node: new node to insert.
  * @cmp: operator defining the node order.
  */
-static inline void
+static inline bool
 bfdev_rb_cached_insert(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t *node,
                        bfdev_rb_cmp_t cmp, void *pdata)
 {
@@ -890,7 +900,11 @@ bfdev_rb_cached_insert(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t *node,
     bool leftmost;
 
     link = bfdev_rb_cached_parent(cached, &parent, node, cmp, pdata, &leftmost);
+    if (bfdev_unlikely(!link))
+        return false;
+
     bfdev_rb_cached_insert_node(cached, parent, link, node, leftmost);
+    return true;
 }
 
 /**
@@ -956,7 +970,7 @@ bfdev_rb_cached_insert_node_augmented(bfdev_rb_root_cached_t *cached, bfdev_rb_n
  * @cmp: operator defining the node order.
  * @callbacks: augmented callback function.
  */
-static inline void
+static inline bool
 bfdev_rb_cached_insert_augmented(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t *node,
                                  bfdev_rb_cmp_t cmp, void *pdata,
                                  const bfdev_rb_callbacks_t *callbacks)
@@ -965,7 +979,11 @@ bfdev_rb_cached_insert_augmented(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t
     bool leftmost;
 
     link = bfdev_rb_cached_parent(cached, &parent, node, cmp, pdata, &leftmost);
+    if (bfdev_unlikely(!link))
+        return false;
+
     bfdev_rb_cached_insert_node_augmented(cached, parent, link, node, leftmost, callbacks);
+    return true;
 }
 
 /**

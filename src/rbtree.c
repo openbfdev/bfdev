@@ -543,52 +543,59 @@ bfdev_rb_replace(bfdev_rb_root_t *root, bfdev_rb_node_t *oldn,
 
 export bfdev_rb_node_t *
 bfdev_rb_find(const bfdev_rb_root_t *root, void *key,
-              bfdev_rb_find_t cmp)
+              bfdev_rb_find_t find)
 {
     bfdev_rb_node_t *node;
     long retval;
 
     node = root->node;
     while (node) {
-        retval = cmp(node, key);
-        if (retval == LONG_MIN)
-            return NULL;
+        retval = find(node, key);
+        if (!retval)
+            return node;
 
         if (retval > 0)
             node = node->left;
-        else if (retval < 0)
+        else /* retval < 0 */
             node = node->right;
-        else
-            return node;
     }
 
     return NULL;
 }
 
 export bfdev_rb_node_t *
-bfdev_rb_find_last(bfdev_rb_root_t *root, void *key, bfdev_rb_find_t cmp,
-                   bfdev_rb_node_t **parentp, bfdev_rb_node_t ***linkp)
+bfdev_rb_find_last(bfdev_rb_root_t *root, void *key, bfdev_rb_find_t find,
+                   bfdev_rb_node_t **parentp, bfdev_rb_node_t ***linkp,
+                   bool *leftmostp)
 {
+    bool leftmost;
     long retval;
 
     *linkp = &root->node;
+    leftmost = true;
+
     if (bfdev_unlikely(!**linkp)) {
         *parentp = NULL;
-        return NULL;
+        goto finish;
     }
 
     do {
-        retval = cmp((*parentp = **linkp), key);
-        if (retval == LONG_MIN)
-            return NULL;
+        *parentp = **linkp;
+        retval = find(**linkp, key);
+        if (!retval)
+            return **linkp;
 
         if (retval > 0)
             *linkp = &(**linkp)->left;
-        else if (retval < 0)
+        else /* retval < 0 */ {
             *linkp = &(**linkp)->right;
-        else
-            return **linkp;
+            leftmost = false;
+        }
     } while (**linkp);
+
+finish:
+    if (leftmostp)
+        *leftmostp = leftmost;
 
     return NULL;
 }
@@ -611,13 +618,14 @@ bfdev_rb_parent(bfdev_rb_root_t *root, bfdev_rb_node_t **parentp,
     }
 
     do {
-        retval = cmp(node, (*parentp = *link), pdata);
+        retval = cmp(node, *link, pdata);
         if (bfdev_unlikely(!retval))
             return NULL;
 
+        *parentp = *link;
         if (retval < 0)
             link = &(*link)->left;
-        else {
+        else /* retval > 0 */ {
             link = &(*link)->right;
             leftmost = false;
         }
