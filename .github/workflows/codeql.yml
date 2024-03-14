@@ -11,7 +11,7 @@ on:
 jobs:
   analyze:
     name: Analyze
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     permissions:
       actions: read
       contents: read
@@ -19,11 +19,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        os: [ubuntu-20.04]
         language: [ 'cpp' ]
 
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: install dependencies
         run: |
           sudo apt update
