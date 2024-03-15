@@ -18,6 +18,16 @@ struct bfdev_circle {
     unsigned long tail;
 };
 
+#define BFDEV_CIRCLE_STATIC(BUFFER) { \
+    .buffer = (BUFFER), \
+}
+
+#define BFDEV_CIRCLE_INIT(buffer) \
+    (bfdev_circle_t) BFDEV_CIRCLE_STATIC(buffer)
+
+#define BFDEV_DEFINE_CIRCLE(name, buffer) \
+    bfdev_circle_t name = BFDEV_CIRCLE_INIT(buffer)
+
 /* Return count in buffer */
 #define BFDEV_CIRCLE_CNT(head, tail, size) \
     (((head) - (tail)) & ((size) - 1))
