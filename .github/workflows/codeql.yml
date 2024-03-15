@@ -10,12 +10,13 @@ on:
 
 jobs:
   analyze:
-    name: Analyze
-    runs-on: ${{ matrix.os }}
+    name: Analyze on ${{matrix.os}}
+    runs-on: ${{matrix.os}}
     permissions:
       actions: read
       contents: read
       security-events: write
+
     strategy:
       fail-fast: false
       matrix:
@@ -25,16 +26,22 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: install dependencies
         run: |
           sudo apt update
           sudo apt install cmake make clang
+
       - name: initialize codeql
         uses: github/codeql-action/init@v2
         with:
-          languages: ${{ matrix.language }}
+          languages: ${{matrix.language}}
+
       - name: autobuild
         uses: github/codeql-action/autobuild@v2
+
       - name: perform analysis
         uses: github/codeql-action/analyze@v2
         with:
