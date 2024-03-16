@@ -1631,26 +1631,8 @@ bfdev_mpi_set(bfdev_mpi_t *dest, const bfdev_mpi_t *src)
 }
 
 export int
-bfdev_mpi_read(const bfdev_mpi_t *var, BFDEV_MPI_TYPE *buffer,
-               unsigned long length, bool *sign)
-{
-    BFDEV_MPI_TYPE *data;
-    unsigned long index;
-
-    index = mpi_len(var);
-    if (bfdev_unlikely(length > index))
-        return -BFDEV_EFBIG;
-
-    data = mpi_val(var);
-    mpa_copy(buffer, data, length);
-    *sign = var->plus;
-
-    return -BFDEV_ENOERR;
-}
-
-export int
-bfdev_mpi_write(bfdev_mpi_t *var, const BFDEV_MPI_TYPE *buffer,
-                unsigned long length, bool sign)
+bfdev_mpi_import(bfdev_mpi_t *var, const BFDEV_MPI_TYPE *buffer,
+                 unsigned long length, bool sign)
 {
     BFDEV_MPI_TYPE *data;
     int retval;
@@ -1666,25 +1648,42 @@ bfdev_mpi_write(bfdev_mpi_t *var, const BFDEV_MPI_TYPE *buffer,
     return -BFDEV_ENOERR;
 }
 
+export const BFDEV_MPI_TYPE *
+bfdev_mpi_data(const bfdev_mpi_t *var,
+               unsigned long index, bool *sign)
+{
+    BFDEV_MPI_TYPE *data;
+
+    data = bfdev_array_data(&var->value, index);
+    if (bfdev_unlikely(!data))
+        return NULL;
+
+    if (sign)
+        *sign = var->plus;
+
+    return data;
+}
+
 export bfdev_mpi_t *
 bfdev_mpi_create(const bfdev_alloc_t *alloc)
 {
-    bfdev_mpi_t *result;
+    bfdev_mpi_t *var;
     int retval;
 
-    result = bfdev_malloc(alloc, sizeof(*result));
-    if (bfdev_unlikely(!result))
+    var = bfdev_malloc(alloc, sizeof(*var));
+    if (bfdev_unlikely(!var))
         return NULL;
 
-    bfdev_array_init(&result->value, alloc, BFDEV_MPI_SIZE);
-    retval = bfdev_mpi_seti(result, 0);
+    var->alloc = alloc;
+    bfdev_array_init(&var->value, alloc, BFDEV_MPI_SIZE);
+    retval = bfdev_mpi_seti(var, 0);
 
     if (bfdev_unlikely(retval)) {
-        bfdev_free(alloc, result);
+        bfdev_free(alloc, var);
         return NULL;
     }
 
-    return result;
+    return var;
 }
 
 export void
@@ -1692,8 +1691,7 @@ bfdev_mpi_destory(bfdev_mpi_t *var)
 {
     const bfdev_alloc_t *alloc;
 
-    alloc = var->value.alloc;
+    alloc = var->alloc;
     bfdev_array_release(&var->value);
-
     bfdev_free(alloc, var);
 }

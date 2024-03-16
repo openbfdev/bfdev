@@ -22,6 +22,7 @@ BFDEV_BEGIN_DECLS
 typedef struct bfdev_mpi bfdev_mpi_t;
 
 struct bfdev_mpi {
+    const bfdev_alloc_t *alloc;
     bfdev_array_t value;
     bool plus;
 };
@@ -120,12 +121,12 @@ extern int
 bfdev_mpi_set(bfdev_mpi_t *dest, const bfdev_mpi_t *src);
 
 extern int
-bfdev_mpi_read(const bfdev_mpi_t *var, BFDEV_MPI_TYPE *buffer,
-               unsigned long length, bool *sign);
+bfdev_mpi_import(bfdev_mpi_t *var, const BFDEV_MPI_TYPE *buffer,
+                 unsigned long length, bool sign);
 
-extern int
-bfdev_mpi_write(bfdev_mpi_t *var, const BFDEV_MPI_TYPE *buffer,
-                unsigned long length, bool sign);
+extern const BFDEV_MPI_TYPE *
+bfdev_mpi_data(const bfdev_mpi_t *var,
+               unsigned long index, bool *sign);
 
 extern bfdev_mpi_t *
 bfdev_mpi_create(const bfdev_alloc_t *alloc);
