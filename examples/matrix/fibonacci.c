@@ -59,7 +59,6 @@ int main(int argc, const char *argv[])
 {
     BFDEV_DEFINE_MATRIX(fibonacci, NULL);
     BFDEV_DEFINE_MATRIX(result, NULL);
-    BFDEV_MATRIX_TYPE *value;
     unsigned int count;
     int retval;
 
@@ -68,6 +67,8 @@ int main(int argc, const char *argv[])
         return retval;
 
     for (count = TEST_BASE; count <= TEST_MAXN; ++count) {
+        const BFDEV_MATRIX_TYPE *value;
+
         retval = power(&result, &fibonacci, count);
         if (retval)
             return retval;

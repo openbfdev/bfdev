@@ -19,7 +19,7 @@ BFDEV_BEGIN_DECLS
 typedef struct bfdev_matrix bfdev_matrix_t;
 
 struct bfdev_matrix {
-    bfdev_alloc_t *alloc;
+    const bfdev_alloc_t *alloc;
     unsigned int row;
     unsigned int col;
     bfdev_array_t value;
@@ -37,7 +37,7 @@ struct bfdev_matrix {
     bfdev_matrix_t name = BFDEV_MATRIX_INIT(alloc)
 
 static inline void
-bfdev_matrix_init(bfdev_matrix_t *matrix, bfdev_alloc_t *alloc)
+bfdev_matrix_init(bfdev_matrix_t *matrix, const bfdev_alloc_t *alloc)
 {
     *matrix = BFDEV_MATRIX_INIT(alloc);
 }
@@ -94,7 +94,7 @@ bfdev_matrix_import(bfdev_matrix_t *var, const BFDEV_MATRIX_TYPE *buffer,
  * @row: index of rows in the @var.
  * @col: index of columns in the @var.
  */
-extern BFDEV_MATRIX_TYPE *
+extern const BFDEV_MATRIX_TYPE *
 bfdev_matrix_data(const bfdev_matrix_t *var,
                   unsigned int row, unsigned int col);
 
