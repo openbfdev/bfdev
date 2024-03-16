@@ -18,9 +18,7 @@
 #define GENERIC_MATRIX_BENCHMARK(func, name)    \
 for (count = 0; count < TEST_LOOP; ++count) {   \
     EXAMPLE_TIME_LOOP(&loop, 1000,              \
-        result = func(NULL, vara, varb);        \
-        bfdev_matrix_destory(NULL, result);     \
-        0;                                      \
+        func(&dest, &vara, &varb);              \
     );                                          \
     bfdev_log_info(                             \
         name " %u: %uops/s\n",                  \
@@ -30,30 +28,34 @@ for (count = 0; count < TEST_LOOP; ++count) {   \
 
 int main(int argc, char const *argv[])
 {
+    BFDEV_MATRIX_TYPE *buffer;
     unsigned int count, loop;
-    bfdev_matrix_t *vara, *varb;
-    bfdev_matrix_t *result;
 
-    vara = bfdev_matrix_create(NULL, TEST_SIZE, TEST_SIZE);
-    if (!vara)
-        return 1;
+    BFDEV_DEFINE_MATRIX(vara, NULL);
+    BFDEV_DEFINE_MATRIX(varb, NULL);
+    BFDEV_DEFINE_MATRIX(dest, NULL);
 
-    varb = bfdev_matrix_create(NULL, TEST_SIZE, TEST_SIZE);
-    if (!varb)
+    buffer = malloc(TEST_SIZE * TEST_SIZE * BFDEV_MATRIX_SIZE);
+    if (!buffer)
         return 1;
 
     srand(time(NULL));
-    for (count = 0; count < TEST_SIZE * TEST_SIZE; ++count) {
-        vara->values[count] = (uint16_t)rand();
-        varb->values[count] = (uint16_t)rand();
-    }
+    for (count = 0; count < TEST_SIZE * TEST_SIZE; ++count)
+        buffer[count] = (uint16_t)rand();
+    bfdev_matrix_import(&vara, buffer, TEST_SIZE, TEST_SIZE);
+
+    for (count = 0; count < TEST_SIZE * TEST_SIZE; ++count)
+        buffer[count] = (uint16_t)rand();
+    bfdev_matrix_import(&varb, buffer, TEST_SIZE, TEST_SIZE);
 
     GENERIC_MATRIX_BENCHMARK(bfdev_matrix_add, "adding")
     GENERIC_MATRIX_BENCHMARK(bfdev_matrix_sub, "subtracting")
     GENERIC_MATRIX_BENCHMARK(bfdev_matrix_mul, "multiplying")
 
-    bfdev_matrix_destory(NULL, vara);
-    bfdev_matrix_destory(NULL, varb);
+    bfdev_matrix_release(&vara);
+    bfdev_matrix_release(&varb);
+    bfdev_matrix_release(&dest);
+    free(buffer);
 
     return 0;
 }
