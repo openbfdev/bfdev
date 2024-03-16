@@ -163,7 +163,7 @@ bfdev_matrix_import(bfdev_matrix_t *var, const BFDEV_MATRIX_TYPE *buffer,
     return -BFDEV_ENOERR;
 }
 
-export BFDEV_MATRIX_TYPE *
+export const BFDEV_MATRIX_TYPE *
 bfdev_matrix_data(const bfdev_matrix_t *var,
                   unsigned int row, unsigned int col)
 {
