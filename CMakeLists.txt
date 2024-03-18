@@ -63,98 +63,8 @@ if(BFDEV_DEVEL)
     set(BFDEV_GCOV ON)
 endif()
 
-asm_generic(
-    bfdev/asm-generic/
-    ${BFDEV_GENERATED_PATH}/bfdev/asm
-    ${BFDEV_ARCH_HEADER_PATH}/bfdev/asm
-    ${BFDEV_HEADER_PATH}/bfdev/asm-generic
-)
-
-configure_file(
-    ${BFDEV_MODULE_PATH}/config.h.in
-    ${BFDEV_GENERATED_PATH}/bfdev/config.h
-)
-
-configure_file(
-    ${BFDEV_MODULE_PATH}/bfdev-config.cmake.in
-    ${BFDEV_CONFIGURE}
-)
-
-add_compile_options(
-    -std=gnu11
-    -Wall
-    -Wextra
-    -Wno-override-init
-    -Wno-unused-parameter
-    -Wno-sign-compare
-    -Wno-pointer-sign
-    -Wno-null-pointer-arithmetic
-    -Wmissing-prototypes
-    -Wmissing-declarations
-    -fvisibility=hidden
-)
-
-if(BFDEV_STRICT)
-    set(CMAKE_C_FLAGS
-        "${CMAKE_C_FLAGS} \
-         -Werror"
-    )
-endif()
-
-if(BFDEV_ASAN)
-    set(CMAKE_C_FLAGS
-        "${CMAKE_C_FLAGS} \
-         -fsanitize=address \
-         -fsanitize=undefined \
-         -fsanitize-recover=all \
-         -fno-omit-frame-pointer \
-         -fno-stack-protector"
-    )
-    if(NOT APPLE)
-        set(CMAKE_C_FLAGS
-            "${CMAKE_C_FLAGS} \
-             -fsanitize=leak"
-        )
-    endif()
-endif()
-
-if(BFDEV_UBSAN)
-    set(CMAKE_C_FLAGS
-        "${CMAKE_C_FLAGS} \
-         -fsanitize=alignment \
-         -fsanitize=bounds \
-         -fsanitize=shift \
-         -fsanitize=integer-divide-by-zero \
-         -fsanitize=unreachable \
-         -fsanitize=bool \
-         -fsanitize=enum \
-         -fsanitize-undefined-trap-on-error"
-    )
-endif()
-
-if(BFDEV_GCOV)
-    set(CMAKE_C_FLAGS
-        "${CMAKE_C_FLAGS} \
-         -fprofile-arcs \
-         -ftest-coverage"
-    )
-endif()
-
 include(${PROJECT_SOURCE_DIR}/build.cmake)
 add_subdirectory(${PROJECT_SOURCE_DIR}/scripts)
-
-macro(bfdev_dependencies target)
-    add_dependencies(
-        ${target}
-        gen-crc8
-        gen-crc16
-        gen-crc16be
-        gen-crc32
-        gen-crc32be
-        gen-crc64
-        gen-crc64be
-    )
-endmacro()
 
 packed_header(
     bfdev/
@@ -169,6 +79,19 @@ packed_source(
     "#undef MODULE_NAME\n"
     "#undef bfdev_log_fmt\n"
 )
+
+macro(bfdev_dependencies target)
+    add_dependencies(
+        ${target}
+        gen-crc8
+        gen-crc16
+        gen-crc16be
+        gen-crc32
+        gen-crc32be
+        gen-crc64
+        gen-crc64be
+    )
+endmacro()
 
 add_library(bfdev_object OBJECT ${BFDEV_LIBRARY})
 bfdev_dependencies(bfdev_object)
