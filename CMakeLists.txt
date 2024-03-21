@@ -30,7 +30,6 @@ set(BFDEV_ARCH_PATH ${PROJECT_SOURCE_DIR}/arch/${BFDEV_ARCH})
 set(BFDEV_ARCH_HEADER_PATH ${BFDEV_ARCH_PATH}/include)
 set(BFDEV_CONFIGURE ${BFDEV_GENERATED_PATH}/bfdev-config.cmake)
 
-include(scripts/asm-generic.cmake)
 include(scripts/hostrule.cmake)
 include(scripts/packed-header.cmake)
 include(scripts/packed-source.cmake)
