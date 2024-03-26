@@ -1,93 +1,96 @@
 # Supporting Components
 
-## Data Structures
+## Data Container
 
-- array
-- bloom
-- btree
-- fifo
-- hashmap
-- hashtbl
-- heap
-- hlist
-- ilist
-- list
-- llist
-- radix
-- rbtree
-- ringbuf
-- segtree
-- skiplist
-- slist
+- array: Dynamic array, also with stack APIs
+- bloom: Bloom filter
+- btree: B+ tree
+- circle: Circular queue
+- fifo: First in first out (single read/write needn't lock)
+- hashmap: Hash map with burst rehash
+- hashtbl: Hash table tools
+- heap: Binary heap tree
+- hlist: Hash linked list
+- ilist: Index linked list
+- list: Double linked list
+- llist: Lock free linked list
+- radix: Radix tree
+- rbtree: Red black tree
+- ringbuf: Ring buffer
+- segtree: Segment tree
+- skiplist: Skip list
+- slist: Single linked list
 
 ## Algorithms
 
-- ascii85
-- base64
-- base64
-- bsearch
-- crc
-- hash
-- prandom
-- stringhash
+- arc4: RC4 stream cipher
+- ascii85: Ascii85 binary-to-text encoding
+- base32: Base32 binary-to-text encoding
+- base64: Base64 binary-to-text encoding
+- bsearch: Array binary search
+- crc: Cyclic redundancy check
+- hash: Golden ratio Hash
+- prandom: Pseudo random generator
+- stringhash: String hash functions
 
 ## Bit Operation
 
-- bcd
-- bitfied
-- bitmap
-- bitops
-- bitrev
-- bitwalk
-- popcount
+- bcd: Binary-coded-decimal encoding
+- bitfield: Bit padding functions
+- bitmap: Bitmap operations
+- bitops: Bit operations
+- bitrev: Bitwise reversal
+- bitwalk: Bitmap iterator
+- popcount: Bitwise statistics
 
 ## Architecture
 
-- atomic
-- byteorder
-- cmpxchg
-- overflow
-- swab
-- unaligned
+- atomic: Atomic operation functions
+- byteorder: Byte order exchange
+- cmpxchg: Atomic compare and exchange
+- overflow: Saturation operations
+- swab: Byte exchange functions
+- unaligned: Non-aligned access functions
 
 ## Memory Allocator
 
-- allocator
-- allocpool
-- minpool
+- allocator: Allocation compatibility layer
+- allocpool: Mempool optimized for allocation performance
+- minpool: Simple memory allocator
 
 ## String Process
 
-- argv
-- fsm
-- levenshtein
-- snprintf
+- argv: Argv segmentation
+- fsm: Finite state machine
+- levenshtein: Levenshtein edit distance
+- scnprintf: Safe snprintf in buffer
 
 ## Mathematics
 
-- align
-- log2
-- math
-- minmax
-- uplower
+- align: Alignment functions
+- dword: Double word calculate
+- log2: Log2 calculate
+- math: Mathematical methods
+- minmax: Maximum and minimum value
+- uplower: High and low bytes
+- mpi: Multi precision integer
 
 ## Cache
 
-- lfu
-- lru
+- lfu: Least-frequently-used cache
+- lru: Least-recently-used cache
 
 ## Textsearch
 
-- bm
-- kmp
-- sunday
+- bm: Boyer–Moore string-search algorithm
+- kmp: Knuth–Morris–Pratt string-search algorithm
+- sunday：Sunday string-search algorithm
 
 ## Miscellaneous
 
-- action
-- callback
-- container
-- guards
-- log
-- notifier
-- once
+- action: Callback function framework
+- callback: Dummy callbacks
+- guards: Clear variable when goes out of scope
+- log: Log framework
+- notifier: Notifier chain
+- once: Do once functions
