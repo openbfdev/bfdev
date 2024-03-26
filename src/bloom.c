@@ -24,8 +24,9 @@ export bool
 bfdev_bloom_peek(bfdev_bloom_t *bloom, void *key)
 {
     unsigned int index, func;
-    bool retval = true;
+    bool retval;
 
+    retval = true;
     for (func = 0; func < bloom->funcs; ++func) {
         index = bloom_index(bloom, func, key);
         if (!bfdev_bit_test(bloom->bitmap, index))
@@ -39,8 +40,9 @@ export bool
 bfdev_bloom_push(bfdev_bloom_t *bloom, void *key)
 {
     unsigned int index, func;
-    bool retval = true;
+    bool retval;
 
+    retval = true;
     for (func = 0; func < bloom->funcs; ++func) {
         index = bloom_index(bloom, func, key);
         if (!bfdev_bit_test_set(bloom->bitmap, index))
@@ -83,6 +85,8 @@ bfdev_bloom_create(const bfdev_alloc_t *alloc, unsigned int capacity,
 export void
 bfdev_bloom_destory(bfdev_bloom_t *bloom)
 {
-    const bfdev_alloc_t *alloc = bloom->alloc;
+    const bfdev_alloc_t *alloc;
+
+    alloc = bloom->alloc;
     bfdev_free(alloc, bloom);
 }

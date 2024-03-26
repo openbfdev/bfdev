@@ -10,8 +10,9 @@ static inline bfdev_list_head_t *
 list_merge(bfdev_list_cmp_t cmp, void *pdata,
            bfdev_list_head_t *node1, bfdev_list_head_t *node2)
 {
-    bfdev_list_head_t *node, **tail = &node;
+    bfdev_list_head_t *node, **tail;
 
+    tail = &node;
     for (;;) {
         if (cmp(node1, node2, pdata) <= 0) {
             *tail = node1;
@@ -39,8 +40,9 @@ static inline void
 list_finish(bfdev_list_cmp_t cmp, void *pdata, bfdev_list_head_t *head,
             bfdev_list_head_t *node1, bfdev_list_head_t *node2)
 {
-    bfdev_list_head_t *tail = head;
+    bfdev_list_head_t *tail;
 
+    tail = head;
     for (;;) {
         if (cmp(node1, node2, pdata) <= 0) {
             tail->next = node1;
@@ -86,14 +88,19 @@ bfdev_list_sort(bfdev_list_head_t *head, bfdev_list_cmp_t cmp, void *pdata)
     pending = NULL;
 
     for (count = 0; node; ++count) {
-        bfdev_list_head_t **tail = &pending;
+        bfdev_list_head_t **tail;
         size_t bits;
 
+        tail = &pending;
         for (bits = count; bits & 1; bits >>= 1)
             tail = &(*tail)->prev;
 
         if (bfdev_likely(bits)) {
-            bfdev_list_head_t *node2 = *tail, *node1 = node2->prev;
+            bfdev_list_head_t *node1, *node2;
+
+            node2 = *tail;
+            node1 = node2->prev;
+
             node2 = list_merge(cmp, pdata, node1, node2);
             node2->prev = node1->prev;
             *tail = node2;

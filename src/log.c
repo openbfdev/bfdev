@@ -56,16 +56,17 @@ log_get_level(const char *str)
 extern unsigned int
 bfdev_log_level(const char *str, const char **endptr)
 {
-    char value, klevel;
+    unsigned int level;
+    char value;
 
-    for (klevel = BFDEV_LEVEL_DEFAULT; *str; str += 2) {
+    for (level = BFDEV_LEVEL_DEFAULT; *str; str += 2) {
         value = log_get_level(str);
         if (!value)
             break;
 
         switch (value) {
             case '0' ... '9':
-                klevel = value - '0';
+                level = value - '0';
                 break;
 
             default:
@@ -76,7 +77,7 @@ bfdev_log_level(const char *str, const char **endptr)
     if (*endptr)
         *endptr = str;
 
-    return klevel;
+    return level;
 }
 
 export int
@@ -85,16 +86,17 @@ bfdev_log_state_vprint(struct bfdev_log *log, const char *fmt, va_list args)
     char buff[BFDEV_LOG_BUFF_SIZE];
     bfdev_log_message_t msg;
     unsigned int level;
-    size_t offset = 0;
+    size_t offset;
     int retval;
 
     level = bfdev_log_level(fmt, &fmt);
     if (level >= BFDEV_LEVEL_DEFAULT)
         level = log->default_level;
 
-    if (bfdev_unlikely(level > log->record_level))
+    if (level > log->record_level)
         return 0;
 
+    offset = 0;
     if (bfdev_log_test_commit(log)) {
         retval = bfdev_scnprintf(
             buff + offset, BFDEV_LOG_BUFF_SIZE - offset,
