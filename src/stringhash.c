@@ -9,8 +9,9 @@
 export unsigned long
 bfdev_pjwhash(const char *str)
 {
-    unsigned long value, hash = 0;
+    unsigned long value, hash;
 
+    hash = 0;
     while (*str) {
         hash <<= 4;
         hash += *str++;

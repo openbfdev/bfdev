@@ -5,20 +5,20 @@
 #
 
 cmake_minimum_required(VERSION 3.12)
-project(bfdev VERSION 1.0.1 LANGUAGES C)
+project(bfdev VERSION 1.0.2 LANGUAGES C)
 
 include(GNUInstallDirs)
 include(CheckIncludeFiles)
 
-set(BFDEV_ARCH dummy)
 set(BFDEV_NAME sirius)
-
-set(BFDEV_EXTREVERSION -devel)
 set(BFDEV_VERSION ${PROJECT_VERSION})
+set(BFDEV_EXTREVERSION -stable)
 
 if(BFDEV_EXTREVERSION)
     string(APPEND BFDEV_VERSION ${BFDEV_EXTREVERSION})
 endif()
+
+set(BFDEV_ARCH generic)
 
 set(BFDEV_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 set(BFDEV_HEADER_PATH ${PROJECT_SOURCE_DIR}/include)
@@ -30,7 +30,6 @@ set(BFDEV_ARCH_PATH ${PROJECT_SOURCE_DIR}/arch/${BFDEV_ARCH})
 set(BFDEV_ARCH_HEADER_PATH ${BFDEV_ARCH_PATH}/include)
 set(BFDEV_CONFIGURE ${BFDEV_GENERATED_PATH}/bfdev-config.cmake)
 
-include(scripts/asm-generic.cmake)
 include(scripts/hostrule.cmake)
 include(scripts/packed-header.cmake)
 include(scripts/packed-source.cmake)
@@ -42,8 +41,10 @@ commit_branch(BFDEV_BRANCH)
 option(BFDEV_DEVEL "Enable development mode" OFF)
 option(BFDEV_STRICT "Enable strict compilation" ON)
 option(BFDEV_EXAMPLES "Build examples" OFF)
+
 option(BFDEV_ASAN "Enable Address Sanitizer" OFF)
 option(BFDEV_UBSAN "Enable Undefined Behaviour Sanitizer" OFF)
+option(BFDEV_GCOV "Enable Code Coverage Test" OFF)
 
 option(BFDEV_DEBUG_LIST "Dynamic debug list" ON)
 option(BFDEV_DEBUG_SLIST "Dynamic debug slist" ON)
@@ -58,112 +59,11 @@ if(BFDEV_DEVEL)
     set(BFDEV_EXAMPLES ON)
     set(BFDEV_ASAN ON)
     set(BFDEV_UBSAN ON)
+    set(BFDEV_GCOV ON)
 endif()
 
-asm_generic(
-    bfdev/asm-generic/
-    ${BFDEV_GENERATED_PATH}/bfdev/asm
-    ${BFDEV_ARCH_HEADER_PATH}/bfdev/asm
-    ${BFDEV_HEADER_PATH}/bfdev/asm-generic
-)
-
-configure_file(
-    ${BFDEV_MODULE_PATH}/config.h.in
-    ${BFDEV_GENERATED_PATH}/bfdev/config.h
-)
-
-configure_file(
-    ${BFDEV_MODULE_PATH}/bfdev-config.cmake.in
-    ${BFDEV_CONFIGURE}
-)
-
-add_compile_options(
-    -std=gnu11
-    -Wall
-    -Wextra
-    -Wno-override-init
-    -Wno-unused-parameter
-    -Wno-sign-compare
-    -Wno-pointer-sign
-    -Wno-null-pointer-arithmetic
-    -Wmissing-prototypes
-    -Wmissing-declarations
-    -fvisibility=hidden
-)
-
-if(BFDEV_STRICT)
-    set(CMAKE_C_FLAGS
-        "${CMAKE_C_FLAGS} \
-         -Werror"
-    )
-endif()
-
-if(BFDEV_ASAN)
-    set(CMAKE_C_FLAGS
-        "${CMAKE_C_FLAGS} \
-         -fsanitize=address \
-         -fsanitize=undefined \
-         -fsanitize-recover=all \
-         -fno-omit-frame-pointer \
-         -fno-stack-protector"
-    )
-    if(NOT APPLE)
-        set(CMAKE_C_FLAGS
-            "${CMAKE_C_FLAGS} \
-             -fsanitize=leak"
-        )
-    endif()
-endif()
-
-if(BFDEV_UBSAN)
-    set(CMAKE_C_FLAGS
-        "${CMAKE_C_FLAGS} \
-         -fsanitize=alignment \
-         -fsanitize=bounds \
-         -fsanitize=shift \
-         -fsanitize=integer-divide-by-zero \
-         -fsanitize=unreachable \
-         -fsanitize=bool \
-         -fsanitize=enum \
-         -fsanitize-undefined-trap-on-error"
-    )
-endif()
-
-include_directories(${PROJECT_SOURCE_DIR}/include)
-include_directories(${PROJECT_BINARY_DIR}/generated)
-
-add_subdirectory(${PROJECT_SOURCE_DIR}/scripts)
 include(${PROJECT_SOURCE_DIR}/build.cmake)
-
-set(BFDEV_LIBRARY_HEADER
-    ${BFDEV_HEADER}
-    ${BFDEV_ASM_HEADER}
-    ${BFDEV_ARCH_ASM_HEADER}
-    ${BFDEV_GENERATED_HEADER}
-)
-
-set(BFDEV_LIBRARY_SOURCE
-    ${BFDEV_SOURCE}
-    ${BFDEV_ARCH_SOURCE}
-)
-
-set(BFDEV_LIBRARY
-    ${BFDEV_LIBRARY_HEADER}
-    ${BFDEV_LIBRARY_SOURCE}
-)
-
-macro(bfdev_dependencies target)
-    add_dependencies(
-        ${target}
-        gen-crc8
-        gen-crc16
-        gen-crc16be
-        gen-crc32
-        gen-crc32be
-        gen-crc64
-        gen-crc64be
-    )
-endmacro()
+add_subdirectory(${PROJECT_SOURCE_DIR}/scripts)
 
 packed_header(
     bfdev/
@@ -178,6 +78,19 @@ packed_source(
     "#undef MODULE_NAME\n"
     "#undef bfdev_log_fmt\n"
 )
+
+macro(bfdev_dependencies target)
+    add_dependencies(
+        ${target}
+        gen-crc8
+        gen-crc16
+        gen-crc16be
+        gen-crc32
+        gen-crc32be
+        gen-crc64
+        gen-crc64be
+    )
+endmacro()
 
 add_library(bfdev_object OBJECT ${BFDEV_LIBRARY})
 bfdev_dependencies(bfdev_object)

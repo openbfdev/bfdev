@@ -21,8 +21,9 @@ struct bfdev_allocpool {
     unsigned long count;
 };
 
-#define BFDEV_ALLOCPOOL_STATIC(BLOCK, SIZE) \
-    {.block = (BLOCK), .size = (SIZE)}
+#define BFDEV_ALLOCPOOL_STATIC(BLOCK, SIZE) { \
+    .block = (BLOCK), .size = (SIZE), \
+}
 
 #define BFDEV_ALLOCPOOL_INIT(block, size) \
     (bfdev_allocpool_t) BFDEV_ALLOCPOOL_STATIC(block, size)

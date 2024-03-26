@@ -261,12 +261,13 @@ export void
 bfdev_minpool_setup(struct bfdev_minpool_head *head, bfdev_minpool_find_t find,
                     void *array, size_t size)
 {
-    struct bfdev_minpool_node *node = array;
+    struct bfdev_minpool_node *node;
 
     bfdev_list_head_init(&head->block_list);
     bfdev_list_head_init(&head->free_list);
     head->find = find;
 
+    node = array;
     minnode_set_used(node, false);
     minnode_set_size(node, size - sizeof(*node));
     head->avail = size - sizeof(*node);

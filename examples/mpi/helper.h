@@ -30,25 +30,24 @@ print_num(const bfdev_mpi_t *var, unsigned int base)
         return NULL;
 
     while (bfdev_mpi_cmpi(value, 0)) {
-        BFDEV_MPI_TYPE walk;
-        bool dummy;
+        const BFDEV_MPI_TYPE *walk;
 
         retval = bfdev_mpi_divi(value, taken, value, base);
         if (retval)
             return NULL;
 
-        retval = bfdev_mpi_read(taken, &walk, 1, &dummy);
-        if (retval)
+        walk = bfdev_mpi_data(taken, 0, NULL);
+        if (!walk)
             return NULL;
 
         buffer = bfdev_array_push(&stack, 1);
         if (!buffer)
             return NULL;
 
-        if (walk < 10)
-            *buffer = '0' + walk;
+        if (*walk < 10)
+            *buffer = '0' + *walk;
         else
-            *buffer = 'A' + walk - 10;
+            *buffer = 'A' + *walk - 10;
     }
 
     size = bfdev_array_size(&stack);

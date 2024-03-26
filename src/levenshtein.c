@@ -22,7 +22,7 @@ bfdev_levenshtein_len(const bfdev_alloc_t *alloc,
         return len2 * a;
 
     if (bfdev_unlikely(!len2))
-        return len1 * a;
+        return len1 * d;
 
     cache = bfdev_malloc(alloc, BFDEV_BYTES_PER_INT * (len1 + 1) * 3);
     if (bfdev_unlikely(!cache))

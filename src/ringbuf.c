@@ -10,11 +10,12 @@
 #include <export.h>
 
 #define RINGBUF_GENERIC_COPY(copy1, copy2, fold1, fold2) do {   \
-    unsigned long size = ringbuf->mask + 1;                     \
-    unsigned long esize = ringbuf->esize;                       \
-    unsigned long llen;                                         \
+    unsigned long size, esize, llen;                            \
                                                                 \
+    size = ringbuf->mask + 1;                                   \
+    esize = ringbuf->esize;                                     \
     offset &= ringbuf->mask;                                    \
+                                                                \
     if (esize != 1) {                                           \
         offset *= esize;                                        \
         size *= esize;                                          \
@@ -49,10 +50,13 @@ ringbuf_in_copy(struct bfdev_ringbuf *ringbuf, const void *buff,
 static __bfdev_always_inline unsigned long
 ringbuf_record_peek(struct bfdev_ringbuf *ringbuf, unsigned long recsize)
 {
-    unsigned long mask = ringbuf->mask;
-    unsigned long offset = ringbuf->out;
-    unsigned long length = 0;
-    uint8_t *data = ringbuf->data;
+    unsigned long mask, offset, length;
+    uint8_t *data;
+
+    mask = ringbuf->mask;
+    offset = ringbuf->out;
+    data = ringbuf->data;
+    length = 0;
 
     if (ringbuf->esize != 1) {
         offset *= ringbuf->esize;
@@ -73,9 +77,12 @@ static __bfdev_always_inline void
 ringbuf_record_poke(struct bfdev_ringbuf *ringbuf, unsigned long len,
                     unsigned long recsize)
 {
-    unsigned long mask = ringbuf->mask;
-    unsigned long offset = ringbuf->out;
-    uint8_t *data = ringbuf->data;
+    unsigned long mask, offset;
+    uint8_t *data;
+
+    mask = ringbuf->mask;
+    offset = ringbuf->out;
+    data = ringbuf->data;
 
     if (ringbuf->esize != 1) {
         offset *= ringbuf->esize;
@@ -105,10 +112,11 @@ ringbuf_valid(struct bfdev_ringbuf *ringbuf)
 static inline unsigned long
 ringbuf_overflow(struct bfdev_ringbuf *ringbuf)
 {
-    unsigned long size = ringbuf->mask + 1;
-    unsigned long used;
+    unsigned long size, used;
 
+    size = ringbuf->mask + 1;
     used = ringbuf->in - ringbuf->out;
+
     if (used > size)
         return used - size;
 
@@ -144,10 +152,11 @@ export unsigned long
 bfdev_ringbuf_in_flat(struct bfdev_ringbuf *ringbuf, const void *buff,
                       unsigned long len)
 {
-    unsigned long size = ringbuf->mask + 1;
-    unsigned long overflow;
+    unsigned long size, overflow;
 
+    size = ringbuf->mask + 1;
     bfdev_min_adj(len, size);
+
     ringbuf_in_copy(ringbuf, buff, len, ringbuf->in);
     ringbuf->in += len;
 
@@ -195,10 +204,12 @@ export unsigned long
 bfdev_ringbuf_in_record(struct bfdev_ringbuf *ringbuf, const void *buff,
                         unsigned long len, unsigned long record)
 {
-    unsigned long size = ringbuf->mask + 1;
-    unsigned long offset, overflow, datalen;
+    unsigned long size, offset;
+    unsigned long overflow, datalen;
 
+    size = ringbuf->mask + 1;
     bfdev_min_adj(len, size);
+
     offset = ringbuf->in + record;
     ringbuf->in = offset + len;
 
@@ -239,13 +250,14 @@ bfdev_ringbuf_dynamic_alloc(struct bfdev_ringbuf *ringbuf, const bfdev_alloc_t *
 export void
 bfdev_ringbuf_dynamic_free(struct bfdev_ringbuf *ringbuf)
 {
-    const bfdev_alloc_t *alloc = ringbuf->alloc;
+    const bfdev_alloc_t *alloc;
 
     ringbuf->in = 0;
     ringbuf->out = 0;
     ringbuf->mask = 0;
     ringbuf->esize = 0;
 
+    alloc = ringbuf->alloc;
     bfdev_free(alloc, ringbuf->data);
     ringbuf->data = NULL;
 }

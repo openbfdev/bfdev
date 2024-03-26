@@ -10,66 +10,78 @@
 #define TEST_BASE 1
 #define TEST_MAXN 46
 
-static bfdev_matrix_t
-matrix_power = {
-    .row = 2, .col = 2,
-    .values = {
-        0, 1,
-        1, 0,
-    },
+static const BFDEV_MATRIX_TYPE
+matrix_power[] = {
+    0, 1,
+    1, 0,
 };
 
-static bfdev_matrix_t
-matrix_fibonacci = {
-    .row = 2, .col = 2,
-    .values = {
-        1, 1,
-        1, 0,
-    },
+static const BFDEV_MATRIX_TYPE
+matrix_fibonacci[] = {
+    1, 1,
+    1, 0,
 };
 
-static bfdev_matrix_t *
-power(const bfdev_matrix_t *var, unsigned int pow)
+static int
+power(bfdev_matrix_t *result, const bfdev_matrix_t *var,
+      unsigned int pow)
 {
-    bfdev_matrix_t *result;
-    bfdev_matrix_t *tmp;
+    BFDEV_DEFINE_MATRIX(tmp, NULL);
+    int retval;
 
-    result = bfdev_matrix_copy(NULL, &matrix_power);
-    var = bfdev_matrix_copy(NULL, var);
+    retval = bfdev_matrix_import(result, matrix_power, 2, 2);
+    if (bfdev_unlikely(retval))
+        return retval;
+
+    retval = bfdev_matrix_set(&tmp, var);
+    if (bfdev_unlikely(retval))
+        return retval;
 
     while (pow) {
         if (pow & 1) {
-            tmp = bfdev_matrix_mul(NULL, result, var);
-            if (bfdev_unlikely(!tmp))
-                return NULL;
-
-            bfdev_matrix_destory(NULL, result);
-            result = tmp;
+            retval = bfdev_matrix_mul(result, result, &tmp);
+            if (bfdev_unlikely(retval))
+                return retval;
         }
 
-        tmp = bfdev_matrix_mul(NULL, var, var);
-        if (bfdev_unlikely(!tmp))
-            return NULL;
+        retval = bfdev_matrix_mul(&tmp, &tmp, &tmp);
+        if (bfdev_unlikely(retval))
+            return retval;
 
-        bfdev_matrix_destory(NULL, var);
-        var = tmp;
         pow >>= 1;
     }
 
-    bfdev_matrix_destory(NULL, var);
-    return result;
+    bfdev_matrix_release(&tmp);
+    return 0;
 }
 
 int main(int argc, const char *argv[])
 {
-    bfdev_matrix_t *result;
+    BFDEV_DEFINE_MATRIX(fibonacci, NULL);
+    BFDEV_DEFINE_MATRIX(result, NULL);
     unsigned int count;
+    int retval;
+
+    retval = bfdev_matrix_import(&fibonacci, matrix_fibonacci, 2, 2);
+    if (retval)
+        return retval;
 
     for (count = TEST_BASE; count <= TEST_MAXN; ++count) {
-        result = power(&matrix_fibonacci, count);
-        printf("matrix fibonacci %02u: %ld\n", count, result->values[0]);
-        bfdev_matrix_destory(NULL, result);
+        const BFDEV_MATRIX_TYPE *value;
+
+        retval = power(&result, &fibonacci, count);
+        if (retval)
+            return retval;
+
+        value = bfdev_matrix_data(&result, 0, 0);
+        if (!value)
+            return 1;
+
+        printf("matrix fibonacci %02u: %ld\n", count, *value);
     }
+
+    bfdev_matrix_release(&fibonacci);
+    bfdev_matrix_release(&result);
 
     return 0;
 }

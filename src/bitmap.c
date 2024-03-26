@@ -78,9 +78,11 @@ bfdev_bitmap_comp_and(unsigned long *dest, const unsigned long *src1,
                       const unsigned long *src2, unsigned int bits)
 {
     unsigned int index, length;
-    unsigned long value, result = 0;
+    unsigned long value, result;
 
+    result = 0;
     length = BFDEV_BITS_DIV_LONG(bits);
+
     for (index = 0; index < length; ++index) {
         value = src1[index] & src2[index];
         result |= (dest[index] = value);
@@ -99,9 +101,11 @@ bfdev_bitmap_comp_andnot(unsigned long *dest, const unsigned long *src1,
                          const unsigned long *src2, unsigned int bits)
 {
     unsigned int index, length;
-    unsigned long value, result = 0;
+    unsigned long value, result;
 
+    result = 0;
     length = BFDEV_BITS_DIV_LONG(bits);
+
     for (index = 0; index < length; ++index) {
         value = src1[index] & ~src2[index];
         result |= (dest[index] = value);

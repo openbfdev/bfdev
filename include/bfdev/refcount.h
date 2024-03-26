@@ -14,9 +14,12 @@
 
 BFDEV_BEGIN_DECLS
 
-typedef struct bfdev_refcnt {
+typedef struct bfdev_refcnt bfdev_refcnt_t;
+typedef enum bfdev_refcnt_saturation bfdev_refcnt_saturation_t;
+
+struct bfdev_refcnt {
     bfdev_atomic_t count;
-} bfdev_refcnt_t;
+};
 
 enum bfdev_refcnt_saturation {
     BFDEV_REFCNT_ADD_UAF,
@@ -29,18 +32,19 @@ enum bfdev_refcnt_saturation {
     BFDEV_REFCNT_ADDNZ_OVF,
 };
 
-#define BFDEV_REFCNT_STATIC \
-    { 1 }
+#define BFDEV_REFCNT_STATIC() { \
+    .count = 1, \
+}
 
 #define BFDEV_REFCNT_INIT \
-    (bfdev_refcnt_t)BFDEV_REFCNT_STATIC
+    (bfdev_refcnt_t) BFDEV_REFCNT_STATIC()
 
 #define BFDEV_DEFINE_REFCNT(name) \
     bfdev_refcnt_t name = BFDEV_REFCNT_INIT
 
 #ifdef BFDEV_DEBUG_REFCNT
 extern void
-bfdev_refcnt_report(bfdev_refcnt_t *ref, enum bfdev_refcnt_saturation type);
+bfdev_refcnt_report(bfdev_refcnt_t *ref, bfdev_refcnt_saturation_t type);
 #endif
 
 static inline bfdev_atomic_t

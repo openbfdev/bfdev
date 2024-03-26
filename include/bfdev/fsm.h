@@ -104,23 +104,76 @@ bfdev_fsm_reset(bfdev_fsm_t *fsm, const bfdev_fsm_state_t *init)
     bfdev_array_reset(&fsm->stack);
 }
 
-static inline const bfdev_fsm_state_t *
+/**
+ * bfdev_fsm_curr() - Get the current state.
+ * @fsm: the state machine to get the current state from.
+ *
+ * Return a pointer to the current state.
+ */
+static inline bfdev_fsm_state_t *
 bfdev_fsm_curr(bfdev_fsm_t *fsm)
 {
-    unsigned int count = fsm->count;
-    return fsm->state[count & (BFDEV_ARRAY_SIZE(fsm->state) - 1)];
+    unsigned int count, index;
+
+    count = fsm->count;
+    index = count & (BFDEV_ARRAY_SIZE(fsm->state) - 1);
+
+    return (bfdev_fsm_state_t *)fsm->state[index];
 }
 
-static inline const bfdev_fsm_state_t *
+/**
+ * bfdev_fsm_curr() - Get the previous state.
+ * @fsm: the state machine to get the current state from.
+ *
+ * Return a pointer to the previous state.
+ */
+static inline bfdev_fsm_state_t *
 bfdev_fsm_prev(const bfdev_fsm_t *fsm)
 {
-    unsigned int count = fsm->count - 1;
-    return fsm->state[count & (BFDEV_ARRAY_SIZE(fsm->state) - 1)];
+    unsigned int count, index;
+
+    count = fsm->count - 1;
+    index = count & (BFDEV_ARRAY_SIZE(fsm->state) - 1);
+
+    return (bfdev_fsm_state_t *)fsm->state[index];
 }
 
+/**
+ * bfdev_fsm_finished() - Check if the state machine has stopped.
+ * @fsm: stateMachine the state machine to test.
+ *
+ * Return true if the state machine has reached a final state.
+ */
+static inline bool
+bfdev_fsm_finished(bfdev_fsm_t *fsm)
+{
+    const bfdev_fsm_state_t *state;
+    bool retval;
+
+    state = bfdev_fsm_curr(fsm);
+    retval = !state->tnum && !state->exception;
+
+    return retval;
+}
+
+/**
+ * bfdev_fsm_handle() - Pass an event to the state machine.
+ * @fsm: the state machine to pass an event to.
+ * @event: the event to be handled.
+ *
+ * Return the entry trigger return value of the error state.
+ */
 extern int
 bfdev_fsm_error(bfdev_fsm_t *fsm, bfdev_fsm_event_t *event);
 
+/**
+ * bfdev_fsm_handle() - Pass an event to the state machine.
+ * @fsm: the state machine to pass an event to.
+ * @event: the event to be handled.
+ *
+ * Return a positive value is bfdev_fsm_retval,
+ * otherwise an error has occurred.
+ */
 extern int
 bfdev_fsm_handle(bfdev_fsm_t *fsm, bfdev_fsm_event_t *event);
 

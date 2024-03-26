@@ -28,8 +28,9 @@ struct bfdev_alloc_ops {
     bfdev_free_t free;
 };
 
-#define BFDEV_ALLOC_OPS_STATIC(ALLOC, REALLOC, FREE) \
-    {.alloc = (ALLOC), .realloc = (REALLOC), .free = (FREE)}
+#define BFDEV_ALLOC_OPS_STATIC(ALLOC, REALLOC, FREE) { \
+    .alloc = (ALLOC), .realloc = (REALLOC), .free = (FREE), \
+}
 
 #define BFDEV_ALLOC_OPS_INIT(alloc, realloc, free) \
     (bfdev_alloc_ops_t) BFDEV_ALLOC_OPS_STATIC(alloc, realloc, free)
@@ -37,8 +38,9 @@ struct bfdev_alloc_ops {
 #define BFDEV_DEFINE_ALLOC_OPS(name, alloc, realloc, free) \
     bfdev_alloc_ops_t name = BFDEV_ALLOC_OPS_INIT(alloc, realloc, free)
 
-#define BFDEV_ALLOC_STATIC(ALLOC, REALLOC, FREE, PDATA) \
-    {.ops = &BFDEV_ALLOC_OPS_INIT(ALLOC, REALLOC, FREE), .pdata = (PDATA)}
+#define BFDEV_ALLOC_STATIC(ALLOC, REALLOC, FREE, PDATA) { \
+    .ops = &BFDEV_ALLOC_OPS_INIT(ALLOC, REALLOC, FREE), .pdata = (PDATA), \
+}
 
 #define BFDEV_ALLOC_INIT(alloc, realloc, free, pdata) \
     (bfdev_alloc_t) BFDEV_ALLOC_STATIC(alloc, realloc, free, pdata)

@@ -15,13 +15,14 @@
 
 BFDEV_BEGIN_DECLS
 
-#define BFDEV_RB_RED    (0)
-#define BFDEV_RB_BLACK  (1)
-#define BFDEV_RB_NSET   (2)
+#define BFDEV_RB_RED 0
+#define BFDEV_RB_BLACK 1
+#define BFDEV_RB_NSET 2
 
 typedef struct bfdev_rb_node bfdev_rb_node_t;
 typedef struct bfdev_rb_root bfdev_rb_root_t;
 typedef struct bfdev_rb_root_cached bfdev_rb_root_cached_t;
+typedef struct bfdev_rb_callbacks bfdev_rb_callbacks_t;
 
 struct bfdev_rb_node {
     bfdev_rb_node_t *parent;
@@ -45,23 +46,26 @@ struct bfdev_rb_callbacks {
     void (*propagate)(bfdev_rb_node_t *node, bfdev_rb_node_t *stop);
 };
 
-#define BFDEV_RB_STATIC \
-    {NULL}
+#define BFDEV_RB_STATIC() { \
+    .node = NULL, \
+}
 
-#define BFDEV_RB_CACHED_STATIC \
-    {{NULL}, NULL}
+#define BFDEV_RB_CACHED_STATIC() { \
+    .root = BFDEV_RB_STATIC(), \
+    .leftmost = NULL, \
+}
 
-#define BFDEV_RB_INIT \
-    (bfdev_rb_root_t) BFDEV_RB_STATIC
+#define BFDEV_RB_INIT() \
+    (bfdev_rb_root_t) BFDEV_RB_STATIC()
 
-#define BFDEV_RB_CACHED_INIT \
-    (bfdev_rb_root_cached_t) BFDEV_RB_CACHED_STATIC
+#define BFDEV_RB_CACHED_INIT() \
+    (bfdev_rb_root_cached_t) BFDEV_RB_CACHED_STATIC()
 
 #define BFDEV_RB_ROOT(name) \
-    bfdev_rb_root_t name = BFDEV_RB_INIT
+    bfdev_rb_root_t name = BFDEV_RB_INIT()
 
 #define BFDEV_RB_ROOT_CACHED(name) \
-    bfdev_rb_root_cached_t name = BFDEV_RB_CACHED_INIT
+    bfdev_rb_root_cached_t name = BFDEV_RB_CACHED_INIT()
 
 #define BFDEV_RB_EMPTY_ROOT(root) \
     ((root)->node == NULL)
@@ -109,7 +113,13 @@ BFDEV_CALLBACK_CMP(
 static inline void
 bfdev_rb_init(bfdev_rb_root_t *root)
 {
-    *root = BFDEV_RB_INIT;
+    *root = BFDEV_RB_INIT();
+}
+
+static inline void
+bfdev_rb_cache_init(bfdev_rb_root_cached_t *root)
+{
+    *root = BFDEV_RB_CACHED_INIT();
 }
 
 /**
@@ -120,7 +130,7 @@ bfdev_rb_init(bfdev_rb_root_t *root)
  */
 extern void
 bfdev_rb_fixup_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
-                         const struct bfdev_rb_callbacks *callbacks);
+                         const bfdev_rb_callbacks_t *callbacks);
 
 /**
  * bfdev_rb_erase_augmented() - augmented balance after remove node.
@@ -130,7 +140,7 @@ bfdev_rb_fixup_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
  */
 extern void
 bfdev_rb_erase_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *parent,
-                         const struct bfdev_rb_callbacks *callbacks);
+                         const bfdev_rb_callbacks_t *callbacks);
 
 /**
  * bfdev_rb_remove_augmented() - augmented remove node form rbtree.
@@ -140,7 +150,7 @@ bfdev_rb_erase_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *parent,
  */
 extern bfdev_rb_node_t *
 bfdev_rb_remove_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
-                          const struct bfdev_rb_callbacks *callbacks);
+                          const bfdev_rb_callbacks_t *callbacks);
 
 /**
  * bfdev_rb_fixup() - balance after insert node.
@@ -183,7 +193,7 @@ bfdev_rb_replace(bfdev_rb_root_t *root, bfdev_rb_node_t *oldn,
  * @cmp: operator defining the node order.
  */
 extern bfdev_rb_node_t *
-bfdev_rb_find(const bfdev_rb_root_t *root, void *key, bfdev_rb_find_t cmp);
+bfdev_rb_find(const bfdev_rb_root_t *root, void *key, bfdev_rb_find_t find);
 
 /**
  * bfdev_rb_find_last() - find @key in tree @root and return parent.
@@ -192,10 +202,12 @@ bfdev_rb_find(const bfdev_rb_root_t *root, void *key, bfdev_rb_find_t cmp);
  * @cmp: operator defining the node order.
  * @parentp: pointer used to modify the parent node pointer.
  * @linkp: pointer used to modify the point to pointer to child node.
+ * @leftmostp: return whether it is the leftmost node.
  */
 extern bfdev_rb_node_t *
-bfdev_rb_find_last(bfdev_rb_root_t *root, void *key, bfdev_rb_find_t cmp,
-                   bfdev_rb_node_t **parentp, bfdev_rb_node_t ***linkp);
+bfdev_rb_find_last(bfdev_rb_root_t *root, void *key, bfdev_rb_find_t find,
+                   bfdev_rb_node_t **parentp, bfdev_rb_node_t ***linkp,
+                   bool *leftmostp);
 
 /**
  * bfdev_rb_parent() - find the parent node.
@@ -637,14 +649,18 @@ bfdev_rb_insert_node(bfdev_rb_root_t *root, bfdev_rb_node_t *parent,
  * @node: new node to insert.
  * @cmp: operator defining the node order.
  */
-static inline void
+static inline bool
 bfdev_rb_insert(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
                 bfdev_rb_cmp_t cmp, void *pdata)
 {
     bfdev_rb_node_t *parent, **link;
 
     link = bfdev_rb_parent(root, &parent, node, cmp, pdata, NULL);
+    if (bfdev_unlikely(!link))
+        return false;
+
     bfdev_rb_insert_node(root, parent, link, node);
+    return true;
 }
 
 /**
@@ -681,7 +697,7 @@ bfdev_rb_delete(bfdev_rb_root_t *root, bfdev_rb_node_t *node)
 static inline void
 bfdev_rb_insert_node_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *parent,
                                bfdev_rb_node_t **link, bfdev_rb_node_t *node,
-                               const struct bfdev_rb_callbacks *callbacks)
+                               const bfdev_rb_callbacks_t *callbacks)
 {
     bfdev_rb_link(parent, link, node);
     bfdev_rb_fixup_augmented(root, node, callbacks);
@@ -694,15 +710,19 @@ bfdev_rb_insert_node_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *parent,
  * @cmp: operator defining the node order.
  * @callbacks: augmented callback function.
  */
-static inline void
+static inline bool
 bfdev_rb_insert_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
                           bfdev_rb_cmp_t cmp, void *pdata,
-                          const struct bfdev_rb_callbacks *callbacks)
+                          const bfdev_rb_callbacks_t *callbacks)
 {
     bfdev_rb_node_t *parent, **link;
 
     link = bfdev_rb_parent(root, &parent, node, cmp, pdata, NULL);
+    if (bfdev_unlikely(!link))
+        return false;
+
     bfdev_rb_insert_node_augmented(root, parent, link, node, callbacks);
+    return true;
 }
 
 /**
@@ -713,7 +733,7 @@ bfdev_rb_insert_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
  */
 static inline void
 bfdev_rb_delete_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
-                          const struct bfdev_rb_callbacks *callbacks)
+                          const bfdev_rb_callbacks_t *callbacks)
 {
     bfdev_rb_node_t *rebalance;
 
@@ -872,7 +892,7 @@ bfdev_rb_cached_insert_node(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t *par
  * @node: new node to insert.
  * @cmp: operator defining the node order.
  */
-static inline void
+static inline bool
 bfdev_rb_cached_insert(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t *node,
                        bfdev_rb_cmp_t cmp, void *pdata)
 {
@@ -880,7 +900,11 @@ bfdev_rb_cached_insert(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t *node,
     bool leftmost;
 
     link = bfdev_rb_cached_parent(cached, &parent, node, cmp, pdata, &leftmost);
+    if (bfdev_unlikely(!link))
+        return false;
+
     bfdev_rb_cached_insert_node(cached, parent, link, node, leftmost);
+    return true;
 }
 
 /**
@@ -913,7 +937,7 @@ bfdev_rb_cached_delete(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t *node)
  */
 static inline void
 bfdev_rb_cached_fixup_augmented(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t *node,
-                                bool leftmost, const struct bfdev_rb_callbacks *callbacks)
+                                bool leftmost, const bfdev_rb_callbacks_t *callbacks)
 {
     if (leftmost)
         cached->leftmost = node;
@@ -933,7 +957,7 @@ bfdev_rb_cached_fixup_augmented(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t 
 static inline void
 bfdev_rb_cached_insert_node_augmented(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t *parent,
                                       bfdev_rb_node_t **link, bfdev_rb_node_t *node,
-                                      bool leftmost, const struct bfdev_rb_callbacks *callbacks)
+                                      bool leftmost, const bfdev_rb_callbacks_t *callbacks)
 {
     bfdev_rb_link(parent, link, node);
     bfdev_rb_cached_fixup_augmented(cached, node, leftmost, callbacks);
@@ -946,16 +970,20 @@ bfdev_rb_cached_insert_node_augmented(bfdev_rb_root_cached_t *cached, bfdev_rb_n
  * @cmp: operator defining the node order.
  * @callbacks: augmented callback function.
  */
-static inline void
+static inline bool
 bfdev_rb_cached_insert_augmented(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t *node,
                                  bfdev_rb_cmp_t cmp, void *pdata,
-                                 const struct bfdev_rb_callbacks *callbacks)
+                                 const bfdev_rb_callbacks_t *callbacks)
 {
     bfdev_rb_node_t *parent, **link;
     bool leftmost;
 
     link = bfdev_rb_cached_parent(cached, &parent, node, cmp, pdata, &leftmost);
+    if (bfdev_unlikely(!link))
+        return false;
+
     bfdev_rb_cached_insert_node_augmented(cached, parent, link, node, leftmost, callbacks);
+    return true;
 }
 
 /**
@@ -966,7 +994,7 @@ bfdev_rb_cached_insert_augmented(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t
  */
 static inline bfdev_rb_node_t *
 bfdev_rb_cached_delete_augmented(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t *node,
-                                 const struct bfdev_rb_callbacks *callbacks)
+                                 const bfdev_rb_callbacks_t *callbacks)
 {
     bfdev_rb_node_t *leftmost;
 
@@ -997,59 +1025,81 @@ bfdev_rb_cached_replace(bfdev_rb_root_cached_t *cached, bfdev_rb_node_t *oldn,
     bfdev_rb_replace(&cached->root, oldn, newn);
 }
 
-#define BFDEV_RB_DECLARE_CALLBACKS(RBSTATIC, RBNAME, RBSTRUCT, RBFIELD, RBAUGMENTED, RBCOMPUTE) \
-static void RBNAME##_rotate(bfdev_rb_node_t *rb_node, bfdev_rb_node_t *rb_successor)            \
-{                                                                                               \
-    RBSTRUCT *node = bfdev_rb_entry(rb_node, RBSTRUCT, RBFIELD);                                \
-    RBSTRUCT *successor = bfdev_rb_entry(rb_successor, RBSTRUCT, RBFIELD);                      \
-    successor->RBAUGMENTED = node->RBAUGMENTED;                                                 \
-    RBCOMPUTE(node, false);                                                                     \
-}                                                                                               \
-                                                                                                \
-static void RBNAME##_copy(bfdev_rb_node_t *rb_node, bfdev_rb_node_t *rb_successor)              \
-{                                                                                               \
-    RBSTRUCT *node = bfdev_rb_entry(rb_node, RBSTRUCT, RBFIELD);                                \
-    RBSTRUCT *successor = bfdev_rb_entry(rb_successor, RBSTRUCT, RBFIELD);                      \
-    successor->RBAUGMENTED = node->RBAUGMENTED;                                                 \
-}                                                                                               \
-                                                                                                \
-static void RBNAME##_propagate(bfdev_rb_node_t *rb_node, bfdev_rb_node_t *rb_stop)              \
-{                                                                                               \
-    while (rb_node != rb_stop) {                                                                \
-        RBSTRUCT *node = bfdev_rb_entry(rb_node, RBSTRUCT, RBFIELD);                            \
-        if (RBCOMPUTE(node, true))                                                              \
-            break;                                                                              \
-        rb_node = node->RBFIELD.parent;                                                         \
-    }                                                                                           \
-}                                                                                               \
-                                                                                                \
-RBSTATIC struct bfdev_rb_callbacks RBNAME = {                                                   \
-    .rotate = RBNAME##_rotate,                                                                  \
-    .copy = RBNAME##_copy,                                                                      \
-    .propagate = RBNAME##_propagate,                                                            \
+#define BFDEV_RB_DECLARE_CALLBACKS(RBSTATIC, RBNAME, RBSTRUCT,              \
+                                   RBFIELD, RBAUGMENTED, RBCOMPUTE)         \
+static void                                                                 \
+RBNAME##_rotate(bfdev_rb_node_t *rb_node, bfdev_rb_node_t *rb_successor)    \
+{                                                                           \
+    RBSTRUCT *node, *successor;                                             \
+                                                                            \
+    node = bfdev_rb_entry(rb_node, RBSTRUCT, RBFIELD);                      \
+    successor = bfdev_rb_entry(rb_successor, RBSTRUCT, RBFIELD);            \
+                                                                            \
+    successor->RBAUGMENTED = node->RBAUGMENTED;                             \
+    RBCOMPUTE(node, false);                                                 \
+}                                                                           \
+                                                                            \
+static void                                                                 \
+RBNAME##_copy(bfdev_rb_node_t *rb_node, bfdev_rb_node_t *rb_successor)      \
+{                                                                           \
+    RBSTRUCT *node, *successor;                                             \
+                                                                            \
+    node = bfdev_rb_entry(rb_node, RBSTRUCT, RBFIELD);                      \
+    successor = bfdev_rb_entry(rb_successor, RBSTRUCT, RBFIELD);            \
+                                                                            \
+    successor->RBAUGMENTED = node->RBAUGMENTED;                             \
+}                                                                           \
+                                                                            \
+static void                                                                 \
+RBNAME##_propagate(bfdev_rb_node_t *rb_node, bfdev_rb_node_t *rb_stop)      \
+{                                                                           \
+    RBSTRUCT *node;                                                         \
+                                                                            \
+    while (rb_node != rb_stop) {                                            \
+        node = bfdev_rb_entry(rb_node, RBSTRUCT, RBFIELD);                  \
+        if (RBCOMPUTE(node, true))                                          \
+            break;                                                          \
+        rb_node = node->RBFIELD.parent;                                     \
+    }                                                                       \
+}                                                                           \
+                                                                            \
+RBSTATIC bfdev_rb_callbacks_t RBNAME = {                                    \
+    .rotate = RBNAME##_rotate,                                              \
+    .copy = RBNAME##_copy,                                                  \
+    .propagate = RBNAME##_propagate,                                        \
 }
 
-#define BFDEV_RB_DECLARE_CALLBACKS_MAX(RBSTATIC, RBNAME, RBSTRUCT, RBFIELD, RBTYPE, RBAUGMENTED, RBCOMPUTE) \
-static inline bool RBNAME##_compute_max(RBSTRUCT *node, bool exit)                                          \
-{                                                                                                           \
-    RBSTRUCT *child;                                                                                        \
-    RBTYPE max = RBCOMPUTE(node);                                                                           \
-    if (node->RBFIELD.left) {                                                                               \
-        child = bfdev_rb_entry(node->RBFIELD.left, RBSTRUCT, RBFIELD);                                      \
-        if (child->RBAUGMENTED > max)                                                                       \
-            max = child->RBAUGMENTED;                                                                       \
-    }                                                                                                       \
-    if (node->RBFIELD.right) {                                                                              \
-        child = bfdev_rb_entry(node->RBFIELD.right, RBSTRUCT, RBFIELD);                                     \
-        if (child->RBAUGMENTED > max)                                                                       \
-            max = child->RBAUGMENTED;                                                                       \
-    }                                                                                                       \
-    if (exit && node->RBAUGMENTED == max)                                                                   \
-        return true;                                                                                        \
-    node->RBAUGMENTED = max;                                                                                \
-    return false;                                                                                           \
-}                                                                                                           \
-BFDEV_RB_DECLARE_CALLBACKS(RBSTATIC, RBNAME, RBSTRUCT, RBFIELD, RBAUGMENTED, RBNAME##_compute_max)
+#define BFDEV_RB_DECLARE_CALLBACKS_MAX(RBSTATIC, RBNAME, RBSTRUCT, RBFIELD, \
+                                       RBTYPE, RBAUGMENTED, RBCOMPUTE)      \
+static inline bool                                                          \
+RBNAME##_compute_max(RBSTRUCT *node, bool exit)                             \
+{                                                                           \
+    RBSTRUCT *child;                                                        \
+    RBTYPE max;                                                             \
+                                                                            \
+    max = RBCOMPUTE(node);                                                  \
+    if (node->RBFIELD.left) {                                               \
+        child = bfdev_rb_entry(node->RBFIELD.left, RBSTRUCT, RBFIELD);      \
+        if (child->RBAUGMENTED > max)                                       \
+            max = child->RBAUGMENTED;                                       \
+    }                                                                       \
+    if (node->RBFIELD.right) {                                              \
+        child = bfdev_rb_entry(node->RBFIELD.right, RBSTRUCT, RBFIELD);     \
+        if (child->RBAUGMENTED > max)                                       \
+            max = child->RBAUGMENTED;                                       \
+    }                                                                       \
+                                                                            \
+    if (exit && node->RBAUGMENTED == max)                                   \
+        return true;                                                        \
+    node->RBAUGMENTED = max;                                                \
+                                                                            \
+    return false;                                                           \
+}                                                                           \
+                                                                            \
+BFDEV_RB_DECLARE_CALLBACKS(                                                 \
+    RBSTATIC, RBNAME, RBSTRUCT, RBFIELD,                                    \
+    RBAUGMENTED, RBNAME##_compute_max                                       \
+)
 
 BFDEV_END_DECLS
 

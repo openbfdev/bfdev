@@ -57,13 +57,13 @@ graph LR
     include[include]
     include/asm-generic[asm-generic]
     arch/asm[asm]
-   	arch/asm-generated{exist}
+    arch/asm-generated{exist}
 
     subgraph target[User Installation]
-    	include/bfdev[bfdev]
-    	include/bfdev/asm-generic[bfdev:asm-generic]
-    	arch/bfdev/asm[bfdev:asm]
-   		arch/bfdev/asm-generated{exist}
+        include/bfdev[bfdev]
+        include/bfdev/asm-generic[bfdev:asm-generic]
+        arch/bfdev/asm[bfdev:asm]
+        arch/bfdev/asm-generated{exist}
     end
 
     include --> arch/asm-generated
@@ -74,9 +74,9 @@ graph LR
     arch/bfdev/asm-generated --Y--> arch/bfdev/asm
     arch/bfdev/asm-generated --N--> include/bfdev/asm-generic
     arch/bfdev/asm -.-> include/bfdev/asm-generic
-   	include --> include/bfdev
-   	arch/asm --> arch/bfdev/asm
-   	include/asm-generic --> arch/bfdev/asm
+    include --> include/bfdev
+    arch/asm --> arch/bfdev/asm
+    include/asm-generic --> arch/bfdev/asm
 ```
 
 ## Documentation Tutorial
@@ -84,7 +84,7 @@ graph LR
 Quickly start, API manual, see [Bfdev Documentation Tutorial](https://openbfdev.github.io/bfdev-docs)
 
 > [!CAUTION]
-> This project is not yet fully completed, so it is not recommended for use in a production environment.
+> This project requires additional testing. If used in a production environment, please be aware of the associated risks.
 
 ## License
 

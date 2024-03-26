@@ -11,6 +11,10 @@
 #include <bfdev/errno.h>
 #include <bfdev/allocator.h>
 
+BFDEV_BEGIN_DECLS
+
+typedef struct bfdev_ringbuf bfdev_ringbuf_t;
+
 struct bfdev_ringbuf {
     const bfdev_alloc_t *alloc;
     unsigned long in;
@@ -197,10 +201,10 @@ struct bfdev_ringbuf {
 #define bfdev_ringbuf_initialized(ptr) ((ptr)->ringbuf.mask)
 
 /**
- * bfdev_ringbuf_recsize - get the size of the record length fie.
- * @ptr: pointer of the ringbuf to get __recsi.
+ * bfdev_ringbuf_recsize - returns the size of the record length field.
+ * @ptr: pointer of the ringbuf to get field length.
  */
-#define bfdev_ringbuf_recsize(ptr) (sizeof(*(ptr)->rectyp))
+#define bfdev_ringbuf_recsize(ptr) (sizeof(*(ptr)->rectype))
 
 /**
  * bfdev_ringbuf_size - get the size of the element managed by the ringbuf.
@@ -425,13 +429,37 @@ struct bfdev_ringbuf {
     bfdev_ringbuf_in_flat(__ringbuf, __tbuff, __tlen);                  \
 })
 
-extern unsigned long bfdev_ringbuf_peek_flat(struct bfdev_ringbuf *ringbuf, void *buff, unsigned long len);
-extern unsigned long bfdev_ringbuf_out_flat(struct bfdev_ringbuf *ringbuf, void *buff, unsigned long len);
-extern unsigned long bfdev_ringbuf_in_flat(struct bfdev_ringbuf *ringbuf, const void *buff, unsigned long len);
-extern unsigned long bfdev_ringbuf_peek_record(struct bfdev_ringbuf *ringbuf, void *buff, unsigned long len, unsigned long record);
-extern unsigned long bfdev_ringbuf_out_record(struct bfdev_ringbuf *ringbuf, void *buff, unsigned long len, unsigned long record);
-extern unsigned long bfdev_ringbuf_in_record(struct bfdev_ringbuf *ringbuf, const void *buff, unsigned long len, unsigned long record);
-extern int bfdev_ringbuf_dynamic_alloc(struct bfdev_ringbuf *ringbuf, const bfdev_alloc_t *alloc, size_t esize, size_t size);
-extern void bfdev_ringbuf_dynamic_free(struct bfdev_ringbuf *ringbuf);
+extern unsigned long
+bfdev_ringbuf_peek_flat(struct bfdev_ringbuf *ringbuf, void *buff,
+                        unsigned long len);
+
+extern unsigned long
+bfdev_ringbuf_out_flat(struct bfdev_ringbuf *ringbuf, void *buff,
+                       unsigned long len);
+
+extern unsigned long
+bfdev_ringbuf_in_flat(struct bfdev_ringbuf *ringbuf, const void *buff,
+                      unsigned long len);
+
+extern unsigned long
+bfdev_ringbuf_peek_record(struct bfdev_ringbuf *ringbuf, void *buff,
+                          unsigned long len, unsigned long record);
+
+extern unsigned long
+bfdev_ringbuf_out_record(struct bfdev_ringbuf *ringbuf, void *buff,
+                         unsigned long len, unsigned long record);
+
+extern unsigned long
+bfdev_ringbuf_in_record(struct bfdev_ringbuf *ringbuf, const void *buff,
+                        unsigned long len, unsigned long record);
+
+extern int
+bfdev_ringbuf_dynamic_alloc(struct bfdev_ringbuf *ringbuf, const bfdev_alloc_t *alloc,
+                            size_t esize, size_t size);
+
+extern void
+bfdev_ringbuf_dynamic_free(struct bfdev_ringbuf *ringbuf);
+
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_RINGBUF_H_ */

@@ -10,41 +10,8 @@
 export bfdev_alloc_ops_t
 bfdev_alloc_default;
 
-static __bfdev_always_inline void *
-generic_alloc(size_t size, void *pdata)
-{
-    if (!bfdev_alloc_default.alloc)
-        return malloc(size);
-
-    return bfdev_alloc_default.alloc(size, pdata);
-}
-
-static __bfdev_always_inline void *
-generic_zalloc(size_t size, void *pdata)
-{
-    if (!bfdev_alloc_default.zalloc)
-        return calloc(1, size);
-
-    return bfdev_alloc_default.zalloc(size, pdata);
-}
-
-static __bfdev_always_inline void *
-generic_realloc(void *block, size_t resize, void *pdata)
-{
-    if (!bfdev_alloc_default.realloc)
-        return realloc(block, resize);
-
-    return bfdev_alloc_default.realloc(block, resize, pdata);
-}
-
-static __bfdev_always_inline void
-generic_free(void *block, void *pdata)
-{
-    if (!bfdev_alloc_default.free)
-        return free((void *)block);
-
-    return bfdev_alloc_default.free(block, pdata);
-}
+#define __INSIDE_ALLOCATOR__
+#include <port/allocator.h>
 
 static inline const bfdev_alloc_ops_t *
 alloc_check(const bfdev_alloc_t *alloc, void **pdata)
@@ -87,7 +54,7 @@ bfdev_zalloc(const bfdev_alloc_t *alloc, size_t size)
 
     ops = alloc_check(alloc, &pdata);
     if (!ops || !ops->zalloc)
-        return generic_zalloc(size, pdata);
+        retval = generic_zalloc(size, pdata);
     else
         retval = ops->zalloc(size, pdata);
 

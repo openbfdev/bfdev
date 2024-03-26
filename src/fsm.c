@@ -10,8 +10,12 @@
 static inline void
 fsm_push_state(bfdev_fsm_t *fsm, const bfdev_fsm_state_t *state)
 {
-    unsigned int count = ++fsm->count;
-    fsm->state[count & (BFDEV_ARRAY_SIZE(fsm->state) - 1)] = state;
+    unsigned int count, index;
+
+    count = ++fsm->count;
+    index = count & (BFDEV_ARRAY_SIZE(fsm->state) - 1);
+
+    fsm->state[index] = state;
 }
 
 static const bfdev_fsm_transition_t *
@@ -42,8 +46,11 @@ fsm_find_transition(const bfdev_fsm_state_t *state, bfdev_fsm_event_t *event)
 export int
 bfdev_fsm_error(bfdev_fsm_t *fsm, bfdev_fsm_event_t *event)
 {
-    const bfdev_fsm_state_t *error = fsm->error;
-    int retval = 0;
+    const bfdev_fsm_state_t *error;
+    int retval;
+
+    error = fsm->error;
+    retval = 0;
 
     fsm_push_state(fsm, error);
     if (error && error->enter)
@@ -55,9 +62,9 @@ bfdev_fsm_error(bfdev_fsm_t *fsm, bfdev_fsm_event_t *event)
 export int
 bfdev_fsm_handle(bfdev_fsm_t *fsm, bfdev_fsm_event_t *event)
 {
-    const bfdev_fsm_state_t *curr = bfdev_fsm_curr(fsm);
-    const bfdev_fsm_state_t *next;
+    const bfdev_fsm_state_t *curr, *next;
 
+    curr = bfdev_fsm_curr(fsm);
     if (bfdev_unlikely(!curr))
         return -BFDEV_EINVAL;
 
@@ -81,7 +88,8 @@ bfdev_fsm_handle(bfdev_fsm_t *fsm, bfdev_fsm_event_t *event)
          * Pop the stack as the new state, if popping is required
          * and there have no next state.
          */
-        if (!(next = tran->next) && tran->stack < 0) {
+        next = tran->next;
+        if (!next && tran->stack < 0) {
             pstate = bfdev_array_pop(&fsm->stack, -tran->stack);
             if (bfdev_unlikely(!pstate))
                 return -BFDEV_EOVERFLOW;

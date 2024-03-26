@@ -4,12 +4,13 @@
  */
 
 #include <base.h>
-#include <bfdev/bitwalk.h>
+#include <bfdev/bitwalk-comp.h>
 #include <bfdev/swab.h>
 #include <export.h>
 
 export unsigned int
-bfdev_comp_find_first_bit(const unsigned long *block, unsigned int bits, bool swap)
+bfdev_comp_find_first_bit(const unsigned long *block,
+                          unsigned int bits, bool swap)
 {
     unsigned int base;
 
@@ -30,7 +31,8 @@ bfdev_comp_find_first_bit(const unsigned long *block, unsigned int bits, bool sw
 }
 
 export unsigned int
-bfdev_comp_find_last_bit(const unsigned long *block, unsigned int bits, bool swap)
+bfdev_comp_find_last_bit(const unsigned long *block,
+                         unsigned int bits, bool swap)
 {
     if (bits) {
         unsigned long val = BFDEV_BIT_LOW_MASK(bits);
@@ -54,7 +56,8 @@ bfdev_comp_find_last_bit(const unsigned long *block, unsigned int bits, bool swa
 }
 
 export unsigned int
-bfdev_comp_find_first_zero(const unsigned long *block, unsigned int bits, bool swap)
+bfdev_comp_find_first_zero(const unsigned long *block,
+                           unsigned int bits, bool swap)
 {
     unsigned int base;
 
@@ -75,7 +78,8 @@ bfdev_comp_find_first_zero(const unsigned long *block, unsigned int bits, bool s
 }
 
 export unsigned int
-bfdev_comp_find_last_zero(const unsigned long *block, unsigned int bits, bool swap)
+bfdev_comp_find_last_zero(const unsigned long *block,
+                          unsigned int bits, bool swap)
 {
     if (bits) {
         unsigned long val = BFDEV_BIT_LOW_MASK(bits);
@@ -152,7 +156,7 @@ bfdev_comp_find_prev_bit(const unsigned long *addr1, const unsigned long *addr2,
         value &= addr2[BFDEV_BITS_DIV_LONG(start)];
     value ^= invert;
 
-    mask = BFDEV_BIT_HIGH_MASK(start);
+    mask = BFDEV_BIT_LOW_MASK(start + 1);
     if (swap)
         mask = bfdev_swab(mask);
 
