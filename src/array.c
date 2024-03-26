@@ -12,7 +12,7 @@
 static inline int
 array_resize(bfdev_array_t *array, unsigned long count)
 {
-    const bfdev_alloc_t *alloc = array->alloc;
+    const bfdev_alloc_t *alloc;
     unsigned long nalloc;
     size_t size;
     void *data;
@@ -20,6 +20,7 @@ array_resize(bfdev_array_t *array, unsigned long count)
     nalloc = bfdev_max(count, BFDEV_ARRAY_MSIZE);
     size = nalloc * array->cells;
 
+    alloc = array->alloc;
     data = bfdev_realloc(alloc, array->data, size);
     if (bfdev_unlikely(!data))
         return -BFDEV_ENOMEM;
@@ -123,11 +124,12 @@ bfdev_array_reserve(bfdev_array_t *array, unsigned long num)
 export void
 bfdev_array_release(bfdev_array_t *array)
 {
-    const bfdev_alloc_t *alloc = array->alloc;
+    const bfdev_alloc_t *alloc;
 
     array->capacity = 0;
     array->index = 0;
 
+    alloc = array->alloc;
     bfdev_free(alloc, array->data);
     array->data = NULL;
 }

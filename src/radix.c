@@ -89,10 +89,11 @@ bfdev_radix_root_find(bfdev_radix_root_t *root, uintptr_t offset)
 static inline bfdev_radix_node_t *
 radix_extend(bfdev_radix_root_t *root, uintptr_t offset)
 {
-    const bfdev_alloc_t *alloc = root->alloc;
+    const bfdev_alloc_t *alloc;
     bfdev_radix_node_t *node, *successor;
     unsigned int level;
 
+    alloc = root->alloc;
     for (;;) {
         node = root->node;
         level = root->level;
@@ -119,9 +120,10 @@ radix_extend(bfdev_radix_root_t *root, uintptr_t offset)
 static inline void
 radix_shrink(bfdev_radix_root_t *root)
 {
-    const bfdev_alloc_t *alloc = root->alloc;
+    const bfdev_alloc_t *alloc;
     bfdev_radix_node_t *node, *successor;
 
+    alloc = root->alloc;
     while (root->level) {
         node = root->node;
 
@@ -139,7 +141,7 @@ radix_shrink(bfdev_radix_root_t *root)
 export void *
 bfdev_radix_root_alloc(bfdev_radix_root_t *root, uintptr_t offset)
 {
-    const bfdev_alloc_t *alloc = root->alloc;
+    const bfdev_alloc_t *alloc;
     bfdev_radix_node_t *node;
     unsigned int level;
 
@@ -147,6 +149,7 @@ bfdev_radix_root_alloc(bfdev_radix_root_t *root, uintptr_t offset)
     if (bfdev_unlikely(!node))
         return NULL;
 
+    alloc = root->alloc;
     for (level = root->level; level--;) {
         bfdev_radix_node_t **slot, *newn;
 
@@ -173,7 +176,7 @@ export int
 bfdev_radix_root_free(bfdev_radix_root_t *root, uintptr_t offset)
 {
     struct radix_parent parents[RADIX_LEVEL_MAX];
-    const bfdev_alloc_t *alloc = root->alloc;
+    const bfdev_alloc_t *alloc;
     bfdev_radix_node_t *node;
     unsigned int level, index;
     bool contain;
@@ -189,6 +192,7 @@ bfdev_radix_root_free(bfdev_radix_root_t *root, uintptr_t offset)
     if (!bfdev_bitmap_empty(node->bitmap, BFDEV_RADIX_BLOCK))
         return -BFDEV_ENOERR;
 
+    alloc = root->alloc;
     for (level = 0; level <= root->level; ++level) {
         bfdev_radix_node_t *parent;
 

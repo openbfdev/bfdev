@@ -10,11 +10,12 @@
 #include <export.h>
 
 #define FIFO_GENERIC_COPY(copy1, copy2, fold1, fold2) do {  \
-    unsigned long size = fifo->mask + 1;                    \
-    unsigned long esize = fifo->esize;                      \
-    unsigned long llen;                                     \
+    unsigned long size, esize, llen;                        \
                                                             \
+    size = fifo->mask + 1;                                  \
+    esize = fifo->esize;                                    \
     offset &= fifo->mask;                                   \
+                                                            \
     if (esize != 1) {                                       \
         offset *= esize;                                    \
         size *= esize;                                      \
@@ -47,10 +48,13 @@ fifo_in_copy(struct bfdev_fifo *fifo, const void *buff, unsigned long len, unsig
 static __bfdev_always_inline unsigned long
 fifo_record_peek(struct bfdev_fifo *fifo, unsigned long recsize)
 {
-    unsigned long mask = fifo->mask;
-    unsigned long offset = fifo->out;
-    unsigned long length = 0;
-    uint8_t *data = fifo->data;
+    unsigned long mask, offset, length;
+    uint8_t *data;
+
+    mask = fifo->mask;
+    offset = fifo->out;
+    data = fifo->data;
+    length = 0;
 
     if (fifo->esize != 1) {
         offset *= fifo->esize;
@@ -71,9 +75,12 @@ static __bfdev_always_inline void
 fifo_record_poke(struct bfdev_fifo *fifo, unsigned long len,
                  unsigned long recsize)
 {
-    unsigned long mask = fifo->mask;
-    unsigned long offset = fifo->out;
-    uint8_t *data = fifo->data;
+    unsigned long mask, offset;
+    uint8_t *data;
+
+    mask = fifo->mask;
+    offset = fifo->out;
+    data = fifo->data;
 
     if (fifo->esize != 1) {
         offset *= fifo->esize;
@@ -216,13 +223,14 @@ bfdev_fifo_dynamic_alloc(struct bfdev_fifo *fifo, const bfdev_alloc_t *alloc,
 export void
 bfdev_fifo_dynamic_free(struct bfdev_fifo *fifo)
 {
-    const bfdev_alloc_t *alloc = fifo->alloc;
+    const bfdev_alloc_t *alloc;
 
     fifo->in = 0;
     fifo->out = 0;
     fifo->mask = 0;
     fifo->esize = 0;
 
+    alloc = fifo->alloc;
     bfdev_free(alloc, fifo->data);
     fifo->data = NULL;
 }

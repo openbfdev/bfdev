@@ -12,9 +12,10 @@
 export unsigned int
 bfdev_argv_count(const char *args)
 {
-    unsigned int argc = 0;
+    unsigned int argc;
     size_t offset;
 
+    argc = 0;
     for (;;) {
         offset = strspn(args, ARGV_SEPARA);
         if (!args[offset])

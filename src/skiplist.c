@@ -10,8 +10,9 @@
 static unsigned int
 random_level(bfdev_skip_head_t *head)
 {
-    unsigned int level = 1;
+    unsigned int level;
 
+    level = 1;
     while (level < head->levels) {
         if (rand() > RAND_MAX >> 2)
             break;
@@ -25,11 +26,12 @@ static bfdev_skip_node_t *
 skipnode_find(bfdev_skip_head_t *head, bfdev_find_t find,
               void *pdata, unsigned int *plev)
 {
-    unsigned int level = head->curr;
     bfdev_list_head_t *list, *end;
     bfdev_skip_node_t *walk;
+    unsigned int level;
     long retval;
 
+    level = head->curr;
     if (bfdev_unlikely(!level))
         return NULL;
 

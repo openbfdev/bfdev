@@ -69,6 +69,7 @@ export void
 bfdev_btree_free(bfdev_btree_root_t *root, void *node)
 {
     const bfdev_alloc_t *alloc;
+
     alloc = root->alloc;
     bfdev_free(alloc, node);
 }

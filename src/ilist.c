@@ -70,8 +70,8 @@ export void
 bfdev_ilist_add(bfdev_ilist_head_t *ihead, bfdev_ilist_node_t *inode,
                 bfdev_ilist_cmp_t cmp, void *pdata)
 {
-    bfdev_ilist_node_t *walk, *first, *prev = NULL;
-    bfdev_list_head_t *next = &ihead->node_list;
+    bfdev_ilist_node_t *walk, *first, *prev;
+    bfdev_list_head_t *next;
 
 #ifdef BFDEV_DEBUG_ILIST
     if (bfdev_unlikely(!ilist_head_check(ihead)))
@@ -84,11 +84,14 @@ bfdev_ilist_add(bfdev_ilist_head_t *ihead, bfdev_ilist_node_t *inode,
         return;
 
     /* Direct insertion of new nodes */
+    next = &ihead->node_list;
     if (bfdev_ilist_head_empty(ihead))
         goto finish;
 
     /* Traverse to find a suitable insertion point */
     first = walk = bfdev_ilist_first(ihead);
+    prev = NULL;
+
     do {
         if (cmp(inode, walk, pdata) < 0) {
             next = &walk->node_list;
