@@ -3,16 +3,13 @@
 # Copyright(c) 2024 John Sanpe <sanpeqf@gmail.com>
 #
 
-testsuite_target(array-fuzzy
-    ${CMAKE_CURRENT_LIST_DIR}/fuzzy.c
-    ${PROJECT_SOURCE_DIR}/src/array.c
-)
-
-add_test(array-fuzzy array-fuzzy)
+add_executable(slist-iterator iterator.c)
+target_link_libraries(slist-iterator bfdev testsuite)
+add_test(slist-iterator slist-iterator)
 
 if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
     install(TARGETS
-        array-fuzzy
+        slist-iterator
         DESTINATION
         ${CMAKE_INSTALL_DOCDIR}/testsuite
     )
