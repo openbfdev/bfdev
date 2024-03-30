@@ -7,4 +7,5 @@ include(build.cmake)
 include(testsuite.cmake)
 
 add_subdirectory(array)
+add_subdirectory(list)
 add_subdirectory(slist)
