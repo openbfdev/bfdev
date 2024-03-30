@@ -3,7 +3,7 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
-#define MODULE_NAME "slist-fuzzy"
+#define MODULE_NAME "slist-iterator"
 #define bfdev_log_fmt(fmt) MODULE_NAME ": " fmt
 
 #include <stdio.h>
@@ -68,7 +68,7 @@ TESTSUITE(
 
     bfdev_slist_for_each(list, &test->head) {
         node = slist_to_test(list);
-        bfdev_log_debug("slist 'for_each' test: %u\n", node->num);
+        bfdev_log_debug("'for_each' test: %u\n", node->num);
         if (count++ == TEST_LOOP / 2)
             break;
     }
@@ -76,14 +76,14 @@ TESTSUITE(
     tlist = list;
     bfdev_slist_for_each_continue(list) {
         node = slist_to_test(list);
-        bfdev_log_debug("slist 'for_each_continue' test: %u\n", node->num);
+        bfdev_log_debug("'for_each_continue' test: %u\n", node->num);
         count++;
     }
 
     list = tlist;
     bfdev_slist_for_each_from(list) {
         node = slist_to_test(list);
-        bfdev_log_debug("slist 'for_each_from' test: %u\n", node->num);
+        bfdev_log_debug("'for_each_from' test: %u\n", node->num);
         count++;
     }
 
@@ -108,7 +108,7 @@ TESTSUITE(
 
     bfdev_slist_for_each_safe(list, nlist, &test->head) {
         node = slist_to_test(list);
-        bfdev_log_debug("slist 'for_each_safe' test: %u\n", node->num);
+        bfdev_log_debug("'for_each_safe' test: %u\n", node->num);
         if (count++ == TEST_LOOP / 2)
             break;
     }
@@ -116,14 +116,14 @@ TESTSUITE(
     tlist = list;
     bfdev_slist_for_each_continue_safe(list, nlist) {
         node = slist_to_test(list);
-        bfdev_log_debug("slist 'for_each_continue_safe' test: %u\n", node->num);
+        bfdev_log_debug("'for_each_continue_safe' test: %u\n", node->num);
         count++;
     }
 
     list = tlist;
     bfdev_slist_for_each_from_safe(list, nlist) {
         node = slist_to_test(list);
-        bfdev_log_debug("slist 'for_each_from_safe' test: %u\n", node->num);
+        bfdev_log_debug("'for_each_from_safe' test: %u\n", node->num);
         count++;
     }
 
@@ -146,20 +146,20 @@ TESTSUITE(
     count = 0;
 
     bfdev_slist_for_each_entry(node, &test->head, list) {
-        bfdev_log_debug("slist 'for_each_entry' test: %u\n", node->num);
+        bfdev_log_debug("'for_each_entry' test: %u\n", node->num);
         if (count++ == TEST_LOOP / 2)
             break;
     }
 
     tnode = node;
     bfdev_slist_for_each_entry_continue(node, list) {
-        bfdev_log_debug("slist 'for_each_entry_continue' test: %u\n", node->num);
+        bfdev_log_debug("'for_each_entry_continue' test: %u\n", node->num);
         count++;
     }
 
     node = tnode;
     bfdev_slist_for_each_entry_from(node, list) {
-        bfdev_log_debug("slist 'for_each_entry_from' test: %u\n", node->num);
+        bfdev_log_debug("'for_each_entry_from' test: %u\n", node->num);
         count++;
     }
 
@@ -182,20 +182,20 @@ TESTSUITE(
     count = 0;
 
     bfdev_slist_for_each_entry_safe(node, nnode, &test->head, list) {
-        bfdev_log_debug("slist 'for_each_entry_safe' test: %u\n", node->num);
+        bfdev_log_debug("'for_each_entry_safe' test: %u\n", node->num);
         if (count++ == TEST_LOOP / 2)
             break;
     }
 
     tnode = node;
     bfdev_slist_for_each_entry_continue_safe(node, nnode, list) {
-        bfdev_log_debug("slist 'for_each_entry_continue_safe' test: %u\n", node->num);
+        bfdev_log_debug("'for_each_entry_continue_safe' test: %u\n", node->num);
         count++;
     }
 
     node = tnode;
     bfdev_slist_for_each_entry_from_safe(node, nnode, list) {
-        bfdev_log_debug("slist 'for_each_entry_from_safe' test: %u\n", node->num);
+        bfdev_log_debug("'for_each_entry_from_safe' test: %u\n", node->num);
         count++;
     }
 
