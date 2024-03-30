@@ -9,3 +9,11 @@ testsuite_target(array-fuzzy
 )
 
 add_test(array-fuzzy array-fuzzy)
+
+if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
+    install(TARGETS
+        array-fuzzy
+        DESTINATION
+        ${CMAKE_INSTALL_DOCDIR}/testsuite
+    )
+endif()
