@@ -17,7 +17,7 @@ bfdev_hlist_check_head_add(bfdev_hlist_head_t *head,
 {
     if (bfdev_unlikely(head->node == newn)) {
         bfdev_log_err(
-            "bfdev_hlist_head_add corruption (%p) head->node"
+            "hlist_head_add corruption (%p) head->node"
             " should not be new (%p)\n", head, newn
         );
         return false;
@@ -32,7 +32,7 @@ bfdev_hlist_check_next_add(bfdev_hlist_node_t *next,
 {
     if (bfdev_unlikely(next->next == newn)) {
         bfdev_log_err(
-            "bfdev_hlist_next_add corruption (%p) next->next"
+            "hlist_next_add corruption (%p) next->next"
             " should not be new (%p)\n",
             next, newn
         );
@@ -48,7 +48,7 @@ bfdev_hlist_check_prev_add(bfdev_hlist_node_t *prev,
 {
     if (bfdev_unlikely(prev->pprev == &newn->next)) {
         bfdev_log_err(
-            "bfdev_hlist_prev_add corruption (%p) prev->pprev"
+            "hlist_prev_add corruption (%p) prev->pprev"
             " should not be new (%p)\n",
             prev, newn
         );
@@ -63,7 +63,7 @@ bfdev_hlist_check_del(bfdev_hlist_node_t *node)
 {
     if (bfdev_unlikely(node->next == BFDEV_POISON_HLIST1)) {
         bfdev_log_err(
-            "bfdev_hlist_del corruption (%p) node->next"
+            "hlist_del corruption (%p) node->next"
             " should not be BFDEV_POISON_HLIST1 (%p)\n",
             node, BFDEV_POISON_HLIST1
         );
@@ -72,7 +72,7 @@ bfdev_hlist_check_del(bfdev_hlist_node_t *node)
 
     if (bfdev_unlikely(node->pprev == BFDEV_POISON_HLIST2)) {
         bfdev_log_err(
-            "bfdev_hlist_del corruption (%p) node->pprev"
+            "hlist_del corruption (%p) node->pprev"
             " should not be BFDEV_POISON_HLIST2 (%p)\n",
             node, BFDEV_POISON_HLIST2
         );
