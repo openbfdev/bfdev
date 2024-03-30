@@ -26,23 +26,6 @@ static BFDEV_LIST_HEAD(tests);
 #define list_to_testsuite(ptr) \
     bfdev_container_of(ptr, struct testsuite, list)
 
-static long
-testsuite_cmp(const bfdev_list_head_t *node1,
-              const bfdev_list_head_t *node2, void *pdata)
-{
-    struct testsuite *test1, *test2;
-    int retval;
-
-    test1 = list_to_testsuite(node1);
-    test2 = list_to_testsuite(node2);
-
-    retval = strcmp(test1->name, test2->name);
-    if (retval)
-        return retval;
-
-    return 0;
-}
-
 static struct testsuite *
 testsuite_find(const char *name)
 {
@@ -79,7 +62,7 @@ testsuite_register(struct testsuite *test)
         return -BFDEV_EALREADY;
 
     bfdev_log_info("register '%s'\n", test->name);
-    bfdev_list_add(&tests, &test->list);
+    bfdev_list_add_prev(&tests, &test->list);
 
     return -BFDEV_ENOERR;
 }
@@ -204,9 +187,7 @@ main(int argc, char *const argv[])
 
     setbuf(stdout, NULL);
     setbuf(stderr, NULL);
-
     loops = DEFAULT_LOOPS;
-    bfdev_list_sort(&tests, testsuite_cmp, NULL);
 
     for (;;) {
         arg = getopt(argc, argv, "c:dh");
