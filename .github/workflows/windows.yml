@@ -38,16 +38,21 @@ jobs:
 
       - name: configure cmake
         run: |
-            cmake -B build \
-                  -D CMAKE_INSTALL_PREFIX=build/install \
-                  -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
-                  -D BFDEV_EXAMPLES=ON
+          cmake -B build \
+                -D CMAKE_INSTALL_PREFIX=build/install \
+                -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
+                -D BFDEV_EXAMPLES=ON \
+                -D BFDEV_TESTSUITE=ON
 
       - name: make
-        run: cmake --build build --config ${{env.BUILD_TYPE}}
+        run: |
+          cmake --build build \
+                --config ${{env.BUILD_TYPE}}
 
       - name: install
-        run: cmake --build build --config ${{env.BUILD_TYPE}} -- install
+        run: |
+          cmake --build build \
+                --config ${{env.BUILD_TYPE}} -- install
 
       - name: ctest
         working-directory: ${{github.workspace}}/build
