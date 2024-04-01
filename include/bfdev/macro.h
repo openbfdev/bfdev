@@ -21,6 +21,17 @@ BFDEV_BEGIN_DECLS
 })
 
 /**
+ * bfdev_cmp() - compare values.
+ * @cond: compare condition.
+ *
+ * If the @cond is met, return an positive number;
+ * otherwise, return a negative number.
+ */
+#define bfdev_cmp(cond) ( \
+    (cond) ? BFDEV_BT : BFDEV_LT \
+)
+
+/**
  * BFDEV_ARRAY_SIZE() - get the number of elements in array.
  * @arr: array to be sized.
  */
