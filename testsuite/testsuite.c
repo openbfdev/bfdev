@@ -118,6 +118,7 @@ trigger_testsuite(struct testsuite *test, unsigned int loops,
             return retval;
     }
 
+    retval = -BFDEV_ENOERR;
     for (count = 1; count <= loops; ++count) {
         bfdev_log_debug("Testing loop%u...\n", count);
         EXAMPLE_TIME_STATISTICAL(
@@ -140,7 +141,7 @@ trigger_testsuite(struct testsuite *test, unsigned int loops,
         bfdev_log_notice("Released.\n");
     }
 
-    return -BFDEV_ENOERR;
+    return retval;
 }
 
 static int
