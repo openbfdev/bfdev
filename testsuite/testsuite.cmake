@@ -9,9 +9,10 @@ function(testsuite_target name src replace)
         TESTSUIT_OBJECT "${BFDEV_LIBRARY}"
     )
 
-    add_library(target OBJECT ${src})
-    target_compile_options(target PRIVATE -include ${replace})
+    add_library("${name}_target" OBJECT ${src})
+    target_compile_options("${name}_target" PRIVATE -include ${replace})
+    bfdev_dependencies("${name}_target")
 
     add_executable("${name}" ${TESTSUIT_OBJECT})
-    target_link_libraries("${name}" testsuite target)
+    target_link_libraries("${name}" "${name}_target" testsuite)
 endfunction()
