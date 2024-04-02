@@ -19,6 +19,8 @@ BFDEV_BEGIN_DECLS
 #elif defined(__BFDEV_BIG_ENDIAN__)
 # define BFDEV_BITOPS_LE_SWIZZLE ((BFDEV_BITS_PER_LONG - 1) & ~0x7)
 # define BFDEV_BITOPS_BE_SWIZZLE 0
+#else
+# error "Unknown endian"
 #endif
 
 static inline void
