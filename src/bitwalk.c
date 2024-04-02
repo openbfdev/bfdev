@@ -9,95 +9,64 @@
 #include <export.h>
 
 export unsigned int
-bfdev_comp_find_first_bit(const unsigned long *block,
-                          unsigned int bits, bool swap)
+bfdev_comp_find_first_bit(const unsigned long *block, unsigned int bits,
+                          unsigned long invert, bool swap)
 {
-    unsigned int base;
+    unsigned long value;
+    unsigned int base, offset;
 
     for (base = 0; base < bits; base += BFDEV_BITS_PER_LONG) {
-        unsigned long value;
-
         if (swap)
             value = bfdev_swabp(block);
         else
             value = *block;
+        value ^= invert;
 
-        if (value != BFDEV_ULONG_MIN)
-            return base + bfdev_ffsuf(value);
-        block++;
+        if (value == BFDEV_ULONG_MIN) {
+            block++;
+            continue;
+        }
+
+        offset = base + bfdev_ffsuf(value);
+        if (offset >= bits)
+            break;
+
+        return offset;
     }
 
     return bits;
 }
 
 export unsigned int
-bfdev_comp_find_last_bit(const unsigned long *block,
-                         unsigned int bits, bool swap)
+bfdev_comp_find_last_bit(const unsigned long *block, unsigned int bits,
+                         unsigned long invert, bool swap)
 {
-    if (bits) {
-        unsigned long val = BFDEV_BIT_LOW_MASK(bits);
-        unsigned long idx = (bits - 1) / BFDEV_BITS_PER_LONG;
+    unsigned long value, mask;
+    unsigned int base, offset;
 
-        do {
-            unsigned long value;
+    if (bfdev_unlikely(!bits))
+        return 0;
 
-            if (swap)
-                value = bfdev_swab(block[idx]);
-            else
-                value = block[idx];
+    mask = BFDEV_BIT_LOW_MASK(bits);
+    base = BFDEV_BITS_DIV_LONG(bits - 1);
 
-            if ((value ^ BFDEV_ULONG_MIN) & val)
-                return idx * BFDEV_BITS_PER_LONG + bfdev_flsuf(value);
-            val = BFDEV_ULONG_MAX;
-        } while (idx--);
-    }
-
-    return bits;
-}
-
-export unsigned int
-bfdev_comp_find_first_zero(const unsigned long *block,
-                           unsigned int bits, bool swap)
-{
-    unsigned int base;
-
-    for (base = 0; base < bits; base += BFDEV_BITS_PER_LONG) {
-        unsigned long value;
-
+    do {
         if (swap)
-            value = bfdev_swabp(block);
+            value = bfdev_swab(block[base]);
         else
-            value = *block;
+            value = block[base];
 
-        if (value != BFDEV_ULONG_MAX)
-            return base + bfdev_ffzuf(value);
-        block++;
-    }
+        value ^= invert;
+        value &= mask;
 
-    return bits;
-}
+        if (value == BFDEV_ULONG_MIN) {
+            mask = BFDEV_ULONG_MAX;
+            continue;
+        }
 
-export unsigned int
-bfdev_comp_find_last_zero(const unsigned long *block,
-                          unsigned int bits, bool swap)
-{
-    if (bits) {
-        unsigned long val = BFDEV_BIT_LOW_MASK(bits);
-        unsigned long idx = (bits - 1) / BFDEV_BITS_PER_LONG;
-
-        do {
-            unsigned long value;
-
-            if (swap)
-                value = bfdev_swab(block[idx]);
-            else
-                value = block[idx];
-
-            if ((value ^ BFDEV_ULONG_MAX) & val)
-                return idx * BFDEV_BITS_PER_LONG + bfdev_flzuf(value);
-            val = BFDEV_ULONG_MAX;
-        } while (idx--);
-    }
+        offset = base * BFDEV_BITS_PER_LONG;
+        return offset + bfdev_flsuf(value);
+    } while (base--);
 
     return bits;
 }
