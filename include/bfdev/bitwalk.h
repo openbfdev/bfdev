@@ -252,6 +252,62 @@ bfdev_find_prev_and_bit(const unsigned long *addr1, const unsigned long *addr2,
 }
 #endif
 
+#define bfdev_for_each_bit(index, bitmap, bits) \
+    for ((index) = bfdev_find_first_bit(bitmap, bits); \
+         (index) < (bits); \
+         (index) = bfdev_find_next_bit(bitmap, bits, (index) + 1))
+
+#define bfdev_for_each_zero(index, bitmap, bits) \
+    for ((index) = bfdev_find_first_zero(bitmap, bits); \
+         (index) < (bits); \
+         (index) = bfdev_find_next_zero(bitmap, bits, (index) + 1))
+
+#define bfdev_for_each_bit_reverse(index, bitmap, bits) \
+    for ((index) = bfdev_find_last_bit(bitmap, bits); \
+         (index) < (bits); \
+         (index) = bfdev_find_prev_bit(bitmap, bits, (index) - 1))
+
+#define bfdev_for_each_zero_reverse(index, bitmap, bits) \
+    for ((index) = bfdev_find_last_zero(bitmap, bits); \
+         (index) < (bits); \
+         (index) = bfdev_find_prev_zero(bitmap, bits, (index) - 1))
+
+#define bfdev_for_each_bit_form(index, bitmap, bits) \
+    for (; (index) < (bits); \
+         (index) = bfdev_find_next_bit(bitmap, bits, (index) + 1))
+
+#define bfdev_for_each_zero_form(index, bitmap, bits) \
+    for (; (index) < (bits); \
+         (index) = bfdev_find_next_zero(bitmap, bits, (index) + 1))
+
+#define bfdev_for_each_bit_reverse_form(index, bitmap, bits) \
+    for (; (index) < (bits); \
+         (index) = bfdev_find_prev_bit(bitmap, bits, (index) - 1))
+
+#define bfdev_for_each_zero_reverse_form(index, bitmap, bits) \
+    for (; (index) < (bits); \
+         (index) = bfdev_find_prev_zero(bitmap, bits, (index) - 1))
+
+#define bfdev_for_each_bit_continue(index, bitmap, bits) \
+    for ((index) = bfdev_find_next_bit(bitmap, bits, (index) + 1); \
+         (index) < (bits); \
+         (index) = bfdev_find_next_bit(bitmap, bits, (index) + 1))
+
+#define bfdev_for_each_zero_continue(index, bitmap, bits) \
+    for ((index) = bfdev_find_next_zero(bitmap, bits, (index) + 1); \
+         (index) < (bits); \
+         (index) = bfdev_find_next_zero(bitmap, bits, (index) + 1))
+
+#define bfdev_for_each_bit_reverse_continue(index, bitmap, bits) \
+    for ((index) = bfdev_find_prev_bit(bitmap, bits, (index) - 1); \
+         (index) < (bits); \
+         (index) = bfdev_find_prev_bit(bitmap, bits, (index) - 1))
+
+#define bfdev_for_each_zero_reverse_continue(index, bitmap, bits) \
+    for ((index) = bfdev_find_prev_zero(bitmap, bits, (index) - 1); \
+         (index) < (bits); \
+         (index) = bfdev_find_prev_zero(bitmap, bits, (index) - 1))
+
 BFDEV_END_DECLS
 
 #endif /* _BFDEV_BITWALK_H_ */
