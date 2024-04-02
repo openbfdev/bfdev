@@ -11,17 +11,22 @@
 #include <bfdev/string.h>
 #include <bfdev/limits.h>
 #include <bfdev/align.h>
+#include <bfdev/byteorder.h>
 #include <bfdev/bitwalk.h>
 #include <bfdev/bitmap-comp.h>
 
 BFDEV_BEGIN_DECLS
 
-#ifdef CONFIG_ARCH_LITTLE_ENDIAN
+#if defined(__BFDEV_LITTLE_ENDIAN__)
 # define BFDEV_BITMAP_ALIGN BFDEV_BITS_PER_BYTE
-#else
+#elif defined(__BFDEV_BIG_ENDIAN__)
 # define BFDEV_BITMAP_ALIGN (BFDEV_BITS_PER_BYTE * BFDEV_BYTES_PER_LONG)
+#else
+# error "Unknown endian"
 #endif
-#define BFDEV_BITMAP_MASK (BFDEV_BITMAP_ALIGN - 1)
+
+#define BFDEV_BITMAP_MASK \
+    (BFDEV_BITMAP_ALIGN - 1)
 
 #define BFDEV_DEFINE_BITMAP(name, bits) \
     unsigned long name[BFDEV_BITS_TO_LONG(bits)];
@@ -40,7 +45,7 @@ bfdev_bitmap_empty(const unsigned long *src, unsigned int bits)
     if (!bfdev_bitmap_const_aligned(bits))
         return bfdev_find_first_bit(src, bits) >= bits;
 
-    return !bfdev_memdiff(src, BFDEV_UINT_MIN, bits / BFDEV_BITS_PER_BYTE);
+    return !bfdev_memdiff(src, BFDEV_UINT8_MIN, bits / BFDEV_BITS_PER_BYTE);
 }
 
 static __bfdev_always_inline bool
@@ -52,7 +57,7 @@ bfdev_bitmap_full(const unsigned long *src, unsigned int bits)
     if (!bfdev_bitmap_const_aligned(bits))
         return bfdev_find_first_zero(src, bits) >= bits;
 
-    return !bfdev_memdiff(src, BFDEV_UINT_MAX, bits / BFDEV_BITS_PER_BYTE);
+    return !bfdev_memdiff(src, BFDEV_UINT8_MAX, bits / BFDEV_BITS_PER_BYTE);
 }
 
 static __bfdev_always_inline bool
