@@ -22,10 +22,26 @@ BFDEV_BEGIN_DECLS
 typedef struct bfdev_mpi bfdev_mpi_t;
 
 struct bfdev_mpi {
-    const bfdev_alloc_t *alloc;
     bfdev_array_t value;
     bool plus;
 };
+
+#define BFDEV_MPI_STATIC(alloc) { \
+    .value = BFDEV_ARRAY_STATIC(alloc, BFDEV_MPI_SIZE), \
+    .plus = true, \
+}
+
+#define BFDEV_MPI_INIT(alloc) \
+    (bfdev_mpi_t) BFDEV_MPI_STATIC(alloc)
+
+#define BFDEV_DEFINE_MPI(name, alloc) \
+    bfdev_mpi_t name = BFDEV_MPI_INIT(alloc)
+
+static inline void
+bfdev_mpi_init(bfdev_mpi_t *mpi, bfdev_alloc_t *alloc)
+{
+    *mpi = BFDEV_MPI_INIT(alloc);
+}
 
 static inline unsigned long
 bfdev_mpi_length(const bfdev_mpi_t *mpi)
@@ -125,14 +141,10 @@ bfdev_mpi_import(bfdev_mpi_t *var, const BFDEV_MPI_TYPE *buffer,
                  unsigned long length, bool sign);
 
 extern const BFDEV_MPI_TYPE *
-bfdev_mpi_data(const bfdev_mpi_t *var,
-               unsigned long index, bool *sign);
-
-extern bfdev_mpi_t *
-bfdev_mpi_create(const bfdev_alloc_t *alloc);
+bfdev_mpi_data(const bfdev_mpi_t *var, bool *sign);
 
 extern void
-bfdev_mpi_destory(bfdev_mpi_t *var);
+bfdev_mpi_release(bfdev_mpi_t *var);
 
 BFDEV_END_DECLS
 

@@ -17,6 +17,9 @@
 #define mpi_val(mpi) bfdev_array_data(&(mpi)->value, 0)
 #define mpi_resize(mpi, size) bfdev_array_resize(&(mpi)->value, size)
 
+static const
+BFDEV_MPI_TYPE mpi_zero;
+
 /**
  * Multi Precision Array Computing.
  *
@@ -42,15 +45,12 @@ mpa_cmpi(const BFDEV_MPI_TYPE *ptra, BFDEV_MPI_TYPE vi,
          unsigned long length)
 {
     if (length > 1)
-        return 1;
+        return BFDEV_BT;
 
-    if (*ptra != vi) {
-        if (*ptra > vi)
-            return 1;
-        return -1;
-    }
+    if (*ptra != vi)
+        return bfdev_cmp(*ptra > vi);
 
-    return 0;
+    return BFDEV_EQ;
 }
 
 static inline int
@@ -59,11 +59,8 @@ mpa_cmp(const BFDEV_MPI_TYPE *ptra, const BFDEV_MPI_TYPE *ptrb,
 {
     unsigned long length;
 
-    if (lena != lenb) {
-        if (lena > lenb)
-            return 1;
-        return -1;
-    }
+    if (lena != lenb)
+        return bfdev_cmp(lena > lenb);
 
     ptra += lena - 1;
     ptrb += lenb - 1;
@@ -75,13 +72,10 @@ mpa_cmp(const BFDEV_MPI_TYPE *ptra, const BFDEV_MPI_TYPE *ptrb,
         ptrb--;
     }
 
-    if (length) {
-        if (*ptra > *ptrb)
-            return 1;
-        return -1;
-    }
+    if (length)
+        return bfdev_cmp(*ptra > *ptrb);
 
-    return 0;
+    return BFDEV_EQ;
 }
 
 static inline bool
@@ -343,7 +337,7 @@ mpa_divrem(BFDEV_MPI_TYPE *ptrs,
 {
     BFDEV_MPI_TYPE dhigh, dlow, value;
     unsigned long index;
-    bool limb;
+    bool limb, borrow;
 
     /**
      * Argument constraints:
@@ -365,7 +359,9 @@ mpa_divrem(BFDEV_MPI_TYPE *ptrs,
     limb = false;
     if (value >= dhigh) {
         if (value > dhigh || mpa_cmp(ptra, ptrb, cntb - 1, cntb - 1) >= 0) {
-            mpa_sub(ptra, ptra, ptrb, cntb, cntb, false);
+            borrow = mpa_sub(ptra, ptra, ptrb, cntb, cntb, false);
+            BFDEV_BUG_ON(borrow);
+
             value = ptra[cntb - 1];
             limb = true;
         }
@@ -429,28 +425,13 @@ mpi_relocation(bfdev_mpi_t *var)
 {
     BFDEV_MPI_TYPE *value;
 
-    while (mpi_len(var) > 1) {
+    while (mpi_len(var)) {
         value = bfdev_array_peek(&var->value, 1);
         if (*value)
             break;
 
         bfdev_array_pop(&var->value, 1);
     }
-}
-
-static inline int
-mpi_set(bfdev_mpi_t *dest, BFDEV_MPI_TYPE vi)
-{
-    BFDEV_MPI_TYPE *value;
-
-    bfdev_array_reset(&dest->value);
-    value = bfdev_array_push(&dest->value, 1);
-    if (bfdev_unlikely(!value))
-        return -BFDEV_ENOMEM;
-
-    *value = vi;
-
-    return -BFDEV_ENOERR;
 }
 
 static inline int
@@ -475,26 +456,56 @@ mpi_extend(bfdev_mpi_t *var, unsigned long length)
 }
 
 static inline int
-mpi_copy(bfdev_mpi_t *dest, const bfdev_mpi_t *src)
+mpi_copy(bfdev_mpi_t *var, const BFDEV_MPI_TYPE *buffer,
+         unsigned long length)
 {
-    BFDEV_MPI_TYPE *ptrs, *ptra;
-    unsigned long length;
+    BFDEV_MPI_TYPE *ptrs;
     int retval;
 
-    if (dest == src)
-        return -BFDEV_EINVAL;
-
-    length = mpi_len(src);
-    retval = mpi_resize(dest, length);
+    retval = mpi_resize(var, length);
     if (bfdev_unlikely(retval))
         return retval;
 
-    ptrs = mpi_val(dest);
-    ptra = mpi_val(src);
-
-    mpa_copy(ptrs, ptra, length);
+    if (length) {
+        ptrs = mpi_val(var);
+        mpa_copy(ptrs, buffer, length);
+        mpi_relocation(var);
+    }
 
     return -BFDEV_ENOERR;
+}
+
+static inline int
+mpi_seti(bfdev_mpi_t *dest, BFDEV_MPI_TYPE vi)
+{
+    BFDEV_MPI_TYPE *value;
+    int retval;
+
+    retval = bfdev_array_resize(&dest->value, !!vi);
+    if (bfdev_unlikely(retval))
+        return retval;
+
+    if (vi) {
+        value = mpi_val(dest);
+        *value = vi;
+    }
+
+    return -BFDEV_ENOERR;
+}
+
+static inline int
+mpi_set(bfdev_mpi_t *dest, const bfdev_mpi_t *src)
+{
+    BFDEV_MPI_TYPE *ptra;
+    unsigned long length;
+
+    if (dest == src)
+        return -BFDEV_ENOERR;
+
+    length = mpi_len(src);
+    ptra = mpi_val(src);
+
+    return mpi_copy(dest, ptra, length);
 }
 
 static inline int
@@ -505,6 +516,12 @@ mpi_cmpi(const bfdev_mpi_t *va, BFDEV_MPI_TYPE vi)
 
     length = mpi_len(va);
     value = mpi_val(va);
+
+    if (!length) {
+        if (vi)
+            return BFDEV_LT;
+        return BFDEV_EQ;
+    }
 
     return mpa_cmpi(value, vi, length);
 }
@@ -517,6 +534,15 @@ mpi_cmp(const bfdev_mpi_t *va, const bfdev_mpi_t *vb)
 
     lena = mpi_len(va);
     lenb = mpi_len(vb);
+
+    if (!lena) {
+        if (lenb)
+            return BFDEV_LT;
+        return BFDEV_EQ;
+    }
+
+    if (!lenb)
+        return BFDEV_BT;
 
     ptra = mpi_val(va);
     ptrb = mpi_val(vb);
@@ -533,7 +559,10 @@ mpi_addi(bfdev_mpi_t *dest,
     bool carry;
     int retval;
 
+    /* parameter check */
     length = mpi_len(va);
+    if (!length)
+        return mpi_seti(dest, vi);
 
     retval = mpi_resize(dest, length + 1);
     if (bfdev_unlikely(retval))
@@ -558,16 +587,21 @@ mpi_add(bfdev_mpi_t *dest,
     bool carry;
     int retval;
 
+    /* parameter check */
+    cnta = mpi_len(va);
+    if (!cnta)
+        return mpi_set(dest, vb);
+
     cntb = mpi_len(vb);
-    ptrb = mpi_val(vb);
+    if (!cntb)
+        return mpi_set(dest, va);
 
     /* degrade to addi */
+    ptrb = mpi_val(vb);
     if (cntb == 1)
         return mpi_addi(dest, va, *ptrb);
 
-    cnta = mpi_len(va);
     length = bfdev_max(cnta, cntb);
-
     retval = mpi_resize(dest, length + 1);
     if (bfdev_unlikely(retval))
         return retval;
@@ -591,7 +625,9 @@ mpi_subi(bfdev_mpi_t *dest,
     bool borrow;
     int retval;
 
+    /* parameter check */
     length = mpi_len(va);
+    BFDEV_BUG_ON(!length);
 
     retval = mpi_resize(dest, length);
     if (bfdev_unlikely(retval))
@@ -616,10 +652,13 @@ mpi_sub(bfdev_mpi_t *dest,
     bool borrow;
     int retval;
 
+    /* parameter check */
     cntb = mpi_len(vb);
-    ptrb = mpi_val(vb);
+    if (!cntb)
+        return mpi_set(dest, va);
 
     /* degrade to subi */
+    ptrb = mpi_val(vb);
     if (cntb == 1)
         return mpi_subi(dest, va, *ptrb);
 
@@ -649,7 +688,10 @@ mpi_muli(bfdev_mpi_t *dest,
     unsigned long length;
     int retval;
 
+    /* parameter check */
     length = mpi_len(va);
+    if (!length || !vi)
+        return mpi_seti(dest, 0);
 
     retval = mpi_resize(dest, length + 1);
     if (bfdev_unlikely(retval))
@@ -675,10 +717,17 @@ mpi_mul(bfdev_mpi_t *dest,
     int retval;
     bool nval;
 
+    /* parameter check */
+    cnta = mpi_len(va);
+    if (!cnta)
+        return mpi_seti(dest, 0);
+
     cntb = mpi_len(vb);
-    ptrb = mpi_val(vb);
+    if (!cntb)
+        return mpi_seti(dest, 0);
 
     /* degrade to muli */
+    ptrb = mpi_val(vb);
     if (cntb == 1)
         return mpi_muli(dest, va, *ptrb);
 
@@ -691,7 +740,6 @@ mpi_mul(bfdev_mpi_t *dest,
         nval = true;
     }
 
-    cnta = mpi_len(va);
     length = cnta + cntb;
 
     retval = bfdev_array_resize(buffer, length);
@@ -720,11 +768,23 @@ mpi_divi(bfdev_mpi_t *quot, bfdev_mpi_t *rem,
     unsigned long length;
     int retval;
 
+    /* parameter check */
+    length = mpi_len(va);
+    if (!length) {
+        retval = mpi_seti(quot, 0);
+        if (retval)
+            return retval;
+
+        retval = mpi_seti(rem, 0);
+        if (retval)
+            return retval;
+
+        return -BFDEV_ENOERR;
+    }
+
     /* divide by zero */
     if (bfdev_unlikely(!vi))
         return -BFDEV_EOVERFLOW;
-
-    length = mpi_len(va);
 
     retval = mpi_resize(quot, length);
     if (bfdev_unlikely(retval))
@@ -735,7 +795,7 @@ mpi_divi(bfdev_mpi_t *quot, bfdev_mpi_t *rem,
 
     value = mpa_divmodi(ptrs, ptra, vi, length);
     if (quot != rem)
-        mpi_set(rem, value);
+        mpi_seti(rem, value);
     mpi_relocation(quot);
 
     return -BFDEV_ENOERR;
@@ -748,6 +808,11 @@ mpi_modi(bfdev_mpi_t *rem,
     BFDEV_MPI_TYPE *ptra, value;
     unsigned long length;
 
+    /* parameter check */
+    length = mpi_len(va);
+    if (!length)
+        return mpi_seti(rem, 0);
+
     /* divide by zero */
     if (bfdev_unlikely(!vi))
         return -BFDEV_EOVERFLOW;
@@ -756,7 +821,7 @@ mpi_modi(bfdev_mpi_t *rem,
     ptra = mpi_val(va);
 
     value = mpa_modi(ptra, vi, length);
-    mpi_set(rem, value);
+    mpi_seti(rem, value);
 
     return -BFDEV_ENOERR;
 }
@@ -771,19 +836,32 @@ mpi_div(bfdev_mpi_t *quot, bfdev_mpi_t *rem,
     bool limb, nval;
     int retval;
 
+    /* parameter check */
+    length = mpi_len(va);
+    if (!length) {
+        retval = mpi_seti(quot, 0);
+        if (retval)
+            return retval;
+
+        retval = mpi_seti(rem, 0);
+        if (retval)
+            return retval;
+
+        return -BFDEV_ENOERR;
+    }
+
+    /* divide by zero */
     cntb = mpi_len(vb);
-    ptrb = mpi_val(vb);
+    if (bfdev_unlikely(!cntb))
+        return -BFDEV_EOVERFLOW;
 
     /* degrade to divi */
+    ptrb = mpi_val(vb);
     if (cntb == 1)
         return mpi_divi(quot, rem, va, *ptrb);
 
-    /* divide by zero */
-    if (bfdev_unlikely(!mpi_cmpi(vb, 0)))
-        return -BFDEV_EOVERFLOW;
-
     if (rem != va) {
-        retval = mpi_copy(rem, va);
+        retval = mpi_set(rem, va);
         if (bfdev_unlikely(retval))
             return retval;
     }
@@ -837,19 +915,23 @@ mpi_mod(bfdev_mpi_t *rem,
     unsigned long cnta, cntb;
     int retval;
 
+    /* parameter check */
+    cnta = mpi_len(va);
+    if (!cnta)
+        return mpi_seti(rem, 0);
+
+    /* divide by zero */
     cntb = mpi_len(vb);
-    ptrb = mpi_val(vb);
+    if (bfdev_unlikely(!cntb))
+        return -BFDEV_EOVERFLOW;
 
     /* degrade to divi */
+    ptrb = mpi_val(vb);
     if (cntb == 1)
         return mpi_modi(rem, va, *ptrb);
 
-    /* divide by zero */
-    if (bfdev_unlikely(!mpi_cmpi(vb, 0)))
-        return -BFDEV_EOVERFLOW;
-
     if (rem != va) {
-        retval = mpi_copy(rem, va);
+        retval = mpi_set(rem, va);
         if (bfdev_unlikely(retval))
             return retval;
     }
@@ -877,6 +959,10 @@ mpi_and(bfdev_mpi_t *dest,
     cntb = mpi_len(vb);
     length = bfdev_min(cnta, cntb);
 
+    /* parameter check */
+    if (!length)
+        return mpi_seti(dest, 0);
+
     retval = mpi_resize(dest, length);
     if (bfdev_unlikely(retval))
         return retval;
@@ -902,6 +988,10 @@ mpi_or(bfdev_mpi_t *dest,
     cnta = mpi_len(va);
     cntb = mpi_len(vb);
     length = bfdev_max(cnta, cntb);
+
+    /* parameter check */
+    if (!length)
+        return mpi_seti(dest, 0);
 
     retval = mpi_resize(dest, length);
     if (bfdev_unlikely(retval))
@@ -937,6 +1027,10 @@ mpi_xor(bfdev_mpi_t *dest,
     cntb = mpi_len(vb);
     length = bfdev_max(cnta, cntb);
 
+    /* parameter check */
+    if (!length)
+        return mpi_seti(dest, 0);
+
     retval = mpi_resize(dest, length);
     if (bfdev_unlikely(retval))
         return retval;
@@ -968,18 +1062,20 @@ mpi_shli(bfdev_mpi_t *dest,
     unsigned long length, cnta;
     int retval;
 
-    if (dest == va && !shift)
-        return -BFDEV_ENOERR;
+    /* parameter check */
+    if (!shift)
+        return mpi_set(dest, va);
 
     cnta = mpi_len(va);
-    length = cnta + BFDEV_BITS_TO_LONG(shift);
+    if (!cnta)
+        return mpi_seti(dest, 0);
 
+    length = cnta + BFDEV_BITS_TO_LONG(shift);
     retval = mpi_resize(dest, length);
     if (bfdev_unlikely(retval))
         return retval;
 
     ptrs = mpi_val(dest);
-
     if (dest != va) {
         ptra = mpi_val(va);
         mpa_copy(ptrs, ptra, cnta);
@@ -999,10 +1095,13 @@ mpi_shri(bfdev_mpi_t *dest,
     unsigned long length;
     int retval;
 
-    if (dest == va && !shift)
-        return -BFDEV_ENOERR;
+    /* parameter check */
+    if (!shift)
+        return mpi_set(dest, va);
 
     length = mpi_len(va);
+    if (!length)
+        return mpi_seti(dest, 0);
 
     retval = mpi_resize(dest, length);
     if (bfdev_unlikely(retval))
@@ -1029,33 +1128,24 @@ bfdev_mpi_cmp(const bfdev_mpi_t *va, const bfdev_mpi_t *vb)
 {
     int diff;
 
-    if (va->plus != vb->plus) {
-        if (va->plus)
-            return 1;
-        return -1;
-    }
+    if (va->plus != vb->plus)
+        return bfdev_cmp(va->plus);
 
     diff = mpi_cmp(va, vb);
-    if (!diff)
-        return 0;
+    if (diff > 0)
+        return bfdev_cmp(va->plus);
 
-    if (diff > 0) {
-        if (va->plus)
-            return 1;
-        return -1;
-    }
+    if (diff < 0)
+        return bfdev_cmp(!va->plus);
 
-    /* diff < 0 */
-    if (va->plus)
-        return -1;
-    return 1;
+    return BFDEV_EQ;
 }
 
 export int
 bfdev_mpi_cmpi(const bfdev_mpi_t *va, BFDEV_MPI_TYPE vi)
 {
     if (!va->plus)
-        return -1;
+        return BFDEV_LT;
 
     return mpi_cmpi(va, vi);
 }
@@ -1085,15 +1175,15 @@ bfdev_mpi_add(bfdev_mpi_t *dest,
 
     diff = mpi_cmp(va, vb);
     switch (diff) {
-        case 0: default:
-            retval = mpi_set(dest, 0);
+        case BFDEV_EQ: default:
+            retval = mpi_seti(dest, 0);
             if (bfdev_unlikely(retval))
                 return retval;
 
             dest->plus = true;
             break;
 
-        case 1:
+        case BFDEV_BT:
             retval = mpi_sub(dest, va, vb);
             if (bfdev_unlikely(retval))
                 return retval;
@@ -1101,7 +1191,7 @@ bfdev_mpi_add(bfdev_mpi_t *dest,
             dest->plus = va->plus;
             break;
 
-        case -1:
+        case BFDEV_LT:
             retval = mpi_sub(dest, vb, va);
             if (bfdev_unlikely(retval))
                 return retval;
@@ -1131,24 +1221,24 @@ bfdev_mpi_addi(bfdev_mpi_t *dest,
 
     diff = bfdev_mpi_cmpi(va, vi);
     switch (diff) {
-        case 0: default:
-            retval = mpi_set(dest, 0);
+        case BFDEV_EQ: default:
+            retval = mpi_seti(dest, 0);
             if (bfdev_unlikely(retval))
                 return retval;
 
             dest->plus = true;
             break;
 
-        case -1:
+        case BFDEV_LT:
             value = mpi_val(va);
-            retval = mpi_set(dest, vi - *value);
+            retval = mpi_seti(dest, vi - *value);
             if (bfdev_unlikely(retval))
                 return retval;
 
             dest->plus = true;
             break;
 
-        case 1:
+        case BFDEV_BT:
             retval = mpi_subi(dest, va, vi);
             if (bfdev_unlikely(retval))
                 return retval;
@@ -1177,15 +1267,15 @@ bfdev_mpi_sub(bfdev_mpi_t *dest,
 
     diff = mpi_cmp(va, vb);
     switch (diff) {
-        case 0: default:
-            retval = mpi_set(dest, 0);
+        case BFDEV_EQ: default:
+            retval = mpi_seti(dest, 0);
             if (bfdev_unlikely(retval))
                 return retval;
 
             dest->plus = true;
             break;
 
-        case 1:
+        case BFDEV_BT:
             retval = mpi_sub(dest, va, vb);
             if (bfdev_unlikely(retval))
                 return retval;
@@ -1193,7 +1283,7 @@ bfdev_mpi_sub(bfdev_mpi_t *dest,
             dest->plus = va->plus;
             break;
 
-        case -1:
+        case BFDEV_LT:
             retval = mpi_sub(dest, vb, va);
             if (bfdev_unlikely(retval))
                 return retval;
@@ -1223,24 +1313,24 @@ bfdev_mpi_subi(bfdev_mpi_t *dest,
 
     diff = mpi_cmpi(va, vi);
     switch (diff) {
-        case 0: default:
-            retval = mpi_set(dest, 0);
+        case BFDEV_EQ: default:
+            retval = mpi_seti(dest, 0);
             if (bfdev_unlikely(retval))
                 return retval;
 
             dest->plus = true;
             break;
 
-        case -1:
+        case BFDEV_LT:
             value = mpi_val(va);
-            retval = mpi_set(dest, vi - *value);
+            retval = mpi_seti(dest, vi - *value);
             if (bfdev_unlikely(retval))
                 return retval;
 
             dest->plus = false;
             break;
 
-        case 1:
+        case BFDEV_BT:
             retval = mpi_subi(dest, va, vi);
             if (bfdev_unlikely(retval))
                 return retval;
@@ -1298,12 +1388,12 @@ bfdev_mpi_div(bfdev_mpi_t *quot, bfdev_mpi_t *rem,
 
     diff = mpi_cmp(va, vb);
     switch (diff) {
-        case 0: default:
-            retval = mpi_set(quot, 1);
+        case BFDEV_EQ: default:
+            retval = mpi_seti(quot, 1);
             if (bfdev_unlikely(retval))
                 return retval;
 
-            retval = mpi_set(rem, 0);
+            retval = mpi_seti(rem, 0);
             if (bfdev_unlikely(retval))
                 return retval;
 
@@ -1311,9 +1401,9 @@ bfdev_mpi_div(bfdev_mpi_t *quot, bfdev_mpi_t *rem,
             rem->plus = true;
             break;
 
-        case -1:
+        case BFDEV_LT:
             if (rem != va) {
-                retval = mpi_copy(rem, va);
+                retval = mpi_set(rem, va);
                 if (bfdev_unlikely(retval))
                     return retval;
 
@@ -1321,14 +1411,14 @@ bfdev_mpi_div(bfdev_mpi_t *quot, bfdev_mpi_t *rem,
             }
 
             /* quot can be equal to va */
-            retval = mpi_set(quot, 0);
+            retval = mpi_seti(quot, 0);
             if (bfdev_unlikely(retval))
                 return retval;
 
             quot->plus = true;
             break;
 
-        case 1:
+        case BFDEV_BT:
             retval = mpi_div(quot, rem, va, vb);
             if (bfdev_unlikely(retval))
                 return retval;
@@ -1349,12 +1439,12 @@ bfdev_mpi_divi(bfdev_mpi_t *quot, bfdev_mpi_t *rem,
 
     diff = mpi_cmpi(va, vi);
     switch (diff) {
-        case 0: default:
-            retval = mpi_set(quot, 1);
+        case BFDEV_EQ: default:
+            retval = mpi_seti(quot, 1);
             if (bfdev_unlikely(retval))
                 return retval;
 
-            retval = mpi_set(rem, 0);
+            retval = mpi_seti(rem, 0);
             if (bfdev_unlikely(retval))
                 return retval;
 
@@ -1362,9 +1452,9 @@ bfdev_mpi_divi(bfdev_mpi_t *quot, bfdev_mpi_t *rem,
             rem->plus = true;
             break;
 
-        case -1:
+        case BFDEV_LT:
             if (rem != va) {
-                retval = mpi_copy(rem, va);
+                retval = mpi_set(rem, va);
                 if (bfdev_unlikely(retval))
                     return retval;
 
@@ -1372,14 +1462,14 @@ bfdev_mpi_divi(bfdev_mpi_t *quot, bfdev_mpi_t *rem,
             }
 
             /* quot can be equal to va */
-            retval = mpi_set(quot, 0);
+            retval = mpi_seti(quot, 0);
             if (bfdev_unlikely(retval))
                 return retval;
 
             quot->plus = true;
             break;
 
-        case 1:
+        case BFDEV_BT:
             retval = mpi_divi(quot, rem, va, vi);
             if (bfdev_unlikely(retval))
                 return retval;
@@ -1400,17 +1490,17 @@ bfdev_mpi_mod(bfdev_mpi_t *rem,
 
     diff = mpi_cmp(va, vb);
     switch (diff) {
-        case 0: default:
-            retval = mpi_set(rem, 0);
+        case BFDEV_EQ: default:
+            retval = mpi_seti(rem, 0);
             if (bfdev_unlikely(retval))
                 return retval;
 
             rem->plus = true;
             break;
 
-        case -1:
+        case BFDEV_LT:
             if (rem != va) {
-                retval = mpi_copy(rem, va);
+                retval = mpi_set(rem, va);
                 if (bfdev_unlikely(retval))
                     return retval;
 
@@ -1418,7 +1508,7 @@ bfdev_mpi_mod(bfdev_mpi_t *rem,
             }
             break;
 
-        case 1:
+        case BFDEV_BT:
             retval = mpi_mod(rem, va, vb);
             if (bfdev_unlikely(retval))
                 return retval;
@@ -1438,17 +1528,17 @@ bfdev_mpi_modi(bfdev_mpi_t *rem,
 
     diff = mpi_cmpi(va, vi);
     switch (diff) {
-        case 0: default:
-            retval = mpi_set(rem, 0);
+        case BFDEV_EQ: default:
+            retval = mpi_seti(rem, 0);
             if (bfdev_unlikely(retval))
                 return retval;
 
             rem->plus = true;
             break;
 
-        case -1:
+        case BFDEV_LT:
             if (rem != va) {
-                retval = mpi_copy(rem, va);
+                retval = mpi_set(rem, va);
                 if (bfdev_unlikely(retval))
                     return retval;
 
@@ -1456,7 +1546,7 @@ bfdev_mpi_modi(bfdev_mpi_t *rem,
             }
             break;
 
-        case 1:
+        case BFDEV_BT:
             retval = mpi_modi(rem, va, vi);
             if (bfdev_unlikely(retval))
                 return retval;
@@ -1607,7 +1697,7 @@ bfdev_mpi_seti(bfdev_mpi_t *dest, BFDEV_MPI_TYPE val)
 {
     int retval;
 
-    retval = mpi_set(dest, val);
+    retval = mpi_seti(dest, val);
     if (bfdev_unlikely(retval))
         return retval;
 
@@ -1621,7 +1711,7 @@ bfdev_mpi_set(bfdev_mpi_t *dest, const bfdev_mpi_t *src)
 {
     int retval;
 
-    retval = mpi_copy(dest, src);
+    retval = mpi_set(dest, src);
     if (bfdev_unlikely(retval))
         return retval;
 
@@ -1634,64 +1724,35 @@ export int
 bfdev_mpi_import(bfdev_mpi_t *var, const BFDEV_MPI_TYPE *buffer,
                  unsigned long length, bool sign)
 {
-    BFDEV_MPI_TYPE *data;
     int retval;
 
-    retval = mpi_resize(var, length);
+    retval = mpi_copy(var, buffer, length);
     if (bfdev_unlikely(retval))
         return retval;
 
-    data = mpi_val(var);
-    mpa_copy(data, buffer, length);
     var->plus = sign;
 
     return -BFDEV_ENOERR;
 }
 
 export const BFDEV_MPI_TYPE *
-bfdev_mpi_data(const bfdev_mpi_t *var,
-               unsigned long index, bool *sign)
+bfdev_mpi_data(const bfdev_mpi_t *var, bool *sign)
 {
-    BFDEV_MPI_TYPE *data;
+    const BFDEV_MPI_TYPE *retval;
 
-    data = bfdev_array_data(&var->value, index);
-    if (bfdev_unlikely(!data))
-        return NULL;
+    if (!mpi_len(var))
+        retval = &mpi_zero;
+    else
+        retval = mpi_val(var);
 
     if (sign)
         *sign = var->plus;
 
-    return data;
-}
-
-export bfdev_mpi_t *
-bfdev_mpi_create(const bfdev_alloc_t *alloc)
-{
-    bfdev_mpi_t *var;
-    int retval;
-
-    var = bfdev_malloc(alloc, sizeof(*var));
-    if (bfdev_unlikely(!var))
-        return NULL;
-
-    var->alloc = alloc;
-    bfdev_array_init(&var->value, alloc, BFDEV_MPI_SIZE);
-    retval = bfdev_mpi_seti(var, 0);
-
-    if (bfdev_unlikely(retval)) {
-        bfdev_free(alloc, var);
-        return NULL;
-    }
-
-    return var;
+    return retval;
 }
 
 export void
-bfdev_mpi_destory(bfdev_mpi_t *var)
+bfdev_mpi_release(bfdev_mpi_t *var)
 {
-    const bfdev_alloc_t *alloc;
-
-    alloc = var->alloc;
     bfdev_array_release(&var->value);
-    bfdev_free(alloc, var);
 }
