@@ -122,8 +122,8 @@ bfdev_fsm_curr(bfdev_fsm_t *fsm)
 }
 
 /**
- * bfdev_fsm_curr() - Get the previous state.
- * @fsm: the state machine to get the current state from.
+ * bfdev_fsm_prev() - Get the previous state.
+ * @fsm: the state machine to get the previous state from.
  *
  * Return a pointer to the previous state.
  */
@@ -157,8 +157,29 @@ bfdev_fsm_finished(bfdev_fsm_t *fsm)
 }
 
 /**
- * bfdev_fsm_handle() - Pass an event to the state machine.
- * @fsm: the state machine to pass an event to.
+ * bfdev_fsm_cond() - Check if transition meet the condition of event.
+ * @trans: the transition to be checked.
+ * @event: the event to be handled.
+ *
+ * Return true if the transition meeted.
+ */
+static inline bool
+bfdev_fsm_cond(const bfdev_fsm_transition_t *trans, bfdev_fsm_event_t *event)
+{
+    /* A transition for the given event has been found. */
+    if (trans->type != event->type)
+        return false;
+
+    /* If transition is guarded, ensure that the condition is held. */
+    if (!trans->guard)
+        return true;
+
+    return !trans->guard(event, trans->cond);
+}
+
+/**
+ * bfdev_fsm_error() - Set the state machine to into the error state.
+ * @fsm: the state machine to enter the error state.
  * @event: the event to be handled.
  *
  * Return the entry trigger return value of the error state.

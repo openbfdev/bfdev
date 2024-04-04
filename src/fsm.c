@@ -26,13 +26,7 @@ fsm_find_transition(const bfdev_fsm_state_t *state, bfdev_fsm_event_t *event)
 
     for (count = 0; count < state->tnum; ++count) {
         find = &state->trans[count];
-
-        /* A transition for the given event has been found. */
-        if (find->type != event->type)
-            continue;
-
-        /* If transition is guarded, ensure that the condition is held. */
-        if (!find->guard || !find->guard(event, find->cond))
+        if (bfdev_fsm_cond(find, event))
             return find;
     }
 
