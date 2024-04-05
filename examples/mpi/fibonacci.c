@@ -21,13 +21,6 @@ int main(int argc, const char *argv[])
     BFDEV_DEFINE_MPI(vb, NULL);
     BFDEV_DEFINE_MPI(vc, NULL);
 
-    bfdev_mpi_seti(&va, 0);
-    bfdev_mpi_seti(&vb, 0);
-    vb.plus = 0;
-
-    retval = bfdev_mpi_cmp(&va, &vb);
-    printf("%d\n", retval);
-
     if ((retval = bfdev_mpi_seti(&va, 1)) ||
         (retval = bfdev_mpi_seti(&vb, 0)) ||
         (retval = bfdev_mpi_seti(&vc, 0)))

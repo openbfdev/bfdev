@@ -22,13 +22,14 @@ BFDEV_BEGIN_DECLS
 typedef struct bfdev_mpi bfdev_mpi_t;
 
 struct bfdev_mpi {
+    const bfdev_alloc_t *alloc;
     bfdev_array_t value;
     bool plus;
 };
 
-#define BFDEV_MPI_STATIC(alloc) { \
-    .value = BFDEV_ARRAY_STATIC(alloc, BFDEV_MPI_SIZE), \
-    .plus = true, \
+#define BFDEV_MPI_STATIC(ALLOC) { \
+    .alloc = (ALLOC), .plus = true, \
+    .value = BFDEV_ARRAY_STATIC(ALLOC, BFDEV_MPI_SIZE), \
 }
 
 #define BFDEV_MPI_INIT(alloc) \
