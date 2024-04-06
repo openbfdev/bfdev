@@ -420,18 +420,23 @@ mpa_divrem(BFDEV_MPI_TYPE *ptrs,
  * calculating unsigned mpi.
  */
 
-static __bfdev_always_inline void
+static __bfdev_always_inline unsigned long
 mpi_relocation(bfdev_mpi_t *var)
 {
     BFDEV_MPI_TYPE *value;
+    unsigned long length;
 
+    length = 0;
     while (mpi_len(var)) {
         value = bfdev_array_peek(&var->value, 1);
         if (*value)
             break;
 
         bfdev_array_pop(&var->value, 1);
+        length++;
     }
+
+    return length;
 }
 
 static inline int
@@ -889,7 +894,7 @@ mpi_div(bfdev_mpi_t *quot, bfdev_mpi_t *rem,
     BFDEV_BUG_ON(mpi_resize(quot, length));
     BFDEV_BUG_ON(mpi_resize(rem, cntb));
 
-    mpi_relocation(quot);
+    BFDEV_BUG_ON(mpi_relocation(quot));
     mpi_relocation(rem);
 
     if (rename) {
@@ -1003,6 +1008,7 @@ mpi_or(bfdev_mpi_t *dest,
 
     length = cnta - cntb;
     mpa_copy(ptrs + cntb, ptra + cntb, length);
+    BFDEV_BUG_ON(mpi_relocation(dest));
 
     return -BFDEV_ENOERR;
 }
@@ -1051,7 +1057,7 @@ mpi_shli(bfdev_mpi_t *dest,
          const bfdev_mpi_t *va, BFDEV_MPI_TYPE shift)
 {
     BFDEV_MPI_TYPE *ptrs, *ptra;
-    unsigned long length, cnta;
+    unsigned long length, cnta, rem;
     int retval;
 
     /* parameter check */
@@ -1062,7 +1068,9 @@ mpi_shli(bfdev_mpi_t *dest,
     if (!cnta)
         return mpi_seti(dest, 0);
 
-    length = cnta + BFDEV_BITS_TO_LONG(shift);
+    rem = BFDEV_BITS_TO_LONG(shift);
+    length = cnta + rem;
+
     retval = mpi_resize(dest, length);
     if (bfdev_unlikely(retval))
         return retval;
@@ -1073,6 +1081,7 @@ mpi_shli(bfdev_mpi_t *dest,
         mpa_copy(ptrs, ptra, cnta);
     }
 
+    mpa_zero(ptrs + cnta, rem);
     bfdev_bitmap_shl(ptrs, ptrs, shift, length * BFDEV_MPI_BITS);
     mpi_relocation(dest);
 
