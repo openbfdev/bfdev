@@ -174,30 +174,30 @@ bfdev_bitmap_comp_shl(unsigned long *dest, const unsigned long *src,
 
     /* length > offset */
     rem = BFDEV_BITS_MOD_LONG(shift);
-    index = length - offset - 1;
+    index = length - offset;
 
     if (BFDEV_BITS_MOD_LONG(bits)) {
-        vhigh = src[index] << rem;
+        vhigh = src[--index] << rem;
 
         if (rem && index)
-            vlow = src[--index] >> (BFDEV_BITS_PER_LONG - rem);
+            vlow = src[index - 1] >> (BFDEV_BITS_PER_LONG - rem);
         else
             vlow = 0;
 
         value = vhigh | vlow;
-        dest[--length] = value & BFDEV_BIT_LOW_MASK(bits);
+        dest[index + offset] = value & BFDEV_BIT_LOW_MASK(bits);
     }
 
-    while (length) {
-        vhigh = src[index] << rem;
+    while (index) {
+        vhigh = src[--index] << rem;
 
         if (rem && index)
-            vlow = src[--index] >> (BFDEV_BITS_PER_LONG - rem);
+            vlow = src[index - 1] >> (BFDEV_BITS_PER_LONG - rem);
         else
             vlow = 0;
 
         value = vhigh | vlow;
-        dest[--length] = value;
+        dest[index + offset] = value;
     }
 
     if (offset)

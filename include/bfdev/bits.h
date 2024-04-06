@@ -31,6 +31,9 @@ BFDEV_BEGIN_DECLS
  * BFDEV_BIT_LOW_MASK - create a low position mask.
  * @nbits: mask length.
  *
+ * The input &nbits is from 1 to BFDEV_BITS_PER_LONG,
+ * if it is not within this range, it will wrap back.
+ *
  * For example:
  * BFDEV_BIT_LOW_MASK(8) gives us the vector 0x000000ff.
  */
