@@ -229,7 +229,7 @@ bfdev_minpool_realloc(struct bfdev_minpool_head *head, void *block, size_t resiz
         if (bfdev_unlikely(!newblk))
             return NULL;
 
-        memcpy(newblk, block, origin);
+        bfport_memcpy(newblk, block, origin);
         bfdev_minpool_free(head, block);
 
         return newblk;

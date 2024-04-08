@@ -58,7 +58,7 @@ ascii85_decode(void *buff, const char *data, size_t size)
 
     while (size) {
         if (*data == 'z' && size >= 1) {
-            memset(buff, 0, 4);
+            bfport_memset(buff, 0, 4);
             data += 1;
             size -= 1;
         } else if (size >= 5) {
@@ -104,7 +104,7 @@ ascii85_encode_length(const uint32_t *data, size_t size)
 static __bfdev_always_inline size_t
 ascii85_decode_length(const char *data, size_t size)
 {
-    while ((data = strchr(data, 'z'))) {
+    while ((data = bfport_strchr(data, 'z'))) {
         size += 4;
         data++;
     }

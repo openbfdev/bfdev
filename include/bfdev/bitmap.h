@@ -205,7 +205,7 @@ bfdev_bitmap_set(unsigned long *bitmap, unsigned int start, unsigned int bits)
     offset = start / BFDEV_BITS_PER_BYTE;
     size = bits / BFDEV_BITS_PER_BYTE;
 
-    memset((char *)bitmap + offset, 0xff, size);
+    bfport_memset((char *)bitmap + offset, 0xff, size);
 }
 
 static __bfdev_always_inline void
@@ -223,7 +223,7 @@ bfdev_bitmap_clr(unsigned long *bitmap, unsigned int start, unsigned int bits)
     offset = start / BFDEV_BITS_PER_BYTE;
     size = bits / BFDEV_BITS_PER_BYTE;
 
-    memset((char *)bitmap + offset, 0, size);
+    bfport_memset((char *)bitmap + offset, 0, size);
 }
 
 static __bfdev_always_inline void
@@ -237,7 +237,7 @@ bfdev_bitmap_zero(unsigned long *bitmap, unsigned int bits)
     }
 
     length = BFDEV_BITS_TO_U8(bits);
-    memset(bitmap, 0, length);
+    bfport_memset(bitmap, 0, length);
 }
 
 static __bfdev_always_inline void
@@ -251,7 +251,7 @@ bfdev_bitmap_fill(unsigned long *bitmap, unsigned int bits)
     }
 
     length = BFDEV_BITS_TO_U8(bits);
-    memset(bitmap, BFDEV_UINT8_MAX, length);
+    bfport_memset(bitmap, BFDEV_UINT8_MAX, length);
 }
 
 static __bfdev_always_inline void
@@ -265,7 +265,7 @@ bfdev_bitmap_copy(unsigned long *dest, unsigned long *src, unsigned int bits)
     }
 
     length = BFDEV_BITS_TO_U8(bits);
-    memcpy(dest, src, length);
+    bfport_memcpy(dest, src, length);
 }
 
 BFDEV_END_DECLS

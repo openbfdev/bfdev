@@ -74,8 +74,8 @@ bfdev_levenshtein(const bfdev_alloc_t *alloc,
 {
     size_t len1, len2;
 
-    len1 = strlen(str1);
-    len2 = strlen(str2);
+    len1 = bfport_strlen(str1);
+    len2 = bfport_strlen(str2);
 
     return bfdev_levenshtein_len(alloc, str1, str2, len1, len2, s, w, a, d);
 }
