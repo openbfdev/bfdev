@@ -16,6 +16,38 @@
 
 BFDEV_BEGIN_DECLS
 
+#ifndef bfport_file
+# define bfport_file FILE
+#endif
+
+#ifndef bfport_stdout
+# define bfport_stdout stdout
+#endif
+
+#ifndef bfport_stderr
+# define bfport_stderr stderr
+#endif
+
+#ifndef bfport_fwrite
+# define bfport_fwrite bfport_fwrite
+static __bfdev_always_inline unsigned long
+bfport_fwrite(const void *restrict ptr, size_t size,
+              size_t n, FILE *restrict stream)
+{
+    return fwrite(ptr, size, n, stream);
+}
+#endif
+
+#ifndef bfport_vsnprintf
+# define bfport_vsnprintf bfport_vsnprintf
+static __bfdev_always_inline int
+bfport_vsnprintf(char *restrict s, size_t maxlen,
+                 const char *restrict format, va_list arg)
+{
+    return vsnprintf(s, maxlen, format, arg);
+}
+#endif
+
 BFDEV_END_DECLS
 
 #endif /* _BFDEV_PORT_STDIO_H_ */

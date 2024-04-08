@@ -10,14 +10,14 @@
 static inline void
 matrix_zero(BFDEV_MATRIX_TYPE *var, unsigned int size)
 {
-    memset(var, 0, size * BFDEV_MATRIX_SIZE);
+    bfport_memset(var, 0, size * BFDEV_MATRIX_SIZE);
 }
 
 static inline void
 matrix_copy(BFDEV_MATRIX_TYPE *dest, const BFDEV_MATRIX_TYPE *src,
             unsigned int size)
 {
-    memcpy(dest, src, size * BFDEV_MATRIX_SIZE);
+    bfport_memcpy(dest, src, size * BFDEV_MATRIX_SIZE);
 }
 
 #define GENERIC_MATRIX_ADDSUB(name, operate)            \

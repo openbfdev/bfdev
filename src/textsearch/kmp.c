@@ -97,7 +97,7 @@ kmp_prepare(const bfdev_alloc_t *alloc, const void *pattern,
     kctx->pattern = (void *)kctx + sizeof(*kctx) + prefix_size;
 
     if (!(flags & BFDEV_TS_IGCASE))
-        memcpy(kctx->pattern, pattern, len);
+        bfport_memcpy(kctx->pattern, pattern, len);
     else for (index = 0; index < len; ++index)
         kctx->pattern[index] = toupper(((char *)pattern)[index]);
     kmp_compute_prefix(kctx);

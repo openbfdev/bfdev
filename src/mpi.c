@@ -30,14 +30,14 @@ BFDEV_MPI_TYPE mpi_zero;
 static inline void
 mpa_zero(BFDEV_MPI_TYPE *dest, unsigned long length)
 {
-    memset(dest, 0, length * BFDEV_MPI_SIZE);
+    bfport_memset(dest, 0, length * BFDEV_MPI_SIZE);
 }
 
 static inline void
 mpa_copy(BFDEV_MPI_TYPE *dest, const BFDEV_MPI_TYPE *src,
          unsigned long length)
 {
-    memcpy(dest, src, length * BFDEV_MPI_SIZE);
+    bfport_memcpy(dest, src, length * BFDEV_MPI_SIZE);
 }
 
 static inline int

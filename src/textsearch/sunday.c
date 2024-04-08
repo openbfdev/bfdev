@@ -98,7 +98,7 @@ sunday_prepare(const bfdev_alloc_t *alloc, const void *pattern,
     sctx->pattern_len = len;
 
     if (!(flags & BFDEV_TS_IGCASE))
-        memcpy(sctx->pattern, pattern, len);
+        bfport_memcpy(sctx->pattern, pattern, len);
     else for (index = 0; index < len; ++index)
         sctx->pattern[index] = toupper(((char *)pattern)[index]);
     sunday_compute_prefix(sctx, flags);

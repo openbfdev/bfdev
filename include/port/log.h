@@ -16,14 +16,14 @@
 static inline void
 generic_log_write(bfdev_log_message_t *msg)
 {
-    FILE *file;
+    bfport_file *file;
 
     if (msg->level > BFDEV_LEVEL_WARNING)
-        file = stdout;
+        file = bfport_stdout;
     else
-        file = stderr;
+        file = bfport_stderr;
 
-    fwrite(msg->data, msg->length, 1, file);
+    bfport_fwrite(msg->data, msg->length, 1, file);
 }
 
 #endif /* _LOCAL_PORT_LOG_H_ */

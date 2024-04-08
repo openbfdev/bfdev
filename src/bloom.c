@@ -55,8 +55,10 @@ bfdev_bloom_push(bfdev_bloom_t *bloom, void *key)
 export void
 bfdev_bloom_flush(bfdev_bloom_t *bloom)
 {
-    size_t size = BFDEV_BITS_WORD(bloom->capacity);
-    memset(bloom->bitmap, 0, size);
+    size_t size;
+
+    size = BFDEV_BITS_WORD(bloom->capacity);
+    bfport_memset(bloom->bitmap, 0, size);
 }
 
 export bfdev_bloom_t *
