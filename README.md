@@ -1,5 +1,7 @@
 # BFDEV Introduce
 
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8769/badge)](https://www.bestpractices.dev/projects/8769)
+
 bfdev is a high-performance, aesthetically pleasing, and portable infrastructure provisioning library. Its goal is to provide a comprehensive and streamlined development environment.
 
 ![logo](docs/images/logo.png)
