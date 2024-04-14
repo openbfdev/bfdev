@@ -17,7 +17,7 @@ cache_algorithm_find(const char *name)
     bfdev_cache_algo_t *algo;
 
     bfdev_list_for_each_entry(algo, &cache_algorithms, list) {
-        if (!strcmp(algo->name, name))
+        if (!bfport_strcmp(algo->name, name))
             return algo;
     }
 
