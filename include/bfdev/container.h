@@ -21,7 +21,7 @@ BFDEV_BEGIN_DECLS
 /* Any const qualifier of @ptr is lost. */
 #define bfdev_container_of(ptr, type, member) ({        \
     const typeof(((type *)0)->member) *__mptr = (ptr);  \
-    (type *)((char *)__mptr - offsetof(type,member));   \
+    (type *)((char *)__mptr - offsetof(type, member));  \
 })
 
 /* If ptr is NULL, ptr is returned unchanged. */

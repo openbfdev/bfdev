@@ -44,7 +44,7 @@ uint64_t bfdev_hashv64_generic(uint64_t value)
 }
 
 /**
- * bfdev_hashv{32/64}() - Fast hashing routine for ints.
+ * bfdev_hash{32/64}() - Fast hashing routine for ints.
  * @value: value to hash.
  * @bits: bit number of result.
  */

@@ -14,7 +14,7 @@ random_level(bfdev_skip_head_t *head)
 
     level = 1;
     while (level < head->levels) {
-        if (rand() > RAND_MAX >> 2)
+        if (bfport_rand() > RAND_MAX >> 2)
             break;
         level++;
     }

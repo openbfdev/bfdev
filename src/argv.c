@@ -17,13 +17,13 @@ bfdev_argv_count(const char *args)
 
     argc = 0;
     for (;;) {
-        offset = strspn(args, ARGV_SEPARA);
+        offset = bfport_strspn(args, ARGV_SEPARA);
         if (!args[offset])
             break;
         args += offset;
         argc++;
 
-        offset = strcspn(args, ARGV_SEPARA);
+        offset = bfport_strcspn(args, ARGV_SEPARA);
         if (!args[offset])
             break;
         args += offset;
@@ -42,17 +42,17 @@ bfdev_argv_split(const bfdev_alloc_t *alloc, const char *args,
     argc = bfdev_argv_count(args);
     count = (argc + 1) * sizeof(*argv);
 
-    argv = bfdev_malloc(alloc, count + strlen(args) + 1);
+    argv = bfdev_malloc(alloc, count + bfport_strlen(args) + 1);
     if (bfdev_unlikely(!argv))
         return NULL;
 
     block = (void *)argv + count;
-    strcpy(block, args);
+    bfport_strcpy(block, args);
 
     for (count = 0; count < argc; ++count) {
-        block += strspn(block, ARGV_SEPARA);
+        block += bfport_strspn(block, ARGV_SEPARA);
         argv[count] = block;
-        block += strcspn(block, ARGV_SEPARA);
+        block += bfport_strcspn(block, ARGV_SEPARA);
         *block++ = '\0';
     }
 

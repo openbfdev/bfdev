@@ -58,7 +58,7 @@ bnode_set_key(bfdev_btree_root_t *root, bfdev_btree_node_t *node,
     size = layout->keylen * sizeof(uintptr_t);
 
     slot = bnode_get_key(root, node, index);
-    memcpy(slot, key, size);
+    bfport_memcpy(slot, key, size);
 }
 
 static inline long
@@ -86,7 +86,7 @@ bnode_takeout_key(bfdev_btree_root_t *root, bfdev_btree_node_t *node,
     size = layout->keylen * sizeof(uintptr_t);
 
     slot = bnode_get_key(root, node, index);
-    memcpy(key, slot, size);
+    bfport_memcpy(key, slot, size);
 }
 
 static inline void
@@ -102,7 +102,7 @@ bnode_clear_index(bfdev_btree_root_t *root, bfdev_btree_node_t *node,
 
     bnode_set_value(root, node, index, NULL);
     slot = bnode_get_key(root, node, index);
-    memset(slot, 0, size);
+    bfport_memset(slot, 0, size);
 }
 
 static inline bool
@@ -146,7 +146,7 @@ bnode_alloc(bfdev_btree_root_t *root)
 
     node = ops->alloc(root);
     if (bfdev_likely(node))
-        memset(node, 0, layout->nodesize);
+        bfport_memset(node, 0, layout->nodesize);
 
     return node;
 }
@@ -582,7 +582,7 @@ bfdev_btree_key_copy(bfdev_btree_root_t *root, uintptr_t *dest, uintptr_t *src)
     bfdev_btree_layout_t *layout;
 
     layout = root->layout;
-    memcpy(dest, src, layout->keylen * sizeof(uintptr_t));
+    bfport_memcpy(dest, src, layout->keylen * sizeof(uintptr_t));
 }
 
 export void *

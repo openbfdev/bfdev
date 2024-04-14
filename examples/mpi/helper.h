@@ -15,28 +15,26 @@ static inline char *
 print_num(const bfdev_mpi_t *var, unsigned int base)
 {
     BFDEV_DEFINE_ARRAY(stack, NULL, sizeof(char));
-    bfdev_mpi_t *taken, *value;
     unsigned long count;
     char *buffer, *str;
     size_t size;
     int retval;
 
-    if (!((value = bfdev_mpi_create(NULL)) &&
-          (taken = bfdev_mpi_create(NULL))))
-        return NULL;
+    BFDEV_DEFINE_MPI(value, NULL);
+    BFDEV_DEFINE_MPI(taken, NULL);
 
-    retval = bfdev_mpi_set(value, var);
+    retval = bfdev_mpi_set(&value, var);
     if (retval)
         return NULL;
 
-    while (bfdev_mpi_cmpi(value, 0)) {
+    while (bfdev_mpi_cmpi(&value, 0)) {
         const BFDEV_MPI_TYPE *walk;
 
-        retval = bfdev_mpi_divi(value, taken, value, base);
+        retval = bfdev_mpi_divi(&value, &taken, &value, base);
         if (retval)
             return NULL;
 
-        walk = bfdev_mpi_data(taken, 0, NULL);
+        walk = bfdev_mpi_data(&taken, NULL);
         if (!walk)
             return NULL;
 
@@ -69,6 +67,8 @@ print_num(const bfdev_mpi_t *var, unsigned int base)
 
     size = bfdev_array_size(&stack);
     buffer = malloc(size + 1);
+    if (!buffer)
+        return NULL;
 
     for (count = 0; count < size; ++count) {
         str = bfdev_array_pop(&stack, 1);
@@ -78,8 +78,8 @@ print_num(const bfdev_mpi_t *var, unsigned int base)
     buffer[count] = '\0';
     bfdev_array_release(&stack);
 
-    bfdev_mpi_destory(taken);
-    bfdev_mpi_destory(value);
+    bfdev_mpi_release(&taken);
+    bfdev_mpi_release(&value);
 
     return buffer;
 }

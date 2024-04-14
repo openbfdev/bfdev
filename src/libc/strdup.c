@@ -17,11 +17,11 @@ bfdev_strdup(const bfdev_alloc_t *alloc,
     if (bfdev_unlikely(!string))
         return NULL;
 
-    length = strlen(string);
+    length = bfport_strlen(string);
     dump = bfdev_malloc(alloc, length + 1);
 
     if (bfdev_likely(dump))
-        strcpy(dump, string);
+        bfport_strcpy(dump, string);
 
     return dump;
 }
@@ -36,11 +36,11 @@ bfdev_strndup(const bfdev_alloc_t *alloc,
     if (bfdev_unlikely(!string))
         return NULL;
 
-    length = strnlen(string, len);
+    length = bfport_strnlen(string, len);
     dump = bfdev_malloc(alloc, length + 1);
 
     if (bfdev_likely(dump))
-        strncpy(dump, string, len);
+        bfport_strncpy(dump, string, len);
 
     return dump;
 }

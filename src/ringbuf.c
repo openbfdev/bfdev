@@ -23,8 +23,8 @@
     }                                                           \
                                                                 \
     llen = bfdev_min(len, size - offset);                       \
-    memcpy(copy1, copy2, llen);                                 \
-    memcpy(fold1, fold2, len - llen);                           \
+    bfport_memcpy(copy1, copy2, llen);                          \
+    bfport_memcpy(fold1, fold2, len - llen);                    \
 } while (0)
 
 static __bfdev_always_inline void

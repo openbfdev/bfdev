@@ -128,7 +128,7 @@ bm_prepare(const bfdev_alloc_t *alloc, const void *pattern,
     bctx->pattern = (void *)bctx + sizeof(*bctx) + gsize;
 
     if (!(flags & BFDEV_TS_IGCASE))
-        memcpy(bctx->pattern, pattern, len);
+        bfport_memcpy(bctx->pattern, pattern, len);
     else for (index = 0; index < len; ++index)
         bctx->pattern[index] = toupper(((char *)pattern)[index]);
     bm_compute_prefix(bctx, flags);

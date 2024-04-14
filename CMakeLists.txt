@@ -5,7 +5,7 @@
 #
 
 cmake_minimum_required(VERSION 3.12)
-project(bfdev VERSION 1.0.2 LANGUAGES C)
+project(bfdev VERSION 1.0.3 LANGUAGES C)
 
 include(GNUInstallDirs)
 include(CheckIncludeFiles)
@@ -41,6 +41,7 @@ commit_branch(BFDEV_BRANCH)
 option(BFDEV_DEVEL "Enable development mode" OFF)
 option(BFDEV_STRICT "Enable strict compilation" ON)
 option(BFDEV_EXAMPLES "Build examples" OFF)
+option(BFDEV_TESTSUITE "Build testsuite" OFF)
 
 option(BFDEV_ASAN "Enable Address Sanitizer" OFF)
 option(BFDEV_UBSAN "Enable Undefined Behaviour Sanitizer" OFF)
@@ -57,6 +58,7 @@ option(BFDEV_CRC_EXTEND "CRC loop unfolding optimize" ON)
 
 if(BFDEV_DEVEL)
     set(BFDEV_EXAMPLES ON)
+    set(BFDEV_TESTSUITE ON)
     set(BFDEV_ASAN ON)
     set(BFDEV_UBSAN ON)
     set(BFDEV_GCOV ON)
@@ -99,6 +101,11 @@ add_library(bfdev ALIAS bfdev_object)
 if(BFDEV_EXAMPLES)
     enable_testing()
     add_subdirectory(examples)
+endif()
+
+if(BFDEV_TESTSUITE)
+    enable_testing()
+    add_subdirectory(testsuite)
 endif()
 
 if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")

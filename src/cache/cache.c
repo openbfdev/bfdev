@@ -17,7 +17,7 @@ cache_algorithm_find(const char *name)
     bfdev_cache_algo_t *algo;
 
     bfdev_list_for_each_entry(algo, &cache_algorithms, list) {
-        if (!strcmp(algo->name, name))
+        if (!bfport_strcmp(algo->name, name))
             return algo;
     }
 
@@ -248,11 +248,11 @@ bfdev_cache_reset(bfdev_cache_head_t *head)
     bfdev_list_head_init(&head->changing);
 
     head->algo->reset(head);
-    memset(head->taghash, 0, sizeof(*head->taghash) * head->size);
+    bfport_memset(head->taghash, 0, sizeof(*head->taghash) * head->size);
 
     for (count = 0; count < head->size; ++count) {
         node = head->nodes[count];
-        memset(node, 0, sizeof(*node));
+        bfport_memset(node, 0, sizeof(*node));
 
         node->index = count;
         node->tag = BFDEV_CACHE_FREE_TAG;

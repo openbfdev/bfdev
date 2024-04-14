@@ -13,20 +13,12 @@
 BFDEV_BEGIN_DECLS
 
 extern unsigned int
-bfdev_comp_find_first_bit(const unsigned long *block,
-                          unsigned int bits, bool swap);
+bfdev_comp_find_first_bit(const unsigned long *block, unsigned int bits,
+                          unsigned long invert, bool swap);
 
 extern unsigned int
-bfdev_comp_find_last_bit(const unsigned long *block,
-                         unsigned int bits, bool swap);
-
-extern unsigned int
-bfdev_comp_find_first_zero(const unsigned long *block,
-                           unsigned int bits, bool swap);
-
-extern unsigned int
-bfdev_comp_find_last_zero(const unsigned long *block,
-                          unsigned int bits, bool swap);
+bfdev_comp_find_last_bit(const unsigned long *block, unsigned int bits,
+                         unsigned long invert, bool swap);
 
 extern unsigned int
 bfdev_comp_find_next_bit(const unsigned long *addr1, const unsigned long *addr2,

@@ -27,38 +27,37 @@ factor2[] = {
 
 int main(int argc, const char *argv[])
 {
-    bfdev_mpi_t *vv[4], *vq;
+    bfdev_mpi_t vq, vv[4];
     unsigned int k, i, v;
     int retval;
 
-    if (!((vv[0] = bfdev_mpi_create(NULL)) &&
-          (vv[1] = bfdev_mpi_create(NULL)) &&
-          (vv[2] = bfdev_mpi_create(NULL)) &&
-          (vv[3] = bfdev_mpi_create(NULL)) &&
-          (vq = bfdev_mpi_create(NULL))))
-        return 1;
+    bfdev_mpi_init(&vq, NULL);
+    bfdev_mpi_init(&vv[0], NULL);
+    bfdev_mpi_init(&vv[1], NULL);
+    bfdev_mpi_init(&vv[2], NULL);
+    bfdev_mpi_init(&vv[3], NULL);
 
     bfdev_log_info("Convergence BBP %d:\n", TEST_LEN);
     EXAMPLE_TIME_STATISTICAL(
         for (i = 0; i < 4; ++i) {
-            retval = bfdev_mpi_seti(vv[i], 0);
+            retval = bfdev_mpi_seti(&vv[i], 0);
             if (retval)
                 return retval;
 
             v = factor1[i] + (TEST_LEN << 2);
-            retval = bfdev_mpi_bseti(vv[i], v);
+            retval = bfdev_mpi_bseti(&vv[i], v);
             if (retval)
                 return retval;
 
             v = factor2[i];
-            retval = bfdev_mpi_divi(vv[i], vv[i], vv[i], v);
+            retval = bfdev_mpi_divi(&vv[i], &vv[i], &vv[i], v);
             if (retval)
                 return retval;
 
             if (i)
-                retval = bfdev_mpi_sub(vq, vq, vv[i]);
+                retval = bfdev_mpi_sub(&vq, &vq, &vv[i]);
             else
-                retval = bfdev_mpi_add(vq, vq, *vv);
+                retval = bfdev_mpi_add(&vq, &vq, vv);
 
             if (retval)
                 return retval;
@@ -66,27 +65,29 @@ int main(int argc, const char *argv[])
 
         for (k = 1; k < TEST_LEN; ++k) {
             for (i = 0; i < 4; ++i) {
-                retval = bfdev_mpi_seti(vv[i], 0);
+                retval = bfdev_mpi_seti(&vv[i], 0);
                 if (retval)
                     return retval;
 
                 v = factor1[i] + ((TEST_LEN - k) << 2);
-                retval = bfdev_mpi_bseti(vv[i], v);
+                retval = bfdev_mpi_bseti(&vv[i], v);
                 if (retval)
                     return retval;
 
                 v = factor2[i] | (k << 3);
-                retval = bfdev_mpi_divi(vv[i], vv[i], vv[i], v);
+                retval = bfdev_mpi_divi(&vv[i], &vv[i], &vv[i], v);
                 if (retval)
                     return retval;
 
-                if (i)
-                    retval = bfdev_mpi_sub(vq, vq, vv[i]);
-                else
-                    retval = bfdev_mpi_add(vq, vq, *vv);
-
-                if (retval)
-                    return retval;
+                if (i) {
+                    retval = bfdev_mpi_sub(&vq, &vq, &vv[i]);
+                    if (retval)
+                        return retval;
+                } else {
+                    retval = bfdev_mpi_add(&vq, &vq, vv);
+                    if (retval)
+                        return retval;
+                }
             }
         }
         0;
@@ -95,7 +96,7 @@ int main(int argc, const char *argv[])
 #if PRINT_RESULT
     char *result;
 
-    result = print_num(vq, 16);
+    result = print_num(&vq, 16);
     if (!result)
         return 1;
 
@@ -104,11 +105,11 @@ int main(int argc, const char *argv[])
     free(result);
 #endif
 
-    bfdev_mpi_destory(vv[0]);
-    bfdev_mpi_destory(vv[1]);
-    bfdev_mpi_destory(vv[2]);
-    bfdev_mpi_destory(vv[3]);
-    bfdev_mpi_destory(vq);
+    bfdev_mpi_release(&vv[0]);
+    bfdev_mpi_release(&vv[1]);
+    bfdev_mpi_release(&vv[2]);
+    bfdev_mpi_release(&vv[3]);
+    bfdev_mpi_release(&vq);
 
     return 0;
 }

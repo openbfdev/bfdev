@@ -23,7 +23,7 @@ generic_alloc(size_t size, void *pdata)
         return retval;
     }
 
-    return malloc(size);
+    return bfport_malloc(size);
 }
 
 static __bfdev_always_inline void *
@@ -36,7 +36,7 @@ generic_zalloc(size_t size, void *pdata)
         return retval;
     }
 
-    return calloc(1, size);
+    return bfport_calloc(1, size);
 }
 
 static __bfdev_always_inline void *
@@ -49,7 +49,7 @@ generic_realloc(void *block, size_t resize, void *pdata)
         return retval;
     }
 
-    return realloc(block, resize);
+    return bfport_realloc(block, resize);
 }
 
 static __bfdev_always_inline void
@@ -60,7 +60,7 @@ generic_free(void *block, void *pdata)
         return;
     }
 
-    free((void *)block);
+    bfport_free((void *)block);
 }
 
 #endif /* _LOCAL_PORT_ALLOCATOR_H_ */

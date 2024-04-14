@@ -15,7 +15,7 @@ textsearch_algorithm_find(const char *name)
     bfdev_ts_algorithm_t *algo;
 
     bfdev_list_for_each_entry(algo, &textsearch_algorithms, list) {
-        if (!strcmp(algo->name, name))
+        if (!bfport_strcmp(algo->name, name))
             return algo;
     }
 
