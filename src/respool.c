@@ -60,8 +60,8 @@ bfdev_respool_find_release(bfdev_respool_t *pool,
 export void
 bfdev_respool_release_all(bfdev_respool_t *pool, void *pdata)
 {
-    bfdev_respool_node_t *node;
+    bfdev_respool_node_t *node, *tmp;
 
-    bfdev_list_for_each_entry(node, &pool->nodes, list)
+    bfdev_list_for_each_entry_safe(node, tmp, &pool->nodes, list)
         node->release(node, pdata);
 }
