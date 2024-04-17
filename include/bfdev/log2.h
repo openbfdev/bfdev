@@ -9,6 +9,8 @@
 #include <bfdev/config.h>
 #include <bfdev/bitops.h>
 
+BFDEV_BEGIN_DECLS
+
 /**
  * bfdev_ilog2_const - log base 2 of long long constant unsigned value.
  * @value: constant value to log base 2.
@@ -90,6 +92,7 @@ bfdev_ilog2_dynamic(unsigned long value)
 {
     if (value < 2)
         return 0;
+
     return bfdev_fls(value) - 1;
 }
 
@@ -102,6 +105,7 @@ bfdev_ilog2_64_dynamic(uint64_t value)
 {
     if (value < 2)
         return 0;
+
     return bfdev_fls64(value) - 1;
 }
 
@@ -112,6 +116,9 @@ bfdev_ilog2_64_dynamic(uint64_t value)
 static inline unsigned long
 bfdev_pow2_roundup_dynamic(unsigned long value)
 {
+    if (value < 2)
+        return value;
+
     return 1UL << bfdev_fls(value - 1);
 }
 
@@ -122,6 +129,9 @@ bfdev_pow2_roundup_dynamic(unsigned long value)
 static inline unsigned long
 bfdev_pow2_rounddown_dynamic(unsigned long value)
 {
+    if (value < 2)
+        return value;
+
     return 1UL << (bfdev_fls(value) - 1);
 }
 
@@ -142,31 +152,42 @@ bfdev_pow2_check(unsigned long value)
 #define bfdev_ilog2(value) (            \
     __builtin_constant_p(value) ?       \
     ((value) < 2 ? 0 :                  \
-     63 - __builtin_clzll(value)) :     \
-    (sizeof(value) <= 4) ?              \
-    bfdev_ilog2_dynamic(value) :        \
-    bfdev_ilog2_64_dynamic(value)       \
+     (63 - __builtin_clzll(value))) :   \
+    ((sizeof(value) <= 4) ?             \
+     bfdev_ilog2_dynamic(value) :       \
+     bfdev_ilog2_64_dynamic(value))     \
 )
 
 /**
  * bfdev_pow2_roundup - round up to nearest power of two.
  * @value: value to round up.
+ *
+ * round the given value up to the nearest power of two.
+ * - the result is @value when n < 2.
+ * - this can be used to initialise global variables from constant data.
  */
-#define bfdev_pow2_roundup(value) (     \
-    __builtin_constant_p(value) ?       \
-    (((value) == 1) ? 1 : (1UL <<       \
-    (bfdev_ilog2((value) - 1) + 1))) :  \
-    bfdev_pow2_roundup_dynamic(value)   \
+#define bfdev_pow2_roundup(value) (             \
+    __builtin_constant_p(value) ?               \
+    (((value) < 2) ? (value) :                  \
+     (1UL << (bfdev_ilog2((value) - 1) + 1))) : \
+    bfdev_pow2_roundup_dynamic(value)           \
 )
 
 /**
  * bfdev_pow2_rounddown - round down to nearest power of two.
  * @value: value to round down.
+ *
+ * round the given value down to the nearest power of two.
+ * - the result is @value when n < 2.
+ * - this can be used to initialise global variables from constant data.
  */
 #define bfdev_pow2_rounddown(value) (   \
     __builtin_constant_p(value) ?       \
-    (1UL << bfdev_ilog2(value)) :       \
+    (((value) < 2) ? (value) :          \
+     (1UL << bfdev_ilog2(value))) :     \
     bfdev_pow2_rounddown_dynamic(value) \
 )
+
+BFDEV_END_DECLS
 
 #endif /* _BFDEV_LOG2_H_ */
