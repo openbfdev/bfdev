@@ -16,6 +16,7 @@
 
 #define NAME_STRING __bfdev_stringify(GENCRC_NAME)
 #define TYPE_STRING __bfdev_stringify(GENCRC_TYPE)
+#define BITS_STRING __bfdev_stringify(GENCRC_BITS)
 #define WIDE_STRING __bfdev_stringify(GENCRC_WIDE)
 
 #define CRC_TABLE_BITS 8
@@ -98,48 +99,59 @@ table_dump(unsigned int rows, const char *trans,
 
 int main(int argc, char *argv[])
 {
-    const char *trans, *name;
+    const char *name, *table, *trans;
     unsigned int rows;
     GENCRC_TYPE poly;
-    void *table;
+    void *buff;
 
-    if (argc != 4 && argc != 5) {
-        printf("usage: %s name rows poly [trans]\n", argv[0]);
+    if (argc != 5 && argc != 6) {
+        fprintf(stderr, "usage: %s name table rows poly [trans]\n", argv[0]);
         return -1;
     }
 
+    name = argv[1];
+    table = argv[2];
+    rows = (unsigned int)strtoul(argv[3], NULL, 0);
+    poly = (GENCRC_TYPE)strtoull(argv[4], NULL, 0);
+
     trans = NULL;
     if (argc == 5)
-        trans = argv[4];
-
-    name = argv[1];
-    rows = (unsigned int)strtoul(argv[2], NULL, 0);
-    poly = (GENCRC_TYPE)strtoull(argv[3], NULL, 0);
+        trans = argv[5];
 
     if (!rows) {
         fprintf(stderr, "error: rows cannot be zero\n");
         return -1;
     }
 
-    table = calloc(1, sizeof(GENCRC_TYPE) * CRC_TABLE_SIZE * rows);
-    if (!table)
+    buff = calloc(1, sizeof(GENCRC_TYPE) * CRC_TABLE_SIZE * rows);
+    if (!buff)
         return -1;
 
-    printf("/*\n");
-    printf(" * Automatically generated file; DO NOT EDIT.\n");
-    printf(" * bfdev scripts/gen-" NAME_STRING "\n");
-    printf(" */\n\n");
+    printf(
+        "/*\n"
+        " * Automatically generated file; DO NOT EDIT.\n"
+        " * bfdev scripts/gen-" NAME_STRING "\n"
+        " */\n"
+        "\n"
+        "/*\n"
+        " * This is the %s table.\n"
+        " * Generated with:\n"
+        " * width = " BITS_STRING " bits\n"
+        " * poly = 0x%" WIDE_STRING "." WIDE_STRING "llx\n"
+        " * byteorder = %s\n"
+        " */\n"
+        "\n"
+        "static const " TYPE_STRING " %s[%d][%d] = {\n",
+        name, (unsigned long long)poly,
+        GENCRC_BELE ? "big-endian" : "little-endian",
+        table, rows, CRC_TABLE_SIZE
+    );
 
-    printf("/* The poly is 0x%" WIDE_STRING "." WIDE_STRING "llx */\n",
-           (unsigned long long)poly);
-    printf("static const " TYPE_STRING " %s[%d][%d] = {\n",
-           name, rows, CRC_TABLE_SIZE);
-
-    table_generic(rows, poly, table);
-    table_dump(rows, trans, table);
+    table_generic(rows, poly, buff);
+    table_dump(rows, trans, buff);
 
     printf("};\n");
-    free(table);
+    free(buff);
 
     return 0;
 }
