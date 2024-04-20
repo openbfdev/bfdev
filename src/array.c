@@ -7,18 +7,26 @@
 #include <base.h>
 #include <bfdev/array.h>
 #include <bfdev/overflow.h>
+#include <bfdev/bug.h>
 #include <export.h>
 
+static inline size_t
+array_reqsize(bfdev_array_t *array, unsigned long count)
+{
+    unsigned long request;
+    size_t size;
+
+    request = bfdev_max(BFDEV_ARRAY_MSIZE, count);
+    size = bfdev_pow2_roundup(request * array->cells);
+
+    return size;
+}
+
 static inline int
-array_resize(bfdev_array_t *array, unsigned long count)
+array_resize(bfdev_array_t *array, size_t size)
 {
     const bfdev_alloc_t *alloc;
-    unsigned long nalloc;
-    size_t size;
     void *data;
-
-    nalloc = bfdev_max(count, BFDEV_ARRAY_MSIZE);
-    size = nalloc * array->cells;
 
     alloc = array->alloc;
     data = bfdev_realloc(alloc, array->data, size);
@@ -26,7 +34,7 @@ array_resize(bfdev_array_t *array, unsigned long count)
         return -BFDEV_ENOMEM;
 
     array->data = data;
-    array->capacity = nalloc;
+    array->capacity = size / array->cells;
 
     return -BFDEV_ENOERR;
 }
@@ -34,10 +42,15 @@ array_resize(bfdev_array_t *array, unsigned long count)
 static inline int
 array_apply(bfdev_array_t *array, unsigned long count)
 {
+    size_t reqsize;
+
     if (count <= array->capacity)
         return -BFDEV_ENOERR;
 
-    return array_resize(array, count << 1);
+    reqsize = array_reqsize(array, count);
+    BFDEV_BUG_ON(count * array->cells > reqsize);
+
+    return array_resize(array, reqsize);
 }
 
 static inline void *
