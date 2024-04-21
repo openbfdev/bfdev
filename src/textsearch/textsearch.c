@@ -12,14 +12,27 @@ static BFDEV_LIST_HEAD(textsearch_algorithms);
 static bfdev_ts_algorithm_t *
 textsearch_algorithm_find(const char *name)
 {
-    bfdev_ts_algorithm_t *algo;
+    bfdev_ts_algorithm_t *walk;
 
-    bfdev_list_for_each_entry(algo, &textsearch_algorithms, list) {
-        if (!bfport_strcmp(algo->name, name))
-            return algo;
+    bfdev_list_for_each_entry(walk, &textsearch_algorithms, list) {
+        if (!bfport_strcmp(walk->name, name))
+            return walk;
     }
 
     return NULL;
+}
+
+static bool
+textsearch_algorithm_exist(bfdev_ts_algorithm_t *algo)
+{
+    bfdev_ts_algorithm_t *walk;
+
+    bfdev_list_for_each_entry(walk, &textsearch_algorithms, list) {
+        if (walk == algo)
+            return true;
+    }
+
+    return false;
 }
 
 export bfdev_ts_context_t *
@@ -55,14 +68,17 @@ bfdev_textsearch_register(bfdev_ts_algorithm_t *algo)
         return -BFDEV_EALREADY;
 
     bfdev_list_add(&textsearch_algorithms, &algo->list);
+
     return -BFDEV_ENOERR;
 }
 
-export void
+export int
 bfdev_textsearch_unregister(bfdev_ts_algorithm_t *algo)
 {
-    if (textsearch_algorithm_find(algo->name))
-        return;
+    if (!textsearch_algorithm_exist(algo))
+        return -BFDEV_ENOENT;
 
     bfdev_list_del(&algo->list);
+
+    return -BFDEV_ENOERR;
 }

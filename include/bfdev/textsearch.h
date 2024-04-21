@@ -239,11 +239,8 @@ bfdev_textsearch_destroy(bfdev_ts_context_t *tsc)
  * %UINT_MAX if no occurrence was found.
  */
 extern unsigned int
-bfdev_textsearch_linear_find(bfdev_ts_context_t *tsc, bfdev_ts_linear_t *linear,
-                             const void *data, unsigned int len);
-
-extern unsigned int
-bfdev_textsearch_linear_next(bfdev_ts_context_t *tsc, bfdev_ts_linear_t *linear);
+bfdev_textsearch_linear(bfdev_ts_context_t *tsc, bfdev_ts_linear_t *linear,
+                        const void *data, unsigned int len);
 
 /**
  * bfdev_textsearch_create() - prepare a search.
@@ -274,7 +271,7 @@ bfdev_textsearch_register(bfdev_ts_algorithm_t *algo);
  * Returns 0 on success or -BFDEV_ENOENT if no matching
  * textsearch registration was found.
  */
-extern void
+extern int
 bfdev_textsearch_unregister(bfdev_ts_algorithm_t *algo);
 
 BFDEV_END_DECLS

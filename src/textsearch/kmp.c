@@ -19,14 +19,20 @@ struct kmp_context {
 static const void *
 kmp_pattern_get(bfdev_ts_context_t *tsc)
 {
-    struct kmp_context *kctx = ts_to_kmp(tsc);
+    struct kmp_context *kctx;
+
+    kctx = ts_to_kmp(tsc);
+
     return kctx->pattern;
 }
 
 static unsigned int
 kmp_pattern_len(bfdev_ts_context_t *tsc)
 {
-    struct kmp_context *kctx = ts_to_kmp(tsc);
+    struct kmp_context *kctx;
+
+    kctx = ts_to_kmp(tsc);
+
     return kctx->pattern_len;
 }
 
@@ -34,11 +40,15 @@ static unsigned int
 kmp_find(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss)
 {
     #define find_pattern() (icase ? toupper(text[index]) : text[index])
-    bool icase = bfdev_ts_test_igcase(tsc);
-    struct kmp_context *kctx = ts_to_kmp(tsc);
-    unsigned int consumed = tss->offset;
-    unsigned int length, index, match = 0;
+    struct kmp_context *kctx;
+    unsigned int consumed, length, index, match;
     const char *text;
+    bool icase;
+
+    kctx = ts_to_kmp(tsc);
+    icase = bfdev_ts_test_igcase(tsc);
+    consumed = tss->offset;
+    match = 0;
 
     for (;;) {
         length = tsc->next_block(tsc, tss, consumed, (const void **)&text);
@@ -52,7 +62,7 @@ kmp_find(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss)
             if (kctx->pattern[match] == find_pattern())
                 match++;
 
-            if (bfdev_unlikely(match == kctx->pattern_len)) {
+            if (match == kctx->pattern_len) {
                 tss->offset = consumed + index + 1;
                 return tss->offset - kctx->pattern_len;
             }
@@ -84,10 +94,10 @@ static bfdev_ts_context_t *
 kmp_prepare(const bfdev_alloc_t *alloc, const void *pattern,
             size_t len, unsigned long flags)
 {
-    unsigned int prefix_size = sizeof(unsigned int) * len;
     struct kmp_context *kctx;
-    unsigned int index;
+    unsigned int prefix_size, index;
 
+    prefix_size = sizeof(unsigned int) * len;
     kctx = bfdev_zalloc(alloc, sizeof(*kctx) + prefix_size + len);
     if (bfdev_unlikely(!kctx))
         return NULL;
@@ -126,4 +136,10 @@ static __bfdev_ctor int
 kmp_init(void)
 {
     return bfdev_textsearch_register(&kmp_algorithm);
+}
+
+static __bfdev_dtor int
+kmp_exit(void)
+{
+    return bfdev_textsearch_unregister(&kmp_algorithm);
 }

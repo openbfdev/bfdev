@@ -20,14 +20,20 @@ struct bm_context {
 static const void *
 bm_pattern_get(bfdev_ts_context_t *tsc)
 {
-    struct bm_context *bctx = ts_to_bm(tsc);
+    struct bm_context *bctx;
+
+    bctx = ts_to_bm(tsc);
+
     return bctx->pattern;
 }
 
 static unsigned int
 bm_pattern_len(bfdev_ts_context_t *tsc)
 {
-    struct bm_context *bctx = ts_to_bm(tsc);
+    struct bm_context *bctx;
+
+    bctx = ts_to_bm(tsc);
+
     return bctx->pattern_len;
 }
 
@@ -35,11 +41,16 @@ static unsigned int
 bm_find(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss)
 {
     #define find_pattern() (icase ? toupper(text[shift - index]) : text[shift - index])
-    bool icase = bfdev_ts_test_igcase(tsc);
-    struct bm_context *bctx = ts_to_bm(tsc);
-    unsigned int bad_shift, good_shift, consumed = tss->offset;
-    unsigned int length, index, shift = bctx->pattern_len - 1;
+    struct bm_context *bctx;
+    unsigned int bad_shift, good_shift, consumed;
+    unsigned int length, index, shift;
     const uint8_t *text;
+    bool icase;
+
+    bctx = ts_to_bm(tsc);
+    icase = bfdev_ts_test_igcase(tsc);
+    consumed = tss->offset;
+    shift = bctx->pattern_len - 1;
 
     for (;;) {
         length = tsc->next_block(tsc, tss, consumed, (const void **)&text);
@@ -52,7 +63,7 @@ bm_find(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss)
                     break;
             }
 
-            if (bfdev_unlikely(index == bctx->pattern_len))
+            if (index == bctx->pattern_len)
                 return consumed + shift - bctx->pattern_len + 1;
 
             bad_shift = shift - index + bctx->bad_shift[text[shift - index]];
@@ -69,7 +80,10 @@ bm_find(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss)
 static inline bool
 subpattern(const uint8_t *pattern, int index, int j, int g)
 {
-    int x = index + g - 1, y = j + g - 1;
+    int x, y;
+
+    x = index + g - 1;
+    y = j + g - 1;
 
     while (y && pattern[x--] == pattern[y--]) {
         if (y < 0)
@@ -115,10 +129,10 @@ static bfdev_ts_context_t *
 bm_prepare(const bfdev_alloc_t *alloc, const void *pattern,
            size_t len, unsigned long flags)
 {
-    unsigned int gsize = sizeof(unsigned int) * len;
     struct bm_context *bctx;
-    unsigned int index;
+    unsigned int gsize, index;
 
+    gsize = sizeof(unsigned int) * len;
     bctx = bfdev_malloc(alloc, sizeof(*bctx) + gsize + len);
     if (bfdev_unlikely(!bctx))
         return NULL;
@@ -157,4 +171,10 @@ static __bfdev_ctor int
 bm_init(void)
 {
     return bfdev_textsearch_register(&bm_algorithm);
+}
+
+static __bfdev_dtor int
+bm_exit(void)
+{
+    return bfdev_textsearch_unregister(&bm_algorithm);
 }

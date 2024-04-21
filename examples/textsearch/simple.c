@@ -27,7 +27,7 @@ test_textsearch(const char *algo)
         return 1;
     }
 
-    offset = bfdev_textsearch_linear_find(
+    offset = bfdev_textsearch_linear(
         context, &linear, TEST_STRING,
         sizeof(TEST_STRING) - 1
     );

@@ -19,14 +19,20 @@ struct sunday_context {
 static const void *
 sunday_pattern_get(bfdev_ts_context_t *tsc)
 {
-    struct sunday_context *sctx = ts_to_sunday(tsc);
+    struct sunday_context *sctx;
+
+    sctx = ts_to_sunday(tsc);
+
     return sctx->pattern;
 }
 
 static unsigned int
 sunday_pattern_len(bfdev_ts_context_t *tsc)
 {
-    struct sunday_context *sctx = ts_to_sunday(tsc);
+    struct sunday_context *sctx;
+
+    sctx = ts_to_sunday(tsc);
+
     return sctx->pattern_len;
 }
 
@@ -34,11 +40,15 @@ static unsigned int
 sunday_find(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss)
 {
     #define find_pattern() (icase ? toupper(text[shift + index]) : text[shift + index])
-    bool icase = bfdev_ts_test_igcase(tsc);
-    struct sunday_context *sctx = ts_to_sunday(tsc);
-    unsigned int consumed = tss->offset;
-    unsigned int length, index, shift = 0;
+    struct sunday_context *sctx;
+    unsigned int consumed, length, index, shift;
     const uint8_t *text;
+    bool icase;
+
+    sctx = ts_to_sunday(tsc);
+    icase = bfdev_ts_test_igcase(tsc);
+    consumed = tss->offset;
+    shift = 0;
 
     for (;;) {
         length = tsc->next_block(tsc, tss, consumed, (const void **)&text);
@@ -51,7 +61,7 @@ sunday_find(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss)
                     break;
             }
 
-            if (bfdev_unlikely(index == sctx->pattern_len))
+            if (index == sctx->pattern_len)
                 return consumed + shift;
 
             if (sctx->pattern_len >= length)
@@ -127,4 +137,10 @@ static __bfdev_ctor int
 sunday_init(void)
 {
     return bfdev_textsearch_register(&sunday_algorithm);
+}
+
+static __bfdev_dtor int
+sunday_exit(void)
+{
+    return bfdev_textsearch_unregister(&sunday_algorithm);
 }
