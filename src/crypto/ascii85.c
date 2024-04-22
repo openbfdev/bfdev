@@ -46,8 +46,6 @@ ascii85_encode(char *buff, const void *data, size_t size)
             buff += 5;
         }
     }
-
-    *buff = '\0';
 }
 
 static __bfdev_always_inline int
@@ -85,33 +83,6 @@ ascii85_decode(void *buff, const char *data, size_t size)
     return -BFDEV_ENOERR;
 }
 
-static __bfdev_always_inline size_t
-ascii85_encode_length(const uint32_t *data, size_t size)
-{
-    size_t csize, length;
-    uint32_t value;
-
-    for (length = 0; (csize = bfdev_min(size, 4)); size -= csize) {
-        value = bfdev_unaligned_get_be32(data);
-        value &= BFDEV_BIT_HIGH_MASK((BFDEV_BYTES_PER_U32 - size) * BFDEV_BITS_PER_BYTE);
-        length += value ? 5 : 1;
-        data++;
-    }
-
-    return length + 1;
-}
-
-static __bfdev_always_inline size_t
-ascii85_decode_length(const char *data, size_t size)
-{
-    while ((data = bfport_strchr(data, 'z'))) {
-        size += 4;
-        data++;
-    }
-
-    return BFDEV_DIV_ROUND_UP(size, 5) * 4;
-}
-
 export void
 bfdev_ascii85_encode(void *buff, const void *data, size_t size)
 {
@@ -122,16 +93,4 @@ export int
 bfdev_ascii85_decode(void *buff, const void *data, size_t size)
 {
     return ascii85_decode(buff, data, size);
-}
-
-export size_t
-bfdev_ascii85_encode_length(const void *data, size_t size)
-{
-    return ascii85_encode_length(data, size);
-}
-
-export size_t
-bfdev_ascii85_decode_length(const void *data, size_t size)
-{
-    return ascii85_decode_length(data, size);
 }
