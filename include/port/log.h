@@ -20,8 +20,10 @@ generic_log_write(bfdev_log_message_t *msg)
 
     if (msg->level > BFDEV_LEVEL_WARNING)
         file = bfport_stdout;
-    else
+    else {
         file = bfport_stderr;
+        bfport_fflush(bfport_stdout);
+    }
 
     bfport_fwrite(msg->data, msg->length, 1, file);
 }

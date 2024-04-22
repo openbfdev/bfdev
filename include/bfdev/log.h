@@ -53,16 +53,19 @@ struct bfdev_log_message {
     size_t length;
 };
 
-BFDEV_BITFLAGS_STRUCT(bfdev_log,
+BFDEV_BITFLAGS_STRUCT(
+    bfdev_log,
     struct bfdev_log, flags
 )
 
-BFDEV_BITFLAGS_STRUCT_FLAG(bfdev_log,
+BFDEV_BITFLAGS_STRUCT_FLAG(
+    bfdev_log,
     struct bfdev_log, flags,
     color, __BFDEV_LOG_COLOR
 )
 
-BFDEV_BITFLAGS_STRUCT_FLAG(bfdev_log,
+BFDEV_BITFLAGS_STRUCT_FLAG(
+    bfdev_log,
     struct bfdev_log, flags,
     commit, __BFDEV_LOG_COMMIT
 )

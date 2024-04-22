@@ -11,28 +11,28 @@
 
 static const unsigned int
 level_color[] = {
-    [BFDEV_LEVEL_EMERG   ] = BFDEV_COLR_RED,
-    [BFDEV_LEVEL_ALERT   ] = BFDEV_COLR_DARK_MAGENTA,
-    [BFDEV_LEVEL_CRIT    ] = BFDEV_COLR_MAGENTA,
-    [BFDEV_LEVEL_ERR     ] = BFDEV_COLR_YELLOW,
-    [BFDEV_LEVEL_WARNING ] = BFDEV_COLR_BLUE,
-    [BFDEV_LEVEL_NOTICE  ] = BFDEV_COLR_CYAN,
-    [BFDEV_LEVEL_INFO    ] = BFDEV_COLR_GREEN,
-    [BFDEV_LEVEL_DEBUG   ] = BFDEV_COLR_DARK_GRAY,
-    [BFDEV_LEVEL_DEFAULT ] = BFDEV_COLR_DEFAULT,
+    [BFDEV_LEVEL_EMERG  ] = BFDEV_COLR_RED,
+    [BFDEV_LEVEL_ALERT  ] = BFDEV_COLR_DARK_MAGENTA,
+    [BFDEV_LEVEL_CRIT   ] = BFDEV_COLR_MAGENTA,
+    [BFDEV_LEVEL_ERR    ] = BFDEV_COLR_YELLOW,
+    [BFDEV_LEVEL_WARNING] = BFDEV_COLR_BLUE,
+    [BFDEV_LEVEL_NOTICE ] = BFDEV_COLR_CYAN,
+    [BFDEV_LEVEL_INFO   ] = BFDEV_COLR_GREEN,
+    [BFDEV_LEVEL_DEBUG  ] = BFDEV_COLR_DARK_GRAY,
+    [BFDEV_LEVEL_DEFAULT] = BFDEV_COLR_DEFAULT,
 };
 
 static const char * const
 level_name[] = {
-    [BFDEV_LEVEL_EMERG   ] = "emerg",
-    [BFDEV_LEVEL_ALERT   ] = "alert",
-    [BFDEV_LEVEL_CRIT    ] = "crit",
-    [BFDEV_LEVEL_ERR     ] = "error",
-    [BFDEV_LEVEL_WARNING ] = "warning",
-    [BFDEV_LEVEL_NOTICE  ] = "notice",
-    [BFDEV_LEVEL_INFO    ] = "info",
-    [BFDEV_LEVEL_DEBUG   ] = "debug",
-    [BFDEV_LEVEL_DEFAULT ] = "default",
+    [BFDEV_LEVEL_EMERG  ] = "emerg",
+    [BFDEV_LEVEL_ALERT  ] = "alert",
+    [BFDEV_LEVEL_CRIT   ] = "crit",
+    [BFDEV_LEVEL_ERR    ] = "error",
+    [BFDEV_LEVEL_WARNING] = "warning",
+    [BFDEV_LEVEL_NOTICE ] = "notice",
+    [BFDEV_LEVEL_INFO   ] = "info",
+    [BFDEV_LEVEL_DEBUG  ] = "debug",
+    [BFDEV_LEVEL_DEFAULT] = "default",
 };
 
 export struct bfdev_log
