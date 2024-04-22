@@ -85,8 +85,6 @@ base64_encode(uint8_t *buff, const uint8_t *data, size_t size)
         default:
             break;
     }
-
-    *buff = '\0';
 }
 
 static __bfdev_always_inline int

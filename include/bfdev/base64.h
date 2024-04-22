@@ -16,7 +16,7 @@ BFDEV_BEGIN_DECLS
 static inline size_t
 bfdev_base64_encode_length(size_t size)
 {
-    return BFDEV_DIV_ROUND_UP(size, 3) * 4 + 1;
+    return BFDEV_DIV_ROUND_UP(size, 3) * 4;
 }
 
 static inline size_t
