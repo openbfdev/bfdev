@@ -38,6 +38,15 @@ bfport_fwrite(const void *restrict ptr, size_t size,
 }
 #endif
 
+#ifndef bfport_fflush
+# define bfport_fflush bfport_fflush
+static __bfdev_always_inline int
+bfport_fflush(FILE *restrict stream)
+{
+    return fflush(stream);
+}
+#endif
+
 #ifndef bfport_vsnprintf
 # define bfport_vsnprintf bfport_vsnprintf
 static __bfdev_always_inline int
