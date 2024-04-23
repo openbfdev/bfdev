@@ -32,10 +32,10 @@ typedef int (*bfdev_log_write_t)
 
 enum bfdev_log_flags {
     __BFDEV_LOG_COLOR = 0,
-    __BFDEV_LOG_COMMIT,
+    __BFDEV_LOG_LEVEL,
 
     BFDEV_LOG_COLOR = BFDEV_BIT(__BFDEV_LOG_COLOR),
-    BFDEV_LOG_COMMIT = BFDEV_BIT(__BFDEV_LOG_COMMIT),
+    BFDEV_LOG_LEVEL = BFDEV_BIT(__BFDEV_LOG_LEVEL),
 };
 
 struct bfdev_log {
@@ -49,9 +49,20 @@ struct bfdev_log {
 
 struct bfdev_log_message {
     unsigned int level;
-    const char *data;
+    char *buff;
     size_t length;
 };
+
+#define BFDEV_LOG_STATIC(HEAD, DEFAULT, RECORD, FLAGS, WRITE, PDATA) { \
+    .default_level = (DEFAULT), .record_level = (RECORD), \
+    .flags = (FLAGS), .write = (WRITE), .pdata = (PDATA), \
+}
+
+#define BFDEV_LOG_INIT(head, default, record, flags, write, pdata) \
+    (bfdev_log_t) BFDEV_LOG_STATIC(head, default, record, flags, write, pdata)
+
+#define BFDEV_DEFINE_LOG(name, default, record, flags, write, pdata) \
+    bfdev_log_t name = BFDEV_LOG_INIT(&name, default, record, flags, write, pdata)
 
 BFDEV_BITFLAGS_STRUCT(
     bfdev_log,
@@ -67,20 +78,27 @@ BFDEV_BITFLAGS_STRUCT_FLAG(
 BFDEV_BITFLAGS_STRUCT_FLAG(
     bfdev_log,
     struct bfdev_log, flags,
-    commit, __BFDEV_LOG_COMMIT
+    level, __BFDEV_LOG_LEVEL
 )
 
-extern struct bfdev_log
+extern bfdev_log_t
 bfdev_log_default;
+
+static inline void
+bfdev_log_init(bfdev_log_t *log, unsigned int def, unsigned int record,
+               unsigned long flags, bfdev_log_write_t write, void *pdata)
+{
+    *log = BFDEV_LOG_INIT(log, def, record, flags, write, pdata);
+}
 
 extern unsigned int
 bfdev_log_level(const char *str, const char **endptr);
 
 extern __bfdev_printf(2, 0) int
-bfdev_log_state_vprint(struct bfdev_log *log, const char *fmt, va_list args);
+bfdev_log_state_vprint(bfdev_log_t *log, const char *fmt, va_list args);
 
 extern __bfdev_printf(2, 3) int
-bfdev_log_state_print(struct bfdev_log *log, const char *fmt, ...);
+bfdev_log_state_print(bfdev_log_t *log, const char *fmt, ...);
 
 /**
  * bfdev_log_fmt - used by the bfdev_log_*() macros to generate the bfdev_log_print format string

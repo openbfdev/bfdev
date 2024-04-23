@@ -13,7 +13,7 @@
 # error "please don't include this file directly"
 #endif
 
-static inline void
+static inline int
 generic_log_write(bfdev_log_message_t *msg)
 {
     bfport_file *file;
@@ -25,7 +25,7 @@ generic_log_write(bfdev_log_message_t *msg)
         bfport_fflush(bfport_stdout);
     }
 
-    bfport_fwrite(msg->data, msg->length, 1, file);
+    return bfport_fwrite(msg->buff, msg->length, 1, file);
 }
 
 #endif /* _LOCAL_PORT_LOG_H_ */
