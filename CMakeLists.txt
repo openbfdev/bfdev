@@ -32,7 +32,6 @@ set(BFDEV_CONFIGURE ${BFDEV_GENERATED_PATH}/bfdev-config.cmake)
 
 include(scripts/hostrule.cmake)
 include(scripts/packed-header.cmake)
-include(scripts/packed-source.cmake)
 include(scripts/commit.cmake)
 
 commit_hash(BFDEV_COMMITID)
@@ -72,13 +71,6 @@ packed_header(
     _BFDEV_H_
     ${BFDEV_GENERATED_PATH}/bfdev.h
     ${BFDEV_HEADER_PATH}/bfdev
-)
-
-packed_source(
-    ${PROJECT_BINARY_DIR}/bfdev.c
-    "${BFDEV_LIBRARY_SOURCE}"
-    "#undef MODULE_NAME\n"
-    "#undef bfdev_log_fmt\n"
 )
 
 macro(bfdev_dependencies target)
