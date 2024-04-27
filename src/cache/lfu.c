@@ -202,3 +202,9 @@ lfu_init(void)
 {
     return bfdev_cache_register(&lfu_algorithm);
 }
+
+static __bfdev_dtor int
+lfu_exit(void)
+{
+    return bfdev_cache_unregister(&lfu_algorithm);
+}

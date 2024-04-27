@@ -153,3 +153,9 @@ lru_init(void)
 {
     return bfdev_cache_register(&lru_algorithm);
 }
+
+static __bfdev_dtor int
+lru_exit(void)
+{
+    return bfdev_cache_unregister(&lru_algorithm);
+}

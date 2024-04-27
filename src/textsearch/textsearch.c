@@ -7,7 +7,8 @@
 #include <bfdev/textsearch.h>
 #include <export.h>
 
-static BFDEV_LIST_HEAD(textsearch_algorithms);
+static
+BFDEV_LIST_HEAD(textsearch_algorithms);
 
 static bfdev_ts_algorithm_t *
 textsearch_algorithm_find(const char *name)
