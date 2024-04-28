@@ -35,7 +35,6 @@ jobs:
           cmake -B ${{github.workspace}}/build \
                 -D CMAKE_INSTALL_PREFIX=${{github.workspace}}/build/install \
                 -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
-                -D CMAKE_C_COMPILER=/usr/local/opt/ccache/libexec/clang \
                 -D BFDEV_DEVEL=ON
 
       - name: make
