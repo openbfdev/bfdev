@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
     poly = (GENCRC_TYPE)strtoull(argv[4], NULL, 0);
 
     trans = NULL;
-    if (argc == 6)
+    if (argc == 5)
         trans = argv[5];
 
     if (!rows) {
