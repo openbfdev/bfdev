@@ -30,11 +30,9 @@ enum bfdev_notifier_ret {
 
 /**
  * struct bfdev_notifier - generic notification chain header.
- * @name: name of notification chain.
  * @nodes: node header for managing notification chain nodes.
  */
 struct bfdev_notifier {
-    const char *name;
     bfdev_ilist_head_t nodes;
 };
 
@@ -53,27 +51,26 @@ struct bfdev_notifier_node {
     void *pdata;
 };
 
-#define BFDEV_NOTIFIER_STATIC(HEAD, NAME) { \
-    .name = (NAME), \
+#define BFDEV_NOTIFIER_STATIC(HEAD) { \
     .nodes = BFDEV_ILIST_HEAD_STATIC(&(HEAD)->nodes), \
 }
 
-#define BFDEV_NOTIFIER_INIT(head, name) \
-    (bfdev_notifier_t) BFDEV_NOTIFIER_STATIC(head, name)
+#define BFDEV_NOTIFIER_INIT(head) \
+    (bfdev_notifier_t) BFDEV_NOTIFIER_STATIC(head)
 
-#define BFDEV_DEFINE_NOTIFIER(head, name) \
-    bfdev_notifier_t head = BFDEV_NOTIFIER_INIT(&head, name)
+#define BFDEV_DEFINE_NOTIFIER(name) \
+    bfdev_notifier_t name = BFDEV_NOTIFIER_INIT(&name)
 
 static inline void
-bfdev_notifier_init(bfdev_notifier_t *head, const char *name)
+bfdev_notifier_init(bfdev_notifier_t *head)
 {
-    *head = BFDEV_NOTIFIER_INIT(head, name);
+    *head = BFDEV_NOTIFIER_INIT(head);
 }
 
 /**
  * bfdev_notifier_call - call the callback function of node on notification chain.
  * @head: chain header to be notified.
- * @arg: parameters to be passed to the node.
+ * @args: parameters to be passed to the node.
  * @call_num: number of nodes to be notified.
  * @called_num: number of nodes actually notified.
  */
