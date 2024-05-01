@@ -3,15 +3,20 @@
  * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
  */
 
+#define MODULE_NAME "notifier-simple"
+#define bfdev_log_fmt(fmt) MODULE_NAME ": " fmt
+
 #include <stdio.h>
+#include <bfdev/log.h>
 #include <bfdev/notifier.h>
 
-BFDEV_DEFINE_NOTIFIER(notifer, "test");
+static
+BFDEV_DEFINE_NOTIFIER(notifer);
 
 static bfdev_notifier_ret_t
 func(void *arg, void *pdata)
 {
-    printf("%s: %s\n", (char *)arg, (char *)pdata);
+    bfdev_log_info("%s: %s\n", (char *)arg, (char *)pdata);
     return BFDEV_NOTIFI_RET_DONE;
 }
 
