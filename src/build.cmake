@@ -29,7 +29,7 @@ set(BFDEV_SOURCE
     ${CMAKE_CURRENT_LIST_DIR}/list-sort.c
     ${CMAKE_CURRENT_LIST_DIR}/llist.c
     ${CMAKE_CURRENT_LIST_DIR}/matrix.c
-    ${CMAKE_CURRENT_LIST_DIR}/minpool.c
+    ${CMAKE_CURRENT_LIST_DIR}/memalloc.c
     ${CMAKE_CURRENT_LIST_DIR}/mpi.c
     ${CMAKE_CURRENT_LIST_DIR}/notifier.c
     ${CMAKE_CURRENT_LIST_DIR}/popcount.c
