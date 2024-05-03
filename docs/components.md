@@ -56,7 +56,7 @@
 
 - allocator: Allocation compatibility layer
 - allocpool: Mempool optimized for allocation performance
-- minpool: Simple memory allocator
+- memalloc: Memory allocator algorithm
 
 ## String Process
 
