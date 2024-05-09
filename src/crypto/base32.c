@@ -7,40 +7,34 @@
 #include <bfdev/base32.h>
 #include <export.h>
 
-static const char
-base32_encode_table[] = {
+static const uint8_t
+base32_encode_table[32] = {
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
     'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
     'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
     'Y', 'Z', '2', '3', '4', '5', '6', '7',
 };
 
-static const char
-base32_decode_table[] = {
-    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-    0xff, 0xff, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f,
-    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-    0xff, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
-    0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e,
-    0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16,
-    0x17, 0x18, 0x19, 0xff, 0xff, 0xff, 0xff, 0xff,
-    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+static const uint8_t
+base32_decode_table[256] = {
+    [0 ... 255] = 0xff,
+    ['A'] = 0x00, ['B'] = 0x01, ['C'] = 0x02, ['D'] = 0x03,
+    ['E'] = 0x04, ['F'] = 0x05, ['G'] = 0x06, ['H'] = 0x07,
+    ['I'] = 0x08, ['J'] = 0x09, ['K'] = 0x0a, ['L'] = 0x0b,
+    ['M'] = 0x0c, ['N'] = 0x0d, ['O'] = 0x0e, ['P'] = 0x0f,
+    ['Q'] = 0x10, ['R'] = 0x11, ['S'] = 0x12, ['T'] = 0x13,
+    ['U'] = 0x14, ['V'] = 0x15, ['W'] = 0x16, ['X'] = 0x17,
+    ['Y'] = 0x18, ['Z'] = 0x19, ['2'] = 0x1a, ['3'] = 0x1b,
+    ['4'] = 0x1c, ['5'] = 0x1d, ['6'] = 0x1e, ['7'] = 0x1f,
 };
 
 static __bfdev_always_inline void
 base32_encode(uint8_t *buff, const uint8_t *data, size_t size)
 {
-    const uint8_t *prev = data;
-    unsigned int bstate = 0;
+    const uint8_t *prev;
+    unsigned int bstate;
 
+    prev = data;
     for (; size >= 5; size -= 5) {
         *buff++ = base32_encode_table[*data++ >> 3];
         *buff++ = base32_encode_table[((*prev++ & 0x7) << 2) | (*data++ >> 6)];
@@ -52,6 +46,7 @@ base32_encode(uint8_t *buff, const uint8_t *data, size_t size)
         *buff++ = base32_encode_table[*prev++ & 0x1f];
     }
 
+    bstate = 0;
     while (size--) switch (bstate) {
         case 0:
             *buff++ = base32_encode_table[*data++ >> 3];
@@ -90,7 +85,7 @@ base32_encode(uint8_t *buff, const uint8_t *data, size_t size)
             *buff++ = '=';
             *buff++ = '=';
             *buff++ = '=';
-            *buff++ = '=';
+            *buff = '=';
             break;
 
         case 2:
@@ -98,19 +93,19 @@ base32_encode(uint8_t *buff, const uint8_t *data, size_t size)
             *buff++ = '=';
             *buff++ = '=';
             *buff++ = '=';
-            *buff++ = '=';
+            *buff = '=';
             break;
 
         case 3:
             *buff++ = base32_encode_table[(*prev & 0xf) << 1];
             *buff++ = '=';
             *buff++ = '=';
-            *buff++ = '=';
+            *buff = '=';
             break;
 
         case 4:
             *buff++ = base32_encode_table[(*prev & 0x3) << 3];
-            *buff++ = '=';
+            *buff = '=';
             break;
 
         default:
@@ -121,17 +116,19 @@ base32_encode(uint8_t *buff, const uint8_t *data, size_t size)
 static __bfdev_always_inline int
 base32_decode(uint8_t *buff, const uint8_t *data, size_t size)
 {
-    unsigned int bstate = 0;
+    unsigned int bstate;
     uint8_t decode;
 
+    bstate = 0;
     while (size--) {
-        decode = base32_decode_table[*data++];
+        decode = base32_decode_table[*data];
         if (decode == 0xff) {
-            if (*data == '=')
+            if (bfdev_likely(*data == '='))
                 break;
             return -BFDEV_EINVAL;
         }
 
+        data++;
         switch (bstate++ & 0x7) {
             case 0:
                 *buff = decode << 3;

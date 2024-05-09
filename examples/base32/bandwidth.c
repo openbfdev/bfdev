@@ -35,7 +35,7 @@ int main(int argc, char const *argv[])
         return 1;
 
     srand(time(NULL));
-    for (index = 0; index < TEST_SIZE; ++index)
+    for (index = 0; index < dlen; ++index)
         dbuff[index] = (uint8_t)rand();
 
     cksum = bfdev_crc32(dbuff, dlen, (uint32_t)~0UL);
@@ -43,7 +43,7 @@ int main(int argc, char const *argv[])
 
     for (count = 0; count < TEST_LOOP; ++count) {
         EXAMPLE_TIME_LOOP(&loop, 1000,
-            bfdev_base32_encode(sbuff, dbuff, TEST_SIZE);
+            bfdev_base32_encode(sbuff, dbuff, dlen);
             0;
         );
         bfdev_log_info("encode bandwidth %u: %uMiB/s\n", count, loop);
