@@ -90,6 +90,14 @@ TESTSUITE(
     if (count != TEST_LOOP + (TEST_LOOP / 2))
         return -BFDEV_EFAULT;
 
+    bfdev_log_debug("'slist_for_each_continue' null test\n");
+    bfdev_slist_for_each_continue(list)
+        return -BFDEV_ENODATA;
+
+    bfdev_log_debug("'slist_for_each_from' null test\n");
+    bfdev_slist_for_each_from(list)
+        return -BFDEV_ENODATA;
+
     return -BFDEV_ENOERR;
 }
 
@@ -130,6 +138,14 @@ TESTSUITE(
     if (count != TEST_LOOP + (TEST_LOOP / 2))
         return -BFDEV_EFAULT;
 
+    bfdev_log_debug("'slist_for_each_continue_safe' null test\n");
+    bfdev_slist_for_each_continue_safe(list, nlist)
+        return -BFDEV_ENODATA;
+
+    bfdev_log_debug("'slist_for_each_from_safe' null test\n");
+    bfdev_slist_for_each_from_safe(list, nlist)
+        return -BFDEV_ENODATA;
+
     return -BFDEV_ENOERR;
 }
 
@@ -166,6 +182,14 @@ TESTSUITE(
     if (count != TEST_LOOP + (TEST_LOOP / 2))
         return -BFDEV_EFAULT;
 
+    bfdev_log_debug("'slist_for_each_entry_continue' null test\n");
+    bfdev_slist_for_each_entry_continue(node, list)
+        return -BFDEV_ENODATA;
+
+    bfdev_log_debug("'slist_for_each_entry_from' null test\n");
+    bfdev_slist_for_each_entry_from(node, list)
+        return -BFDEV_ENODATA;
+
     return -BFDEV_ENOERR;
 }
 
@@ -201,6 +225,14 @@ TESTSUITE(
 
     if (count != TEST_LOOP + (TEST_LOOP / 2))
         return -BFDEV_EFAULT;
+
+    bfdev_log_debug("'slist_for_each_entry_continue_safe' null test\n");
+    bfdev_slist_for_each_entry_continue_safe(node, nnode, list)
+        return -BFDEV_ENODATA;
+
+    bfdev_log_debug("'slist_for_each_entry_from_safe' null test\n");
+    bfdev_slist_for_each_entry_from_safe(node, nnode, list)
+        return -BFDEV_ENODATA;
 
     return -BFDEV_ENOERR;
 }
