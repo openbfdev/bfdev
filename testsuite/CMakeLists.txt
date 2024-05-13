@@ -8,6 +8,7 @@ include(testsuite.cmake)
 
 add_subdirectory(array)
 add_subdirectory(bitwalk)
+add_subdirectory(hlist)
 add_subdirectory(list)
 add_subdirectory(memalloc)
 add_subdirectory(mpi)
