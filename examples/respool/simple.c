@@ -37,7 +37,6 @@ int main(int argc, char *argv[])
     struct test_struct *test;
     unsigned int count;
 
-
     for (count = 0; count < TEST_LOOP; ++count) {
         test = malloc(sizeof(*test));
         if (!test)
