@@ -28,7 +28,7 @@
 } while (0)
 
 static __bfdev_always_inline void
-ringbuf_out_copy(struct bfdev_ringbuf *ringbuf, void *buff,
+ringbuf_out_copy(bfdev_ringbuf_t *ringbuf, void *buff,
                  unsigned long len, unsigned long offset)
 {
     RINGBUF_GENERIC_COPY(
@@ -38,7 +38,7 @@ ringbuf_out_copy(struct bfdev_ringbuf *ringbuf, void *buff,
 }
 
 static __bfdev_always_inline void
-ringbuf_in_copy(struct bfdev_ringbuf *ringbuf, const void *buff,
+ringbuf_in_copy(bfdev_ringbuf_t *ringbuf, const void *buff,
                 unsigned long len, unsigned long offset)
 {
     RINGBUF_GENERIC_COPY(
@@ -48,7 +48,7 @@ ringbuf_in_copy(struct bfdev_ringbuf *ringbuf, const void *buff,
 }
 
 static __bfdev_always_inline unsigned long
-ringbuf_record_peek(struct bfdev_ringbuf *ringbuf, unsigned long recsize)
+ringbuf_record_peek(bfdev_ringbuf_t *ringbuf, unsigned long recsize)
 {
     unsigned long mask, offset, length;
     uint8_t *data;
@@ -74,8 +74,7 @@ ringbuf_record_peek(struct bfdev_ringbuf *ringbuf, unsigned long recsize)
 }
 
 static __bfdev_always_inline void
-ringbuf_record_poke(struct bfdev_ringbuf *ringbuf, unsigned long len,
-                    unsigned long recsize)
+ringbuf_record_poke(bfdev_ringbuf_t *ringbuf, unsigned long len, unsigned long recsize)
 {
     unsigned long mask, offset;
     uint8_t *data;
@@ -98,19 +97,19 @@ ringbuf_record_poke(struct bfdev_ringbuf *ringbuf, unsigned long len,
 }
 
 static inline bool
-ringbuf_empty(struct bfdev_ringbuf *ringbuf)
+ringbuf_empty(bfdev_ringbuf_t *ringbuf)
 {
     return ringbuf->in == ringbuf->out;
 }
 
 static inline unsigned long
-ringbuf_valid(struct bfdev_ringbuf *ringbuf)
+ringbuf_valid(bfdev_ringbuf_t *ringbuf)
 {
     return ringbuf->in - ringbuf->out;
 }
 
 static inline unsigned long
-ringbuf_overflow(struct bfdev_ringbuf *ringbuf)
+ringbuf_overflow(bfdev_ringbuf_t *ringbuf)
 {
     unsigned long size, used;
 
@@ -124,8 +123,7 @@ ringbuf_overflow(struct bfdev_ringbuf *ringbuf)
 }
 
 export unsigned long
-bfdev_ringbuf_peek_flat(struct bfdev_ringbuf *ringbuf, void *buff,
-                        unsigned long len)
+bfdev_ringbuf_peek_flat(bfdev_ringbuf_t *ringbuf, void *buff, unsigned long len)
 {
     unsigned long valid;
 
@@ -137,8 +135,7 @@ bfdev_ringbuf_peek_flat(struct bfdev_ringbuf *ringbuf, void *buff,
 }
 
 export unsigned long
-bfdev_ringbuf_out_flat(struct bfdev_ringbuf *ringbuf, void *buff,
-                       unsigned long len)
+bfdev_ringbuf_out_flat(bfdev_ringbuf_t *ringbuf, void *buff, unsigned long len)
 {
     unsigned long llen;
 
@@ -149,8 +146,7 @@ bfdev_ringbuf_out_flat(struct bfdev_ringbuf *ringbuf, void *buff,
 }
 
 export unsigned long
-bfdev_ringbuf_in_flat(struct bfdev_ringbuf *ringbuf, const void *buff,
-                      unsigned long len)
+bfdev_ringbuf_in_flat(bfdev_ringbuf_t *ringbuf, const void *buff, unsigned long len)
 {
     unsigned long size, overflow;
 
@@ -168,8 +164,8 @@ bfdev_ringbuf_in_flat(struct bfdev_ringbuf *ringbuf, const void *buff,
 }
 
 export unsigned long
-bfdev_ringbuf_peek_record(struct bfdev_ringbuf *ringbuf, void *buff,
-                          unsigned long len, unsigned long record)
+bfdev_ringbuf_peek_record(bfdev_ringbuf_t *ringbuf, void *buff, unsigned long len,
+                          unsigned long record)
 {
     unsigned long datalen;
 
@@ -184,8 +180,8 @@ bfdev_ringbuf_peek_record(struct bfdev_ringbuf *ringbuf, void *buff,
 }
 
 export unsigned long
-bfdev_ringbuf_out_record(struct bfdev_ringbuf *ringbuf, void *buff,
-                         unsigned long len, unsigned long record)
+bfdev_ringbuf_out_record(bfdev_ringbuf_t *ringbuf, void *buff, unsigned long len,
+                         unsigned long record)
 {
     unsigned long datalen;
 
@@ -201,8 +197,8 @@ bfdev_ringbuf_out_record(struct bfdev_ringbuf *ringbuf, void *buff,
 }
 
 export unsigned long
-bfdev_ringbuf_in_record(struct bfdev_ringbuf *ringbuf, const void *buff,
-                        unsigned long len, unsigned long record)
+bfdev_ringbuf_in_record(bfdev_ringbuf_t *ringbuf, const void *buff, unsigned long len,
+                        unsigned long record)
 {
     unsigned long size, offset;
     unsigned long overflow, datalen;
@@ -227,7 +223,7 @@ bfdev_ringbuf_in_record(struct bfdev_ringbuf *ringbuf, const void *buff,
 }
 
 export int
-bfdev_ringbuf_dynamic_alloc(struct bfdev_ringbuf *ringbuf, const bfdev_alloc_t *alloc,
+bfdev_ringbuf_dynamic_alloc(bfdev_ringbuf_t *ringbuf, const bfdev_alloc_t *alloc,
                             size_t esize, size_t size)
 {
     size = bfdev_pow2_roundup(size);
@@ -248,7 +244,7 @@ bfdev_ringbuf_dynamic_alloc(struct bfdev_ringbuf *ringbuf, const bfdev_alloc_t *
 }
 
 export void
-bfdev_ringbuf_dynamic_free(struct bfdev_ringbuf *ringbuf)
+bfdev_ringbuf_dynamic_free(bfdev_ringbuf_t *ringbuf)
 {
     const bfdev_alloc_t *alloc;
 
