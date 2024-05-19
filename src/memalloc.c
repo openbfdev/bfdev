@@ -284,8 +284,7 @@ bfdev_memalloc_init(bfdev_memalloc_head_t *head, bfdev_memalloc_find_t find,
     head->find = find;
 
     node = array;
-    pnode_set_used(node, false);
-    pnode_set_size(node, size - sizeof(*node));
+    pnode_set(node, size - sizeof(*node), false);
     head->avail = size - sizeof(*node);
 
     bfdev_list_add(&head->block_list, &node->block);
