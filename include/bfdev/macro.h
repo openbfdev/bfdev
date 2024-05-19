@@ -7,6 +7,7 @@
 #define _BFDEV_MACRO_H_
 
 #include <bfdev/config.h>
+#include <bfdev/types.h>
 
 BFDEV_BEGIN_DECLS
 
@@ -29,6 +30,14 @@ BFDEV_BEGIN_DECLS
  */
 #define bfdev_cmp(cond) ( \
     (cond) ? BFDEV_BT : BFDEV_LT \
+)
+
+/**
+ * BFDEV_REPEAT_BYTE() - repeat the value multiple times to unsigned long.
+ * @char: value to repeat.
+ */
+#define BFDEV_REPEAT_BYTE(char) ( \
+    (~0UL / 0xff) * (char) \
 )
 
 /**
