@@ -28,7 +28,8 @@
 } while (0)
 
 static __bfdev_always_inline void
-fifo_out_copy(struct bfdev_fifo *fifo, void *buff, unsigned long len, unsigned long offset)
+fifo_out_copy(bfdev_fifo_t *fifo, void *buff, unsigned long len,
+              unsigned long offset)
 {
     FIFO_GENERIC_COPY(
         buff, fifo->data + offset,
@@ -37,7 +38,8 @@ fifo_out_copy(struct bfdev_fifo *fifo, void *buff, unsigned long len, unsigned l
 }
 
 static __bfdev_always_inline void
-fifo_in_copy(struct bfdev_fifo *fifo, const void *buff, unsigned long len, unsigned long offset)
+fifo_in_copy(bfdev_fifo_t *fifo, const void *buff, unsigned long len,
+             unsigned long offset)
 {
     FIFO_GENERIC_COPY(
         fifo->data + offset, buff,
@@ -46,7 +48,7 @@ fifo_in_copy(struct bfdev_fifo *fifo, const void *buff, unsigned long len, unsig
 }
 
 static __bfdev_always_inline unsigned long
-fifo_record_peek(struct bfdev_fifo *fifo, unsigned long recsize)
+fifo_record_peek(bfdev_fifo_t *fifo, unsigned long recsize)
 {
     unsigned long mask, offset, length;
     uint8_t *data;
@@ -72,8 +74,7 @@ fifo_record_peek(struct bfdev_fifo *fifo, unsigned long recsize)
 }
 
 static __bfdev_always_inline void
-fifo_record_poke(struct bfdev_fifo *fifo, unsigned long len,
-                 unsigned long recsize)
+fifo_record_poke(bfdev_fifo_t *fifo, unsigned long len, unsigned long recsize)
 {
     unsigned long mask, offset;
     uint8_t *data;
@@ -96,26 +97,25 @@ fifo_record_poke(struct bfdev_fifo *fifo, unsigned long len,
 }
 
 static inline bool
-fifo_empty(struct bfdev_fifo *fifo)
+fifo_empty(bfdev_fifo_t *fifo)
 {
     return fifo->in == fifo->out;
 }
 
 static inline unsigned long
-fifo_valid(struct bfdev_fifo *fifo)
+fifo_valid(bfdev_fifo_t *fifo)
 {
     return fifo->in - fifo->out;
 }
 
 static inline unsigned long
-fifo_unused(struct bfdev_fifo *fifo)
+fifo_unused(bfdev_fifo_t *fifo)
 {
     return (fifo->mask + 1) - (fifo->in - fifo->out);
 }
 
 export unsigned long
-bfdev_fifo_peek_flat(struct bfdev_fifo *fifo, void *buff,
-                     unsigned long len)
+bfdev_fifo_peek_flat(bfdev_fifo_t *fifo, void *buff, unsigned long len)
 {
     unsigned long valid;
 
@@ -127,8 +127,7 @@ bfdev_fifo_peek_flat(struct bfdev_fifo *fifo, void *buff,
 }
 
 export unsigned long
-bfdev_fifo_out_flat(struct bfdev_fifo *fifo, void *buff,
-                    unsigned long len)
+bfdev_fifo_out_flat(bfdev_fifo_t *fifo, void *buff, unsigned long len)
 {
     unsigned long llen;
 
@@ -139,8 +138,7 @@ bfdev_fifo_out_flat(struct bfdev_fifo *fifo, void *buff,
 }
 
 export unsigned long
-bfdev_fifo_in_flat(struct bfdev_fifo *fifo, const void *buff,
-                   unsigned long len)
+bfdev_fifo_in_flat(bfdev_fifo_t *fifo, const void *buff, unsigned long len)
 {
     unsigned long unused;
 
@@ -153,8 +151,8 @@ bfdev_fifo_in_flat(struct bfdev_fifo *fifo, const void *buff,
 }
 
 export unsigned long
-bfdev_fifo_peek_record(struct bfdev_fifo *fifo, void *buff,
-                       unsigned long len, unsigned long record)
+bfdev_fifo_peek_record(bfdev_fifo_t *fifo, void *buff, unsigned long len,
+                       unsigned long record)
 {
     unsigned long datalen;
 
@@ -169,8 +167,8 @@ bfdev_fifo_peek_record(struct bfdev_fifo *fifo, void *buff,
 }
 
 export unsigned long
-bfdev_fifo_out_record(struct bfdev_fifo *fifo, void *buff,
-                      unsigned long len, unsigned long record)
+bfdev_fifo_out_record(bfdev_fifo_t *fifo, void *buff, unsigned long len,
+                      unsigned long record)
 {
     unsigned long datalen;
 
@@ -186,8 +184,8 @@ bfdev_fifo_out_record(struct bfdev_fifo *fifo, void *buff,
 }
 
 export unsigned long
-bfdev_fifo_in_record(struct bfdev_fifo *fifo, const void *buff,
-                     unsigned long len, unsigned long record)
+bfdev_fifo_in_record(bfdev_fifo_t *fifo, const void *buff, unsigned long len,
+                     unsigned long record)
 {
     if (len + record > fifo_unused(fifo))
         return 0;
@@ -200,7 +198,7 @@ bfdev_fifo_in_record(struct bfdev_fifo *fifo, const void *buff,
 }
 
 export int
-bfdev_fifo_dynamic_alloc(struct bfdev_fifo *fifo, const bfdev_alloc_t *alloc,
+bfdev_fifo_dynamic_alloc(bfdev_fifo_t *fifo, const bfdev_alloc_t *alloc,
                          size_t esize, size_t size)
 {
     size = bfdev_pow2_roundup(size);
@@ -221,7 +219,7 @@ bfdev_fifo_dynamic_alloc(struct bfdev_fifo *fifo, const bfdev_alloc_t *alloc,
 }
 
 export void
-bfdev_fifo_dynamic_free(struct bfdev_fifo *fifo)
+bfdev_fifo_dynamic_free(bfdev_fifo_t *fifo)
 {
     const bfdev_alloc_t *alloc;
 
