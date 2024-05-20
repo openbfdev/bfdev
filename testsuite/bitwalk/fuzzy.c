@@ -306,21 +306,21 @@ failed:
 
 TESTSUITE(
     "bitwalk:bit_small", NULL, NULL,
-    ""
+    "bitwalk bit small test"
 ) {
     return bitwalk_bit(TEST_SMALL_SIZE, TEST_SMALL_LOOP);
 }
 
 TESTSUITE(
     "bitwalk:bit_large", NULL, NULL,
-    ""
+    "bitwalk bit large test"
 ) {
     return bitwalk_bit(TEST_LARGE_SIZE, TEST_LARGE_LOOP);
 }
 
 TESTSUITE(
     "bitwalk:zero_small", NULL, NULL,
-    ""
+    "bitwalk zero small test"
 ) {
     return bitwalk_zero(TEST_SMALL_SIZE, TEST_SMALL_LOOP);
 }
@@ -328,7 +328,7 @@ TESTSUITE(
 
 TESTSUITE(
     "bitwalk:zero_large", NULL, NULL,
-    ""
+    "bitwalk zero large test"
 ) {
     return bitwalk_zero(TEST_LARGE_SIZE, TEST_LARGE_LOOP);
 }
