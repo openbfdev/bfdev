@@ -9,19 +9,33 @@
 #include <bfdev/cache.h>
 #include <export.h>
 
-static BFDEV_LIST_HEAD(cache_algorithms);
+static
+BFDEV_LIST_HEAD(cache_algorithms);
 
 static bfdev_cache_algo_t *
 cache_algorithm_find(const char *name)
 {
-    bfdev_cache_algo_t *algo;
+    bfdev_cache_algo_t *walk;
 
-    bfdev_list_for_each_entry(algo, &cache_algorithms, list) {
-        if (!bfport_strcmp(algo->name, name))
-            return algo;
+    bfdev_list_for_each_entry(walk, &cache_algorithms, list) {
+        if (!bfport_strcmp(walk->name, name))
+            return walk;
     }
 
     return NULL;
+}
+
+static bool
+cache_algorithm_exist(bfdev_cache_algo_t *algo)
+{
+    bfdev_cache_algo_t *walk;
+
+    bfdev_list_for_each_entry(walk, &cache_algorithms, list) {
+        if (walk == algo)
+            return true;
+    }
+
+    return false;
 }
 
 static __bfdev_always_inline bool
@@ -332,14 +346,17 @@ bfdev_cache_register(bfdev_cache_algo_t *algo)
         return -BFDEV_EALREADY;
 
     bfdev_list_add(&cache_algorithms, &algo->list);
+
     return -BFDEV_ENOERR;
 }
 
-export void
+export int
 bfdev_cache_unregister(bfdev_cache_algo_t *algo)
 {
-    if (cache_algorithm_find(algo->name))
-        return;
+    if (!cache_algorithm_exist(algo))
+        return -BFDEV_ENOENT;
 
     bfdev_list_del(&algo->list);
+
+    return -BFDEV_ENOERR;
 }

@@ -25,14 +25,14 @@ struct bfdev_ringbuf {
 };
 
 /**
- * BFDEV_GENERIC_RINGBUF - define a generic ringbuf structure.
+ * BFDEV_GENERIC_RINGBUF() - define a generic ringbuf structure.
  * @datatype: ringbuf data type.
  * @ptrtype: ringbuf pointer containing data.
  * @rsize: ringbuf record size.
  */
 #define BFDEV_GENERIC_RINGBUF(datatype, ptrtype, rsize) \
     union {                                             \
-        struct bfdev_ringbuf ringbuf;                   \
+        bfdev_ringbuf_t ringbuf;                        \
         datatype *data;                                 \
         const datatype *cdata;                          \
         ptrtype *ptr;                                   \
@@ -41,7 +41,7 @@ struct bfdev_ringbuf {
     }
 
 /**
- * BFDEV_BODY_RINGBUF - generate the body of normal ringbuf.
+ * BFDEV_BODY_RINGBUF() - generate the body of normal ringbuf.
  * @type: ringbuf contains the type of data.
  * @ptype: ringbuf pointer containing data.
  * @size: ringbuf buffer size.
@@ -54,7 +54,7 @@ struct bfdev_ringbuf {
 }
 
 /**
- * BFDEV_BODY_RINGBUF_DYNAMIC - generate the body of dynamic ringbuf.
+ * BFDEV_BODY_RINGBUF_DYNAMIC() - generate the body of dynamic ringbuf.
  * @type: ringbuf contains the type of data.
  * @ptype: ringbuf pointer containing data.
  * @rsize: ringbuf record size.
@@ -65,33 +65,33 @@ struct bfdev_ringbuf {
 }
 
 /**
- * BFDEV_RINGBUF_INIT - initialize normal ringbuf in compound literals.
- * @name: the name of ringbuf to init.
+ * BFDEV_RINGBUF_INIT() - initialize normal ringbuf in compound literals.
+ * @ptr: the pointer of ringbuf to init.
  */
-#define BFDEV_RINGBUF_INIT(name)                            \
-(typeof(name)) {                                            \
+#define BFDEV_RINGBUF_INIT(ptr)                             \
+(typeof(*(ptr))) {                                          \
     .ringbuf = {                                            \
         .in = 0, .out = 0,                                  \
-        .esize = sizeof(*(name).buff),                      \
-        .mask = BFDEV_ARRAY_SIZE((name).buff) - 1,          \
-        .data = (name).buff,                                \
+        .esize = sizeof(*(ptr)->buff),                      \
+        .mask = BFDEV_ARRAY_SIZE((ptr)->buff) - 1,          \
+        .data = &(ptr)->buff,                               \
     },                                                      \
 }
 
 /**
- * BFDEV_RINGBUF_DYNAMIC_INIT - initialize dynamic ringbuf in compound literals.
- * @name: the name of ringbuf to init.
+ * BFDEV_RINGBUF_DYNAMIC_INIT() - initialize dynamic ringbuf in compound literals.
+ * @ptr: the pointer of ringbuf to init.
  */
-#define BFDEV_RINGBUF_DYNAMIC_INIT(name)                    \
-(typeof(name)) {{                                           \
+#define BFDEV_RINGBUF_DYNAMIC_INIT(ptr)                     \
+(typeof(*(ptr))) {                                          \
     .ringbuf = {                                            \
         .in = 0, .out = 0, .mask = 0, .data = NULL,         \
-        .esize = sizeof(*(name).buff),                      \
+        .esize = sizeof(*(ptr)->buff),                      \
     },                                                      \
-}}
+}
 
 /**
- * BFDEV_STRUCT_RINGBUF - generate a normal ringbuf structure.
+ * BFDEV_STRUCT_RINGBUF() - generate a normal ringbuf structure.
  * @type: ringbuf contains the type of data.
  * @size: ringbuf buffer size.
  */
@@ -99,7 +99,7 @@ struct bfdev_ringbuf {
     struct BFDEV_BODY_RINGBUF(type, type, size, 0)
 
 /**
- * BFDEV_STRUCT_RINGBUF_RECORD - generate a record ringbuf structure.
+ * BFDEV_STRUCT_RINGBUF_RECORD() - generate a record ringbuf structure.
  * @type: ringbuf contains the type of data.
  * @size: ringbuf buffer size.
  * @record: ringbuf record size.
@@ -108,14 +108,14 @@ struct bfdev_ringbuf {
     struct BFDEV_BODY_RINGBUF(type, type, size, record)
 
 /**
- * BFDEV_DECLARE_STRUCT_RINGBUF_DYNAMIC - generate a dynamic ringbuf structure.
+ * BFDEV_DECLARE_STRUCT_RINGBUF_DYNAMIC() - generate a dynamic ringbuf structure.
  * @type: ringbuf contains the type of data.
  */
 #define BFDEV_DECLARE_STRUCT_RINGBUF_DYNAMIC(type) \
     struct BFDEV_BODY_RINGBUF_DYNAMIC(type, type, 0)
 
 /**
- * BFDEV_STRUCT_RINGBUF_DYNAMIC_RECORD - generate a dynamic record ringbuf structure.
+ * BFDEV_STRUCT_RINGBUF_DYNAMIC_RECORD() - generate a dynamic record ringbuf structure.
  * @type: ringbuf contains the type of data.
  * @record: ringbuf record size.
  */
@@ -123,7 +123,7 @@ struct bfdev_ringbuf {
     struct BFDEV_BODY_RINGBUF_DYNAMIC(type, type, record)
 
 /**
- * BFDEV_DECLARE_RINGBUF - declare a normal ringbuf structure.
+ * BFDEV_DECLARE_RINGBUF() - declare a normal ringbuf structure.
  * @name: name of ringbuf structure to declare.
  * @type: ringbuf contains the type of data.
  * @size: ringbuf buffer size.
@@ -132,7 +132,7 @@ struct bfdev_ringbuf {
     BFDEV_STRUCT_RINGBUF(type, size) name
 
 /**
- * BFDEV_DECLARE_RINGBUF_RECORD - declare a record ringbuf structure.
+ * BFDEV_DECLARE_RINGBUF_RECORD() - declare a record ringbuf structure.
  * @name: name of ringbuf structure to declare.
  * @type: ringbuf contains the type of data.
  * @size: ringbuf buffer size.
@@ -142,7 +142,7 @@ struct bfdev_ringbuf {
     BFDEV_STRUCT_RINGBUF_RECORD(type, size, record) name
 
 /**
- * BFDEV_DECLARE_RINGBUF_DYNAMIC - declare a dynamic ringbuf structure.
+ * BFDEV_DECLARE_RINGBUF_DYNAMIC() - declare a dynamic ringbuf structure.
  * @name: name of ringbuf structure to declare.
  * @type: ringbuf contains the type of data.
  */
@@ -150,7 +150,7 @@ struct bfdev_ringbuf {
     BFDEV_DECLARE_STRUCT_RINGBUF_DYNAMIC(type) name
 
 /**
- * BFDEV_DECLARE_RINGBUF_DYNAMIC_RECORD - declare a dynamic record ringbuf structure.
+ * BFDEV_DECLARE_RINGBUF_DYNAMIC_RECORD() - declare a dynamic record ringbuf structure.
  * @name: name of ringbuf structure to declare.
  * @type: ringbuf contains the type of data.
  * @record: ringbuf record size.
@@ -159,67 +159,67 @@ struct bfdev_ringbuf {
     BFDEV_STRUCT_RINGBUF_DYNAMIC_RECORD(type, record) name
 
 /**
- * BFDEV_DEFINE_RINGBUF - define a normal ringbuf structure.
+ * BFDEV_DEFINE_RINGBUF() - define a normal ringbuf structure.
  * @name: name of ringbuf structure to declare.
  * @type: ringbuf contains the type of data.
  * @size: ringbuf buffer size.
  */
 #define BFDEV_DEFINE_RINGBUF(name, type, size) \
-    BFDEV_DECLARE_RINGBUF(name, type, size) = BFDEV_RINGBUF_INIT(name)
+    BFDEV_DECLARE_RINGBUF(name, type, size) = BFDEV_RINGBUF_INIT(&name)
 
 /**
- * BFDEV_DEFINE_RINGBUF_RECORD - define a record ringbuf structure.
+ * BFDEV_DEFINE_RINGBUF_RECORD() - define a record ringbuf structure.
  * @name: name of ringbuf structure to declare.
  * @type: ringbuf contains the type of data.
  * @size: ringbuf buffer size.
  * @record: ringbuf record size.
  */
 #define BFDEV_DEFINE_RINGBUF_RECORD(name, type, size, record) \
-    BFDEV_DECLARE_RINGBUF_RECORD(name, type, size, record) = BFDEV_RINGBUF_INIT(name)
+    BFDEV_DECLARE_RINGBUF_RECORD(name, type, size, record) = BFDEV_RINGBUF_INIT(&name)
 
 /**
- * BFDEV_DEFINE_RINGBUF_DYNAMIC - define a dynamic ringbuf structure.
+ * BFDEV_DEFINE_RINGBUF_DYNAMIC() - define a dynamic ringbuf structure.
  * @name: name of ringbuf structure to declare.
  * @type: ringbuf contains the type of data.
  */
 #define BFDEV_DEFINE_RINGBUF_DYNAMIC(name, type) \
-    BFDEV_DECLARE_RINGBUF_DYNAMIC(name, type) = BFDEV_RINGBUF_DYNAMIC_INIT(name)
+    BFDEV_DECLARE_RINGBUF_DYNAMIC(name, type) = BFDEV_RINGBUF_DYNAMIC_INIT(&name)
 
 /**
- * BFDEV_DEFINE_RINGBUF_DYNAMIC_RECORD - declare define dynamic record ringbuf structure.
+ * BFDEV_DEFINE_RINGBUF_DYNAMIC_RECORD() - declare define dynamic record ringbuf structure.
  * @name: name of ringbuf structure to declare.
  * @type: ringbuf contains the type of data.
  * @record: ringbuf record size.
  */
 #define BFDEV_DEFINE_RINGBUF_DYNAMIC_RECORD(name, type, record) \
-    BFDEV_DECLARE_RINGBUF_DYNAMIC_RECORD(name, type, record) = BFDEV_RINGBUF_DYNAMIC_INIT(name)
+    BFDEV_DECLARE_RINGBUF_DYNAMIC_RECORD(name, type, record) = BFDEV_RINGBUF_DYNAMIC_INIT(&name)
 
 /**
- * bfdev_ringbuf_initialized - check if the ringbuf is initialized.
+ * bfdev_ringbuf_initialized() - check if the ringbuf is initialized.
  * @ptr: pointer of the ringbuf to check.
  */
 #define bfdev_ringbuf_initialized(ptr) ((ptr)->ringbuf.mask)
 
 /**
- * bfdev_ringbuf_recsize - returns the size of the record length field.
+ * bfdev_ringbuf_recsize() - returns the size of the record length field.
  * @ptr: pointer of the ringbuf to get field length.
  */
 #define bfdev_ringbuf_recsize(ptr) (sizeof(*(ptr)->rectype))
 
 /**
- * bfdev_ringbuf_size - get the size of the element managed by the ringbuf.
+ * bfdev_ringbuf_size() - get the size of the element managed by the ringbuf.
  * @ptr: pointer of the ringbuf to get size.
  */
 #define bfdev_ringbuf_size(ptr) ((ptr)->ringbuf.mask + 1)
 
 /**
- * bfdev_ringbuf_esize - get the size of the ringbuf in elements.
+ * bfdev_ringbuf_esize() - get the size of the ringbuf in elements.
  * @ptr: pointer of the ringbuf to get size.
  */
 #define bfdev_ringbuf_esize(ptr) ((ptr)->ringbuf.esize)
 
 /**
- * bfdev_ringbuf_reset - reset ringbuf state.
+ * bfdev_ringbuf_reset() - reset ringbuf state.
  * @ptr: the ringbuf to reset.
  */
 #define bfdev_ringbuf_reset(ptr) do {               \
@@ -228,7 +228,7 @@ struct bfdev_ringbuf {
 } while (0)
 
 /**
- * bfdev_ringbuf_homing - homing unread valid data length.
+ * bfdev_ringbuf_homing() - homing unread valid data length.
  * @ptr: the ringbuf to homing.
  */
 #define bfdev_ringbuf_homing(ptr) do {              \
@@ -237,7 +237,7 @@ struct bfdev_ringbuf {
 } while (0)
 
 /**
- * bfdev_ringbuf_len - get the valid data length in ringbuf.
+ * bfdev_ringbuf_len() - get the valid data length in ringbuf.
  * @ptr: the ringbuf to get.
  */
 #define bfdev_ringbuf_len(ptr) ({                   \
@@ -246,7 +246,7 @@ struct bfdev_ringbuf {
 })
 
 /**
- * bfdev_ringbuf_check_empty - check w ringbuf is empty.
+ * bfdev_ringbuf_check_empty() - check w ringbuf is empty.
  * @ptr: the ringbuf to check.
  */
 #define bfdev_ringbuf_check_empty(ptr) ({           \
@@ -255,7 +255,7 @@ struct bfdev_ringbuf {
 })
 
 /**
- * bfdev_ringbuf_check_full - check whether ringbuf is full.
+ * bfdev_ringbuf_check_full() - check whether ringbuf is full.
  * @ptr: the ringbuf to check.
  */
 #define bfdev_ringbuf_check_full(ptr) ({                \
@@ -264,7 +264,7 @@ struct bfdev_ringbuf {
 })
 
 /**
- * bfdev_ringbuf_check_dynamic - check whether ringbuf is dynamic.
+ * bfdev_ringbuf_check_dynamic() - check whether ringbuf is dynamic.
  * @ptr: the ringbuf to check.
  */
 #define bfdev_ringbuf_check_dynamic(ptr) (              \
@@ -272,7 +272,7 @@ struct bfdev_ringbuf {
 )
 
 /**
- * bfdev_ringbuf_alloc - dynamically allocate buffer to ringbuf.
+ * bfdev_ringbuf_alloc() - dynamically allocate buffer to ringbuf.
  * @ptr: the ringbuf to allocate buffer.
  * @size: size of buffer.
  */
@@ -285,7 +285,7 @@ struct bfdev_ringbuf {
 })
 
 /**
- * bfdev_ringbuf_free - dynamically free buffer to ringbuf.
+ * bfdev_ringbuf_free() - dynamically free buffer to ringbuf.
  * @ptr: the ringbuf to free buffer.
  */
 #define bfdev_ringbuf_free(ptr) ({                      \
@@ -296,14 +296,14 @@ struct bfdev_ringbuf {
 })
 
 /**
- * bfdev_ringbuf_peek - peek an object from ringbuf.
+ * bfdev_ringbuf_peek() - peek an object from ringbuf.
  * @struct: the ringbuf to peek object out.
  * @value: object to peek.
  */
 #define bfdev_ringbuf_peek(pringbuf, value)  ({             \
     typeof((pringbuf) + 1) __tmp = (pringbuf);              \
     typeof(__tmp->ptr) __tvalue = (value);                  \
-    struct bfdev_ringbuf *__ringbuf = &__tmp->ringbuf;      \
+    bfdev_ringbuf_t *__ringbuf = &__tmp->ringbuf;           \
     unsigned long __recsize = sizeof(*__tmp->rectype);      \
     unsigned long __retval;                                 \
     if (__recsize) {                                        \
@@ -323,14 +323,14 @@ struct bfdev_ringbuf {
 })
 
 /**
- * bfdev_ringbuf_get - get an object from ringbuf.
+ * bfdev_ringbuf_get() - get an object from ringbuf.
  * @struct: the ringbuf to get object out.
  * @value: object to get.
  */
 #define bfdev_ringbuf_get(pringbuf, value)  ({              \
     typeof((pringbuf) + 1) __tmp = (pringbuf);              \
     typeof(__tmp->ptr) __tvalue = (value);                  \
-    struct bfdev_ringbuf *__ringbuf = &__tmp->ringbuf;      \
+    bfdev_ringbuf_t *__ringbuf = &__tmp->ringbuf;           \
     unsigned long __recsize = sizeof(*__tmp->rectype);      \
     unsigned long __retval;                                 \
     if (__recsize) {                                        \
@@ -351,14 +351,14 @@ struct bfdev_ringbuf {
 })
 
 /**
- * bfdev_ringbuf_put - put an object into ringbuf.
+ * bfdev_ringbuf_put() - put an object into ringbuf.
  * @pringbuf: the ringbuf to put object in.
  * @value: object to put.
  */
 #define bfdev_ringbuf_put(pringbuf, value)  ({              \
     typeof((pringbuf) + 1) __tmp = (pringbuf);              \
     typeof(*__tmp->cdata) __tvalue = (value);               \
-    struct bfdev_ringbuf *__ringbuf = &__tmp->ringbuf;      \
+    bfdev_ringbuf_t *__ringbuf = &__tmp->ringbuf;           \
     unsigned long __recsize = sizeof(*__tmp->rectype);      \
     unsigned long __retval;                                 \
     if (__recsize) {                                        \
@@ -379,7 +379,7 @@ struct bfdev_ringbuf {
 })
 
 /**
- * bfdev_ringbuf_out_peek - peek continuous data from ringbuf.
+ * bfdev_ringbuf_out_peek() - peek continuous data from ringbuf.
  * @pringbuf: the ringbuf to peek data out.
  * @buff: the buffer to peek data in.
  * @len: number of continuously peeked objects.
@@ -387,7 +387,7 @@ struct bfdev_ringbuf {
 #define bfdev_ringbuf_out_peek(pringbuf, buff, len) ({                  \
     typeof((pringbuf) + 1) __tmp = (pringbuf);                          \
     typeof(__tmp->ptr) __tbuff = (buff);                                \
-    struct bfdev_ringbuf *__ringbuf = &__tmp->ringbuf;                  \
+    bfdev_ringbuf_t *__ringbuf = &__tmp->ringbuf;                       \
     unsigned long __tlen = (len);                                       \
     unsigned long __recsize = sizeof(*__tmp->rectype);                  \
     (__recsize) ?                                                       \
@@ -396,7 +396,7 @@ struct bfdev_ringbuf {
 })
 
 /**
- * bfdev_ringbuf_out - copy continuous data from ringbuf.
+ * bfdev_ringbuf_out() - copy continuous data from ringbuf.
  * @pringbuf: the ringbuf to copy data out.
  * @buff: the buffer to copy data in.
  * @len: number of continuously copied objects.
@@ -404,7 +404,7 @@ struct bfdev_ringbuf {
 #define bfdev_ringbuf_out(pringbuf, buff, len) ({                       \
     typeof((pringbuf) + 1) __tmp = (pringbuf);                          \
     typeof(__tmp->ptr) __tbuff = (buff);                                \
-    struct bfdev_ringbuf *__ringbuf = &__tmp->ringbuf;                  \
+    bfdev_ringbuf_t *__ringbuf = &__tmp->ringbuf;                       \
     unsigned long __tlen = (len);                                       \
     unsigned long __recsize = sizeof(*__tmp->rectype);                  \
     (__recsize) ?                                                       \
@@ -413,7 +413,7 @@ struct bfdev_ringbuf {
 })
 
 /**
- * bfdev_ringbuf_in - copy continuous data into ringbuf.
+ * bfdev_ringbuf_in() - copy continuous data into ringbuf.
  * @pringbuf: the ringbuf to copy data in.
  * @buff: the buffer to copy data out.
  * @len: number of continuously copied objects.
@@ -421,7 +421,7 @@ struct bfdev_ringbuf {
 #define bfdev_ringbuf_in(pringbuf, buff, len) ({                        \
     typeof((pringbuf) + 1) __tmp = (pringbuf);                          \
     typeof(__tmp->cptr) __tbuff = (buff);                               \
-    struct bfdev_ringbuf *__ringbuf = &__tmp->ringbuf;                  \
+    bfdev_ringbuf_t *__ringbuf = &__tmp->ringbuf;                       \
     unsigned long __tlen = (len);                                       \
     unsigned long __recsize = sizeof(*__tmp->rectype);                  \
     (__recsize) ?                                                       \
@@ -430,35 +430,32 @@ struct bfdev_ringbuf {
 })
 
 extern unsigned long
-bfdev_ringbuf_peek_flat(struct bfdev_ringbuf *ringbuf, void *buff,
-                        unsigned long len);
+bfdev_ringbuf_peek_flat(bfdev_ringbuf_t *ringbuf, void *buff, unsigned long len);
 
 extern unsigned long
-bfdev_ringbuf_out_flat(struct bfdev_ringbuf *ringbuf, void *buff,
-                       unsigned long len);
+bfdev_ringbuf_out_flat(bfdev_ringbuf_t *ringbuf, void *buff, unsigned long len);
 
 extern unsigned long
-bfdev_ringbuf_in_flat(struct bfdev_ringbuf *ringbuf, const void *buff,
-                      unsigned long len);
+bfdev_ringbuf_in_flat(bfdev_ringbuf_t *ringbuf, const void *buff, unsigned long len);
 
 extern unsigned long
-bfdev_ringbuf_peek_record(struct bfdev_ringbuf *ringbuf, void *buff,
-                          unsigned long len, unsigned long record);
+bfdev_ringbuf_peek_record(bfdev_ringbuf_t *ringbuf, void *buff, unsigned long len,
+                          unsigned long record);
 
 extern unsigned long
-bfdev_ringbuf_out_record(struct bfdev_ringbuf *ringbuf, void *buff,
-                         unsigned long len, unsigned long record);
+bfdev_ringbuf_out_record(bfdev_ringbuf_t *ringbuf, void *buff, unsigned long len,
+                         unsigned long record);
 
 extern unsigned long
-bfdev_ringbuf_in_record(struct bfdev_ringbuf *ringbuf, const void *buff,
-                        unsigned long len, unsigned long record);
+bfdev_ringbuf_in_record(bfdev_ringbuf_t *ringbuf, const void *buff, unsigned long len,
+                        unsigned long record);
 
 extern int
-bfdev_ringbuf_dynamic_alloc(struct bfdev_ringbuf *ringbuf, const bfdev_alloc_t *alloc,
+bfdev_ringbuf_dynamic_alloc(bfdev_ringbuf_t *ringbuf, const bfdev_alloc_t *alloc,
                             size_t esize, size_t size);
 
 extern void
-bfdev_ringbuf_dynamic_free(struct bfdev_ringbuf *ringbuf);
+bfdev_ringbuf_dynamic_free(bfdev_ringbuf_t *ringbuf);
 
 BFDEV_END_DECLS
 

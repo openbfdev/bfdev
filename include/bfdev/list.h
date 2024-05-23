@@ -65,7 +65,7 @@ bfdev_list_insert(bfdev_list_head_t *prev, bfdev_list_head_t *next,
 }
 
 /**
- * bfdev_list_head_init - initialize a list head structure.
+ * bfdev_list_head_init() - initialize a list head structure.
  * @head: list head structure to be initialized.
  */
 static inline void
@@ -75,7 +75,7 @@ bfdev_list_head_init(bfdev_list_head_t *head)
 }
 
 /**
- * bfdev_list_add - add a new node next old node.
+ * bfdev_list_add() - add a new node next old node.
  * @node: list head to add it next.
  * @newn: new entry to be added.
  */
@@ -86,7 +86,7 @@ bfdev_list_add(bfdev_list_head_t *node, bfdev_list_head_t *newn)
 }
 
 /**
- * bfdev_list_add_prev - add a new node after old node.
+ * bfdev_list_add_prev() - add a new node after old node.
  * @node: list head to add it prev.
  * @newn: new entry to be added.
  */
@@ -97,7 +97,7 @@ bfdev_list_add_prev(bfdev_list_head_t *node, bfdev_list_head_t *newn)
 }
 
 /**
- * bfdev_list_deluf - deletes entry from list (unsafe).
+ * bfdev_list_deluf() - deletes entry from list (unsafe).
  * @node: the element to delete from the list.
  */
 static inline void
@@ -108,7 +108,7 @@ bfdev_list_deluf(bfdev_list_head_t *node)
 }
 
 /**
- * bfdev_list_del - deletes entry from list.
+ * bfdev_list_del() - deletes entry from list.
  * @node: the element to delete from the list.
  */
 static inline void
@@ -125,7 +125,7 @@ bfdev_list_del(bfdev_list_head_t *node)
 }
 
 /**
- * bfdev_list_check_empty - check whether a list is empty.
+ * bfdev_list_check_empty() - check whether a list is empty.
  * @head: list head to check.
  */
 static inline bool
@@ -135,7 +135,7 @@ bfdev_list_check_empty(const bfdev_list_head_t *head)
 }
 
 /**
- * bfdev_list_check_head - check whether the node is head.
+ * bfdev_list_check_head() - check whether the node is head.
  * @head: the head of the list
  * @list: the entry to test
  */
@@ -147,7 +147,7 @@ bfdev_list_check_head(const bfdev_list_head_t *head,
 }
 
 /**
- * bfdev_list_check_first - check whether the node is a header.
+ * bfdev_list_check_first() - check whether the node is a header.
  * @head: the head of the list.
  * @node: the entry to test.
  */
@@ -159,7 +159,7 @@ bfdev_list_check_first(const bfdev_list_head_t *head,
 }
 
 /**
- * bfdev_list_check_end - check whether the node is a ending.
+ * bfdev_list_check_end() - check whether the node is a ending.
  * @head: the head of the list.
  * @node: the entry to test.
  */
@@ -171,7 +171,7 @@ bfdev_list_check_end(const bfdev_list_head_t *head,
 }
 
 /**
- * bfdev_list_check_another - check whether has another node.
+ * bfdev_list_check_another() - check whether has another node.
  * @head: list head to check.
  * @node: the unique node.
  */
@@ -186,8 +186,11 @@ static inline void
 bfdev_list_relocate(bfdev_list_head_t *prev, bfdev_list_head_t *next,
                     bfdev_list_head_t *list)
 {
-    bfdev_list_head_t *first = list->next;
-    bfdev_list_head_t *last = list->prev;
+    bfdev_list_head_t *first;
+    bfdev_list_head_t *last;
+
+    first = list->next;
+    last = list->prev;
 
     first->prev = prev;
     prev->next = first;
@@ -197,7 +200,7 @@ bfdev_list_relocate(bfdev_list_head_t *prev, bfdev_list_head_t *next,
 }
 
 /**
- * bfdev_list_splice - join two lists, this is designed for stacks.
+ * bfdev_list_splice() - join two lists, this is designed for stacks.
  * @head: the place to add it in the first list.
  * @list: the new list to add.
  */
@@ -209,7 +212,7 @@ bfdev_list_splice(bfdev_list_head_t *head, bfdev_list_head_t *list)
 }
 
 /**
- * bfdev_list_splice_prev - join two lists, each list being a queue.
+ * bfdev_list_splice_prev() - join two lists, each list being a queue.
  * @head: the place to add it in the first list.
  * @list: the new list to add.
  */
@@ -221,7 +224,7 @@ bfdev_list_splice_prev(bfdev_list_head_t *head, bfdev_list_head_t *list)
 }
 
 /**
- * bfdev_list_replace - replace a list node with an external node.
+ * bfdev_list_replace() - replace a list node with an external node.
  * @oldn: the element to be replaced.
  * @newn: the new element to insert.
  */
@@ -230,12 +233,13 @@ bfdev_list_replace(bfdev_list_head_t *oldn, bfdev_list_head_t *newn)
 {
     newn->prev = oldn->prev;
     newn->next = oldn->next;
+
     newn->prev->next = newn;
     newn->next->prev = newn;
 }
 
 /**
- * bfdev_list_move - move the node to the next of the node.
+ * bfdev_list_move() - move the node to the next of the node.
  * @head: the head that will precede our entry.
  * @node: the entry to move.
  */
@@ -247,7 +251,7 @@ bfdev_list_move(bfdev_list_head_t *head, bfdev_list_head_t *node)
 }
 
 /**
- * bfdev_list_move_prev - move the node to the prev of the node.
+ * bfdev_list_move_prev() - move the node to the prev of the node.
  * @head: the head that will follow our entry.
  * @node: the entry to move.
  */
@@ -259,15 +263,16 @@ bfdev_list_move_prev(bfdev_list_head_t *head, bfdev_list_head_t *node)
 }
 
 /**
- * bfdev_list_swap - replace entry1 with entry2 and re-add entry1 at entry2's position.
+ * bfdev_list_swap() - replace entry1 with entry2 and re-add entry1 at entry2's position.
  * @node1: the location to place entry2.
  * @node2: the location to place entry1.
  */
 static inline void
 bfdev_list_swap(bfdev_list_head_t *node1, bfdev_list_head_t *node2)
 {
-    bfdev_list_head_t *prev = node2->prev;
+    bfdev_list_head_t *prev;
 
+    prev = node2->prev;
     bfdev_list_del(node2);
     bfdev_list_replace(node1, node2);
 
@@ -277,7 +282,7 @@ bfdev_list_swap(bfdev_list_head_t *node1, bfdev_list_head_t *node2)
 }
 
 /**
- * bfdev_list_del_init - deletes entry from list and reinitialize it.
+ * bfdev_list_del_init() - deletes entry from list and reinitialize it.
  * @node: the element to delete from the list.
  */
 static inline void
@@ -288,7 +293,7 @@ bfdev_list_del_init(bfdev_list_head_t *node)
 }
 
 /**
- * bfdev_list_replace_init - replace old entry by new one and initialize the old one.
+ * bfdev_list_replace_init() - replace old entry by new one and initialize the old one.
  * @oldn: the element to be replaced.
  * @newn: the new element to insert.
  */
@@ -300,7 +305,7 @@ bfdev_list_replace_init(bfdev_list_head_t *oldn, bfdev_list_head_t *newn)
 }
 
 /**
- * bfdev_list_splice_init - join two lists and reinitialise the emptied list.
+ * bfdev_list_splice_init() - join two lists and reinitialise the emptied list.
  * @head: the place to add it in the first list.
  * @list: the new list to add.
  */
@@ -314,7 +319,7 @@ bfdev_list_splice_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
 }
 
 /**
- * bfdev_list_splice_tail_init - join two lists and reinitialise the emptied list.
+ * bfdev_list_splice_tail_init() - join two lists and reinitialise the emptied list.
  * @head: the place to add it in the first list.
  * @list: the new list to add.
  */
@@ -328,7 +333,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
 }
 
 /**
- * bfdev_list_entry - get the struct for this entry.
+ * bfdev_list_entry() - get the struct for this entry.
  * @ptr: the &struct list head pointer.
  * @type: the type of the struct this is embedded in.
  * @member: the name of the list head within the struct.
@@ -337,7 +342,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
     bfdev_container_of(ptr, type, member)
 
 /**
- * bfdev_list_entry_check_head - test if the entry points to the head of the list.
+ * bfdev_list_entry_check_head() - test if the entry points to the head of the list.
  * @pos: the type * to cursor
  * @head: the head for your list.
  * @member: the name of the list head within the struct.
@@ -346,7 +351,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
     (&(pos)->member == (head))
 
 /**
- * bfdev_list_first_entry - get the first element from a list.
+ * bfdev_list_first_entry() - get the first element from a list.
  * @ptr: the list head to take the element from.
  * @type: the type of the struct this is embedded in.
  * @member: the name of the list head within the struct.
@@ -355,7 +360,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
     bfdev_list_entry((ptr)->next, type, member)
 
 /**
- * bfdev_list_last_entry - get the last element from a list.
+ * bfdev_list_last_entry() - get the last element from a list.
  * @ptr: the list head to take the element from.
  * @type: the type of the struct this is embedded in.
  * @member: the name of the list head within the struct.
@@ -364,7 +369,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
     bfdev_list_entry((ptr)->prev, type, member)
 
 /**
- * bfdev_list_next_entry - get the next element in list.
+ * bfdev_list_next_entry() - get the next element in list.
  * @pos: the type * to cursor.
  * @member: the name of the list head within the struct.
  */
@@ -372,7 +377,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
     bfdev_list_entry((pos)->member.next, typeof(*(pos)), member)
 
 /**
- * bfdev_list_prev_entry - get the prev element in list.
+ * bfdev_list_prev_entry() - get the prev element in list.
  * @pos: the type * to cursor.
  * @member: the name of the list head within the struct.
  */
@@ -380,7 +385,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
     bfdev_list_entry((pos)->member.prev, typeof(*(pos)), member)
 
 /**
- * bfdev_list_first_entry_or_null - get the first element from a list or null.
+ * bfdev_list_first_entry_or_null() - get the first element from a list or null.
  * @ptr: the list head to take the element from.
  * @type: the type of the struct this is embedded in.
  * @member: the name of the list head within the struct.
@@ -392,7 +397,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
 })
 
 /**
- * bfdev_list_last_entry_or_null - get the last element from a list or null.
+ * bfdev_list_last_entry_or_null() - get the last element from a list or null.
  * @ptr: the list head to take the element from.
  * @type: the type of the struct this is embedded in.
  * @member: the name of the list head within the struct.
@@ -404,7 +409,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
 })
 
 /**
- * bfdev_list_next_entry_or_null - get the next element in list or null.
+ * bfdev_list_next_entry_or_null() - get the next element in list or null.
  * @pos: the type * to cursor.
  * @head: the head for your list.
  * @member: the name of the list head within the struct.
@@ -416,7 +421,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
 })
 
 /**
- * bfdev_list_prev_entry_or_null - get the prev element in list or null.
+ * bfdev_list_prev_entry_or_null() - get the prev element in list or null.
  * @pos: the type * to cursor.
  * @head: the head for your list.
  * @member: the name of the list head within the struct.
@@ -428,7 +433,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
 })
 
 /**
- * bfdev_list_for_each - iterate over a list.
+ * bfdev_list_for_each() - iterate over a list.
  * @pos: the &struct list head to use as a loop cursor.
  * @head: the head for your list.
  */
@@ -437,7 +442,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
          (pos) = (pos)->next)
 
 /**
- * bfdev_list_for_each_reverse - iterate over a list backwards.
+ * bfdev_list_for_each_reverse() - iterate over a list backwards.
  * @pos: the &struct list head to use as a loop cursor.
  * @head: the head for your list.
  */
@@ -446,7 +451,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
          (pos) = (pos)->prev)
 
 /**
- * bfdev_list_for_each_from - iterate over a list from the current point.
+ * bfdev_list_for_each_from() - iterate over a list from the current point.
  * @pos: the &struct list head to use as a loop cursor.
  * @head: the head for your list.
  */
@@ -454,7 +459,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
     for (; !bfdev_list_check_head(head, pos); (pos) = (pos)->next)
 
 /**
- * bfdev_list_for_each_reverse_from - iterate over a list backwards from the current point.
+ * bfdev_list_for_each_reverse_from() - iterate over a list backwards from the current point.
  * @pos: the &struct list head to use as a loop cursor.
  * @head: the head for your list.
  */
@@ -462,7 +467,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
     for (; !bfdev_list_check_head(head, pos); (pos) = (pos)->prev)
 
 /**
- * bfdev_list_for_each_continue - continue iteration over a list.
+ * bfdev_list_for_each_continue() - continue iteration over a list.
  * @pos: the &struct list head to use as a loop cursor.
  * @head: the head for your list.
  */
@@ -471,7 +476,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
          (pos) = (pos)->next)
 
 /**
- * bfdev_list_for_each_reverse_continue - continue iteration over a list backwards.
+ * bfdev_list_for_each_reverse_continue() - continue iteration over a list backwards.
  * @pos: the &struct list head to use as a loop cursor.
  * @head: the head for your list.
  */
@@ -480,25 +485,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
          (pos) = (pos)->prev)
 
 /**
- * bfdev_list_for_each_continue_check - check head and continue iteration over a list.
- * @pos: the &struct list head to use as a loop cursor.
- * @head: the head for your list.
- */
-#define bfdev_list_for_each_continue_check(pos, head) \
-    for ((void)(!bfdev_list_check_head(head, pos) && ((pos) = (pos)->next)); \
-         !bfdev_list_check_head(head, pos); (pos) = (pos)->next)
-
-/**
- * bfdev_list_for_each_reverse_continue_check - check head and continue iteration over a list backwards.
- * @pos: the &struct list head to use as a loop cursor.
- * @head: the head for your list.
- */
-#define bfdev_list_for_each_reverse_continue_check(pos, head) \
-    for ((void)(!bfdev_list_check_head(head, pos) && ((pos) = (pos)->prev)); \
-         !bfdev_list_check_head(head, pos); (pos) = (pos)->prev)
-
-/**
- * bfdev_list_for_each_safe - iterate over a list safe against removal of list entry.
+ * bfdev_list_for_each_safe() - iterate over a list safe against removal of list entry.
  * @pos: the &struct list head to use as a loop cursor.
  * @tmp: another list head to use as temporary storage.
  * @head: the head for your list.
@@ -509,7 +496,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
          (pos) = (tmp), (tmp) = (tmp)->next)
 
 /**
- * bfdev_list_for_each_reverse_safe - iterate backwards over list safe against removal.
+ * bfdev_list_for_each_reverse_safe() - iterate backwards over list safe against removal.
  * @pos: the &struct list head to use as a loop cursor.
  * @tmp: another list head to use as temporary storage.
  * @head: the head for your list.
@@ -520,29 +507,27 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
          (pos) = (tmp), (tmp) = (tmp)->prev)
 
 /**
- * bfdev_list_for_each_from_safe - iterate over a list safe against removal of list entry from the current point.
+ * bfdev_list_for_each_from_safe() - iterate over a list safe against removal of list entry from the current point.
  * @pos: the &struct list head to use as a loop cursor.
  * @tmp: another list head to use as temporary storage.
  * @head: the head for your list.
  */
 #define bfdev_list_for_each_from_safe(pos, tmp, head) \
-    for ((tmp) = (pos)->next; \
-         !bfdev_list_check_head(head, pos); \
+    for ((tmp) = (pos)->next; !bfdev_list_check_head(head, pos); \
          (pos) = (tmp), (tmp) = (tmp)->next)
 
 /**
- * bfdev_list_for_each_reverse_from_safe - iterate backwards over list safe against removal from the current point.
+ * bfdev_list_for_each_reverse_from_safe() - iterate backwards over list safe against removal from the current point.
  * @pos: the &struct list head to use as a loop cursor.
  * @tmp: another list head to use as temporary storage.
  * @head: the head for your list.
  */
 #define bfdev_list_for_each_reverse_from_safe(pos, tmp, head) \
-    for ((tmp) = pos->prev; \
-         !bfdev_list_check_head(head, pos); \
+    for ((tmp) = pos->prev; !bfdev_list_check_head(head, pos); \
          (pos) = (tmp), (tmp) = (tmp)->prev)
 
 /**
- * bfdev_list_for_each_continue_safe - continue list iteration safe against removal.
+ * bfdev_list_for_each_continue_safe() - continue list iteration safe against removal.
  * @pos: the &struct list head to use as a loop cursor.
  * @tmp: another list head to use as temporary storage.
  * @head: the head for your list.
@@ -553,7 +538,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
          (pos) = (tmp), (tmp) = (tmp)->next)
 
 /**
- * bfdev_list_for_each_reverse_continue_safe - continue backwards over list iteration safe against removal.
+ * bfdev_list_for_each_reverse_continue_safe() - continue backwards over list iteration safe against removal.
  * @pos: the &struct list head to use as a loop cursor.
  * @tmp: another list head to use as temporary storage.
  * @head: the head for your list.
@@ -564,31 +549,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
          (pos) = (tmp), (tmp) = (tmp)->prev)
 
 /**
- * bfdev_list_for_each_continue_check_safe - check head and continue list iteration safe against removal.
- * @pos: the &struct list head to use as a loop cursor.
- * @tmp: another list head to use as temporary storage.
- * @head: the head for your list.
- */
-#define bfdev_list_for_each_continue_check_safe(pos, tmp, head) \
-    for ((void)(!bfdev_list_check_head(head, pos) && \
-         ((pos) = (pos)->next, (tmp) = (pos)->next)); \
-         !bfdev_list_check_head(head, pos); \
-         (pos) = (tmp), (tmp) = (tmp)->next)
-
-/**
- * bfdev_list_for_each_reverse_continue_check_safe - check head and continue backwards over list iteration safe against removal.
- * @pos: the &struct list head to use as a loop cursor.
- * @tmp: another list head to use as temporary storage.
- * @head: the head for your list.
- */
-#define bfdev_list_for_each_reverse_continue_check_safe(pos, tmp, head) \
-    for ((void)(!bfdev_list_check_head(head, pos) && \
-         ((pos) = pos->prev, (tmp) = pos->prev)); \
-         !bfdev_list_check_head(head, pos); \
-         (pos) = (tmp), (tmp) = (tmp)->prev)
-
-/**
- * bfdev_list_for_each_entry - iterate over list of given type.
+ * bfdev_list_for_each_entry() - iterate over list of given type.
  * @pos: the type * to use as a loop cursor.
  * @head: the head for your list.
  * @member: the name of the list head within the struct.
@@ -599,7 +560,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
          (pos) = bfdev_list_next_entry(pos, member))
 
 /**
- * bfdev_list_for_each_entry_reverse - iterate backwards over list of given type.
+ * bfdev_list_for_each_entry_reverse() - iterate backwards over list of given type.
  * @pos: the type * to use as a loop cursor.
  * @head: the head for your list.
  * @member: the name of the list head within the struct.
@@ -610,7 +571,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
          (pos) = bfdev_list_prev_entry(pos, member))
 
 /**
- * bfdev_list_for_each_entry_from - iterate over list of given type from the current point.
+ * bfdev_list_for_each_entry_from() - iterate over list of given type from the current point.
  * @pos: the type * to use as a loop cursor.
  * @head: the head for your list.
  * @member: the name of the list head within the struct.
@@ -620,7 +581,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
          (pos) = bfdev_list_next_entry(pos, member))
 
 /**
- * bfdev_list_for_each_entry_reverse_from - iterate backwards over list of given type from the current point.
+ * bfdev_list_for_each_entry_reverse_from() - iterate backwards over list of given type from the current point.
  * @pos: the type * to use as a loop cursor.
  * @head: the head for your list.
  * @member: the name of the list head within the struct.
@@ -630,7 +591,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
          (pos) = bfdev_list_prev_entry(pos, member))
 
 /**
- * bfdev_list_for_each_entry_continue - continue iteration over list of given type.
+ * bfdev_list_for_each_entry_continue() - continue iteration over list of given type.
  * @pos: the type * to use as a loop cursor.
  * @head: the head for your list.
  * @member: the name of the list head within the struct.
@@ -641,7 +602,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
          (pos) = bfdev_list_next_entry(pos, member))
 
 /**
- * bfdev_list_for_each_entry_reverse_continue - iterate backwards from the given point.
+ * bfdev_list_for_each_entry_reverse_continue() - iterate backwards from the given point.
  * @pos: the type * to use as a loop cursor.
  * @head: the head for your list.
  * @member: the name of the list head within the struct.
@@ -652,31 +613,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
          (pos) = bfdev_list_prev_entry(pos, member))
 
 /**
- * bfdev_list_for_each_entry_continue_check - check head and continue iteration over list of given type.
- * @pos: the type * to use as a loop cursor.
- * @head: the head for your list.
- * @member: the name of the list head within the struct.
- */
-#define bfdev_list_for_each_entry_continue_check(pos, head, member) \
-    for ((void)(!bfdev_list_entry_check_head(pos, head, member) && \
-         ((pos) = bfdev_list_next_entry(pos, member))); \
-         !bfdev_list_entry_check_head(pos, head, member); \
-         (pos) = bfdev_list_next_entry(pos, member))
-
-/**
- * bfdev_list_for_each_entry_reverse_continue_check - check head and iterate backwards from the given point.
- * @pos: the type * to use as a loop cursor.
- * @head: the head for your list.
- * @member: the name of the list head within the struct.
- */
-#define bfdev_list_for_each_entry_reverse_continue_check(pos, head, member) \
-    for ((void)(!bfdev_list_entry_check_head(pos, head, member) && \
-         ((pos) = bfdev_list_prev_entry(pos, member))); \
-         !bfdev_list_entry_check_head(pos, head, member); \
-         (pos) = bfdev_list_prev_entry(pos, member))
-
-/**
- * bfdev_list_for_each_entry_safe - iterate over list of given type safe against removal of list entry.
+ * bfdev_list_for_each_entry_safe() - iterate over list of given type safe against removal of list entry.
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
  * @head: the head for your list.
@@ -689,7 +626,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
          (pos) = (tmp), (tmp) = bfdev_list_next_entry(tmp, member))
 
 /**
- * bfdev_list_for_each_entry_reverse_safe - iterate backwards over list safe against removal.
+ * bfdev_list_for_each_entry_reverse_safe() - iterate backwards over list safe against removal.
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
  * @head: the head for your list.
@@ -702,7 +639,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
          (pos) = (tmp), (tmp) = bfdev_list_prev_entry(tmp, member))
 
 /**
- * bfdev_list_for_each_entry_from_safe - iterate over list from current point safe against removal.
+ * bfdev_list_for_each_entry_from_safe() - iterate over list from current point safe against removal.
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
  * @head: the head for your list.
@@ -714,7 +651,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
          (pos) = (tmp), (tmp) = bfdev_list_next_entry(tmp, member))
 
 /**
- * bfdev_list_for_each_entry_reverse_from_safe - iterate backwards over list from current point safe against removal.
+ * bfdev_list_for_each_entry_reverse_from_safe() - iterate backwards over list from current point safe against removal.
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
  * @head: the head for your list.
@@ -726,7 +663,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
          (pos) = (tmp), (tmp) = bfdev_list_prev_entry(tmp, member))
 
 /**
- * bfdev_list_for_each_entry_continue_safe - continue list iteration safe against removal.
+ * bfdev_list_for_each_entry_continue_safe() - continue list iteration safe against removal.
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
  * @head: the head for your list.
@@ -739,7 +676,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
          (pos) = (tmp), (tmp) = bfdev_list_next_entry(tmp, member))
 
 /**
- * bfdev_list_for_each_entry_reverse_continue_safe - continue backwards over list iteration safe against removal.
+ * bfdev_list_for_each_entry_reverse_continue_safe() - continue backwards over list iteration safe against removal.
  * @pos: the type * to use as a loop cursor.
  * @tmp: another type * to use as temporary storage.
  * @head: the head for your list.
@@ -748,34 +685,6 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
 #define bfdev_list_for_each_entry_reverse_continue_safe(pos, tmp, head, member) \
     for ((pos) = bfdev_list_prev_entry(pos, member), \
          (tmp) = bfdev_list_prev_entry(pos, member); \
-         !bfdev_list_entry_check_head(pos, head, member); \
-         (pos) = (tmp), (tmp) = bfdev_list_prev_entry(tmp, member))
-
-/**
- * bfdev_list_for_each_entry_continue_check_safe - check head and continue list iteration safe against removal.
- * @pos: the type * to use as a loop cursor.
- * @tmp: another type * to use as temporary storage.
- * @head: the head for your list.
- * @member: the name of the list head within the struct.
- */
-#define bfdev_list_for_each_entry_continue_check_safe(pos, tmp, head, member) \
-    for ((void)(!bfdev_list_entry_check_head(pos, head, member) && \
-         ((pos) = bfdev_list_next_entry(pos, member), \
-         (tmp) = bfdev_list_next_entry(pos, member))); \
-         !bfdev_list_entry_check_head(pos, head, member); \
-         (pos) = (tmp), (tmp) = bfdev_list_next_entry(tmp, member))
-
-/**
- * bfdev_list_for_each_entry_reverse_continue_check_safe - check head and continue backwards over list iteration safe against removal.
- * @pos: the type * to use as a loop cursor.
- * @tmp: another type * to use as temporary storage.
- * @head: the head for your list.
- * @member: the name of the list head within the struct.
- */
-#define bfdev_list_for_each_entry_reverse_continue_check_safe(pos, tmp, head, member) \
-    for ((void)(!bfdev_list_entry_check_head(pos, head, member) && \
-         ((pos) = bfdev_list_prev_entry(pos, member), \
-         (tmp) = bfdev_list_prev_entry(pos, member))); \
          !bfdev_list_entry_check_head(pos, head, member); \
          (pos) = (tmp), (tmp) = bfdev_list_prev_entry(tmp, member))
 

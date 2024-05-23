@@ -99,16 +99,19 @@ struct bfdev_cache_algo {
     void (*destroy)(bfdev_cache_head_t *head);
 };
 
-BFDEV_BITFLAGS_STRUCT(bfdev_cache,
+BFDEV_BITFLAGS_STRUCT(
+    bfdev_cache,
     bfdev_cache_head_t, flags
 );
 
-BFDEV_BITFLAGS_STRUCT_FLAG(bfdev_cache,
+BFDEV_BITFLAGS_STRUCT_FLAG(
+    bfdev_cache,
     bfdev_cache_head_t, flags,
     dirty, __BFDEV_CACHE_DIRTY
 );
 
-BFDEV_BITFLAGS_STRUCT_FLAG(bfdev_cache,
+BFDEV_BITFLAGS_STRUCT_FLAG(
+    bfdev_cache,
     bfdev_cache_head_t, flags,
     starving, __BFDEV_CACHE_STARVING
 );
@@ -164,7 +167,7 @@ bfdev_cache_cumulative(bfdev_cache_head_t *head, unsigned long tag)
 extern int
 bfdev_cache_register(bfdev_cache_algo_t *algo);
 
-extern void
+extern int
 bfdev_cache_unregister(bfdev_cache_algo_t *algo);
 
 BFDEV_END_DECLS

@@ -11,8 +11,9 @@ static unsigned int
 linear_next(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss,
             unsigned int consumed, const void **dest)
 {
-    bfdev_ts_linear_t *linear = tss->pdata;
+    bfdev_ts_linear_t *linear;
 
+    linear = tss->pdata;
     if (bfdev_likely(consumed < linear->len)) {
         *dest = linear->data + consumed;
         return linear->len - consumed;
@@ -22,25 +23,18 @@ linear_next(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss,
 }
 
 export unsigned int
-bfdev_textsearch_linear_find(bfdev_ts_context_t *tsc,
-                             bfdev_ts_linear_t *linear,
-                             const void *data, unsigned int len)
+bfdev_textsearch_linear(bfdev_ts_context_t *tsc, bfdev_ts_linear_t *linear,
+                        const void *data, unsigned int len)
 {
-    bfdev_ts_algorithm_t *algo = tsc->algo;
+    bfdev_ts_algorithm_t *algo;
+
+    algo = tsc->algo;
+    tsc->next_block = linear_next;
 
     linear->data = data;
     linear->len = len;
     linear->tss.offset = 0;
     linear->tss.pdata = linear;
-    tsc->next_block = linear_next;
 
-    return algo->find(tsc, &linear->tss);
-}
-
-export unsigned int
-bfdev_textsearch_linear_next(bfdev_ts_context_t *tsc,
-                             bfdev_ts_linear_t *linear)
-{
-    bfdev_ts_algorithm_t *algo = tsc->algo;
     return algo->find(tsc, &linear->tss);
 }

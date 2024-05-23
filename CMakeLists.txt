@@ -5,7 +5,7 @@
 #
 
 cmake_minimum_required(VERSION 3.12)
-project(bfdev VERSION 1.0.3 LANGUAGES C)
+project(bfdev VERSION 1.0.4 LANGUAGES C)
 
 include(GNUInstallDirs)
 include(CheckIncludeFiles)
@@ -32,7 +32,6 @@ set(BFDEV_CONFIGURE ${BFDEV_GENERATED_PATH}/bfdev-config.cmake)
 
 include(scripts/hostrule.cmake)
 include(scripts/packed-header.cmake)
-include(scripts/packed-source.cmake)
 include(scripts/commit.cmake)
 
 commit_hash(BFDEV_COMMITID)
@@ -54,6 +53,7 @@ option(BFDEV_DEBUG_ILIST "Dynamic debug ilist" ON)
 option(BFDEV_DEBUG_RBTREE "Dynamic debug rbtree" ON)
 option(BFDEV_DEBUG_HEAP "Dynamic debug heap" ON)
 option(BFDEV_DEBUG_REFCNT "Dynamic debug refcnt" ON)
+option(BFDEV_DEBUG_MEMALLOC "Dynamic debug memalloc" ON)
 option(BFDEV_CRC_EXTEND "CRC loop unfolding optimize" ON)
 
 if(BFDEV_DEVEL)
@@ -72,13 +72,6 @@ packed_header(
     _BFDEV_H_
     ${BFDEV_GENERATED_PATH}/bfdev.h
     ${BFDEV_HEADER_PATH}/bfdev
-)
-
-packed_source(
-    ${PROJECT_BINARY_DIR}/bfdev.c
-    "${BFDEV_LIBRARY_SOURCE}"
-    "#undef MODULE_NAME\n"
-    "#undef bfdev_log_fmt\n"
 )
 
 macro(bfdev_dependencies target)

@@ -439,7 +439,6 @@ bfdev_heap_post_next(const bfdev_heap_node_t *node);
          pos && ({ tmp = bfdev_heap_post_next_entry(pos, member); \
          1; }); pos = tmp)
 
-
 BFDEV_END_DECLS
 
 #endif /* _BFDEV_HEAP_H_ */

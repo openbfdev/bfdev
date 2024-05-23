@@ -41,7 +41,7 @@ struct bfdev_respool_node {
     (bfdev_respool_t) BFDEV_RESPOOL_STATIC(head)
 
 #define BFDEV_DEFINE_RESPOOL(name) \
-    bfdev_respool_t head = BFDEV_RESPOOL_INIT(name)
+    bfdev_respool_t name = BFDEV_RESPOOL_INIT(&name)
 
 static inline void
 bfdev_respool_init(bfdev_respool_t *pool)
@@ -59,7 +59,7 @@ static inline void
 bfdev_respool_insert(bfdev_respool_t *pool,
                      bfdev_respool_node_t *node)
 {
-    bfdev_list_add_prev(&pool->nodes, &node->list);
+    bfdev_list_add(&pool->nodes, &node->list);
 }
 
 static inline void
