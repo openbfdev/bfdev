@@ -7,22 +7,30 @@
 #include <bfdev/allocator.h>
 #include <export.h>
 
-export bfdev_alloc_ops_t
+export bfdev_alloc_t
 bfdev_alloc_default;
+
+export bfdev_alloc_ops_t
+bfdev_alloc_default_ops;
 
 #define __INSIDE_ALLOCATOR__
 #include <port/allocator.h>
 
 static inline const bfdev_alloc_ops_t *
-alloc_check(const bfdev_alloc_t *alloc, void **pdata)
+alloc_ops(const bfdev_alloc_t *alloc, void **pdata)
 {
-    if (!alloc) {
-        *pdata = NULL;
-        return NULL;
-    }
+    const bfdev_alloc_ops_t *ops;
 
+    if (!alloc)
+        alloc = &bfdev_alloc_default;
     *pdata = alloc->pdata;
-    return alloc->ops;
+
+    if (alloc->ops)
+        ops = alloc->ops;
+    else
+        ops = &bfdev_alloc_default_ops;
+
+    return ops;
 }
 
 export __bfdev_malloc void *
@@ -34,8 +42,8 @@ bfdev_malloc(const bfdev_alloc_t *alloc, size_t size)
     if (bfdev_unlikely(!size))
         return NULL;
 
-    ops = alloc_check(alloc, &pdata);
-    if (!ops || !ops->alloc)
+    ops = alloc_ops(alloc, &pdata);
+    if (!ops->alloc)
         retval = generic_alloc(size, pdata);
     else
         retval = ops->alloc(size, pdata);
@@ -52,8 +60,8 @@ bfdev_zalloc(const bfdev_alloc_t *alloc, size_t size)
     if (bfdev_unlikely(!size))
         return NULL;
 
-    ops = alloc_check(alloc, &pdata);
-    if (!ops || !ops->zalloc)
+    ops = alloc_ops(alloc, &pdata);
+    if (!ops->zalloc)
         retval = generic_zalloc(size, pdata);
     else
         retval = ops->zalloc(size, pdata);
@@ -75,8 +83,8 @@ bfdev_realloc(const bfdev_alloc_t *alloc, const void *block, size_t resize)
         return NULL;
     }
 
-    ops = alloc_check(alloc, &pdata);
-    if (!ops || !ops->realloc)
+    ops = alloc_ops(alloc, &pdata);
+    if (!ops->realloc)
         retval = generic_realloc((void *)block, resize, pdata);
     else
         retval = ops->realloc((void *)block, resize, pdata);
@@ -93,8 +101,8 @@ bfdev_free(const bfdev_alloc_t *alloc, const void *block)
     if (!block)
         return;
 
-    ops = alloc_check(alloc, &pdata);
-    if (!ops || !ops->free)
+    ops = alloc_ops(alloc, &pdata);
+    if (!ops->free)
         generic_free((void *)block, pdata);
     else
         ops->free((void *)block, pdata);

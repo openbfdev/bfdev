@@ -28,34 +28,51 @@ struct bfdev_alloc_ops {
     bfdev_free_t free;
 };
 
-#define BFDEV_ALLOC_OPS_STATIC(ALLOC, REALLOC, FREE) { \
-    .alloc = (ALLOC), .realloc = (REALLOC), .free = (FREE), \
+#define BFDEV_ALLOC_OPS_STATIC(ALLOC, ZALLOC, REALLOC, FREE) { \
+    .alloc = (ALLOC), .zalloc = (ZALLOC), \
+    .realloc = (REALLOC), .free = (FREE), \
 }
 
-#define BFDEV_ALLOC_OPS_INIT(alloc, realloc, free) \
-    (bfdev_alloc_ops_t) BFDEV_ALLOC_OPS_STATIC(alloc, realloc, free)
+#define BFDEV_ALLOC_OPS_INIT(alloc, zalloc, realloc, free) \
+    (bfdev_alloc_ops_t) BFDEV_ALLOC_OPS_STATIC(alloc, zalloc, realloc, free)
 
-#define BFDEV_DEFINE_ALLOC_OPS(name, alloc, realloc, free) \
-    bfdev_alloc_ops_t name = BFDEV_ALLOC_OPS_INIT(alloc, realloc, free)
+#define BFDEV_DEFINE_ALLOC_OPS(name, alloc, zalloc, realloc, free) \
+    bfdev_alloc_ops_t name = BFDEV_ALLOC_OPS_INIT(alloc, zalloc, realloc, free)
 
-#define BFDEV_ALLOC_STATIC(ALLOC, REALLOC, FREE, PDATA) { \
-    .ops = &BFDEV_ALLOC_OPS_INIT(ALLOC, REALLOC, FREE), .pdata = (PDATA), \
+#define BFDEV_ALLOC_STATIC(OPS, PDATA) { \
+    .ops = (OPS), .pdata = (PDATA), \
 }
 
-#define BFDEV_ALLOC_INIT(alloc, realloc, free, pdata) \
-    (bfdev_alloc_t) BFDEV_ALLOC_STATIC(alloc, realloc, free, pdata)
+#define BFDEV_ALLOC_INIT(ops, pdata) \
+    (bfdev_alloc_t) BFDEV_ALLOC_STATIC(ops, pdata)
 
-#define BFDEV_DEFINE_ALLOC(name, alloc, realloc, free, pdata) \
-    bfdev_alloc_t name = BFDEV_ALLOC_INIT(alloc, realloc, free, pdata)
+#define BFDEV_DEFINE_ALLOC(name, ops, pdata) \
+    bfdev_alloc_t name = BFDEV_ALLOC_INIT(ops, pdata)
 
-extern bfdev_alloc_ops_t
+extern bfdev_alloc_t
 bfdev_alloc_default;
 
+extern bfdev_alloc_ops_t
+bfdev_alloc_default_ops;
+
+/**
+ * bfdev_alloc_init() - initializes the allocator structure.
+ * @alloc: allocator which will be initialized.
+ * @ops: operations for the allocator.
+ */
 static inline void
-bfdev_alloc_init(bfdev_alloc_t *allocator, bfdev_malloc_t alloc,
-                 bfdev_realloc_t realloc, bfdev_free_t free, void *pdata)
+bfdev_alloc_init(bfdev_alloc_t *alloc, const bfdev_alloc_ops_t *ops,
+                 void *pdata)
 {
-    *allocator = BFDEV_ALLOC_INIT(alloc, realloc, free, pdata);
+    *alloc = BFDEV_ALLOC_INIT(ops, pdata);
+}
+
+static inline void
+bfdev_alloc_ops_init(bfdev_alloc_ops_t *ops,
+                     bfdev_malloc_t alloc, bfdev_malloc_t zalloc,
+                     bfdev_realloc_t realloc, bfdev_free_t free)
+{
+    *ops = BFDEV_ALLOC_OPS_INIT(alloc, zalloc, realloc, free);
 }
 
 extern __bfdev_malloc void *
