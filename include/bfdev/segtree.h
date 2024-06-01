@@ -44,16 +44,16 @@ extern void
 bfdev_segtree_delete(bfdev_rb_root_cached_t *root, bfdev_segtree_node_t *node);
 
 extern bfdev_segtree_node_t *
-bfdev_segtree_search(bfdev_segtree_node_t *node, unsigned long start,
-                     unsigned long end);
+bfdev_segtree_search(bfdev_segtree_node_t *node,
+                     unsigned long start, unsigned long end);
 
 extern bfdev_segtree_node_t *
-bfdev_segtree_first(bfdev_rb_root_cached_t *root, unsigned long start,
-                    unsigned long end);
+bfdev_segtree_first(bfdev_rb_root_cached_t *root,
+                    unsigned long start, unsigned long end);
 
 extern bfdev_segtree_node_t *
-bfdev_segtree_next(bfdev_segtree_node_t *node, unsigned long start,
-                   unsigned long end);
+bfdev_segtree_next(bfdev_segtree_node_t *node,
+                   unsigned long start, unsigned long end);
 
 /**
  * bfdev_segtree_first_entry - get the first element from a segtree.

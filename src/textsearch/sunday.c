@@ -119,7 +119,9 @@ sunday_prepare(const bfdev_alloc_t *alloc, const void *pattern,
 static void
 sunday_destroy(bfdev_ts_context_t *tsc)
 {
-    struct sunday_context *sctx = ts_to_sunday(tsc);
+    struct sunday_context *sctx;
+
+    sctx = ts_to_sunday(tsc);
     bfdev_free(tsc->alloc, sctx);
 }
 

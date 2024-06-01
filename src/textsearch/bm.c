@@ -153,7 +153,9 @@ bm_prepare(const bfdev_alloc_t *alloc, const void *pattern,
 static void
 bm_destroy(bfdev_ts_context_t *tsc)
 {
-    struct bm_context *bctx = ts_to_bm(tsc);
+    struct bm_context *bctx;
+
+    bctx = ts_to_bm(tsc);
     bfdev_free(tsc->alloc, bctx);
 }
 

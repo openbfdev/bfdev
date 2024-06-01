@@ -118,7 +118,9 @@ kmp_prepare(const bfdev_alloc_t *alloc, const void *pattern,
 static void
 kmp_destroy(bfdev_ts_context_t *tsc)
 {
-    struct kmp_context *kctx = ts_to_kmp(tsc);
+    struct kmp_context *kctx;
+
+    kctx = ts_to_kmp(tsc);
     bfdev_free(tsc->alloc, kctx);
 }
 
