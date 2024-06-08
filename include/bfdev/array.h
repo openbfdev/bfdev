@@ -181,4 +181,4 @@ bfdev_array_release(bfdev_array_t *array);
 
 BFDEV_END_DECLS
 
-#endif /*_BFDEV_ARRAY_H_*/
+#endif /* _BFDEV_ARRAY_H_ */
