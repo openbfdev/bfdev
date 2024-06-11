@@ -20,6 +20,8 @@ function(packed_header prefix name genfile source)
 
     foreach(srcpath ${srclist})
         string(REGEX REPLACE ".+/(.+)" "\\1" filename ${srcpath})
+        message(STATUS "Packing header: " ${prefix} ${filename})
+
         file(APPEND ${genfile}
             "#include <" ${prefix} ${filename} ">\n"
         )

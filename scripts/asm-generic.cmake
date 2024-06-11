@@ -13,7 +13,9 @@ function(asm_generic prefix generated compare source)
         set(genfile ${generated}/${filename})
 
         file(REMOVE ${genfile})
-        if(${retval})
+        if(${retval} LESS 0)
+            message(STATUS "Generating header: " ${genfile})
+
             file(WRITE ${genfile}
                 "/*\n"
                 " * Automatically generated file; DO NOT EDIT.\n"
