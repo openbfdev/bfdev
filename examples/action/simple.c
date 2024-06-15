@@ -17,7 +17,8 @@ test_action(void *pdata)
     return 0;
 }
 
-int main(int argc, char **argv)
+int
+main(int argc, char **argv)
 {
     BFDEV_DEFINE_ACTION(action, test_action, NULL);
     int retval;

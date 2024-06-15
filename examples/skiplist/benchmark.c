@@ -43,7 +43,8 @@ test_find(const void *node, void *pdata)
     return valuea > valueb ? 1 : -1;
 }
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     bfdev_skip_head_t *head;
     bfdev_skip_node_t *node;

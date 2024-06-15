@@ -30,7 +30,8 @@ test_gc_lasting(void)
     bfdev_clean_return(block);
 }
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     void *block;
 

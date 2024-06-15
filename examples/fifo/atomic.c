@@ -36,7 +36,8 @@ fifo_production(void *unused)
     return NULL;
 }
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     pthread_t thread;
     char ch;

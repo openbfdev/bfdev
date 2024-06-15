@@ -65,7 +65,8 @@ cache_test(const char *name)
     return 0;
 }
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     int retval;
 

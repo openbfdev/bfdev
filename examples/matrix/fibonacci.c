@@ -55,7 +55,8 @@ power(bfdev_matrix_t *result, const bfdev_matrix_t *var,
     return 0;
 }
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     BFDEV_DEFINE_MATRIX(fibonacci, NULL);
     BFDEV_DEFINE_MATRIX(result, NULL);

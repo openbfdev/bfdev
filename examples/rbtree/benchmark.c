@@ -89,7 +89,8 @@ demo_cmp(const bfdev_rb_node_t *node1,
     return test1->data < test2->data ? -1 : 1;
 }
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     struct bench_node *node, *tmp;
     unsigned int count;

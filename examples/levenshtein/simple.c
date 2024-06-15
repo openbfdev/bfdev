@@ -7,7 +7,8 @@
 #include <stdlib.h>
 #include <bfdev/levenshtein.h>
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     unsigned int diff;
 

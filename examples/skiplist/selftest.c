@@ -88,7 +88,8 @@ skiplist_testing(struct test_node *test)
     return 0;
 }
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     struct test_node *test;
     int retval;

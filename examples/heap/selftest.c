@@ -219,7 +219,8 @@ bfdev_heap_testing(struct test_pdata *hdata)
     return 0;
 }
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     struct test_pdata *rdata;
     unsigned int count;

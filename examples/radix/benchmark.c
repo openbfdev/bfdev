@@ -15,7 +15,8 @@
 #define TEST_LOOP 1000000
 BFDEV_RADIX_ROOT(bench_root, unsigned int, NULL);
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     unsigned int count, *data;
     int retval;

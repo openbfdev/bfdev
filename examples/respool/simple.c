@@ -31,7 +31,8 @@ cleanup(bfdev_respool_node_t *node, void *pdata)
     free(test);
 }
 
-int main(int argc, char *argv[])
+int
+main(int argc, char *argv[])
 {
     BFDEV_DEFINE_RESPOOL(respool);
     struct test_struct *test;
