@@ -19,4 +19,5 @@ set(BFDEV_SOURCE
     ${CMAKE_CURRENT_LIST_DIR}/crc-itut.c
     ${CMAKE_CURRENT_LIST_DIR}/crc-rocksoft.c
     ${CMAKE_CURRENT_LIST_DIR}/crc-t10dif.c
+    ${CMAKE_CURRENT_LIST_DIR}/sha1.c
 )
