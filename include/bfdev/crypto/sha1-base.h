@@ -34,7 +34,7 @@ bfdev_sha1_base_update(bfdev_sha1_ctx_t *ctx, const void *data,
             func(ctx, ctx->buffer, 1);
 
             data += length;
-            size -= BFDEV_BYTES_PER_U32;
+            size -= length;
         }
 
         blocks = size / BFDEV_SHA1_BLOCK_SIZE;
@@ -82,7 +82,7 @@ bfdev_sha1_base_finish(bfdev_sha1_ctx_t *ctx, void *buff)
     unsigned int count;
 
     digest = (bfdev_be32 *)buff;
-    for (count = 0; count < BFDEV_SHA1_DIGEST_SIZE / BFDEV_BYTES_PER_U32; ++count)
+    for (count = 0; count < BFDEV_SHA1_DIGEST_WORDS; ++count)
         bfdev_unaligned_set_be32(digest++, ctx->state[count]);
 }
 
