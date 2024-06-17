@@ -11,7 +11,8 @@
 #define TEST_LOOP 10000
 #define PRINT_RESULT 1
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     unsigned int count;
     char *result;

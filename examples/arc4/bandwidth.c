@@ -18,7 +18,8 @@
 #define TEST_LOOP 3
 #define TEST_KEY 64
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     bfdev_arc4_ctx_t sctx, dctx;
     unsigned int count, loop;

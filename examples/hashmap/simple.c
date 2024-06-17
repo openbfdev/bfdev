@@ -56,7 +56,8 @@ test_ops = {
     .find = hashmap_find,
 };
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     struct test_node *nodes, *find;
     bfdev_hlist_node_t *hnode;

@@ -14,7 +14,8 @@
 
 BFDEV_DEFINE_PRANDOM(prandom);
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     unsigned int count;
     uint64_t seed;

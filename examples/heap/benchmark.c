@@ -68,7 +68,8 @@ bench_cmp(const bfdev_heap_node_t *hpa,
     return node1->data < node2->data ? -1 : 1;
 }
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     struct bench_node *bnode;
     unsigned int count;

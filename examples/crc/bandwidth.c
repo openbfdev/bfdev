@@ -29,7 +29,8 @@ for (count = 0; count < TEST_LOOP; ++count) {   \
     );                                          \
 }
 
-int main(int argc, char const *argv[])
+int
+main(int argc, char const *argv[])
 {
     unsigned int count, loop;
     uint8_t *buff;

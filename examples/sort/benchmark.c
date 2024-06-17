@@ -43,7 +43,8 @@ test_cmp(const void *node1, const void *node2, void *pdata)
     return *test1 < *test2 ? -1 : 1;
 }
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     unsigned int count, loop;
     int *buffer;

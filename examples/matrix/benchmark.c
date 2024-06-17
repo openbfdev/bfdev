@@ -26,7 +26,8 @@ for (count = 0; count < TEST_LOOP; ++count) {   \
     );                                          \
 }
 
-int main(int argc, char const *argv[])
+int
+main(int argc, char const *argv[])
 {
     BFDEV_MATRIX_TYPE *buffer;
     unsigned int count, loop;

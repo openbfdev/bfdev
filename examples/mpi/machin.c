@@ -17,7 +17,8 @@
 #define TEST_LOOP (TEST_LEN / 1.39793 + 1)
 #define PRINT_RESULT 0
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     bfdev_mpi_t vw, vs, vv, vq;
     unsigned int k;

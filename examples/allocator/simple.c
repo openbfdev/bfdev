@@ -36,7 +36,8 @@ BFDEV_DEFINE_ALLOC_OPS(
     test_realloc, test_free
 );
 
-int main(int argc, char const *argv[])
+int
+main(int argc, char const *argv[])
 {
     BFDEV_DEFINE_ALLOC(test, &test_ops, NULL);
     int *block;

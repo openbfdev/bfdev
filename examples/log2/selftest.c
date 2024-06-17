@@ -7,7 +7,8 @@
 #include <stdint.h>
 #include <bfdev/log2.h>
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     unsigned int count, result;
 

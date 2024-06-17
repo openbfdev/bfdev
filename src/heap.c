@@ -66,10 +66,12 @@ bfdev_heap_erase(bfdev_heap_root_t *root, bfdev_heap_node_t *node,
     bfdev_heap_node_t *child1, *child2, *successor;
 
     successor = node->parent;
-    if (successor && cmp(node, successor, pdata) < 0)
+    if (successor && cmp(node, successor, pdata) < 0) {
         bfdev_heap_fixup(root, node, cmp, pdata);
+        return;
+    }
 
-    else for (;;) {
+    for (;;) {
         child1 = node->left;
         child2 = node->right;
 

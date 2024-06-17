@@ -39,7 +39,8 @@ bench_ops = {
     .find = bfdev_btree_key_find,
 };
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     struct bench_node *node;
     unsigned int count;

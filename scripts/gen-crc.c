@@ -97,7 +97,8 @@ table_dump(unsigned int rows, const char *trans,
     }
 }
 
-int main(int argc, char *argv[])
+int
+main(int argc, char *argv[])
 {
     const char *name, *table, *trans;
     unsigned int rows;

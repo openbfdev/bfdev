@@ -59,7 +59,8 @@ test_ops = {
     .find = test_find,
 };
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     struct test_node *nodes;
     bfdev_hlist_node_t *hnode;

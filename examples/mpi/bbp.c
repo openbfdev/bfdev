@@ -25,7 +25,8 @@ factor2[] = {
     1, 4, 5, 6,
 };
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     bfdev_mpi_t vq, vv[4];
     unsigned int k, i, v;

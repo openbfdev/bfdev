@@ -176,7 +176,8 @@ BFDEV_DEFINE_FSM(test_fsm, NULL,
     &test_state[TEST_EXIT]
 );
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     int ch, retval;
 

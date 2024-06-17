@@ -18,7 +18,8 @@ struct test_node {
     unsigned int value;
 };
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     struct test_node *nodes, *walk;
     unsigned int count, value;
