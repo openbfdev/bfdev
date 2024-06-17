@@ -69,6 +69,18 @@ struct bfdev_fsm_state {
     const bfdev_fsm_state_t *entry;
 };
 
+/**
+ * struct bfdev_fsm - State machine.
+ * @state: State history table, including current and previous states.
+ * @error: Pointer to a state that will be entered whenever an error occurs
+ *         in the state machine.
+ * @stack:
+ * @count:
+ *
+ * The previous state is stored for convenience in case the user needs to
+ * keep track of previous states.
+ *
+ */
 struct bfdev_fsm {
     const bfdev_fsm_state_t *state[2];
     const bfdev_fsm_state_t *error;
