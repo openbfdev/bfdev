@@ -36,6 +36,15 @@ include(scripts/commit.cmake)
 
 commit_hash(BFDEV_COMMITID)
 commit_branch(BFDEV_BRANCH)
+string(TIMESTAMP BFDEV_BUILD_TIME "%A %B %d %H:%M:%S UTC %Y" UTC)
+
+string(APPEND BFDEV_RELEASE
+    "${PROJECT_NAME}-${BFDEV_NAME} "
+    "${BFDEV_VERSION}.${BFDEV_ARCH} "
+    "${BFDEV_COMMITID}-${BFDEV_BRANCH} "
+    "(${CMAKE_C_COMPILER_ID} ${CMAKE_C_COMPILER_VERSION} ${CMAKE_HOST_SYSTEM_NAME}) "
+    "${BFDEV_BUILD_TIME}"
+)
 
 option(BFDEV_DEVEL "Enable development mode" OFF)
 option(BFDEV_STRICT "Enable strict compilation" ON)
