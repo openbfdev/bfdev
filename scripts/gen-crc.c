@@ -7,17 +7,19 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <bfdev/stringify.h>
 
 #if !defined(GENCRC_NAME) || !defined(GENCRC_TYPE) || \
     !defined(GENCRC_BITS) || !defined(GENCRC_WIDE) || !defined(GENCRC_BELE)
 # error "Compilation parameters not defined"
 #endif
 
-#define NAME_STRING __bfdev_stringify(GENCRC_NAME)
-#define TYPE_STRING __bfdev_stringify(GENCRC_TYPE)
-#define BITS_STRING __bfdev_stringify(GENCRC_BITS)
-#define WIDE_STRING __bfdev_stringify(GENCRC_WIDE)
+#define ___stringify(x...) #x
+#define __stringify(x...) ___stringify(x)
+
+#define NAME_STRING __stringify(GENCRC_NAME)
+#define TYPE_STRING __stringify(GENCRC_TYPE)
+#define BITS_STRING __stringify(GENCRC_BITS)
+#define WIDE_STRING __stringify(GENCRC_WIDE)
 
 #define CRC_TABLE_BITS 8
 #define CRC_TABLE_SIZE (1U << CRC_TABLE_BITS)
@@ -142,7 +144,8 @@ main(int argc, char *argv[])
         " * byteorder = %s-endian\n"
         " */\n"
         "\n"
-        "static const " TYPE_STRING " %s[%d][%d] = {\n",
+        "static const " TYPE_STRING "\n"
+        "%s[%d][%d] = {\n",
         name, (unsigned long long)poly,
         GENCRC_BELE ? "little" : "big",
         table, rows, CRC_TABLE_SIZE

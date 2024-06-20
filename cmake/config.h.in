@@ -19,12 +19,10 @@ BFDEV_BEGIN_DECLS
 #define BFDEV_VERSION_TWEAK ${PROJECT_VERSION_TWEAK}
 #define BFDEV_EXTREVERSION ${BFDEV_EXTREVERSION}
 
-#define BFDEV_ARCH ${BFDEV_ARCH}
 #define BFDEV_NAME ${BFDEV_NAME}
+#define BFDEV_ARCH ${BFDEV_ARCH}
 #define BFDEV_VERSION ${BFDEV_VERSION}
-
-#define BFDEV_COMMITID ${BFDEV_COMMITID}
-#define BFDEV_BRANCH ${BFDEV_BRANCH}
+#define BFDEV_RELEASE "${BFDEV_RELEASE}"
 
 #cmakedefine BFDEV_DEBUG_LIST
 #cmakedefine BFDEV_DEBUG_SLIST
@@ -42,6 +40,18 @@ BFDEV_BEGIN_DECLS
      ((minor) == BFDEV_VERSION_MINOR &&             \
       (patch) <= BFDEV_VERSION_PATCH))              \
 )
+
+static inline const char *
+bfdev_version(void)
+{
+    return __bfdev_stringify(BFDEV_VERSION);
+}
+
+static inline const char *
+bfdev_release(void)
+{
+    return BFDEV_RELEASE;
+}
 
 static inline int
 bfdev_version_major(void)
@@ -63,4 +73,4 @@ bfdev_version_patch(void)
 
 BFDEV_END_DECLS
 
-#endif /*_BFDEV_CONFIG_H_*/
+#endif /* _BFDEV_CONFIG_H_ */
