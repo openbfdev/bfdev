@@ -35,10 +35,7 @@ log_color_prefix(bfdev_log_t *log, bfdev_log_message_t *msg)
     if (!bfdev_log_test_color(log))
         return;
 
-    msg->length += bfdev_scnprintf(
-        msg->buff + msg->length, BFDEV_LOG_BUFF_SIZE - msg->length,
-        "\e[%dm", level_color[msg->level]
-    );
+    log_scnprintf(msg, "\e[%dm", level_color[msg->level]);
 }
 
 static void
@@ -47,8 +44,5 @@ log_color_suffix(bfdev_log_t *log, bfdev_log_message_t *msg)
     if (!bfdev_log_test_color(log))
         return;
 
-    msg->length += bfdev_scnprintf(
-        msg->buff + msg->length, BFDEV_LOG_BUFF_SIZE - msg->length,
-        "\e[0m"
-    );
+    log_scnprintf(msg, "\e[0m");
 }
