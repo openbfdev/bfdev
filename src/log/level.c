@@ -22,8 +22,5 @@ log_level(bfdev_log_t *log, bfdev_log_message_t *msg)
     if (!bfdev_log_test_level(log))
         return;
 
-    msg->length = bfdev_scnprintf(
-        msg->buff + msg->length, BFDEV_LOG_BUFF_SIZE - msg->length,
-        "[%s] ", level_name[msg->level]
-    );
+    log_scnprintf(msg, "[%s] ", level_name[msg->level]);
 }

@@ -12,14 +12,14 @@ bfdev_vscnprintf(char *buf, size_t size, const char *fmt, va_list args)
 {
     int len;
 
+    if (bfdev_unlikely(size == 0))
+        return 0;
+
     len = bfport_vsnprintf(buf, size, fmt, args);
     if (bfdev_likely(len < size))
         return len;
 
-    if (size != 0)
-        return size - 1;
-
-    return 0;
+    return size - 1;
 }
 
 export int
