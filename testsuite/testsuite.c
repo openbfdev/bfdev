@@ -21,7 +21,17 @@
 #define MESSAGE_FAIL "\e[0m[\e[31mFAIL\e[0m]"
 #define DEFAULT_LOOPS 3
 
-static BFDEV_LIST_HEAD(tests);
+static const struct option
+options[] = {
+    {"version", no_argument, 0, 'v'},
+    {"help", no_argument, 0, 'h'},
+    {"count", required_argument, 0, 'c'},
+    {"slient", required_argument, 0, 's'},
+    { }, /* NULL */
+};
+
+static
+BFDEV_LIST_HEAD(tests);
 
 #define list_to_testsuite(ptr) \
     bfdev_container_of(ptr, struct testsuite, list)
@@ -159,55 +169,79 @@ trigger_overall(unsigned int loops)
     return -BFDEV_ENOERR;
 }
 
-static void
+static __bfdev_noreturn void
 usage(void)
 {
     struct testsuite *walk;
     unsigned int align;
 
-    bfdev_log_print("usage: testsuite [option] [group[:name]] ...\n");
-    bfdev_log_print("\t-c  <count>  number of repetitions for each test\n");
-    bfdev_log_print("\t-d  do not print debugging information\n");
-    bfdev_log_print("\t-h  show this help\n\n");
+    bfdev_log_err("Usage: testsuite [option] [group[:name]] ...\n");
+    bfdev_log_err("License GPLv2+: GNU GPL version 2 or later.\n");
+    bfdev_log_err("\n");
+
+    bfdev_log_err("With no specified, run all testsuits.\n");
+    bfdev_log_err("  -v, --version      output version information and exit.\n");
+    bfdev_log_err("  -h, --help         display this help and exit.\n");
+    bfdev_log_err("\n");
+
+    bfdev_log_err("Mandatory arguments to long options are mandatory for short options too.\n");
+    bfdev_log_err("  -c, --count=NUM    number of repetitions for each test\n");
+    bfdev_log_err("  -s, --slient       do not print debugging information\n");
+    bfdev_log_err("\n");
 
     align = 0;
     bfdev_list_for_each_entry(walk, &tests, list)
         bfdev_max_adj(align, strlen(walk->name));
 
-    bfdev_log_print("Supported tests:\n");
+    bfdev_log_err("Supported testsuite and description:\n");
     bfdev_list_for_each_entry(walk, &tests, list)
-        bfdev_log_print("\t%-*s - %s\n", align + 1, walk->name, walk->desc);
+        bfdev_log_err("\t%-*s - %s\n", align + 1, walk->name, walk->desc);
+
+    exit(1);
+}
+
+static __bfdev_noreturn void
+version(void)
+{
+    bfdev_log_err("%s\n", bfdev_release());
+    exit(1);
 }
 
 int
 main(int argc, char *const argv[])
 {
     unsigned int loops, count;
+    int retval, optidx;
     char arg;
-    int retval;
 
     setbuf(stdout, NULL);
     setbuf(stderr, NULL);
     loops = DEFAULT_LOOPS;
 
     for (;;) {
-        arg = getopt(argc, argv, "c:dh");
+        arg = getopt_long(argc, argv, "c:svh", options, &optidx);
         if (arg == -1)
             break;
 
         switch (arg) {
             case 'c':
                 loops = atoi(optarg);
-                if (!loops)
-                    goto usage;
+                if (!loops) {
+                    bfdev_log_err("Invalid loop count: '%s'\n", optarg);
+                    usage();
+                }
                 break;
 
-            case 'd':
+            case 's':
                 bfdev_log_default.record_level = BFDEV_LEVEL_INFO;
                 break;
 
+            case 'v':
+                version();
+
             case 'h': default:
-                goto usage;
+                bfdev_log_err("Unknown option: %c\n", arg);
+                usage();
         }
     }
 
@@ -229,8 +263,4 @@ main(int argc, char *const argv[])
     }
 
     return -BFDEV_ENOERR;
-
-usage:
-    usage();
-    return -BFDEV_EINVAL;
 }
