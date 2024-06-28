@@ -3,13 +3,14 @@
  * Copyright(c) 2024 John Sanpe <sanpeqf@gmail.com>
  */
 
-#define MODULE_NAME "sha-bandwidth"
+#define MODULE_NAME "crypto-bandwidth"
 #define bfdev_log_fmt(fmt) MODULE_NAME ": " fmt
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <bfdev/sha1.h>
 #include <bfdev/sha2.h>
+#include <bfdev/md5.h>
 #include <bfdev/log.h>
 #include <bfdev/size.h>
 #include "../time.h"
@@ -71,6 +72,24 @@ sha256_test(void *buff)
     }
 }
 
+static void
+md5_test(void *buff)
+{
+    uint8_t digest[BFDEV_MD5_DIGEST_SIZE];
+    bfdev_md5_ctx_t md5;
+    unsigned int count, loop;
+
+    bfdev_md5_init(&md5);
+    for (count = 0; count < TEST_LOOP; ++count) {
+        EXAMPLE_TIME_LOOP(&loop, 1000,
+            bfdev_md5_update(&md5, buff, TEST_SIZE);
+            bfdev_md5_finish(&md5, digest);
+            0;
+        );
+        bfdev_log_info("md5 bandwidth %u: %uMiB/s\n", count, loop);
+    }
+}
+
 int
 main(int argc, char const *argv[])
 {
@@ -88,6 +107,7 @@ main(int argc, char const *argv[])
     sha1_test(buff);
     sha224_test(buff);
     sha256_test(buff);
+    md5_test(buff);
 
     free(buff);
     return 0;
