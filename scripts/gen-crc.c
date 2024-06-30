@@ -86,8 +86,8 @@ table_dump(unsigned int rows, const char *trans,
                 printf("\n\t\t");
 
             if (trans) {
-                printf("%s((" TYPE_STRING ")0x%" WIDE_STRING "."
-                       WIDE_STRING "llxULL), ", trans,
+                printf("(__bfdev_force " TYPE_STRING ")(%s((" TYPE_STRING ")0x%"
+                       WIDE_STRING "." WIDE_STRING "llxULL)), ", trans,
                        (unsigned long long)table[index][count]);
             } else {
                 printf("(" TYPE_STRING ")0x%" WIDE_STRING

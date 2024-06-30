@@ -19,7 +19,7 @@ BFDEV_BEGIN_DECLS
 #ifndef bfport_rand
 # define bfport_rand bfport_rand
 static __bfdev_always_inline int
-bfport_rand()
+bfport_rand(void)
 {
     return rand();
 }
