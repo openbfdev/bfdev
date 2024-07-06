@@ -25,6 +25,7 @@ set(BFDEV_SOURCE
     ${CMAKE_CURRENT_LIST_DIR}/hashmap.c
     ${CMAKE_CURRENT_LIST_DIR}/heap.c
     ${CMAKE_CURRENT_LIST_DIR}/ilist.c
+    ${CMAKE_CURRENT_LIST_DIR}/jhash.c
     ${CMAKE_CURRENT_LIST_DIR}/levenshtein.c
     ${CMAKE_CURRENT_LIST_DIR}/list-sort.c
     ${CMAKE_CURRENT_LIST_DIR}/llist.c
