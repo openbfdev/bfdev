@@ -32,7 +32,7 @@ level_color[] = {
 static void
 log_color_prefix(bfdev_log_t *log, bfdev_log_message_t *msg)
 {
-    if (!bfdev_log_test_color(log))
+    if (!bfdev_log_color_test(log))
         return;
 
     log_scnprintf(msg, "\e[%dm", level_color[msg->level]);
@@ -41,7 +41,7 @@ log_color_prefix(bfdev_log_t *log, bfdev_log_message_t *msg)
 static void
 log_color_suffix(bfdev_log_t *log, bfdev_log_message_t *msg)
 {
-    if (!bfdev_log_test_color(log))
+    if (!bfdev_log_color_test(log))
         return;
 
     log_scnprintf(msg, "\e[0m");

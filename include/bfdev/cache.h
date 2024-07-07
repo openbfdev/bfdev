@@ -99,21 +99,26 @@ struct bfdev_cache_algo {
     void (*destroy)(bfdev_cache_head_t *head);
 };
 
+BFDEV_BITFLAGS(
+    bfdev_cache_change,
+    __BFDEV_CACHE_CHANGE
+);
+
+BFDEV_BITFLAGS(
+    bfdev_cache_uncommitted,
+    __BFDEV_CACHE_UNCOMMITTED
+);
+
 BFDEV_BITFLAGS_STRUCT(
-    bfdev_cache,
-    bfdev_cache_head_t, flags
+    bfdev_cache_dirty,
+    bfdev_cache_head_t, flags,
+    __BFDEV_CACHE_DIRTY
 );
 
-BFDEV_BITFLAGS_STRUCT_FLAG(
-    bfdev_cache,
+BFDEV_BITFLAGS_STRUCT(
+    bfdev_cache_starving,
     bfdev_cache_head_t, flags,
-    dirty, __BFDEV_CACHE_DIRTY
-);
-
-BFDEV_BITFLAGS_STRUCT_FLAG(
-    bfdev_cache,
-    bfdev_cache_head_t, flags,
-    starving, __BFDEV_CACHE_STARVING
+    __BFDEV_CACHE_STARVING
 );
 
 extern bfdev_cache_node_t *
@@ -161,7 +166,8 @@ bfdev_cache_try_get(bfdev_cache_head_t *head, unsigned long tag)
 static inline bfdev_cache_node_t *
 bfdev_cache_cumulative(bfdev_cache_head_t *head, unsigned long tag)
 {
-    return bfdev_cache_obtain(head, tag, BFDEV_CACHE_CHANGE | BFDEV_CACHE_UNCOMMITTED);
+    return bfdev_cache_obtain(head, tag, BFDEV_CACHE_CHANGE |
+                              BFDEV_CACHE_UNCOMMITTED);
 }
 
 extern int

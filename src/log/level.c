@@ -19,7 +19,7 @@ level_name[] = {
 static void
 log_level(bfdev_log_t *log, bfdev_log_message_t *msg)
 {
-    if (!bfdev_log_test_level(log))
+    if (!bfdev_log_level_test(log))
         return;
 
     log_scnprintf(msg, "[%s] ", level_name[msg->level]);
