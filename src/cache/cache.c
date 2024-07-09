@@ -111,7 +111,7 @@ bfdev_cache_obtain(bfdev_cache_head_t *head, unsigned long tag,
     if (bfdev_unlikely(tag == BFDEV_CACHE_FREE_TAG))
         return NULL;
 
-    if (bfdev_unlikely(bfdev_cache_test_starving(head))) {
+    if (bfdev_unlikely(bfdev_cache_starving_test(head))) {
         head->starve++;
         return NULL;
     }
@@ -121,7 +121,7 @@ bfdev_cache_obtain(bfdev_cache_head_t *head, unsigned long tag,
         head->hits++;
 
         if (node->status == BFDEV_CACHE_PENDING) {
-            if (!(flags & BFDEV_CACHE_UNCOMMITTED))
+            if (!bfdev_cache_uncommitted_test(&flags))
                 return NULL;
 
             node->refcnt++;
@@ -145,12 +145,12 @@ bfdev_cache_obtain(bfdev_cache_head_t *head, unsigned long tag,
     }
 
     head->misses++;
-    if (!(flags & BFDEV_CACHE_CHANGE))
+    if (!bfdev_cache_change_test(&flags))
         return NULL;
 
-    bfdev_cache_set_dirty(head);
+    bfdev_cache_dirty_set(head);
     if (bfdev_unlikely(cache_starving(head))) {
-        bfdev_cache_set_starving(head);
+        bfdev_cache_starving_set(head);
         return NULL;
     }
 
@@ -158,7 +158,7 @@ bfdev_cache_obtain(bfdev_cache_head_t *head, unsigned long tag,
         return NULL;
 
     node = cache_obtain(head, tag);
-    bfdev_cache_clr_starving(head);
+    bfdev_cache_starving_clr(head);
 
     node->refcnt++;
     head->pending++;
@@ -174,7 +174,7 @@ bfdev_cache_put(bfdev_cache_head_t *head, bfdev_cache_node_t *node)
         return -BFDEV_EINVAL;
 
     if (!--node->refcnt) {
-        bfdev_cache_clr_starving(head);
+        bfdev_cache_starving_clr(head);
         bfdev_list_del_init(&node->list);
 
         head->algo->put(head, node);
