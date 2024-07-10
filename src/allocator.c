@@ -7,11 +7,15 @@
 #include <bfdev/allocator.h>
 #include <export.h>
 
-export bfdev_alloc_t
-bfdev_alloc_default;
+BFDEV_DEFINE_ALLOC(
+    bfdev_alloc_default,
+    NULL, NULL
+);
 
-export bfdev_alloc_ops_t
-bfdev_alloc_default_ops;
+BFDEV_DEFINE_ALLOC_OPS(
+    bfdev_alloc_default_ops,
+    NULL, NULL, NULL, NULL
+);
 
 #define __INSIDE_ALLOCATOR__
 #include <port/allocator.h>
@@ -75,10 +79,10 @@ bfdev_realloc(const bfdev_alloc_t *alloc, const void *block, size_t resize)
     const bfdev_alloc_ops_t *ops;
     void *pdata, *retval;
 
-    if (!block)
+    if (bfdev_unlikely(!block))
         return bfdev_malloc(alloc, resize);
 
-    if (!resize) {
+    if (bfdev_unlikely(!resize)) {
         bfdev_free(alloc, block);
         return NULL;
     }
@@ -98,7 +102,7 @@ bfdev_free(const bfdev_alloc_t *alloc, const void *block)
     const bfdev_alloc_ops_t *ops;
     void *pdata;
 
-    if (!block)
+    if (bfdev_unlikely(!block))
         return;
 
     ops = alloc_ops(alloc, &pdata);
