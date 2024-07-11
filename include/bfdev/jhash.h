@@ -17,12 +17,12 @@ BFDEV_BEGIN_DECLS
 
 /* Mix 3 32-bit values reversibly */
 #define bfdev_jhash_mix(a, b, c) {              \
-	a -= c; a ^= bfdev_rol32(c, 4);  c += b;    \
-	b -= a; b ^= bfdev_rol32(a, 6);  a += c;    \
-	c -= b; c ^= bfdev_rol32(b, 8);  b += a;    \
+	a -= c; a ^= bfdev_rol32(c,  4); c += b;    \
+	b -= a; b ^= bfdev_rol32(a,  6); a += c;    \
+	c -= b; c ^= bfdev_rol32(b,  8); b += a;    \
 	a -= c; a ^= bfdev_rol32(c, 16); c += b;    \
 	b -= a; b ^= bfdev_rol32(a, 19); a += c;    \
-	c -= b; c ^= bfdev_rol32(b, 4);  b += a;    \
+	c -= b; c ^= bfdev_rol32(b,  4); b += a;    \
 }
 
 /* Final mixing of 3 32-bit values (a,b,c) into c */
@@ -31,7 +31,7 @@ BFDEV_BEGIN_DECLS
     a ^= c; a -= bfdev_rol32(c, 11);    \
     b ^= a; b -= bfdev_rol32(a, 25);    \
     c ^= b; c -= bfdev_rol32(b, 16);    \
-    a ^= c; a -= bfdev_rol32(c, 4);     \
+    a ^= c; a -= bfdev_rol32(c,  4);    \
     b ^= a; b -= bfdev_rol32(a, 14);    \
     c ^= b; c -= bfdev_rol32(b, 24);    \
 }

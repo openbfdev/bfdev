@@ -47,8 +47,8 @@ BFDEV_BEGIN_DECLS
  * @align: alignment size.
  */
 #define bfdev_align_high(value, align) ({ \
-    typeof(align) _align = (align); \
-    ((value) + (_align - 1)) & ~(_align - 1); \
+    typeof(align) __align = (align); \
+    ((value) + (__align - 1)) & ~(__align - 1); \
 })
 
 /**

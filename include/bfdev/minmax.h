@@ -16,10 +16,9 @@ BFDEV_BEGIN_DECLS
  * @b: second value.
  */
 #define bfdev_min(a, b) ({ \
-    typeof(a) _amin = (a); \
-    typeof(a) _bmin = (b); \
-    (void)(&_amin == &_bmin); \
-    _amin < _bmin ? _amin : _bmin; \
+    typeof(a) __amin = (a); \
+    typeof(a) __bmin = (b); \
+    __amin < __bmin ? __amin : __bmin; \
 })
 
 /**
@@ -28,10 +27,9 @@ BFDEV_BEGIN_DECLS
  * @b: second value.
  */
 #define bfdev_max(a, b) ({ \
-    typeof(a) _amax = (a); \
-    typeof(a) _bmax = (b); \
-    (void)(&_amax == &_bmax); \
-    _amax > _bmax ? _amax : _bmax; \
+    typeof(a) __amax = (a); \
+    typeof(a) __bmax = (b); \
+    __amax > __bmax ? __amax : __bmax; \
 })
 
 /**
