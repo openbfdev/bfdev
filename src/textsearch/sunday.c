@@ -46,7 +46,7 @@ sunday_find(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss)
     bool icase;
 
     sctx = ts_to_sunday(tsc);
-    icase = bfdev_ts_test_igcase(tsc);
+    icase = bfdev_ts_igcase_test(tsc);
     consumed = tss->offset;
     shift = 0;
 
@@ -77,7 +77,7 @@ sunday_find(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss)
 }
 
 static inline void
-sunday_compute_prefix(struct sunday_context *sctx, unsigned int flags)
+sunday_compute_prefix(struct sunday_context *sctx)
 {
     unsigned int index;
 
@@ -86,7 +86,7 @@ sunday_compute_prefix(struct sunday_context *sctx, unsigned int flags)
 
     for (index = 0; index < sctx->pattern_len; ++index) {
         sctx->shift_table[sctx->pattern[index]] = sctx->pattern_len - index;
-        if (flags & BFDEV_TS_IGCASE) {
+        if (bfdev_ts_igcase_test(&sctx->tsc)) {
             sctx->shift_table[tolower(sctx->pattern[index])] =
                 sctx->pattern_len - index;
         }
@@ -107,11 +107,11 @@ sunday_prepare(const bfdev_alloc_t *alloc, const void *pattern,
     sctx->tsc.flags = flags;
     sctx->pattern_len = len;
 
-    if (!(flags & BFDEV_TS_IGCASE))
+    if (!bfdev_ts_igcase_test(&sctx->tsc))
         bfport_memcpy(sctx->pattern, pattern, len);
     else for (index = 0; index < len; ++index)
         sctx->pattern[index] = toupper(((char *)pattern)[index]);
-    sunday_compute_prefix(sctx, flags);
+    sunday_compute_prefix(sctx);
 
     return &sctx->tsc;
 }
@@ -119,7 +119,9 @@ sunday_prepare(const bfdev_alloc_t *alloc, const void *pattern,
 static void
 sunday_destroy(bfdev_ts_context_t *tsc)
 {
-    struct sunday_context *sctx = ts_to_sunday(tsc);
+    struct sunday_context *sctx;
+
+    sctx = ts_to_sunday(tsc);
     bfdev_free(tsc->alloc, sctx);
 }
 

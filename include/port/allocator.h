@@ -16,51 +16,25 @@
 static __bfdev_always_inline void *
 generic_alloc(size_t size, void *pdata)
 {
-    void *retval;
-
-    if (bfdev_alloc_default.alloc) {
-        retval = bfdev_alloc_default.alloc(size, pdata);
-        return retval;
-    }
-
     return bfport_malloc(size);
 }
 
 static __bfdev_always_inline void *
 generic_zalloc(size_t size, void *pdata)
 {
-    void *retval;
-
-    if (bfdev_alloc_default.zalloc) {
-        retval = bfdev_alloc_default.zalloc(size, pdata);
-        return retval;
-    }
-
     return bfport_calloc(1, size);
 }
 
 static __bfdev_always_inline void *
 generic_realloc(void *block, size_t resize, void *pdata)
 {
-    void *retval;
-
-    if (bfdev_alloc_default.realloc) {
-        retval = bfdev_alloc_default.realloc(block, resize, pdata);
-        return retval;
-    }
-
     return bfport_realloc(block, resize);
 }
 
 static __bfdev_always_inline void
 generic_free(void *block, void *pdata)
 {
-    if (bfdev_alloc_default.free) {
-        bfdev_alloc_default.free(block, pdata);
-        return;
-    }
-
-    bfport_free((void *)block);
+    bfport_free(block);
 }
 
 #endif /* _LOCAL_PORT_ALLOCATOR_H_ */

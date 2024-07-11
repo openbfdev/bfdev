@@ -54,7 +54,8 @@ sort_testing(struct sort_test *test)
     return 0;
 }
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     struct sort_test *test;
     int retval;

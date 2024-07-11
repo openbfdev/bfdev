@@ -43,15 +43,17 @@ name##_inline(const uint8_t *src, size_t len, type crc)             \
     const uint32_t *combine;                                        \
     uint32_t value[2];                                              \
                                                                     \
-    crc = bswap(crc);                                               \
+    crc = (__bfdev_force type)bswap(crc);                           \
     while (len && !bfdev_align_ptr_check(src, sizeof(*value))) {    \
         crc = name##_byte(crc, *src++);                             \
         len--;                                                      \
     }                                                               \
                                                                     \
     for (combine = (const void *)src; len >= 8; len -= 8) {         \
-        value[0] = bfdev_cpu_to_le32p(combine++) ^ crc;             \
-        value[1] = bfdev_cpu_to_le32p(combine++);                   \
+        value[0] = (__bfdev_force uint32_t)                         \
+            bfdev_cpu_to_le32p(combine++) ^ crc;                    \
+        value[1] = (__bfdev_force uint32_t)                         \
+            bfdev_cpu_to_le32p(combine++);                          \
                                                                     \
         crc = (                                                     \
             table[7][(value[0] >>  0) & 0xff] ^                     \
@@ -68,7 +70,7 @@ name##_inline(const uint8_t *src, size_t len, type crc)             \
     for (src = (const void *)combine; len; --len)                   \
         crc = name##_byte(crc, *src++);                             \
                                                                     \
-    return bswap(crc);                                              \
+    return (__bfdev_force type)bswap(crc);                          \
 }
 #endif
 

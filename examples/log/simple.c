@@ -8,7 +8,8 @@
 
 #include <bfdev/log.h>
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     bfdev_log_emerg("helloworld\n");
     bfdev_log_alert("helloworld\n");

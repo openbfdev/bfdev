@@ -132,8 +132,16 @@ bfdev_errname_table[] = {
 static long
 errname_search(const void *key, void *pdata)
 {
-    const bfdev_errname_t *entry = key;
-    return entry->errnum - (intptr_t)pdata;
+    const bfdev_errname_t *entry;
+    int value;
+
+    entry = key;
+    value = (intptr_t)pdata;
+
+    if (entry->errnum == value)
+        return BFDEV_EQ;
+
+    return bfdev_cmp(entry->errnum > value);
 }
 
 export bfdev_errname_t *

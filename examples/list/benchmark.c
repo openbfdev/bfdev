@@ -50,7 +50,8 @@ demo_cmp(const bfdev_list_head_t *node1,
     return test1->num < test2->num ? -1 : 1;
 }
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     struct benchmark *node, *tmp;
     unsigned int count;

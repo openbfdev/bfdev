@@ -431,7 +431,8 @@ rbtree_testing(struct demo_data *sdata)
     return 0;
 }
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     struct demo_data *rdata;
     unsigned int count;

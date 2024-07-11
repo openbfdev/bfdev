@@ -20,7 +20,8 @@ func(void *arg, void *pdata)
     return BFDEV_NOTIFI_RET_DONE;
 }
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     bfdev_notifier_node_t node[3];
     int retval;

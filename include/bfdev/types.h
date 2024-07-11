@@ -15,8 +15,10 @@ BFDEV_BEGIN_DECLS
 
 #ifdef __CHECKER__
 # define __bfdev_bitwise __attribute__((bitwise))
+# define __bfdev_force __attribute__((force))
 #else
 # define __bfdev_bitwise
+# define __bfdev_force
 #endif
 
 typedef uint16_t __bfdev_bitwise bfdev_le16;

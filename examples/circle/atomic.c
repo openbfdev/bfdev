@@ -48,7 +48,8 @@ fifo_production(void *unused)
     return NULL;
 }
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     unsigned int index;
     pthread_t thread;

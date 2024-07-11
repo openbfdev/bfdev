@@ -48,7 +48,7 @@ bm_find(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss)
     bool icase;
 
     bctx = ts_to_bm(tsc);
-    icase = bfdev_ts_test_igcase(tsc);
+    icase = bfdev_ts_igcase_test(tsc);
     consumed = tss->offset;
     shift = bctx->pattern_len - 1;
 
@@ -96,7 +96,7 @@ subpattern(const uint8_t *pattern, int index, int j, int g)
 }
 
 static inline void
-bm_compute_prefix(struct bm_context *bctx, unsigned long flags)
+bm_compute_prefix(struct bm_context *bctx)
 {
     int index, start, count;
 
@@ -105,7 +105,7 @@ bm_compute_prefix(struct bm_context *bctx, unsigned long flags)
 
     for (index = 0; index < bctx->pattern_len - 1; ++index) {
         bctx->bad_shift[bctx->pattern[index]] = bctx->pattern_len - index - 1;
-        if (flags & BFDEV_TS_IGCASE) {
+        if (bfdev_ts_igcase_test(&bctx->tsc)) {
             bctx->bad_shift[tolower(bctx->pattern[index])] =
                 bctx->pattern_len - index - 1;
         }
@@ -141,11 +141,11 @@ bm_prepare(const bfdev_alloc_t *alloc, const void *pattern,
     bctx->pattern_len = len;
     bctx->pattern = (void *)bctx + sizeof(*bctx) + gsize;
 
-    if (!(flags & BFDEV_TS_IGCASE))
+    if (!bfdev_ts_igcase_test(&bctx->tsc))
         bfport_memcpy(bctx->pattern, pattern, len);
     else for (index = 0; index < len; ++index)
         bctx->pattern[index] = toupper(((char *)pattern)[index]);
-    bm_compute_prefix(bctx, flags);
+    bm_compute_prefix(bctx);
 
     return &bctx->tsc;
 }
@@ -153,7 +153,9 @@ bm_prepare(const bfdev_alloc_t *alloc, const void *pattern,
 static void
 bm_destroy(bfdev_ts_context_t *tsc)
 {
-    struct bm_context *bctx = ts_to_bm(tsc);
+    struct bm_context *bctx;
+
+    bctx = ts_to_bm(tsc);
     bfdev_free(tsc->alloc, bctx);
 }
 

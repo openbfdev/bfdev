@@ -65,8 +65,12 @@ bfdev_prandom_value(bfdev_prandom_t *pstate);
 static inline uint64_t
 bfdev_prandom_u64(bfdev_prandom_t *pstate)
 {
-    uint32_t high = bfdev_prandom_value(pstate);
-    return ((uint64_t)high << 32) + bfdev_prandom_value(pstate);
+    uint32_t high, low;
+
+    high = bfdev_prandom_value(pstate);
+    low = bfdev_prandom_value(pstate);
+
+    return ((uint64_t)high << 32) | low;
 }
 
 static inline unsigned long

@@ -32,7 +32,8 @@ demo_cmp(const bfdev_rb_node_t *node1, const bfdev_rb_node_t *node2, void *pdata
     return demo1->data < demo2->data ? -1 : 1;
 }
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     struct simple_node *node, *tmp;
     unsigned int count;

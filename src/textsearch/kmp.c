@@ -46,7 +46,7 @@ kmp_find(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss)
     bool icase;
 
     kctx = ts_to_kmp(tsc);
-    icase = bfdev_ts_test_igcase(tsc);
+    icase = bfdev_ts_igcase_test(tsc);
     consumed = tss->offset;
     match = 0;
 
@@ -106,7 +106,7 @@ kmp_prepare(const bfdev_alloc_t *alloc, const void *pattern,
     kctx->pattern_len = len;
     kctx->pattern = (void *)kctx + sizeof(*kctx) + prefix_size;
 
-    if (!(flags & BFDEV_TS_IGCASE))
+    if (!bfdev_ts_igcase_test(&kctx->tsc))
         bfport_memcpy(kctx->pattern, pattern, len);
     else for (index = 0; index < len; ++index)
         kctx->pattern[index] = toupper(((char *)pattern)[index]);
@@ -118,7 +118,9 @@ kmp_prepare(const bfdev_alloc_t *alloc, const void *pattern,
 static void
 kmp_destroy(bfdev_ts_context_t *tsc)
 {
-    struct kmp_context *kctx = ts_to_kmp(tsc);
+    struct kmp_context *kctx;
+
+    kctx = ts_to_kmp(tsc);
     bfdev_free(tsc->alloc, kctx);
 }
 

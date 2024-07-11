@@ -20,6 +20,33 @@ BFDEV_DEFINE_LOG(
 #define __INSIDE_LOG__
 #include <port/log.h>
 
+static size_t
+log_vscnprintf(bfdev_log_message_t *msg, const char *fmt, va_list args)
+{
+    size_t append;
+
+    append = bfdev_vscnprintf(
+        msg->buff + msg->length, BFDEV_LOG_BUFF_SIZE - msg->length,
+        fmt, args
+    );
+    msg->length += append;
+
+    return append;
+}
+
+static size_t
+log_scnprintf(bfdev_log_message_t *msg, const char *fmt, ...)
+{
+    size_t append;
+    va_list args;
+
+    va_start(args, fmt);
+    append = log_vscnprintf(msg, fmt, args);
+    va_end(args);
+
+    return append;
+}
+
 #include "color.c"
 #include "level.c"
 

@@ -34,7 +34,8 @@ ringbuf_warnup(void)
         bfdev_ringbuf_put(&normal_bytetest, warn_table[count]);
 }
 
-int main(int argc, const char *argv[])
+int
+main(int argc, const char *argv[])
 {
     unsigned int count, index;
     char ch = 0;

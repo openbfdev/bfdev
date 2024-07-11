@@ -65,20 +65,15 @@ struct bfdev_log_message {
     bfdev_log_t name = BFDEV_LOG_INIT(&name, default, record, flags, write, pdata)
 
 BFDEV_BITFLAGS_STRUCT(
-    bfdev_log,
-    struct bfdev_log, flags
+    bfdev_log_color,
+    struct bfdev_log, flags,
+    __BFDEV_LOG_COLOR
 )
 
-BFDEV_BITFLAGS_STRUCT_FLAG(
-    bfdev_log,
+BFDEV_BITFLAGS_STRUCT(
+    bfdev_log_level,
     struct bfdev_log, flags,
-    color, __BFDEV_LOG_COLOR
-)
-
-BFDEV_BITFLAGS_STRUCT_FLAG(
-    bfdev_log,
-    struct bfdev_log, flags,
-    level, __BFDEV_LOG_LEVEL
+    __BFDEV_LOG_LEVEL
 )
 
 extern bfdev_log_t

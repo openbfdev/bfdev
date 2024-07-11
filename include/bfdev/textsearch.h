@@ -129,14 +129,9 @@ struct bfdev_ts_algorithm {
 };
 
 BFDEV_BITFLAGS_STRUCT(
-    bfdev_ts,
-    bfdev_ts_context_t, flags
-)
-
-BFDEV_BITFLAGS_STRUCT_FLAG(
-    bfdev_ts,
+    bfdev_ts_igcase,
     bfdev_ts_context_t, flags,
-    igcase, __BFDEV_TS_IGCASE
+    __BFDEV_TS_IGCASE
 )
 
 /**
