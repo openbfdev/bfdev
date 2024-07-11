@@ -5,7 +5,7 @@
 #
 
 cmake_minimum_required(VERSION 3.12)
-project(bfdev VERSION 1.0.4 LANGUAGES C)
+project(bfdev VERSION 1.0.5 LANGUAGES C)
 
 include(GNUInstallDirs)
 include(CheckIncludeFiles)
