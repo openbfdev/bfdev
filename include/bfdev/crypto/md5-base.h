@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: GPL-2.0-or-later */
 /*
- * Copyright(C) 2024 John Sanpe <sanpeqf@gmail.com>
+ * Copyright(C) 2024 Fredrik Anderson <sanpeqf@gmail.com>
  */
 
 #ifndef _BFDEV_CRYPTO_MD5_BASE_H_

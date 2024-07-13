@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 #
-# Copyright(c) 2024 John Sanpe <sanpeqf@gmail.com>
+# Copyright(c) 2024 Fredrik Anderson <sanpeqf@gmail.com>
 #
 
 add_executable(ascii85-bandwidth bandwidth.c)

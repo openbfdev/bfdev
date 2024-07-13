@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: GPL-2.0-or-later */
 /*
- * Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
+ * Copyright(c) 2023 Fredrik Anderson <sanpeqf@gmail.com>
  */
 
 #ifndef _BFDEV_ASM_GENERIC_SWAB_H_

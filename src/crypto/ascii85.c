@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: GPL-2.0-or-later */
 /*
- * Copyright(c) 2022 John Sanpe <sanpeqf@gmail.com>
+ * Copyright(c) 2022 Fredrik Anderson <sanpeqf@gmail.com>
  */
 
 #include <base.h>
@@ -30,7 +30,7 @@ ascii85_encode(uint8_t *buff, const void *data, size_t *plen, size_t size)
             buff[index] = '!' + value % 85;
             index += 4;
         }
-    
+
         index++;
     }
 
