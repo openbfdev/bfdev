@@ -13,7 +13,9 @@
 #include "../time.h"
 
 #define TEST_LOOP 1000000
-BFDEV_RADIX_ROOT(bench_root, unsigned int, NULL);
+
+static
+BFDEV_DECLARE_RADIX(root, unsigned int);
 
 int
 main(int argc, const char *argv[])
@@ -32,7 +34,8 @@ main(int argc, const char *argv[])
     for (count = 0; count < TEST_LOOP; ++count)
         data[count] = rand();
 
-    retval = bfdev_radix_charge(&bench_root, 0, TEST_LOOP);
+    root = BFDEV_RADIX_INIT(&root, NULL);
+    retval = bfdev_radix_charge(&root, 0, TEST_LOOP);
     if (retval) {
         bfdev_log_err("Insufficient memory!\n");
         return retval;
@@ -42,7 +45,7 @@ main(int argc, const char *argv[])
     EXAMPLE_TIME_STATISTICAL(
         for (count = 0; count < TEST_LOOP; ++count) {
             unsigned int *block;
-            block = bfdev_radix_alloc(&bench_root, count);
+            block = bfdev_radix_alloc(&root, count);
             *block = data[count];
         }
         0;
@@ -52,7 +55,7 @@ main(int argc, const char *argv[])
     EXAMPLE_TIME_STATISTICAL(
         for (count = 0; count < TEST_LOOP; ++count) {
             unsigned int *block;
-            block = bfdev_radix_find(&bench_root, count);
+            block = bfdev_radix_find(&root, count);
             if (!block || *block != data[count]) {
                 bfdev_log_info("Data verification failed!\n");
                 return 1;
@@ -64,7 +67,7 @@ main(int argc, const char *argv[])
     bfdev_log_info("Free Nodes:\n");
     EXAMPLE_TIME_STATISTICAL(
         for (count = 0; count < TEST_LOOP; ++count) {
-            retval = bfdev_radix_free(&bench_root, count);
+            retval = bfdev_radix_free(&root, count);
             if (retval) {
                 bfdev_log_info("Sequence error!\n");
                 return 1;
@@ -73,7 +76,7 @@ main(int argc, const char *argv[])
         0;
     );
 
-    count = bench_root.tree.level;
+    count = root.tree.level;
     bfdev_log_info("\tradix level: %u\n", count);
     if (count) {
         bfdev_log_info("Pruning error!\n");
@@ -81,7 +84,7 @@ main(int argc, const char *argv[])
     }
 
     bfdev_log_info("Done.\n");
-    bfdev_radix_release(&bench_root);
+    bfdev_radix_release(&root);
     free(data);
 
     return 0;
