@@ -83,6 +83,10 @@ bfdev_radix_root_find(bfdev_radix_root_t *root, uintptr_t offset)
     node = parents[0].node;
     index = parents[0].index;
 
+    contain = bfdev_bit_test(node->bitmap, index);
+    if (bfdev_unlikely(!contain))
+        return NULL;
+
     return &node->block[index];
 }
 
