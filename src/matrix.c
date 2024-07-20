@@ -116,6 +116,38 @@ bfdev_matrix_mul(bfdev_matrix_t *dest,
 }
 
 export int
+bfdev_matrix_trans(bfdev_matrix_t *dest, const bfdev_matrix_t *src)
+{
+    unsigned int row, col;
+    unsigned int size;
+    int retval;
+
+    col = src->row;
+    row = src->col;
+
+    size = row * col;
+    retval = bfdev_array_resize(&dest->value, size);
+    if (bfdev_unlikely(retval))
+        return retval;
+
+    dest->row = row;
+    dest->col = col;
+
+    const BFDEV_MATRIX_TYPE (*ads)[src->col];
+    BFDEV_MATRIX_TYPE (*add)[dest->col];
+
+    ads = bfdev_array_data(&dest->value, 0);
+    add = bfdev_array_data(&src->value, 0);
+
+    for (row = 0; row < dest->row; ++row) {
+        for (col = 0; col < dest->col; ++col)
+            add[row][col] = ads[col][row];
+    }
+
+    return -BFDEV_ENOERR;
+}
+
+export int
 bfdev_matrix_set(bfdev_matrix_t *dest, const bfdev_matrix_t *src)
 {
     unsigned int row, col;

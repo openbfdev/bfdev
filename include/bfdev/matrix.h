@@ -12,17 +12,19 @@
 
 BFDEV_BEGIN_DECLS
 
-#define BFDEV_MATRIX_TYPE bfdev_uw_t
-#define BFDEV_MATRIX_BITS BFDEV_BITS_PER_LONG
-#define BFDEV_MATRIX_SIZE BFDEV_BYTES_PER_LONG
+#ifndef BFDEV_MATRIX_TYPE
+# define BFDEV_MATRIX_TYPE bfdev_uw_t
+# define BFDEV_MATRIX_BITS BFDEV_BITS_PER_LONG
+# define BFDEV_MATRIX_SIZE BFDEV_BYTES_PER_LONG
+#endif
 
 typedef struct bfdev_matrix bfdev_matrix_t;
 
 struct bfdev_matrix {
     const bfdev_alloc_t *alloc;
+    bfdev_array_t value;
     unsigned int row;
     unsigned int col;
-    bfdev_array_t value;
 };
 
 #define BFDEV_MATRIX_STATIC(ALLOC) { \
@@ -68,6 +70,14 @@ bfdev_matrix_sub(bfdev_matrix_t *dest,
 extern int
 bfdev_matrix_mul(bfdev_matrix_t *dest,
                  const bfdev_matrix_t *va, const bfdev_matrix_t *vb);
+
+/**
+ * bfdev_matrix_trans() - matrix transpose.
+ * @dest: destination matrix.
+ * @src: source matrix.
+ */
+extern int
+bfdev_matrix_trans(bfdev_matrix_t *dest, const bfdev_matrix_t *src);
 
 /**
  * bfdev_matrix_set() - copy data form matrices.
