@@ -53,6 +53,13 @@ main(int argc, char const *argv[])
     GENERIC_MATRIX_BENCHMARK(bfdev_matrix_sub, "subtracting")
     GENERIC_MATRIX_BENCHMARK(bfdev_matrix_mul, "multiplying")
 
+    for (count = 0; count < TEST_LOOP; ++count) {
+        EXAMPLE_TIME_LOOP(&loop, 1000,
+            bfdev_matrix_trans(&dest, &vara);
+        );
+        bfdev_log_info("transpose %u: %uops/s\n", count, loop);
+    }
+
     bfdev_matrix_release(&vara);
     bfdev_matrix_release(&varb);
     bfdev_matrix_release(&dest);

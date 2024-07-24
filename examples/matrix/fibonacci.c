@@ -23,8 +23,7 @@ matrix_fibonacci[] = {
 };
 
 static int
-power(bfdev_matrix_t *result, const bfdev_matrix_t *var,
-      unsigned int pow)
+power(bfdev_matrix_t *result, const bfdev_matrix_t *var, unsigned int pow)
 {
     BFDEV_DEFINE_MATRIX(tmp, NULL);
     int retval;
@@ -52,6 +51,7 @@ power(bfdev_matrix_t *result, const bfdev_matrix_t *var,
     }
 
     bfdev_matrix_release(&tmp);
+
     return 0;
 }
 
