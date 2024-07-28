@@ -17,6 +17,10 @@ BFDEV_BEGIN_DECLS
 # define BFDEV_PRANDOM_SEED 0x408c3c09UL
 #endif
 
+#ifndef BFDEV_PRANDOM_WARMUP
+# define BFDEV_PRANDOM_WARMUP 10
+#endif
+
 typedef struct bfdev_prandom bfdev_prandom_t;
 
 struct bfdev_prandom {
