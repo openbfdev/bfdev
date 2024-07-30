@@ -142,6 +142,52 @@ bfdev_hashmap_append(bfdev_hashmap_t *hashmap, bfdev_hlist_node_t *node)
     return bfdev_hashmap_insert(hashmap, node, NULL, BFDEV_HASHMAP_APPEND);
 }
 
+/**
+ * bfdev_hashmap_for_each - iterate over a hashtable.
+ * @pos: the &bfdev_hlist_node_t to use as a loop cursor.
+ * @hashmap: the head for your hashtable.
+ * @index: index temporary storage.
+ */
+#define bfdev_hashmap_for_each(pos, hashmap, index) \
+    bfdev_hashtbl_for_each(pos, (hashmap)->buckets, \
+        (hashmap)->capacity, index)
+
+/**
+ * bfdev_hashmap_for_each_safe - iterate over a hashtable safe
+ * against removal of hlist entry.
+ * @pos: the &bfdev_hlist_node_t to use as a loop cursor.
+ * @tmp: another bfdev_hlist_node to use as temporary storage.
+ * @hashmap: the head for your hashtable.
+ * @index: index temporary storage.
+ */
+#define bfdev_hashmap_for_each_safe(pos, tmp, hashmap, index) \
+    bfdev_hashtbl_for_each_safe(pos, tmp, (hashmap)->buckets, \
+        (hashmap)->capacity, index)
+
+/**
+ * bfdev_hashmap_for_each_entry - iterate over hashtable of given type.
+ * @pos: the type * to use as a loop cursor.
+ * @hashmap: the head for your hashtable.
+ * @member: the name of the bfdev_hlist_node within the struct.
+ * @index: index temporary storage.
+ */
+#define bfdev_hashmap_for_each_entry(pos, hashmap, member, index) \
+    bfdev_hashtbl_for_each_entry(pos, (hashmap)->buckets, \
+        (hashmap)->capacity, member, index)
+
+/**
+ * bfdev_hashmap_for_each_entry_safe - iterate over hashtable of given type
+ * safe against removal of hlist entry.
+ * @pos: the type * to use as a loop cursor.
+ * @tmp: another type * to use as temporary storage.
+ * @hashmap: the head for your hashtable.
+ * @member: the name of the bfdev_hlist_node within the struct.
+ * @index: index temporary storage.
+ */
+#define bfdev_hashmap_for_each_entry_safe(pos, tmp, hashmap, member, index) \
+    bfdev_hashtbl_for_each_entry_safe(pos, tmp, (hashmap)->buckets, \
+        (hashmap)->capacity, member, index)
+
 BFDEV_END_DECLS
 
 #endif /* _BFDEV_HASHMAP_H_ */

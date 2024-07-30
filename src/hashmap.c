@@ -142,16 +142,15 @@ hashmap_rehash(bfdev_hashmap_t *hashmap, unsigned int nbits)
         return -BFDEV_ENOMEM;
 
     bfdev_hashtbl_init(nbuckets, ncapacity);
-    bfdev_hashtbl_for_each_safe(walk, tmp, hashmap->buckets, hashmap->capacity, index) {
+    bfdev_hashmap_for_each_safe(walk, tmp, hashmap, index) {
         value = hashmap_hash_node(hashmap, walk);
         bfdev_hlist_del(walk);
         bfdev_hashtbl_add(nbuckets, ncapacity, walk, value);
     }
 
     bfdev_free(alloc, hashmap->buckets);
-
-    hashmap->capacity = ncapacity;
     hashmap->bits = nbits;
+    hashmap->capacity = ncapacity;
     hashmap->buckets = nbuckets;
 
     return -BFDEV_ENOERR;
