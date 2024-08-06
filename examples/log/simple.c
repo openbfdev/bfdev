@@ -19,7 +19,7 @@ main(int argc, const char *argv[])
     bfdev_log_notice("helloworld\n");
     bfdev_log_info("helloworld\n");
     bfdev_log_debug("helloworld\n");
-    bfdev_log_print("helloworld\n");
+    bfdev_log("helloworld\n");
 
     return 0;
 }

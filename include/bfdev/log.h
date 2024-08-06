@@ -90,13 +90,13 @@ extern unsigned int
 bfdev_log_level(const char *str, const char **endptr);
 
 extern __bfdev_printf(2, 0) int
-bfdev_log_state_vprint(bfdev_log_t *log, const char *fmt, va_list args);
+bfdev_vlog_core(bfdev_log_t *log, const char *fmt, va_list args);
 
 extern __bfdev_printf(2, 3) int
-bfdev_log_state_print(bfdev_log_t *log, const char *fmt, ...);
+bfdev_log_core(bfdev_log_t *log, const char *fmt, ...);
 
 /**
- * bfdev_log_fmt - used by the bfdev_log_*() macros to generate the bfdev_log_print format string
+ * bfdev_log_fmt - used by the bfdev_log_*() macros to generate the bfdev_log format string
  * @fmt: format string passed from a bfdev_log_*() macro
  *
  * This macro can be used to generate a unified format string for bfdev_log_*()
@@ -112,24 +112,24 @@ bfdev_log_state_print(bfdev_log_t *log, const char *fmt, ...);
 # define bfdev_log_fmt(fmt) fmt
 #endif
 
-#ifndef bfdev_log_state
-# define bfdev_log_state (&bfdev_log_default)
+#ifndef bfdev_log_conf
+# define bfdev_log_conf NULL
 #endif
 
-#define bfdev_log_vprint(fmt, args) \
-    bfdev_log_state_vprint(bfdev_log_state, fmt, args)
+#define bfdev_vlog(fmt, args) \
+    bfdev_vlog_core(bfdev_log_conf, fmt, args)
 
-#define bfdev_log_print(fmt, ...) \
-    bfdev_log_state_print(bfdev_log_state, fmt, ##__VA_ARGS__)
+#define bfdev_log(fmt, ...) \
+    bfdev_log_core(bfdev_log_conf, fmt, ##__VA_ARGS__)
 
 /*
- * Dummy bfdev_log_print for disabled debugging statements to use whilst maintaining
+ * Dummy bfdev_log for disabled debugging statements to use whilst maintaining
  * gcc's format checking.
  */
-#define bfdev_log_none(fmt, ...) ({             \
-    if (0)                                      \
-        bfdev_log_print(fmt, ##__VA_ARGS__);    \
-    0;                                          \
+#define bfdev_log_none(fmt, ...) ({     \
+    if (0)                              \
+        bfdev_log(fmt, ##__VA_ARGS__);  \
+    0;                                  \
 })
 
 /**
@@ -137,12 +137,12 @@ bfdev_log_state_print(bfdev_log_t *log, const char *fmt, ...);
  * @fmt: format string
  * @...: arguments for the format string
  *
- * This macro expands to a bfdev_log_print with BFDEV_EMERG loglevel.
+ * This macro expands to a bfdev_log with BFDEV_EMERG loglevel.
  * It uses bfdev_log_fmt() to generate the format string.
  */
 #if BFDEV_LOGLEVEL_MAX >= BFDEV_LEVEL_EMERG
 # define bfdev_log_emerg(fmt, ...) \
-    bfdev_log_print(BFDEV_EMERG bfdev_log_fmt(fmt), ##__VA_ARGS__)
+    bfdev_log(BFDEV_EMERG bfdev_log_fmt(fmt), ##__VA_ARGS__)
 #else
 # define bfdev_log_emerg(fmt, ...) \
     bfdev_log_none(fmt, ##__VA_ARGS__)
@@ -153,12 +153,12 @@ bfdev_log_state_print(bfdev_log_t *log, const char *fmt, ...);
  * @fmt: format string
  * @...: arguments for the format string
  *
- * This macro expands to a bfdev_log_print with BFDEV_ALERT loglevel.
+ * This macro expands to a bfdev_log with BFDEV_ALERT loglevel.
  * It uses bfdev_log_fmt() to generate the format string.
  */
 #if BFDEV_LOGLEVEL_MAX >= BFDEV_LEVEL_ALERT
 # define bfdev_log_alert(fmt, ...) \
-    bfdev_log_print(BFDEV_ALERT bfdev_log_fmt(fmt), ##__VA_ARGS__)
+    bfdev_log(BFDEV_ALERT bfdev_log_fmt(fmt), ##__VA_ARGS__)
 #else
 # define bfdev_log_alert(fmt, ...) \
     bfdev_log_none(fmt, ##__VA_ARGS__)
@@ -169,12 +169,12 @@ bfdev_log_state_print(bfdev_log_t *log, const char *fmt, ...);
  * @fmt: format string
  * @...: arguments for the format string
  *
- * This macro expands to a bfdev_log_print with BFDEV_CRIT loglevel.
+ * This macro expands to a bfdev_log with BFDEV_CRIT loglevel.
  * It uses bfdev_log_fmt() to generate the format string.
  */
 #if BFDEV_LOGLEVEL_MAX >= BFDEV_LEVEL_CRIT
 # define bfdev_log_crit(fmt, ...) \
-    bfdev_log_print(BFDEV_CRIT bfdev_log_fmt(fmt), ##__VA_ARGS__)
+    bfdev_log(BFDEV_CRIT bfdev_log_fmt(fmt), ##__VA_ARGS__)
 #else
 # define bfdev_log_crit(fmt, ...) \
     bfdev_log_none(fmt, ##__VA_ARGS__)
@@ -185,12 +185,12 @@ bfdev_log_state_print(bfdev_log_t *log, const char *fmt, ...);
  * @fmt: format string
  * @...: arguments for the format string
  *
- * This macro expands to a bfdev_log_print with BFDEV_ERR loglevel.
+ * This macro expands to a bfdev_log with BFDEV_ERR loglevel.
  * It uses bfdev_log_fmt() to generate the format string.
  */
 #if BFDEV_LOGLEVEL_MAX >= BFDEV_LEVEL_ERR
 # define bfdev_log_err(fmt, ...) \
-    bfdev_log_print(BFDEV_ERR bfdev_log_fmt(fmt), ##__VA_ARGS__)
+    bfdev_log(BFDEV_ERR bfdev_log_fmt(fmt), ##__VA_ARGS__)
 #else
 # define bfdev_log_err(fmt, ...) \
     bfdev_log_none(fmt, ##__VA_ARGS__)
@@ -201,12 +201,12 @@ bfdev_log_state_print(bfdev_log_t *log, const char *fmt, ...);
  * @fmt: format string
  * @...: arguments for the format string
  *
- * This macro expands to a bfdev_log_print with BFDEV_WARNING loglevel.
+ * This macro expands to a bfdev_log with BFDEV_WARNING loglevel.
  * It uses bfdev_log_fmt() to generate the format string.
  */
 #if BFDEV_LOGLEVEL_MAX >= BFDEV_LEVEL_WARNING
 # define bfdev_log_warn(fmt, ...) \
-    bfdev_log_print(BFDEV_WARNING bfdev_log_fmt(fmt), ##__VA_ARGS__)
+    bfdev_log(BFDEV_WARNING bfdev_log_fmt(fmt), ##__VA_ARGS__)
 #else
 # define bfdev_log_warn(fmt, ...) \
     bfdev_log_none(fmt, ##__VA_ARGS__)
@@ -217,12 +217,12 @@ bfdev_log_state_print(bfdev_log_t *log, const char *fmt, ...);
  * @fmt: format string
  * @...: arguments for the format string
  *
- * This macro expands to a bfdev_log_print with BFDEV_NOTICE loglevel. It uses bfdev_log_fmt() to
+ * This macro expands to a bfdev_log with BFDEV_NOTICE loglevel. It uses bfdev_log_fmt() to
  * generate the format string.
  */
 #if BFDEV_LOGLEVEL_MAX >= BFDEV_LEVEL_NOTICE
 # define bfdev_log_notice(fmt, ...) \
-    bfdev_log_print(BFDEV_NOTICE bfdev_log_fmt(fmt), ##__VA_ARGS__)
+    bfdev_log(BFDEV_NOTICE bfdev_log_fmt(fmt), ##__VA_ARGS__)
 #else
 # define bfdev_log_notice(fmt, ...) \
     bfdev_log_none(fmt, ##__VA_ARGS__)
@@ -233,12 +233,12 @@ bfdev_log_state_print(bfdev_log_t *log, const char *fmt, ...);
  * @fmt: format string
  * @...: arguments for the format string
  *
- * This macro expands to a bfdev_log_print with BFDEV_INFO loglevel. It uses bfdev_log_fmt() to
+ * This macro expands to a bfdev_log with BFDEV_INFO loglevel. It uses bfdev_log_fmt() to
  * generate the format string.
  */
 #if BFDEV_LOGLEVEL_MAX >= BFDEV_LEVEL_INFO
 # define bfdev_log_info(fmt, ...) \
-    bfdev_log_print(BFDEV_INFO bfdev_log_fmt(fmt), ##__VA_ARGS__)
+    bfdev_log(BFDEV_INFO bfdev_log_fmt(fmt), ##__VA_ARGS__)
 #else
 # define bfdev_log_info(fmt, ...) \
     bfdev_log_none(fmt, ##__VA_ARGS__)
@@ -249,12 +249,12 @@ bfdev_log_state_print(bfdev_log_t *log, const char *fmt, ...);
  * @fmt: format string
  * @...: arguments for the format string
  *
- * This macro expands to a bfdev_log_print with BFDEV_DEBUG loglevel. It uses bfdev_log_fmt() to
+ * This macro expands to a bfdev_log with BFDEV_DEBUG loglevel. It uses bfdev_log_fmt() to
  * generate the format string.
  */
 #if BFDEV_LOGLEVEL_MAX >= BFDEV_LEVEL_DEBUG
 # define bfdev_log_debug(fmt, ...) \
-    bfdev_log_print(BFDEV_DEBUG bfdev_log_fmt(fmt), ##__VA_ARGS__)
+    bfdev_log(BFDEV_DEBUG bfdev_log_fmt(fmt), ##__VA_ARGS__)
 #else
 # define bfdev_log_debug(fmt, ...) \
     bfdev_log_none(fmt, ##__VA_ARGS__)
