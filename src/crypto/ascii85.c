@@ -1,4 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0-or-later */
+/* SPDX-License-Identifier: LGPL-3.0-or-later */
 /*
  * Copyright(c) 2022 John Sanpe <sanpeqf@gmail.com>
  */
@@ -30,7 +30,7 @@ ascii85_encode(uint8_t *buff, const void *data, size_t *plen, size_t size)
             buff[index] = '!' + value % 85;
             index += 4;
         }
-    
+
         index++;
     }
 
