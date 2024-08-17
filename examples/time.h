@@ -14,67 +14,78 @@
 #include <bfdev/log.h>
 
 static inline void
-time_dump(double ticks, clock_t start, clock_t end,
-          struct tms *stms, struct tms *etms)
+time_dump(double ticks, struct tms *stms, struct tms *etms,
+          struct timeval *start, struct timeval *stop)
 {
+    uint64_t tstart, tstop;
+
+    tstart = (uint64_t)start->tv_sec * 1000000 + start->tv_usec;
+    tstop = (uint64_t)stop->tv_sec * 1000000 + stop->tv_usec;
+
     bfdev_log_debug(
-        "\treal time: %lf\n",
-        (end - start) / ticks
+        "\treal time: %.6lf\n",
+        (double)(tstop - tstart) / 1000000
     );
 
     bfdev_log_debug(
-        "\tuser time: %lf\n",
+        "\tuser time: %.3lf\n",
         (etms->tms_utime - stms->tms_utime) / ticks
     );
 
     bfdev_log_debug(
-        "\tkern time: %lf\n",
+        "\tkern time: %.3lf\n",
         (etms->tms_stime - stms->tms_stime) / ticks
     );
 }
 
 #define EXAMPLE_TIME_STATISTICAL(codeblock...) ({   \
-    struct tms _start_tms, _stop_tms;               \
-    clock_t _start, _stop;                          \
-    unsigned int _ticks;                            \
-    int _retval;                                    \
+    struct tms __start_tms, __stop_tms;             \
+    struct timeval __start_time, __stop_time;       \
+    unsigned int __ticks;                           \
+    int __retval;                                   \
                                                     \
-    _ticks = sysconf(_SC_CLK_TCK);                  \
-    _start = times(&_start_tms);                    \
+    __ticks = sysconf(_SC_CLK_TCK);                 \
+    times(&__start_tms);                            \
+    gettimeofday(&__start_time, NULL);              \
                                                     \
-    _retval = ({                                    \
+    __retval = ({                                   \
         codeblock                                   \
     });                                             \
                                                     \
-    _stop = times(&_stop_tms);                      \
-    time_dump((double)_ticks, _start, _stop,        \
-              &_start_tms, &_stop_tms);             \
+    gettimeofday(&__stop_time, NULL);               \
+    times(&__stop_tms);                             \
                                                     \
-    _retval;                                        \
+    time_dump(                                      \
+        (double)__ticks,                            \
+        &__start_tms, &__stop_tms,                  \
+        &__start_time, &__stop_time                 \
+    );                                              \
+                                                    \
+    __retval;                                       \
 })
 
-#define EXAMPLE_TIME_LOOP(loop, time, codeblock...) ({      \
-    struct timeval _curr_timval, _stop_timval;              \
-    int _retval;                                            \
-                                                            \
-    gettimeofday(&_stop_timval, NULL);                      \
-    _stop_timval.tv_sec += (time) / 1000;                   \
-    _stop_timval.tv_usec += ((time) % 1000) * 1000;         \
-    *(loop) = 0;                                            \
-                                                            \
-    do {                                                    \
-        _retval = ({                                        \
-            codeblock                                       \
-        });                                                 \
-                                                            \
-        if (_retval)                                        \
-            break;                                          \
-                                                            \
-        ++*(loop);                                          \
-        gettimeofday(&_curr_timval, NULL);                  \
-    } while (timercmp(&_curr_timval, &_stop_timval, <));    \
-                                                            \
-    _retval;                                                \
+#define EXAMPLE_TIME_LOOP(loop, time, codeblock...) ({  \
+    struct timeval __curr_time, __stop_time;            \
+    int __retval;                                       \
+                                                        \
+    gettimeofday(&__stop_time, NULL);                   \
+    __stop_time.tv_sec += (time) / 1000;                \
+    __stop_time.tv_usec += ((time) % 1000) * 1000;      \
+    *(loop) = 0;                                        \
+                                                        \
+    do {                                                \
+        __retval = ({                                   \
+            codeblock                                   \
+        });                                             \
+                                                        \
+        if (__retval)                                   \
+            break;                                      \
+                                                        \
+        ++*(loop);                                      \
+        gettimeofday(&__curr_time, NULL);               \
+    } while (timercmp(&__curr_time, &__stop_time, <));  \
+                                                        \
+    __retval;                                           \
 })
 
 #endif /* _EXAMPLES_TIME_H_ */
