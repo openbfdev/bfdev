@@ -131,25 +131,63 @@ BFDEV_BITFLAGS_STRUCT(
     __BFDEV_CACHE_STARVING
 );
 
+/**
+ * bfdev_cache_find - find element by tag, if present in the hash table.
+ * @head: the lru_cache header.
+ * @tag: element key.
+ */
 extern bfdev_cache_node_t *
 bfdev_cache_find(bfdev_cache_head_t *head, const void *tag);
 
+/**
+ * bfdev_cache_obtain - obtain element by tag, with different ways.
+ * @head: the lru_cache header.
+ * @tag: element key.
+ * @flags: ways to obtaining element.
+ */
 extern bfdev_cache_node_t *
-bfdev_cache_obtain(bfdev_cache_head_t *head,
-                   const void *tag, unsigned long flags);
+bfdev_cache_obtain(bfdev_cache_head_t *head, const void *tag,
+                   unsigned long flags);
 
+/**
+ * bfdev_cache_put - put using element into the cache.
+ * @head: the lru_cache header.
+ * @node: element to be put.
+ *
+ * node status transition:
+ * BFDEV_CACHE_USING => BFDEV_CACHE_MANAGED
+ */
 extern unsigned long
-bfdev_cache_put(bfdev_cache_head_t *head,
-                bfdev_cache_node_t *node);
+bfdev_cache_put(bfdev_cache_head_t *head, bfdev_cache_node_t *node);
 
+/**
+ * bfdev_cache_del - delete managed element from the cache.
+ * @head: the lru_cache header.
+ * @node: element to be deleted.
+ *
+ * node status transition:
+ * BFDEV_CACHE_MANAGED => BFDEV_CACHE_FREED
+ */
 extern int
-bfdev_cache_del(bfdev_cache_head_t *head,
-                bfdev_cache_node_t *node);
+bfdev_cache_del(bfdev_cache_head_t *head, bfdev_cache_node_t *node);
 
+/**
+ * bfdev_cache_set - rename element tag.
+ * @head: the lru_cache header.
+ * @node: element to be renamed.
+ * @tag: new element tag.
+ *
+ * node status transition:
+ * node must in BFDEV_CACHE_MANAGED status.
+ */
 extern int
-bfdev_cache_set(bfdev_cache_head_t *head,
-                bfdev_cache_node_t *node, const void *tag);
+bfdev_cache_set(bfdev_cache_head_t *head, bfdev_cache_node_t *node,
+                const void *tag);
 
+/**
+ * bfdev_cache_committed() - tell cache that pending changes have been recorded.
+ * @head: the lru_cache header.
+ */
 extern void
 bfdev_cache_committed(bfdev_cache_head_t *head);
 
