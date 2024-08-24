@@ -16,7 +16,7 @@ bfdev_slist_check_add(bfdev_slist_head_t *node, bfdev_slist_head_t *newn)
 {
     if (bfdev_unlikely(node->next == newn)) {
         bfdev_log_err(
-            "slist_add corruption (%p) node->next"
+            "insert corruption (%p) node->next"
             " should not be newn (%p)\n",
             node, newn
         );
@@ -25,7 +25,7 @@ bfdev_slist_check_add(bfdev_slist_head_t *node, bfdev_slist_head_t *newn)
 
     if (bfdev_unlikely(node == newn)) {
         bfdev_log_err(
-            "slist_add corruption double add:"
+            "insert corruption double add:"
             " newn=(%p), node=(%p)\n",
             newn, node
         );
@@ -40,7 +40,7 @@ bfdev_slist_check_del(bfdev_slist_head_t *node)
 {
     if (bfdev_unlikely(node->next == BFDEV_POISON_SLIST)) {
         bfdev_log_err(
-            "bfdev_slist_del corruption (%p) node->next"
+            "delete corruption (%p) node->next"
             " should not be BFDEV_POISON_SLIST (%p)\n",
             node, BFDEV_POISON_SLIST
         );
