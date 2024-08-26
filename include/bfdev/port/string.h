@@ -34,6 +34,15 @@ bfport_memset(void *s, int c, size_t n)
 }
 #endif
 
+#ifndef bfport_memcmp
+# define bfport_memcmp bfport_memcmp
+static __bfdev_always_inline int
+bfport_memcmp(const void *s1, const void *s2, size_t n)
+{
+    return memcmp(s1, s2, n);
+}
+#endif
+
 #ifndef bfport_strcmp
 # define bfport_strcmp bfport_strcmp
 static __bfdev_always_inline int

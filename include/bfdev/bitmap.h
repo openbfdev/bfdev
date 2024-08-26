@@ -70,7 +70,7 @@ bfdev_bitmap_equal(const unsigned long *src1, const unsigned long *src2,
     if (!bfdev_bitmap_const_aligned(bits))
         return bfdev_bitmap_comp_equal(src1, src2, bits);
 
-    return memcmp(src1, src2, bits / BFDEV_BITS_PER_BYTE);
+    return bfport_memcmp(src1, src2, bits / BFDEV_BITS_PER_BYTE);
 }
 
 static __bfdev_always_inline bool
