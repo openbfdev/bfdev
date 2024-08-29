@@ -39,7 +39,7 @@ lfu_compare(const bfdev_heap_node_t *node1,
     if (lfu1->count == lfu2->count)
         return 0;
 
-    return lfu1->count < lfu2->count ? -1 : 1;
+    return bfdev_cmp(lfu1->count > lfu2->count);
 }
 
 static bool

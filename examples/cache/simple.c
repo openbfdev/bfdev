@@ -17,13 +17,31 @@
 #define TEST_SIZE 10
 #define TEST_MASK 30
 
+static unsigned long
+cache_hash(const void *tag, void *pdata)
+{
+    return (unsigned long)(uintptr_t)tag;
+}
+
+static long
+cache_find(const void *node, const void *tag, void *pdata)
+{
+    return node != tag;
+}
+
+static const bfdev_cache_ops_t
+cache_ops = {
+    .hash = cache_hash,
+    .find = cache_find,
+};
+
 static int
 cache_test(const char *name)
 {
     bfdev_cache_head_t *cache;
     unsigned int count;
 
-    cache = bfdev_cache_create(name, NULL, TEST_SIZE, 1);
+    cache = bfdev_cache_create(name, NULL, &cache_ops, TEST_SIZE, 1, NULL);
     if (!cache)
         return 1;
 
@@ -33,16 +51,16 @@ cache_test(const char *name)
         unsigned int value, verify;
 
         value = (unsigned int)rand() % TEST_MASK;
-        node = bfdev_cache_get(cache, value);
+        node = bfdev_cache_get(cache, (void *)(uintptr_t)value);
         if (!node)
             return 1;
 
         if (node->status == BFDEV_CACHE_PENDING) {
             bfdev_log_info("%s test%u cache miss: %u\n", name, count, value);
-            node->pdata = (void *)(uintptr_t)value;
+            node->data = (void *)(uintptr_t)value;
             bfdev_cache_committed(cache);
         } else {
-            verify = (uintptr_t)node->pdata;
+            verify = (uintptr_t)node->data;
             if (value == verify)
                 bfdev_log_info("%s test%u cache hit: %u passed\n",
                                name, count, verify);

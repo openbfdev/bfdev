@@ -15,13 +15,14 @@
 
 BFDEV_BEGIN_DECLS
 
-#ifndef BFDEV_CACHE_FREE_TAG
-# define BFDEV_CACHE_FREE_TAG ULONG_MAX
-#endif
+typedef enum bfdev_cache_obtain bfdev_cache_obtain_t;
+typedef enum bfdev_cache_flags bfdev_cache_flags_t;
+typedef enum bfdev_cache_status bfdev_cache_status_t;
 
 typedef struct bfdev_cache_head bfdev_cache_head_t;
 typedef struct bfdev_cache_node bfdev_cache_node_t;
 typedef struct bfdev_cache_algo bfdev_cache_algo_t;
+typedef struct bfdev_cache_ops bfdev_cache_ops_t;
 
 enum bfdev_cache_obtain {
     __BFDEV_CACHE_CHANGE = 0,
@@ -29,6 +30,7 @@ enum bfdev_cache_obtain {
 
     BFDEV_CACHE_CHANGE = BFDEV_BIT(__BFDEV_CACHE_CHANGE),
     BFDEV_CACHE_UNCOMMITTED = BFDEV_BIT(__BFDEV_CACHE_UNCOMMITTED),
+    BFDEV_CACHE_CUMULATIVE = BFDEV_CACHE_CHANGE | BFDEV_CACHE_UNCOMMITTED,
 };
 
 enum bfdev_cache_flags {
@@ -49,12 +51,12 @@ enum bfdev_cache_status {
 struct bfdev_cache_node {
     bfdev_hlist_node_t hash;
     bfdev_list_head_t list;
-    enum bfdev_cache_status status;
+    bfdev_cache_status_t status;
 
     unsigned long index;
-    unsigned long tag;
     unsigned long refcnt;
-    void *pdata;
+    const void *tag;
+    void *data;
 };
 
 struct bfdev_cache_head {
@@ -62,6 +64,9 @@ struct bfdev_cache_head {
     const bfdev_cache_algo_t *algo;
     bfdev_hlist_head_t *taghash;
     bfdev_cache_node_t **nodes;
+
+    const bfdev_cache_ops_t *ops;
+    void *pdata;
 
     bfdev_list_head_t using;
     bfdev_list_head_t freed;
@@ -99,6 +104,11 @@ struct bfdev_cache_algo {
     void (*destroy)(bfdev_cache_head_t *head);
 };
 
+struct bfdev_cache_ops {
+    unsigned long (*hash)(const void *tag, void *pdata);
+    long (*find)(const void *node, const void *tag, void *pdata);
+};
+
 BFDEV_BITFLAGS(
     bfdev_cache_change,
     __BFDEV_CACHE_CHANGE
@@ -121,23 +131,63 @@ BFDEV_BITFLAGS_STRUCT(
     __BFDEV_CACHE_STARVING
 );
 
+/**
+ * bfdev_cache_find - find element by tag, if present in the hash table.
+ * @head: the lru_cache header.
+ * @tag: element key.
+ */
 extern bfdev_cache_node_t *
-bfdev_cache_find(bfdev_cache_head_t *head, unsigned long tag);
+bfdev_cache_find(bfdev_cache_head_t *head, const void *tag);
 
+/**
+ * bfdev_cache_obtain - obtain element by tag, with different ways.
+ * @head: the lru_cache header.
+ * @tag: element key.
+ * @flags: ways to obtaining element.
+ */
 extern bfdev_cache_node_t *
-bfdev_cache_obtain(bfdev_cache_head_t *head, unsigned long tag,
+bfdev_cache_obtain(bfdev_cache_head_t *head, const void *tag,
                    unsigned long flags);
 
+/**
+ * bfdev_cache_put - put using element into the cache.
+ * @head: the lru_cache header.
+ * @node: element to be put.
+ *
+ * node status transition:
+ * BFDEV_CACHE_USING => BFDEV_CACHE_MANAGED
+ */
 extern unsigned long
 bfdev_cache_put(bfdev_cache_head_t *head, bfdev_cache_node_t *node);
 
+/**
+ * bfdev_cache_del - delete managed element from the cache.
+ * @head: the lru_cache header.
+ * @node: element to be deleted.
+ *
+ * node status transition:
+ * BFDEV_CACHE_MANAGED => BFDEV_CACHE_FREED
+ */
 extern int
 bfdev_cache_del(bfdev_cache_head_t *head, bfdev_cache_node_t *node);
 
+/**
+ * bfdev_cache_set - rename element tag.
+ * @head: the lru_cache header.
+ * @node: element to be renamed.
+ * @tag: new element tag.
+ *
+ * node status transition:
+ * node must in BFDEV_CACHE_MANAGED status.
+ */
 extern int
 bfdev_cache_set(bfdev_cache_head_t *head, bfdev_cache_node_t *node,
-                unsigned long tag);
+                const void *tag);
 
+/**
+ * bfdev_cache_committed() - tell cache that pending changes have been recorded.
+ * @head: the lru_cache header.
+ */
 extern void
 bfdev_cache_committed(bfdev_cache_head_t *head);
 
@@ -146,28 +196,28 @@ bfdev_cache_reset(bfdev_cache_head_t *head);
 
 extern bfdev_cache_head_t *
 bfdev_cache_create(const char *name, const bfdev_alloc_t *alloc,
-                   unsigned long size, unsigned long maxp);
+                   const bfdev_cache_ops_t *ops, unsigned long size,
+                   unsigned long maxp, void *pdata);
 
 extern void
 bfdev_cache_destroy(bfdev_cache_head_t *head);
 
 static inline bfdev_cache_node_t *
-bfdev_cache_get(bfdev_cache_head_t *head, unsigned long tag)
+bfdev_cache_get(bfdev_cache_head_t *head, const void *tag)
 {
     return bfdev_cache_obtain(head, tag, BFDEV_CACHE_CHANGE);
 }
 
 static inline bfdev_cache_node_t *
-bfdev_cache_try_get(bfdev_cache_head_t *head, unsigned long tag)
+bfdev_cache_try_get(bfdev_cache_head_t *head, const void *tag)
 {
     return bfdev_cache_obtain(head, tag, 0);
 }
 
 static inline bfdev_cache_node_t *
-bfdev_cache_cumulative(bfdev_cache_head_t *head, unsigned long tag)
+bfdev_cache_cumulative(bfdev_cache_head_t *head, const void *tag)
 {
-    return bfdev_cache_obtain(head, tag, BFDEV_CACHE_CHANGE |
-                              BFDEV_CACHE_UNCOMMITTED);
+    return bfdev_cache_obtain(head, tag, BFDEV_CACHE_CUMULATIVE);
 }
 
 extern int
