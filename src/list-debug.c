@@ -17,7 +17,7 @@ bfdev_list_check_add(bfdev_list_head_t *prev, bfdev_list_head_t *next,
 {
     if (bfdev_unlikely(prev->next != next)) {
         bfdev_log_err(
-            "list_add corruption (%p) prev->next"
+            "insert corruption (%p) prev->next"
             " should be next (%p), but was (%p)\n",
             prev, next, prev->next
         );
@@ -26,7 +26,7 @@ bfdev_list_check_add(bfdev_list_head_t *prev, bfdev_list_head_t *next,
 
     if (bfdev_unlikely(next->prev != prev)) {
         bfdev_log_err(
-            "list_add corruption (%p) next->prev"
+            "insert corruption (%p) next->prev"
             " should be prev (%p), but was (%p)\n",
             next, prev, next->prev
         );
@@ -35,7 +35,7 @@ bfdev_list_check_add(bfdev_list_head_t *prev, bfdev_list_head_t *next,
 
     if (bfdev_unlikely(newn == prev || newn == next)) {
         bfdev_log_err(
-            "list_add corruption double add:"
+            "insert corruption double add:"
             " newn=(%p), prev=(%p), next=(%p)\n",
             newn, prev, next
         );
@@ -50,7 +50,7 @@ bfdev_list_check_del(bfdev_list_head_t *node)
 {
     if (bfdev_unlikely(node->next == BFDEV_POISON_LIST1)) {
         bfdev_log_err(
-            "list_del corruption (%p) node->next"
+            "delete corruption (%p) node->next"
             " should not be BFDEV_POISON_LIST1 (%p)\n",
             node, BFDEV_POISON_LIST1
         );
@@ -59,7 +59,7 @@ bfdev_list_check_del(bfdev_list_head_t *node)
 
     if (bfdev_unlikely(node->prev == BFDEV_POISON_LIST2)) {
         bfdev_log_err(
-            "list_del corruption (%p) node->prev"
+            "delete corruption (%p) node->prev"
             " should not be BFDEV_POISON_LIST2 (%p)\n",
             node, BFDEV_POISON_LIST2
         );
