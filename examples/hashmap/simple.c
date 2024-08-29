@@ -28,23 +28,32 @@ hashmap_hash_key(const void *key, void *pdata)
 static inline unsigned long
 hashmap_hash_node(const bfdev_hlist_node_t *node, void *pdata)
 {
-    const struct test_node *tnode = node_to_test(node);
+    struct test_node *tnode;
+
+    tnode = node_to_test(node);
+
     return tnode->value;
 }
 
 static inline long
 hashmap_equal(const bfdev_hlist_node_t *node1,
-              const bfdev_hlist_node_t *nodeb, void *pdata)
+              const bfdev_hlist_node_t *node2, void *pdata)
 {
-    const struct test_node *tnode1 = node_to_test(node1);
-    const struct test_node *tnodeb = node_to_test(nodeb);
-    return tnode1->value - tnodeb->value;
+    struct test_node *tnode1, *tnode2;
+
+    tnode1 = node_to_test(node1);
+    tnode2 = node_to_test(node2);
+
+    return tnode1->value - tnode2->value;
 }
 
 static inline long
 hashmap_find(const bfdev_hlist_node_t *node, const void *key, void *pdata)
 {
-    const struct test_node *tnode = node_to_test(node);
+    struct test_node *tnode;
+
+    tnode = node_to_test(node);
+
     return tnode->value - (unsigned long)key;
 }
 

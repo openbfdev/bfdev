@@ -79,7 +79,10 @@ static inline void
 bfdev_hashtbl_add(bfdev_hlist_head_t *head, unsigned long size,
                   bfdev_hlist_node_t *node, unsigned long key)
 {
-    unsigned long index = bfdev_hashtbl_index(size, key);
+    unsigned long index;
+
+    index = bfdev_hashtbl_index(size, key);
+
     bfdev_hlist_head_add(&head[index], node);
 }
 
