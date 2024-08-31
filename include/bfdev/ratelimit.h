@@ -16,22 +16,23 @@ typedef struct bfdev_ratelimit bfdev_ratelimit_t;
 
 /**
  * struct bfdev_ratelimit - describe ratelimit status.
- * @begin: start time of current management granularity.
  * @interval: manage time granularity of the maximum number of transfers.
  * @burst: maximum number of transfers allowed in @interval period.
+ * @begin: start time of current management granularity.
  * @passed: number of data passed in compliance with rate limit.
  * @missed: number of lost data exceeding the rate limit.
  */
 struct bfdev_ratelimit {
-    bfdev_time_t begin;
     bfdev_time_t interval;
     unsigned int burst;
+
+    bfdev_time_t begin;
     unsigned int passed;
     unsigned int missed;
 };
 
 #define BFDEV_RATELIMIT_STATIC(INTERVAL, BURST) { \
-    .interval = (INTERVAL), .burst = (BURST) \
+    .interval = (INTERVAL), .burst = (BURST), \
 }
 
 #define BFDEV_RATELIMIT_INIT(interval, burst) \
@@ -50,6 +51,8 @@ bfdev_ratelimit_init(bfdev_ratelimit_t *limit,
 static inline void
 bfdev_ratelimit_reset(bfdev_ratelimit_t *limit)
 {
+    limit->begin = 0;
+    limit->passed = 0;
     limit->missed = 0;
 }
 

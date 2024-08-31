@@ -24,7 +24,7 @@ bfdev_ratelimit(bfdev_ratelimit_t *limit, bfdev_time_t current)
         limit->passed = 0;
     }
 
-    if (limit->burst > limit->passed) {
+    if (bfdev_likely(limit->burst > limit->passed)) {
         limit->passed++;
         accept = true;
     } else {
