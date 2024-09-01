@@ -46,6 +46,7 @@ set(BFDEV_SOURCE
     ${CMAKE_CURRENT_LIST_DIR}/skiplist.c
     ${CMAKE_CURRENT_LIST_DIR}/sort.c
     ${CMAKE_CURRENT_LIST_DIR}/stringhash.c
+    ${CMAKE_CURRENT_LIST_DIR}/tokenbucket.c
 )
 
 if(BFDEV_DEBUG_LIST)
