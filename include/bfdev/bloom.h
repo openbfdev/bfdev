@@ -68,11 +68,11 @@ bfdev_bloom_create(const bfdev_alloc_t *alloc, unsigned int capacity,
                    bfdev_bloom_hash_t hash, unsigned int funcs, void *pdata);
 
 /**
- * bfdev_bloom_destory() - destory a bloom filter.
+ * bfdev_bloom_destroy() - destroy a bloom filter.
  * @bloom: bloom filter pointer.
  */
 extern void
-bfdev_bloom_destory(bfdev_bloom_t *bloom);
+bfdev_bloom_destroy(bfdev_bloom_t *bloom);
 
 BFDEV_END_DECLS
 
