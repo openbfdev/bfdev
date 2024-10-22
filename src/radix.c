@@ -245,7 +245,7 @@ bfdev_radix_root_charge(bfdev_radix_root_t *root,
 }
 
 static void
-radix_destory_recurse(const bfdev_alloc_t *alloc,
+radix_destroy_recurse(const bfdev_alloc_t *alloc,
                       bfdev_radix_node_t *node, unsigned int level)
 {
     bfdev_radix_node_t *child;
@@ -255,7 +255,7 @@ radix_destory_recurse(const bfdev_alloc_t *alloc,
         for (index = 0; index < BFDEV_RADIX_ARY; ++index) {
             child = node->child[index];
             if (child)
-                radix_destory_recurse(alloc, child, level - 1);
+                radix_destroy_recurse(alloc, child, level - 1);
         }
     }
 
@@ -268,7 +268,7 @@ bfdev_radix_root_release(bfdev_radix_root_t *root)
     const bfdev_alloc_t *alloc;
 
     alloc = root->alloc;
-    radix_destory_recurse(alloc, root->node, root->level);
+    radix_destroy_recurse(alloc, root->node, root->level);
 
     root->level = 0;
     root->node = NULL;

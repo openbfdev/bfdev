@@ -63,7 +63,7 @@ main(int argc, const char *argv[])
     }
 
     bfdev_bloom_flush(bloom);
-    bfdev_bloom_destory(bloom);
+    bfdev_bloom_destroy(bloom);
 
     return 0;
 }
