@@ -10,7 +10,6 @@
 #include <bfdev/mpi.h>
 #include <bfdev/dword.h>
 #include <bfdev/bitmap.h>
-#include <bfdev/bug.h>
 #include <export.h>
 
 #define mpi_len(mpi) bfdev_array_index(&(mpi)->value)

@@ -9,7 +9,6 @@
 #include <base.h>
 #include <bfdev/dword.h>
 #include <bfdev/bitops.h>
-#include <bfdev/bug.h>
 #include <export.h>
 
 export void
