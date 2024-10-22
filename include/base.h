@@ -27,5 +27,6 @@
 #include <bfdev/minmax.h>
 #include <bfdev/string.h>
 #include <bfdev/stringify.h>
+#include <bfdev/bug.h>
 
 #endif /* _LOCAL_BASE_H_ */

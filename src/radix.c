@@ -6,7 +6,6 @@
 #include <base.h>
 #include <bfdev/radix.h>
 #include <bfdev/overflow.h>
-#include <bfdev/bug.h>
 #include <export.h>
 
 #define RADIX_BLOCK_MASK (BFDEV_RADIX_BLOCK - 1)

@@ -45,7 +45,7 @@ cache_starving(bfdev_cache_head_t *head)
 }
 
 static __bfdev_always_inline unsigned long
-cache_hash(bfdev_cache_head_t *head, const char *tag)
+cache_hash(bfdev_cache_head_t *head, const void *tag)
 {
     const bfdev_cache_ops_t *ops;
     unsigned long hash;
@@ -56,7 +56,7 @@ cache_hash(bfdev_cache_head_t *head, const char *tag)
     return hash;
 }
 
-static __bfdev_always_inline unsigned long
+static __bfdev_always_inline bool
 cache_find(bfdev_cache_head_t *head, bfdev_cache_node_t *node, const char *tag)
 {
     const bfdev_cache_ops_t *ops;
@@ -65,7 +65,7 @@ cache_find(bfdev_cache_head_t *head, bfdev_cache_node_t *node, const char *tag)
     ops = head->ops;
     cmpval = ops->find(node->data, tag, head->pdata);
 
-    return cmpval;
+    return !cmpval;
 }
 
 /* Find in changing, using or algos */
@@ -79,7 +79,7 @@ cache_lookup(bfdev_cache_head_t *head, const char *tag, bool change)
     index = bfdev_hashtbl_index(head->size, hash);
 
     bfdev_hashtbl_for_each_idx_entry(walk, head->taghash, head->size, hash, index) {
-        if (cache_find(head, walk, tag))
+        if (!cache_find(head, walk, tag))
             continue;
 
         if (walk->status != BFDEV_CACHE_PENDING || change)
@@ -191,8 +191,9 @@ bfdev_cache_obtain(bfdev_cache_head_t *head, const void *tag, unsigned long flag
         return NULL;
 
     node = cache_obtain(head, tag);
-    bfdev_cache_starving_clr(head);
+    BFDEV_BUG_ON(!node);
 
+    bfdev_cache_starving_clr(head);
     node->refcnt++;
     head->pending++;
     head->used++;

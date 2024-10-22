@@ -7,7 +7,6 @@
 #include <base.h>
 #include <bfdev/array.h>
 #include <bfdev/overflow.h>
-#include <bfdev/bug.h>
 #include <export.h>
 
 static inline size_t

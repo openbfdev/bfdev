@@ -6,7 +6,6 @@
 #include <base.h>
 #include <bfdev/log.h>
 #include <bfdev/scnprintf.h>
-#include <bfdev/bug.h>
 #include <export.h>
 
 export
