@@ -23,10 +23,8 @@ bfdev_tokenbucket(bfdev_tokenbucket_t *limit, bfdev_time_t current)
 
     /* generate token */
     generate = bfdev_time_sub(current, limit->last) / limit->interval;
+    limit->last = bfdev_time_add(generate * limit->interval, limit->last);
     limit->current = bfdev_min(limit->current + generate, limit->capacity);
-
-    if (generate)
-        limit->last = current;
 
     if (bfdev_unlikely(!limit->current)) {
         limit->missed++;
