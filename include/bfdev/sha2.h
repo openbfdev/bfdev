@@ -47,7 +47,7 @@ struct bfdev_sha2_ctx {
 };
 
 extern void
-bfdev_sha2_update(bfdev_sha2_ctx_t *ctx, const char *data, size_t size);
+bfdev_sha2_update(bfdev_sha2_ctx_t *ctx, const void *data, size_t size);
 
 extern void
 bfdev_sha224_finish(bfdev_sha2_ctx_t *ctx, void *hash);

@@ -32,7 +32,7 @@ struct bfdev_sha1_ctx {
 };
 
 extern void
-bfdev_sha1_update(bfdev_sha1_ctx_t *ctx, const char *data, size_t size);
+bfdev_sha1_update(bfdev_sha1_ctx_t *ctx, const void *data, size_t size);
 
 extern void
 bfdev_sha1_finish(bfdev_sha1_ctx_t *ctx, void *hash);

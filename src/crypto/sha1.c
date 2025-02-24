@@ -21,7 +21,7 @@ sha1_transform_block(bfdev_sha1_ctx_t *ctx, const void *src, size_t blocks)
 }
 
 export void
-bfdev_sha1_update(bfdev_sha1_ctx_t *ctx, const char *data, size_t size)
+bfdev_sha1_update(bfdev_sha1_ctx_t *ctx, const void *data, size_t size)
 {
     bfdev_sha1_base_update(ctx, data, size, sha1_transform_block);
 }
