@@ -36,9 +36,10 @@ skipnode_find(bfdev_skip_head_t *head, bfdev_find_t find,
         return NULL;
 
     list = &head->nodes[level - 1];
-    end = &head->nodes[level - 1];
+    end = list;
 
     for (; level--; --list, --end) {
+        retval = BFDEV_LT;
         bfdev_list_for_each_continue(list, end) {
             walk = bfdev_list_entry(list, bfdev_skip_node_t, list[level]);
             retval = find(walk->key, pdata);
@@ -48,7 +49,7 @@ skipnode_find(bfdev_skip_head_t *head, bfdev_find_t find,
             }
         }
 
-        if (retval == 0) {
+        if (!retval) {
             if (plev)
                 *plev = level + 1;
             return walk;
@@ -63,16 +64,12 @@ skipnode_find(bfdev_skip_head_t *head, bfdev_find_t find,
 export bfdev_skip_node_t *
 bfdev_skiplist_find(bfdev_skip_head_t *head, bfdev_find_t find, void *pdata)
 {
-    bfdev_skip_node_t *node;
-
-    node = skipnode_find(head, find, pdata, NULL);
-
-    return node;
+    return skipnode_find(head, find, pdata, NULL);
 }
 
 export int
-bfdev_skiplist_insert(bfdev_skip_head_t *head, void *key, bfdev_cmp_t cmp,
-                      void *pdata)
+bfdev_skiplist_insert(bfdev_skip_head_t *head, void *key,
+                      bfdev_cmp_t cmp, void *pdata)
 {
     const bfdev_alloc_t *alloc;
     bfdev_list_head_t *list, *end;
