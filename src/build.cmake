@@ -39,7 +39,6 @@ set(BFDEV_SOURCE
     ${CMAKE_CURRENT_LIST_DIR}/radix.c
     ${CMAKE_CURRENT_LIST_DIR}/ratelimit.c
     ${CMAKE_CURRENT_LIST_DIR}/rbtree.c
-    ${CMAKE_CURRENT_LIST_DIR}/refcount.c
     ${CMAKE_CURRENT_LIST_DIR}/respool.c
     ${CMAKE_CURRENT_LIST_DIR}/ringbuf.c
     ${CMAKE_CURRENT_LIST_DIR}/scnprintf.c
@@ -82,6 +81,13 @@ if(BFDEV_DEBUG_HEAP)
     set(BFDEV_SOURCE
         ${BFDEV_SOURCE}
         ${CMAKE_CURRENT_LIST_DIR}/heap-debug.c
+    )
+endif()
+
+if(BFDEV_DEBUG_REFCNT)
+    set(BFDEV_SOURCE
+        ${BFDEV_SOURCE}
+        ${CMAKE_CURRENT_LIST_DIR}/refcount-debug.c
     )
 endif()
 
