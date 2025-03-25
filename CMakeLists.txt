@@ -25,6 +25,7 @@ set(BFDEV_HEADER_PATH ${PROJECT_SOURCE_DIR}/include)
 set(BFDEV_SOURCE_PATH ${PROJECT_SOURCE_DIR}/src)
 set(BFDEV_DOCUMENT_PATH ${PROJECT_SOURCE_DIR}/docs)
 set(BFDEV_GENERATED_PATH ${PROJECT_BINARY_DIR}/generated)
+set(BFDEV_EXPORT_PATH ${PROJECT_BINARY_DIR}/export)
 
 set(BFDEV_ARCH_PATH ${PROJECT_SOURCE_DIR}/arch/${BFDEV_ARCH})
 set(BFDEV_ARCH_HEADER_PATH ${BFDEV_ARCH_PATH}/include)
@@ -86,9 +87,30 @@ packed_header(
     ${BFDEV_HEADER_PATH}/bfdev
 )
 
+add_custom_target(
+    bfdev_export
+    COMMAND ${CMAKE_COMMAND} -E make_directory
+        ${BFDEV_EXPORT_PATH}
+        ${BFDEV_EXPORT_PATH}/bfdev
+    COMMAND ${CMAKE_COMMAND} -E copy
+        ${BFDEV_GENERATED_PATH}/bfdev.h
+        ${BFDEV_EXPORT_PATH}
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${BFDEV_HEADER_PATH}/bfdev
+        ${BFDEV_ARCH_HEADER_PATH}/bfdev
+        ${BFDEV_GENERATED_PATH}/bfdev
+        ${BFDEV_EXPORT_PATH}/bfdev
+)
+
+set_property(
+    GLOBAL PROPERTY
+    "BFDEV_INCLUDE_DIRS"
+    ${BFDEV_EXPORT_PATH}
+)
+
 macro(bfdev_dependencies target)
     add_dependencies(
-        ${target}
+        bfdev_export
         gen-crc8
         gen-crc16
         gen-crc16be
@@ -96,6 +118,11 @@ macro(bfdev_dependencies target)
         gen-crc32be
         gen-crc64
         gen-crc64be
+    )
+
+    add_dependencies(
+        ${target}
+        bfdev_export
     )
 endmacro()
 
@@ -141,14 +168,12 @@ if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
     )
 
     install(FILES
-        ${BFDEV_GENERATED_PATH}/bfdev.h
+        ${BFDEV_EXPORT_PATH}/bfdev.h
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     )
 
     install(DIRECTORY
-        ${BFDEV_HEADER_PATH}/bfdev
-        ${BFDEV_GENERATED_PATH}/bfdev
-        ${BFDEV_ARCH_HEADER_PATH}/bfdev
+        ${BFDEV_EXPORT_PATH}/bfdev
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     )
 
