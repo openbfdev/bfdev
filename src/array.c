@@ -53,8 +53,7 @@ array_apply(bfdev_array_t *array, unsigned long count)
 }
 
 static inline void *
-array_peek(const bfdev_array_t *array, unsigned long num,
-           unsigned long *indexp)
+array_peek(const bfdev_array_t *array, unsigned long num, unsigned long *idxp)
 {
     unsigned long index;
     uintptr_t offset;
@@ -65,8 +64,8 @@ array_peek(const bfdev_array_t *array, unsigned long num,
         return NULL;
 
     offset = bfdev_array_offset(array, index);
-    if (indexp)
-        *indexp = index;
+    if (idxp)
+        *idxp = index;
 
     return array->data + offset;
 }
@@ -104,6 +103,22 @@ export void *
 bfdev_array_peek(const bfdev_array_t *array, unsigned long num)
 {
     return array_peek(array, num, NULL);
+}
+
+export int
+bfdev_array_append(bfdev_array_t *array, const void *data, unsigned long num)
+{
+    size_t size;
+    void *buff;
+
+    buff = bfdev_array_push(array, num);
+    if (bfdev_unlikely(!buff))
+        return -BFDEV_ENOMEM;
+
+    size = bfdev_array_offset(array, num);
+    bfport_memcpy(buff, data, size);
+
+    return -BFDEV_ENOERR;
 }
 
 export int
