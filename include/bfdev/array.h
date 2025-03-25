@@ -10,6 +10,7 @@
 #include <bfdev/config.h>
 #include <bfdev/types.h>
 #include <bfdev/stddef.h>
+#include <bfdev/string.h>
 #include <bfdev/allocator.h>
 
 BFDEV_BEGIN_DECLS
@@ -131,7 +132,7 @@ bfdev_array_data(const bfdev_array_t *array, unsigned long index)
 /**
  * bfdev_array_push() - push elements into the array.
  * @array: the array object.
- * @num: the data length to push.
+ * @num: the number of element to push.
  *
  * Creates a number of new elements on the array and
  * returns a pointer to the first of these elements.
@@ -150,9 +151,22 @@ extern void *
 bfdev_array_peek(const bfdev_array_t *array, unsigned long num);
 
 /**
+ * bfdev_array_append() - append memory into the array.
+ * @array: the array object.
+ * @data: the data to append.
+ * @num: the number of element to append.
+ *
+ * Return 0 on success or a negative error code on failure.
+ */
+extern int
+bfdev_array_append(bfdev_array_t *array, const void *data, unsigned long num);
+
+/**
  * bfdev_array_resize() - directly set the number of elements in array.
  * @array: the array object.
  * @num: the number required resize.
+ *
+ * Return 0 on success or a negative error code on failure.
  */
 extern int
 bfdev_array_resize(bfdev_array_t *array, unsigned long num);
@@ -165,6 +179,8 @@ bfdev_array_resize(bfdev_array_t *array, unsigned long num);
  * Ensure that the buffer has space allocated for at least
  * @num bytes. If the current buffer is too small, it will
  * be reallocated, possibly to a larger size than requested.
+ *
+ * Return 0 on success or a negative error code on failure.
  */
 extern int
 bfdev_array_reserve(bfdev_array_t *array, unsigned long num);
