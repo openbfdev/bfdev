@@ -21,9 +21,8 @@ host_target(gen-crc64be gen-crc64be.c)
 
 macro(generate_crctbl proc path name table rows poly trans)
     add_custom_command(
-        TARGET ${proc}
-        POST_BUILD COMMAND
-        bash -c \"
+        TARGET ${proc} POST_BUILD
+        COMMAND bash -c \"
             mkdir -p ${BFDEV_GENERATED_PATH}/bfdev/crypto &&
             ${PROJECT_BINARY_DIR}/scripts/${proc}
                 ${name} ${table} ${rows} ${poly} ${trans} >
