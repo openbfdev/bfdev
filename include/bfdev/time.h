@@ -35,7 +35,7 @@ bfdev_time_compare(const bfdev_time_t va, const bfdev_time_t vb)
  * @va: the bigger one.
  * @vb: the smaller one.
  */
-static inline bool
+static inline bfdev_bool
 bfdev_time_after(const bfdev_time_t va, const bfdev_time_t vb)
 {
     return bfdev_time_compare(va, vb) > 0;
@@ -46,7 +46,7 @@ bfdev_time_after(const bfdev_time_t va, const bfdev_time_t vb)
  * @va: the smaller one.
  * @vb: the bigger one.
  */
-static inline bool
+static inline bfdev_bool
 bfdev_time_before(const bfdev_time_t va, const bfdev_time_t vb)
 {
     return bfdev_time_compare(va, vb) < 0;
@@ -57,7 +57,7 @@ bfdev_time_before(const bfdev_time_t va, const bfdev_time_t vb)
  * @va: the bigger one.
  * @vb: the smaller one.
  */
-static inline bool
+static inline bfdev_bool
 bfdev_time_after_equal(const bfdev_time_t va, const bfdev_time_t vb)
 {
     return bfdev_time_compare(va, vb) >= 0;
@@ -68,7 +68,7 @@ bfdev_time_after_equal(const bfdev_time_t va, const bfdev_time_t vb)
  * @va: the smaller one.
  * @vb: the bigger one.
  */
-static inline bool
+static inline bfdev_bool
 bfdev_time_before_equal(const bfdev_time_t va, const bfdev_time_t vb)
 {
     return bfdev_time_compare(va, vb) <= 0;

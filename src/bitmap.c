@@ -7,7 +7,7 @@
 #include <bfdev/bitmap-comp.h>
 #include <export.h>
 
-export bool
+export bfdev_bool
 bfdev_bitmap_comp_equal(const unsigned long *src1, const unsigned long *src2,
                         unsigned int bits)
 {
@@ -17,19 +17,19 @@ bfdev_bitmap_comp_equal(const unsigned long *src1, const unsigned long *src2,
     length = BFDEV_BITS_DIV_LONG(bits);
     for (index = 0; index < length; ++index) {
         if (src1[index] != src2[index])
-            return false;
+            return bfdev_false;
     }
 
     if (BFDEV_BITS_MOD_LONG(bits)) {
         value = src1[index] ^ src2[index];
         if (value & BFDEV_BIT_LOW_MASK(bits))
-            return false;
+            return bfdev_false;
     }
 
-    return true;
+    return bfdev_true;
 }
 
-export bool
+export bfdev_bool
 bfdev_bitmap_comp_or_equal(const unsigned long *src1, const unsigned long *src2,
                            const unsigned long *src3, unsigned int bits)
 {
@@ -39,19 +39,19 @@ bfdev_bitmap_comp_or_equal(const unsigned long *src1, const unsigned long *src2,
     length = BFDEV_BITS_DIV_LONG(bits);
     for (index = 0; index < length; ++index) {
         if ((src1[index] | src2[index]) != src3[index])
-            return false;
+            return bfdev_false;
     }
 
     if (BFDEV_BITS_MOD_LONG(bits)) {
         value = (src1[index] | src2[index]) ^ src3[index];
         if (value & BFDEV_BIT_LOW_MASK(bits))
-            return false;
+            return bfdev_false;
     }
 
-    return true;
+    return bfdev_true;
 }
 
-export bool
+export bfdev_bool
 bfdev_bitmap_comp_intersects(const unsigned long *src1, const unsigned long *src2,
                              unsigned int bits)
 {
@@ -61,19 +61,19 @@ bfdev_bitmap_comp_intersects(const unsigned long *src1, const unsigned long *src
     length = BFDEV_BITS_DIV_LONG(bits);
     for (index = 0; index < length; ++index) {
         if ((src1[index] & src2[index]))
-            return true;
+            return bfdev_true;
     }
 
     if (BFDEV_BITS_MOD_LONG(bits)) {
         value = src1[index] & src2[index];
         if (value & BFDEV_BIT_LOW_MASK(bits))
-            return true;
+            return bfdev_true;
     }
 
-    return false;
+    return bfdev_false;
 }
 
-export bool
+export bfdev_bool
 bfdev_bitmap_comp_and(unsigned long *dest, const unsigned long *src1,
                       const unsigned long *src2, unsigned int bits)
 {
@@ -96,7 +96,7 @@ bfdev_bitmap_comp_and(unsigned long *dest, const unsigned long *src1,
     return !!result;
 }
 
-export bool
+export bfdev_bool
 bfdev_bitmap_comp_andnot(unsigned long *dest, const unsigned long *src1,
                          const unsigned long *src2, unsigned int bits)
 {
@@ -168,7 +168,7 @@ bfdev_bitmap_comp_shl(unsigned long *dest, const unsigned long *src,
     offset = BFDEV_BITS_DIV_LONG(shift);
 
     if (length <= offset) {
-        bfport_memset(dest, 0, length * sizeof(*dest));
+        bfdev_memset(dest, 0, length * sizeof(*dest));
         return;
     }
 
@@ -201,7 +201,7 @@ bfdev_bitmap_comp_shl(unsigned long *dest, const unsigned long *src,
     }
 
     if (offset)
-        bfport_memset(dest, 0, offset * sizeof(*dest));
+        bfdev_memset(dest, 0, offset * sizeof(*dest));
 }
 
 export void
@@ -215,7 +215,7 @@ bfdev_bitmap_comp_shr(unsigned long *dest, const unsigned long *src,
     offset = BFDEV_BITS_DIV_LONG(shift);
 
     if (length <= offset) {
-        bfport_memset(dest, 0, length * sizeof(*dest));
+        bfdev_memset(dest, 0, length * sizeof(*dest));
         return;
     }
 
@@ -248,7 +248,7 @@ bfdev_bitmap_comp_shr(unsigned long *dest, const unsigned long *src,
     }
 
     if (offset)
-        bfport_memset(dest + length - offset, 0, offset * sizeof(*dest));
+        bfdev_memset(dest + length - offset, 0, offset * sizeof(*dest));
 }
 
 export void
@@ -305,7 +305,7 @@ bfdev_bitmap_comp_set(unsigned long *bitmap, unsigned int start,
     while (bits - bits_to_set) {
         *curr++ |= mask_to_set;
         bits -= bits_to_set;
-        mask_to_set = ULONG_MAX;
+        mask_to_set = BFDEV_ULONG_MAX;
         bits_to_set = BFDEV_BITS_PER_LONG;
     }
 
@@ -330,7 +330,7 @@ bfdev_bitmap_comp_clr(unsigned long *bitmap, unsigned int start,
     while (bits - bits_to_clr) {
         *curr++ &= ~mask_to_clr;
         bits -= bits_to_clr;
-        mask_to_clr = ULONG_MAX;
+        mask_to_clr = BFDEV_ULONG_MAX;
         bits_to_clr = BFDEV_BITS_PER_LONG;
     }
 

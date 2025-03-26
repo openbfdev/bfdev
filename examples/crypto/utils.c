@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
 #include <bfdev/log.h>
 #include <bfdev/errname.h>
 #include <bfdev/sha1.h>

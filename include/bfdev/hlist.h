@@ -27,7 +27,7 @@ struct bfdev_hlist_head {
 };
 
 #define BFDEV_HLIST_HEAD_STATIC() { \
-    .node = NULL, \
+    .node = BFDEV_NULL, \
 }
 
 #define BFDEV_HLIST_HEAD_INIT() \
@@ -37,16 +37,16 @@ struct bfdev_hlist_head {
     bfdev_hlist_head_t name = BFDEV_HLIST_HEAD_INIT()
 
 #ifdef BFDEV_DEBUG_HLIST
-extern bool
+extern bfdev_bool
 bfdev_hlist_check_head_add(bfdev_hlist_head_t *head, bfdev_hlist_node_t *newn);
 
-extern bool
+extern bfdev_bool
 bfdev_hlist_check_next_add(bfdev_hlist_node_t *next, bfdev_hlist_node_t *newn);
 
-extern bool
+extern bfdev_bool
 bfdev_hlist_check_prev_add(bfdev_hlist_node_t *prev, bfdev_hlist_node_t *newn);
 
-extern bool
+extern bfdev_bool
 bfdev_hlist_check_del(bfdev_hlist_node_t *node);
 #endif
 
@@ -67,8 +67,8 @@ bfdev_hlist_head_init(bfdev_hlist_head_t *head)
 static inline void
 bfdev_hlist_node_init(bfdev_hlist_node_t *node)
 {
-    node->pprev = NULL;
-    node->next = NULL;
+    node->pprev = BFDEV_NULL;
+    node->next = BFDEV_NULL;
 }
 
 /**
@@ -94,7 +94,7 @@ bfdev_hlist_head_add(bfdev_hlist_head_t *head, bfdev_hlist_node_t *newn)
 
 /**
  * bfdev_hlist_next_add() - add a new entry before the one specified.
- * @node: hlist node to add it after, which must be non-NULL.
+ * @node: hlist node to add it after, which must be non-BFDEV_NULL.
  * @newn: new entry to be added.
  */
 static inline void
@@ -115,7 +115,7 @@ bfdev_hlist_next_add(bfdev_hlist_node_t *node, bfdev_hlist_node_t *newn)
 
 /**
  * bfdev_hlist_prev_add() - add a new entry before the one specified.
- * @node: hlist node to add it before, which must be non-NULL.
+ * @node: hlist node to add it before, which must be non-BFDEV_NULL.
  * @newn: new entry to be added.
  */
 static inline void
@@ -170,7 +170,7 @@ bfdev_hlist_del(bfdev_hlist_node_t *node)
  * bfdev_hlist_check_empty() - check whether the node is head.
  * @head: hlist head to check.
  */
-static inline bool
+static inline bfdev_bool
 bfdev_hlist_check_empty(const bfdev_hlist_head_t *head)
 {
     return !head->node;
@@ -181,7 +181,7 @@ bfdev_hlist_check_empty(const bfdev_hlist_head_t *head)
  * @head: the head of the hlist.
  * @node: the entry to test.
  */
-static inline bool
+static inline bfdev_bool
 bfdev_hlist_check_first(const bfdev_hlist_head_t *head,
                         const bfdev_hlist_node_t *node)
 {
@@ -192,7 +192,7 @@ bfdev_hlist_check_first(const bfdev_hlist_head_t *head,
  * bfdev_hlist_check_end() - check whether the node is a ending.
  * @node: the entry to test.
  */
-static inline bool
+static inline bfdev_bool
 bfdev_hlist_check_end(const bfdev_hlist_node_t *node)
 {
     return !node->next;
@@ -203,18 +203,18 @@ bfdev_hlist_check_end(const bfdev_hlist_node_t *node)
  * @head: hlist head to check.
  * @node: the unique node.
  */
-static inline bool
+static inline bfdev_bool
 bfdev_hlist_check_another(const bfdev_hlist_head_t *head,
                           const bfdev_hlist_node_t *node)
 {
-    return head->node == node && node->next == NULL;
+    return head->node == node && node->next == BFDEV_NULL;
 }
 
 /**
  * bfdev_hlist_check_unhashed() - check whether the node is reinitialized.
  * @node: hlist node to check.
  */
-static inline bool
+static inline bfdev_bool
 bfdev_hlist_check_unhashed(const bfdev_hlist_node_t *node)
 {
     return !node->pprev;
@@ -229,7 +229,7 @@ static inline void
 bfdev_hlist_head_replace(bfdev_hlist_head_t *oldn, bfdev_hlist_head_t *newn)
 {
     newn->node = oldn->node;
-    oldn->node = NULL;
+    oldn->node = BFDEV_NULL;
     if (newn->node)
         newn->node->pprev = &newn->node;
 }

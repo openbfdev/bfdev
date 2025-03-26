@@ -14,7 +14,7 @@ BFDEV_BEGIN_DECLS
 #include <bfdev/crypto/crc32-table.h>
 
 BFDEV_CRC_INLINE(
-    bfdev_crc32, uint32_t,
+    bfdev_crc32, bfdev_u32,
     bfdev_crc32_table, bfdev_cpu_to_le32
 )
 

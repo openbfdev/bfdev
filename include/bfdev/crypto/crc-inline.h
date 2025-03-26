@@ -16,32 +16,32 @@ BFDEV_BEGIN_DECLS
 
 #define BFDEV_CRC_BYTE(name, type, table)       \
 static inline type                              \
-name##_byte(type crc, const uint8_t data)       \
+name##_byte(type crc, const bfdev_u8 data)      \
 {                                               \
     unsigned int index = (crc ^ data) & 0xff;   \
     return table[0][index] ^ (crc >> 8);        \
 }
 
 #ifndef BFDEV_CRC_EXTEND
-# define BFDEV_CRC_INLINE(name, type, table, bswap)         \
-BFDEV_CRC_BYTE(name, type, table)                           \
-static inline type                                          \
-name##_inline(const uint8_t *src, size_t len, type crc)     \
-{                                                           \
-    crc = bswap(crc);                                       \
-    while (len--)                                           \
-        crc = name##_byte(crc, *src++);                     \
-                                                            \
-    return bswap(crc);                                      \
+# define BFDEV_CRC_INLINE(name, type, table, bswap)             \
+BFDEV_CRC_BYTE(name, type, table)                               \
+static inline type                                              \
+name##_inline(const bfdev_u8 *src, bfdev_size_t len, type crc)  \
+{                                                               \
+    crc = bswap(crc);                                           \
+    while (len--)                                               \
+        crc = name##_byte(crc, *src++);                         \
+                                                                \
+    return bswap(crc);                                          \
 }
 #else
 # define BFDEV_CRC_INLINE(name, type, table, bswap)                 \
 BFDEV_CRC_BYTE(name, type, table)                                   \
 static inline type                                                  \
-name##_inline(const uint8_t *src, size_t len, type crc)             \
+name##_inline(const bfdev_u8 *src, bfdev_size_t len, type crc)      \
 {                                                                   \
-    const uint32_t *combine;                                        \
-    uint32_t value[2];                                              \
+    const bfdev_u32 *combine;                                       \
+    bfdev_u32 value[2];                                             \
                                                                     \
     crc = (__bfdev_force type)bswap(crc);                           \
     while (len && !bfdev_align_ptr_check(src, sizeof(*value))) {    \
@@ -50,9 +50,9 @@ name##_inline(const uint8_t *src, size_t len, type crc)             \
     }                                                               \
                                                                     \
     for (combine = (const void *)src; len >= 8; len -= 8) {         \
-        value[0] = (__bfdev_force uint32_t)                         \
+        value[0] = (__bfdev_force bfdev_u32)                        \
             bfdev_cpu_to_le32p(combine++) ^ crc;                    \
-        value[1] = (__bfdev_force uint32_t)                         \
+        value[1] = (__bfdev_force bfdev_u32)                        \
             bfdev_cpu_to_le32p(combine++);                          \
                                                                     \
         crc = (                                                     \

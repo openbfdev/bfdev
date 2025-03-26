@@ -24,13 +24,13 @@ BFDEV_BEGIN_DECLS
 typedef struct bfdev_md5_ctx bfdev_md5_ctx_t;
 
 struct bfdev_md5_ctx {
-	uint32_t digest[BFDEV_MD5_HASH_WORDS];
-	uint32_t block[BFDEV_MD5_BLOCK_WORDS];
-	unsigned long count;
+    bfdev_u32 digest[BFDEV_MD5_HASH_WORDS];
+    bfdev_u32 block[BFDEV_MD5_BLOCK_WORDS];
+    unsigned long count;
 };
 
 extern void
-bfdev_md5_update(bfdev_md5_ctx_t *ctx, const char *data, size_t size);
+bfdev_md5_update(bfdev_md5_ctx_t *ctx, const char *data, bfdev_size_t size);
 
 extern void
 bfdev_md5_finish(bfdev_md5_ctx_t *ctx, void *hash);

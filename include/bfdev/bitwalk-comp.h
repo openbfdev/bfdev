@@ -14,21 +14,21 @@ BFDEV_BEGIN_DECLS
 
 extern unsigned int
 bfdev_comp_find_first_bit(const unsigned long *block, unsigned int bits,
-                          unsigned long invert, bool swap);
+                          unsigned long invert, bfdev_bool swap);
 
 extern unsigned int
 bfdev_comp_find_last_bit(const unsigned long *block, unsigned int bits,
-                         unsigned long invert, bool swap);
+                         unsigned long invert, bfdev_bool swap);
 
 extern unsigned int
 bfdev_comp_find_next_bit(const unsigned long *addr1, const unsigned long *addr2,
                          unsigned int bits, unsigned int start,
-                         unsigned long invert, bool swap);
+                         unsigned long invert, bfdev_bool swap);
 
 extern unsigned int
 bfdev_comp_find_prev_bit(const unsigned long *addr1, const unsigned long *addr2,
                          unsigned int bits, unsigned int start,
-                         unsigned long invert, bool swap);
+                         unsigned long invert, bfdev_bool swap);
 
 BFDEV_END_DECLS
 

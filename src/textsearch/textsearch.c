@@ -16,40 +16,40 @@ textsearch_algorithm_find(const char *name)
     bfdev_ts_algorithm_t *walk;
 
     bfdev_list_for_each_entry(walk, &textsearch_algorithms, list) {
-        if (!bfport_strcmp(walk->name, name))
+        if (!bfdev_strcmp(walk->name, name))
             return walk;
     }
 
-    return NULL;
+    return BFDEV_NULL;
 }
 
-static bool
+static bfdev_bool
 textsearch_algorithm_exist(bfdev_ts_algorithm_t *algo)
 {
     bfdev_ts_algorithm_t *walk;
 
     bfdev_list_for_each_entry(walk, &textsearch_algorithms, list) {
         if (walk == algo)
-            return true;
+            return bfdev_true;
     }
 
-    return false;
+    return bfdev_false;
 }
 
 export bfdev_ts_context_t *
 bfdev_textsearch_create(const bfdev_alloc_t *alloc, const char *name,
-                        const void *pattern, size_t len, unsigned long flags)
+                        const void *pattern, bfdev_size_t len, unsigned long flags)
 {
     bfdev_ts_algorithm_t *algo;
     bfdev_ts_context_t *tsc;
 
     algo = textsearch_algorithm_find(name);
     if (!algo)
-        return NULL;
+        return BFDEV_NULL;
 
     tsc = algo->prepare(alloc, pattern, len, flags);
     if (!tsc)
-        return NULL;
+        return BFDEV_NULL;
 
     tsc->algo = algo;
     tsc->alloc = alloc;

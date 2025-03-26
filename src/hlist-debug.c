@@ -11,7 +11,7 @@
 #include <bfdev/hlist.h>
 #include <export.h>
 
-export bool
+export bfdev_bool
 bfdev_hlist_check_head_add(bfdev_hlist_head_t *head,
                            bfdev_hlist_node_t *newn)
 {
@@ -20,13 +20,13 @@ bfdev_hlist_check_head_add(bfdev_hlist_head_t *head,
             "head add corruption (%p) head->node"
             " should not be new (%p)\n", head, newn
         );
-        return false;
+        return bfdev_false;
     }
 
-    return true;
+    return bfdev_true;
 }
 
-export bool
+export bfdev_bool
 bfdev_hlist_check_next_add(bfdev_hlist_node_t *next,
                            bfdev_hlist_node_t *newn)
 {
@@ -36,13 +36,13 @@ bfdev_hlist_check_next_add(bfdev_hlist_node_t *next,
             " should not be new (%p)\n",
             next, newn
         );
-        return false;
+        return bfdev_false;
     }
 
-    return true;
+    return bfdev_true;
 }
 
-export bool
+export bfdev_bool
 bfdev_hlist_check_prev_add(bfdev_hlist_node_t *prev,
                            bfdev_hlist_node_t *newn)
 {
@@ -52,13 +52,13 @@ bfdev_hlist_check_prev_add(bfdev_hlist_node_t *prev,
             " should not be new (%p)\n",
             prev, newn
         );
-        return false;
+        return bfdev_false;
     }
 
-    return true;
+    return bfdev_true;
 }
 
-export bool
+export bfdev_bool
 bfdev_hlist_check_del(bfdev_hlist_node_t *node)
 {
     if (bfdev_unlikely(node->next == BFDEV_POISON_HLIST1)) {
@@ -67,7 +67,7 @@ bfdev_hlist_check_del(bfdev_hlist_node_t *node)
             " should not be BFDEV_POISON_HLIST1 (%p)\n",
             node, BFDEV_POISON_HLIST1
         );
-        return false;
+        return bfdev_false;
     }
 
     if (bfdev_unlikely(node->pprev == BFDEV_POISON_HLIST2)) {
@@ -76,8 +76,8 @@ bfdev_hlist_check_del(bfdev_hlist_node_t *node)
             " should not be BFDEV_POISON_HLIST2 (%p)\n",
             node, BFDEV_POISON_HLIST2
         );
-        return false;
+        return bfdev_false;
     }
 
-    return true;
+    return bfdev_true;
 }

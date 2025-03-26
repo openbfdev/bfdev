@@ -8,25 +8,26 @@
 
 #include <base.h>
 #include <bfdev/allocator.h>
+#include <port/stdlib.h>
 
 #ifndef __INSIDE_ALLOCATOR__
 # error "please don't include this file directly"
 #endif
 
 static __bfdev_always_inline void *
-generic_alloc(size_t size, void *pdata)
+generic_alloc(bfdev_size_t size, void *pdata)
 {
     return bfport_malloc(size);
 }
 
 static __bfdev_always_inline void *
-generic_zalloc(size_t size, void *pdata)
+generic_zalloc(bfdev_size_t size, void *pdata)
 {
     return bfport_calloc(1, size);
 }
 
 static __bfdev_always_inline void *
-generic_realloc(void *block, size_t resize, void *pdata)
+generic_realloc(void *block, bfdev_size_t resize, void *pdata)
 {
     return bfport_realloc(block, resize);
 }

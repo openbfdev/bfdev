@@ -8,13 +8,13 @@
 #include <bfdev/time.h>
 #include <export.h>
 
-export bool
+export bfdev_bool
 bfdev_ratelimit(bfdev_ratelimit_t *limit, bfdev_time_t current)
 {
-    bool accept;
+    bfdev_bool accept;
 
     if (!limit->interval)
-        return true;
+        return bfdev_true;
 
     if (bfdev_unlikely(!limit->begin))
         limit->begin = current;
@@ -26,10 +26,10 @@ bfdev_ratelimit(bfdev_ratelimit_t *limit, bfdev_time_t current)
 
     if (bfdev_likely(limit->burst > limit->passed)) {
         limit->passed++;
-        accept = true;
+        accept = bfdev_true;
     } else {
         limit->missed++;
-        accept = false;
+        accept = bfdev_false;
     }
 
     return accept;

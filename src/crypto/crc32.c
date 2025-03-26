@@ -7,8 +7,8 @@
 #include <bfdev/crypto/crc32-inline.h>
 #include <export.h>
 
-export uint32_t
-bfdev_crc32(const void *data, size_t len, uint32_t crc)
+export bfdev_u32
+bfdev_crc32(const void *data, bfdev_size_t len, bfdev_u32 crc)
 {
     return bfdev_crc32_inline(data, len, crc);
 }

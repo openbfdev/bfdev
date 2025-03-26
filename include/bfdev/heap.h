@@ -29,7 +29,7 @@ struct bfdev_heap_root {
 };
 
 #define BFDEV_HEAP_STATIC() { \
-    .node = NULL, .count = 0, \
+    .node = BFDEV_NULL, .count = 0, \
 }
 
 #define BFDEV_HEAP_INIT() \
@@ -63,11 +63,11 @@ struct bfdev_heap_root {
     bfdev_container_of_safe(ptr, type, member)
 
 #ifdef BFDEV_DEBUG_HEAP
-extern bool
+extern bfdev_bool
 bfdev_heap_check_link(bfdev_heap_node_t *parent, bfdev_heap_node_t **link,
                       bfdev_heap_node_t *node);
 
-extern bool
+extern bfdev_bool
 bfdev_heap_check_delete(bfdev_heap_node_t *node);
 #endif
 
@@ -82,7 +82,7 @@ bfdev_heap_init(bfdev_heap_root_t *root)
     *root = BFDEV_HEAP_INIT();
 }
 
-static inline bool
+static inline bfdev_bool
 bfdev_heap_empty_root(bfdev_heap_root_t *root)
 {
     return !root->node;
@@ -153,7 +153,7 @@ bfdev_heap_link(bfdev_heap_root_t *root, bfdev_heap_node_t *parent,
     /* link = &parent->left/right */
     *link = node;
     node->parent = parent;
-    node->left = node->right = NULL;
+    node->left = node->right = BFDEV_NULL;
     root->count++;
 }
 

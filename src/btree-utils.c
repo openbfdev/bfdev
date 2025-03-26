@@ -15,29 +15,32 @@
 export bfdev_btree_layout_t
 bfdev_btree_layout32 = {
     .keylen = UINTPTR_PER_U32,
-    .keynum = NODE_SIZE / sizeof(uintptr_t) / (UINTPTR_PER_U32 + 1),
-    .ptrindex = UINTPTR_PER_U32 * (NODE_SIZE / sizeof(uintptr_t) / (UINTPTR_PER_U32 + 1)),
+    .keynum = NODE_SIZE / sizeof(bfdev_uintptr_t) / (UINTPTR_PER_U32 + 1),
+    .ptrindex = UINTPTR_PER_U32 * (NODE_SIZE / sizeof(bfdev_uintptr_t) /
+        (UINTPTR_PER_U32 + 1)),
     .nodesize = NODE_SIZE,
 };
 
 export bfdev_btree_layout_t
 bfdev_btree_layout64 = {
     .keylen = UINTPTR_PER_U64,
-    .keynum = NODE_SIZE / sizeof(uintptr_t) / (UINTPTR_PER_U64 + 1),
-    .ptrindex = UINTPTR_PER_U64 * (NODE_SIZE / sizeof(uintptr_t) / (UINTPTR_PER_U64 + 1)),
+    .keynum = NODE_SIZE / sizeof(bfdev_uintptr_t) / (UINTPTR_PER_U64 + 1),
+    .ptrindex = UINTPTR_PER_U64 * (NODE_SIZE / sizeof(bfdev_uintptr_t) /
+        (UINTPTR_PER_U64 + 1)),
     .nodesize = NODE_SIZE,
 };
 
 export bfdev_btree_layout_t
 bfdev_btree_layoutptr = {
     .keylen = 1,
-    .keynum = NODE_SIZE / sizeof(uintptr_t) / 2,
-    .ptrindex = NODE_SIZE / sizeof(uintptr_t) / 2,
+    .keynum = NODE_SIZE / sizeof(bfdev_uintptr_t) / 2,
+    .ptrindex = NODE_SIZE / sizeof(bfdev_uintptr_t) / 2,
     .nodesize = NODE_SIZE,
 };
 
 export long
-bfdev_btree_key_find(bfdev_btree_root_t *root, uintptr_t *node, uintptr_t *key)
+bfdev_btree_key_find(bfdev_btree_root_t *root, bfdev_uintptr_t *node,
+                     bfdev_uintptr_t *key)
 {
     bfdev_btree_layout_t *layout;
     unsigned int index;

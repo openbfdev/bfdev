@@ -8,39 +8,37 @@
 #include <export.h>
 
 export char *
-bfdev_strdup(const bfdev_alloc_t *alloc,
-             const char *string)
+bfdev_strdup(const bfdev_alloc_t *alloc, const char *string)
 {
-    size_t length;
+    bfdev_size_t length;
     char *dump;
 
     if (bfdev_unlikely(!string))
-        return NULL;
+        return BFDEV_NULL;
 
-    length = bfport_strlen(string);
+    length = bfdev_strlen(string);
     dump = bfdev_malloc(alloc, length + 1);
 
     if (bfdev_likely(dump))
-        bfport_strcpy(dump, string);
+        bfdev_strcpy(dump, string);
 
     return dump;
 }
 
 export char *
-bfdev_strndup(const bfdev_alloc_t *alloc,
-              const char *string, size_t len)
+bfdev_strndup(const bfdev_alloc_t *alloc, const char *string, bfdev_size_t len)
 {
-    size_t length;
+    bfdev_size_t length;
     char *dump;
 
     if (bfdev_unlikely(!string))
-        return NULL;
+        return BFDEV_NULL;
 
-    length = bfport_strnlen(string, len);
+    length = bfdev_strnlen(string, len);
     dump = bfdev_malloc(alloc, length + 1);
 
     if (bfdev_likely(dump))
-        bfport_strncpy(dump, string, len);
+        bfdev_strncpy(dump, string, len);
 
     return dump;
 }

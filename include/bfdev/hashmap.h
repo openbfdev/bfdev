@@ -52,8 +52,8 @@ struct bfdev_hashmap_ops {
     long (*equal)(const bfdev_hlist_node_t *node1, const bfdev_hlist_node_t *node2, void *pdata);
     long (*find)(const bfdev_hlist_node_t *node, const void *key, void *pdata);
 
-    bool (*extend)(const bfdev_hashmap_t *hashmap, void *pdata);
-    bool (*shrink)(const bfdev_hashmap_t *hashmap, void *pdata);
+    bfdev_bool (*extend)(const bfdev_hashmap_t *hashmap, void *pdata);
+    bfdev_bool (*shrink)(const bfdev_hashmap_t *hashmap, void *pdata);
 };
 
 #define BFDEV_HASHMAP_STATIC(ALLOC, OPS, PDATA) { \
@@ -119,7 +119,7 @@ bfdev_hashmap_release(bfdev_hashmap_t *hashmap);
 static __bfdev_always_inline int
 bfdev_hashmap_add(bfdev_hashmap_t *hashmap, bfdev_hlist_node_t *node)
 {
-    return bfdev_hashmap_insert(hashmap, node, NULL, BFDEV_HASHMAP_ADD);
+    return bfdev_hashmap_insert(hashmap, node, BFDEV_NULL, BFDEV_HASHMAP_ADD);
 }
 
 static __bfdev_always_inline int
@@ -139,7 +139,7 @@ bfdev_hashmap_update(bfdev_hashmap_t *hashmap, bfdev_hlist_node_t *node,
 static __bfdev_always_inline int
 bfdev_hashmap_append(bfdev_hashmap_t *hashmap, bfdev_hlist_node_t *node)
 {
-    return bfdev_hashmap_insert(hashmap, node, NULL, BFDEV_HASHMAP_APPEND);
+    return bfdev_hashmap_insert(hashmap, node, BFDEV_NULL, BFDEV_HASHMAP_APPEND);
 }
 
 /**

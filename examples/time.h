@@ -7,6 +7,7 @@
 #define _EXAMPLES_TIME_H_
 
 #include <stdio.h>
+#include <stdint.h>
 #include <time.h>
 #include <unistd.h>
 #include <sys/time.h>

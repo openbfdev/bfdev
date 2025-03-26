@@ -14,8 +14,8 @@ BFDEV_BEGIN_DECLS
 #include <bfdev/crypto/crc7-table.h>
 
 BFDEV_CRC_INLINE(
-    bfdev_crc7, uint8_t,
-    bfdev_crc7_table, (uint8_t)
+    bfdev_crc7, bfdev_u8,
+    bfdev_crc7_table, (bfdev_u8)
 )
 
 BFDEV_END_DECLS

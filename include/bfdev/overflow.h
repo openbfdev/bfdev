@@ -90,8 +90,8 @@ bfdev_overflow_check(({                         \
     ? (type)~0ULL : __d;                        \
 })
 
-static inline __bfdev_must_check bool
-bfdev_overflow_check(bool overflow)
+static inline __bfdev_must_check bfdev_bool
+bfdev_overflow_check(bfdev_bool overflow)
 {
     return bfdev_unlikely(overflow);
 }
@@ -145,15 +145,15 @@ bfdev_overflow_mul_##name(type a, type b)           \
     return bfdev_overflow_mul_type(type, a, b);     \
 }
 
-BFDEV_GENERIC_OVERFLOW_OPS(s8, int8_t)
-BFDEV_GENERIC_OVERFLOW_OPS(s16, int16_t)
-BFDEV_GENERIC_OVERFLOW_OPS(s32, int32_t)
-BFDEV_GENERIC_OVERFLOW_OPS(s64, int64_t)
+BFDEV_GENERIC_OVERFLOW_OPS(s8, bfdev_s8)
+BFDEV_GENERIC_OVERFLOW_OPS(s16, bfdev_s16)
+BFDEV_GENERIC_OVERFLOW_OPS(s32, bfdev_s32)
+BFDEV_GENERIC_OVERFLOW_OPS(s64, bfdev_s64)
 
-BFDEV_GENERIC_OVERFLOW_OPS(u8, uint8_t)
-BFDEV_GENERIC_OVERFLOW_OPS(u16, uint16_t)
-BFDEV_GENERIC_OVERFLOW_OPS(u32, uint32_t)
-BFDEV_GENERIC_OVERFLOW_OPS(u64, uint64_t)
+BFDEV_GENERIC_OVERFLOW_OPS(u8, bfdev_u8)
+BFDEV_GENERIC_OVERFLOW_OPS(u16, bfdev_u16)
+BFDEV_GENERIC_OVERFLOW_OPS(u32, bfdev_u32)
+BFDEV_GENERIC_OVERFLOW_OPS(u64, bfdev_u64)
 
 BFDEV_END_DECLS
 

@@ -65,7 +65,7 @@ bfdev_tokenbucket_reset(bfdev_tokenbucket_t *limit)
  * 0 means function will be suppressed.
  * 1 means go ahead and do it.
  */
-extern bool
+extern bfdev_bool
 bfdev_tokenbucket(bfdev_tokenbucket_t *limit, bfdev_time_t current);
 
 BFDEV_END_DECLS

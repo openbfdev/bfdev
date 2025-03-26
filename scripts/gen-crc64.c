@@ -5,6 +5,7 @@
 
 #define GENCRC_NAME crc64
 #define GENCRC_TYPE uint64_t
+#define GENCRC_TYPE_NAME bfdev_u64
 #define GENCRC_BITS 64
 #define GENCRC_WIDE 16
 #define GENCRC_BELE 1

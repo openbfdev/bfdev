@@ -21,7 +21,7 @@ struct bfdev_slist_head {
 };
 
 #define BFDEV_SLIST_HEAD_STATIC() { \
-    .next = NULL, \
+    .next = BFDEV_NULL, \
 }
 
 #define BFDEV_SLIST_HEAD_INIT() \
@@ -31,10 +31,10 @@ struct bfdev_slist_head {
     bfdev_slist_head_t name = BFDEV_SLIST_HEAD_INIT()
 
 #ifdef BFDEV_DEBUG_SLIST
-extern bool
+extern bfdev_bool
 bfdev_slist_check_add(bfdev_slist_head_t *node, bfdev_slist_head_t *newn);
 
-extern bool
+extern bfdev_bool
 bfdev_slist_check_del(bfdev_slist_head_t *node);
 #endif
 
@@ -92,7 +92,7 @@ bfdev_slist_del(bfdev_slist_head_t *head, bfdev_slist_head_t *node)
  * bfdev_slist_check_empty() - check whether the node is head.
  * @head: slist head to check.
  */
-static inline bool
+static inline bfdev_bool
 bfdev_slist_check_empty(const bfdev_slist_head_t *head)
 {
     return !head->next;
@@ -103,7 +103,7 @@ bfdev_slist_check_empty(const bfdev_slist_head_t *head)
  * @head: the head of the slist.
  * @node: the entry to test.
  */
-static inline bool
+static inline bfdev_bool
 bfdev_slist_check_first(const bfdev_slist_head_t *head,
                         const bfdev_slist_head_t *node)
 {
@@ -114,7 +114,7 @@ bfdev_slist_check_first(const bfdev_slist_head_t *head,
  * bfdev_slist_check_next() - check whether the node is a ending.
  * @node: the node to check.
  */
-static inline bool
+static inline bfdev_bool
 bfdev_slist_check_end(const bfdev_slist_head_t *node)
 {
     return !node->next;
@@ -125,11 +125,11 @@ bfdev_slist_check_end(const bfdev_slist_head_t *node)
  * @head: slist head to check.
  * @node: the unique node.
  */
-static inline bool
+static inline bfdev_bool
 bfdev_slist_check_another(const bfdev_slist_head_t *head,
                           const bfdev_slist_head_t *node)
 {
-    return head->next == node && node->next == NULL;
+    return head->next == node && node->next == BFDEV_NULL;
 }
 
 /**

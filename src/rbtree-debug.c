@@ -11,7 +11,7 @@
 #include <bfdev/rbtree.h>
 #include <export.h>
 
-export bool
+export bfdev_bool
 bfdev_rb_check_link(bfdev_rb_node_t *parent, bfdev_rb_node_t **link,
                     bfdev_rb_node_t *node)
 {
@@ -21,13 +21,13 @@ bfdev_rb_check_link(bfdev_rb_node_t *parent, bfdev_rb_node_t **link,
             " should not be node (%p)\n",
             link, node
         );
-        return false;
+        return bfdev_false;
     }
 
-    return true;
+    return bfdev_true;
 }
 
-export bool
+export bfdev_bool
 bfdev_rb_check_delete(bfdev_rb_node_t *node)
 {
     if (bfdev_unlikely(node->left == BFDEV_POISON_RBNODE1)) {
@@ -36,7 +36,7 @@ bfdev_rb_check_delete(bfdev_rb_node_t *node)
             " should not be BFDEV_POISON_RBNODE1 (%p)\n",
             node, BFDEV_POISON_RBNODE1
         );
-        return false;
+        return bfdev_false;
     }
 
     if (bfdev_unlikely(node->right == BFDEV_POISON_RBNODE2)) {
@@ -45,7 +45,7 @@ bfdev_rb_check_delete(bfdev_rb_node_t *node)
             " should not be BFDEV_POISON_RBNODE2 (%p)\n",
             node, BFDEV_POISON_RBNODE2
         );
-        return false;
+        return bfdev_false;
     }
 
     if (bfdev_unlikely(node->parent == BFDEV_POISON_RBNODE3)) {
@@ -54,8 +54,8 @@ bfdev_rb_check_delete(bfdev_rb_node_t *node)
             " should not be BFDEV_POISON_RBNODE3 (%p)\n",
             node, BFDEV_POISON_RBNODE3
         );
-        return false;
+        return bfdev_false;
     }
 
-    return true;
+    return bfdev_true;
 }

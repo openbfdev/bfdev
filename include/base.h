@@ -10,8 +10,6 @@
 #include <bfdev/types.h>
 #include <bfdev/stdarg.h>
 #include <bfdev/stddef.h>
-#include <bfdev/stdio.h>
-#include <bfdev/stdlib.h>
 
 #include <bfdev/align.h>
 #include <bfdev/alloca.h>

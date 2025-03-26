@@ -13,7 +13,7 @@
 BFDEV_BEGIN_DECLS
 
 static inline void *
-bfdev_bsearch_inline(const void *base, size_t num, size_t esize,
+bfdev_bsearch_inline(const void *base, bfdev_size_t num, bfdev_size_t esize,
                      bfdev_find_t find, void *pdata)
 {
     const void *pivot;
@@ -34,7 +34,7 @@ bfdev_bsearch_inline(const void *base, size_t num, size_t esize,
         num >>= 1;
     }
 
-    return NULL;
+    return BFDEV_NULL;
 }
 
 /**
@@ -46,7 +46,7 @@ bfdev_bsearch_inline(const void *base, size_t num, size_t esize,
  * @pdata: pointer to item being searched for.
  */
 extern void *
-bfdev_bsearch(const void *base, size_t num, size_t esize,
+bfdev_bsearch(const void *base, bfdev_size_t num, bfdev_size_t esize,
               bfdev_find_t find, void *pdata);
 
 BFDEV_END_DECLS

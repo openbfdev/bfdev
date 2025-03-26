@@ -7,6 +7,7 @@
 #define _TESTSUITE_RANDPOOL_H_
 
 #include <stdlib.h>
+#include <stdbool.h>
 #include <bfdev/errno.h>
 #include <bfdev/list.h>
 #include <bfdev/bug.h>

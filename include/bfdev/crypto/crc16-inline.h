@@ -14,7 +14,7 @@ BFDEV_BEGIN_DECLS
 #include <bfdev/crypto/crc16-table.h>
 
 BFDEV_CRC_INLINE(
-    bfdev_crc16, uint16_t,
+    bfdev_crc16, bfdev_u16,
     bfdev_crc16_table, bfdev_cpu_to_le16
 )
 

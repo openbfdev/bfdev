@@ -22,7 +22,7 @@ struct lru_node {
 #define cache_to_lru_node(ptr) \
     bfdev_container_of(ptr, struct lru_node, cache)
 
-static bool
+static bfdev_bool
 lru_starving(bfdev_cache_head_t *head)
 {
     struct lru_head *lru_head;
@@ -87,7 +87,7 @@ lru_create(const bfdev_alloc_t *alloc, unsigned long size)
 
     lru_head = bfdev_zalloc(alloc, sizeof(*lru_head));
     if (bfdev_unlikely(!lru_head))
-        return NULL;
+        return BFDEV_NULL;
 
     head = &lru_head->cache;
     bfdev_list_head_init(&lru_head->lru);
@@ -115,7 +115,7 @@ free_element:
 
 free_head:
     bfdev_free(alloc, head);
-    return NULL;
+    return BFDEV_NULL;
 }
 
 static void

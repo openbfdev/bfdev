@@ -56,17 +56,17 @@ bfdev_hashtbl_init(bfdev_hlist_head_t *head, unsigned long size)
  * bfdev_hash_empty - check whether a hashtable is empty.
  * @hashtable: hashtable to check.
  */
-static inline bool
+static inline bfdev_bool
 bfdev_hashtbl_empty(bfdev_hlist_head_t *head, unsigned long size)
 {
     unsigned long count;
 
     for (count = 0; count < size; ++count) {
         if (!bfdev_hlist_check_empty(&head[count]))
-            return false;
+            return bfdev_false;
     }
 
-    return true;
+    return bfdev_true;
 }
 
 /**

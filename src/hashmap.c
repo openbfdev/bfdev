@@ -59,13 +59,13 @@ hashmap_find(bfdev_hashmap_t *hashmap, const void *key,
     return retval;
 }
 
-static __bfdev_always_inline bool
+static __bfdev_always_inline bfdev_bool
 hashmap_need_extend(bfdev_hashmap_t *hashmap)
 {
     const bfdev_hashmap_ops_t *ops;
 
     if (!hashmap->capacity)
-        return true;
+        return bfdev_true;
 
     ops = hashmap->ops;
     if (ops->extend)
@@ -75,7 +75,7 @@ hashmap_need_extend(bfdev_hashmap_t *hashmap)
     return hashmap->used * 4 / 3 > hashmap->capacity;
 }
 
-static __bfdev_always_inline bool
+static __bfdev_always_inline bfdev_bool
 hashmap_need_shrink(bfdev_hashmap_t *hashmap)
 {
     const bfdev_hashmap_ops_t *ops;
@@ -96,7 +96,7 @@ hashmap_find_node(bfdev_hashmap_t *hashmap, const bfdev_hlist_node_t *node,
     unsigned long index;
 
     if (!hashmap->buckets)
-        return NULL;
+        return BFDEV_NULL;
 
     index = bfdev_hashtbl_index(hashmap->capacity, hash);
     bfdev_hashtbl_for_each_idx(walk, hashmap->buckets, hashmap->capacity, index) {
@@ -104,7 +104,7 @@ hashmap_find_node(bfdev_hashmap_t *hashmap, const bfdev_hlist_node_t *node,
             return walk;
     }
 
-    return NULL;
+    return BFDEV_NULL;
 }
 
 static inline bfdev_hlist_node_t *
@@ -115,7 +115,7 @@ hashmap_find_key(bfdev_hashmap_t *hashmap, const void *key,
     unsigned long index;
 
     if (!hashmap->buckets)
-        return NULL;
+        return BFDEV_NULL;
 
     index = bfdev_hashtbl_index(hashmap->capacity, hash);
     bfdev_hashtbl_for_each_idx(walk, hashmap->buckets, hashmap->capacity, index) {
@@ -123,7 +123,7 @@ hashmap_find_key(bfdev_hashmap_t *hashmap, const void *key,
             return walk;
     }
 
-    return NULL;
+    return BFDEV_NULL;
 }
 
 static inline int
@@ -260,7 +260,7 @@ bfdev_hashmap_release(bfdev_hashmap_t *hashmap)
 
     alloc = hashmap->alloc;
     bfdev_free(alloc, hashmap->buckets);
-    hashmap->buckets = NULL;
+    hashmap->buckets = BFDEV_NULL;
 
     hashmap->used = 0;
     hashmap->capacity = 0;

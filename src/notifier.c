@@ -57,7 +57,7 @@ bfdev_notifier_register(bfdev_notifier_t *head, bfdev_notifier_node_t *node)
         return -BFDEV_EINVAL;
 
     bfdev_ilist_node_init(&node->list);
-    bfdev_ilist_add(&head->nodes, &node->list, notifier_chain_cmp, NULL);
+    bfdev_ilist_add(&head->nodes, &node->list, notifier_chain_cmp, BFDEV_NULL);
 
     return -BFDEV_ENOERR;
 }

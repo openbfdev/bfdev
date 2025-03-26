@@ -24,7 +24,8 @@ BFDEV_BEGIN_DECLS
  * O(n^2) worst-case behavior and extra memory requirements.
  */
 extern int
-bfdev_sort(void *base, size_t num, size_t cells, bfdev_cmp_t cmp, void *pdata);
+bfdev_sort(void *base, bfdev_size_t num, bfdev_size_t cells,
+           bfdev_cmp_t cmp, void *pdata);
 
 BFDEV_END_DECLS
 

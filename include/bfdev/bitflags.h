@@ -7,51 +7,52 @@
 #define _BFDEV_BITFLAGS_H_
 
 #include <bfdev/config.h>
+#include <bfdev/stddef.h>
 #include <bfdev/bitops.h>
 
 BFDEV_BEGIN_DECLS
 
-#define BFDEV_GENERIC_BITFLAGS(name, func, type, member, index)     \
-static __bfdev_always_inline void                                   \
-name##_clr(type *ptr)                                               \
-{                                                                   \
-    bfdev_bit##func##_clr(member, index);                           \
-}                                                                   \
-                                                                    \
-static __bfdev_always_inline void                                   \
-name##_set(type *ptr)                                               \
-{                                                                   \
-    bfdev_bit##func##_set(member, index);                           \
-}                                                                   \
-                                                                    \
-static __bfdev_always_inline void                                   \
-name##_flip(type *ptr)                                              \
-{                                                                   \
-    bfdev_bit##func##_flip(member, index);                          \
-}                                                                   \
-                                                                    \
-static __bfdev_always_inline bool                                   \
-name##_test(const type *ptr)                                        \
-{                                                                   \
-    return bfdev_bit##func##_test(member, index);                   \
-}                                                                   \
-                                                                    \
-static __bfdev_always_inline bool                                   \
-name##_test_clr(type *ptr)                                          \
-{                                                                   \
-    return bfdev_bit##func##_test_clr(member, index);               \
-}                                                                   \
-                                                                    \
-static __bfdev_always_inline bool                                   \
-name##_test_set(type *ptr)                                          \
-{                                                                   \
-    return bfdev_bit##func##_test_set(member, index);               \
-}                                                                   \
-                                                                    \
-static __bfdev_always_inline bool                                   \
-name##_test_flip(type *ptr)                                         \
-{                                                                   \
-    return bfdev_bit##func##_test_flip(member, index);              \
+#define BFDEV_GENERIC_BITFLAGS(name, func, type, member, index) \
+static __bfdev_always_inline void                               \
+name##_clr(type *ptr)                                           \
+{                                                               \
+    bfdev_bit##func##_clr(member, index);                       \
+}                                                               \
+                                                                \
+static __bfdev_always_inline void                               \
+name##_set(type *ptr)                                           \
+{                                                               \
+    bfdev_bit##func##_set(member, index);                       \
+}                                                               \
+                                                                \
+static __bfdev_always_inline void                               \
+name##_flip(type *ptr)                                          \
+{                                                               \
+    bfdev_bit##func##_flip(member, index);                      \
+}                                                               \
+                                                                \
+static __bfdev_always_inline bfdev_bool                         \
+name##_test(const type *ptr)                                    \
+{                                                               \
+    return bfdev_bit##func##_test(member, index);               \
+}                                                               \
+                                                                \
+static __bfdev_always_inline bfdev_bool                         \
+name##_test_clr(type *ptr)                                      \
+{                                                               \
+    return bfdev_bit##func##_test_clr(member, index);           \
+}                                                               \
+                                                                \
+static __bfdev_always_inline bfdev_bool                         \
+name##_test_set(type *ptr)                                      \
+{                                                               \
+    return bfdev_bit##func##_test_set(member, index);           \
+}                                                               \
+                                                                \
+static __bfdev_always_inline bfdev_bool                         \
+name##_test_flip(type *ptr)                                     \
+{                                                               \
+    return bfdev_bit##func##_test_flip(member, index);          \
 }
 
 #define BFDEV_BITFLAGS(name, index) \

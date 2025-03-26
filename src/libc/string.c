@@ -17,11 +17,11 @@ bfdev_strdiff(const char *addr, int c)
         addr++;
     }
 
-    return NULL;
+    return BFDEV_NULL;
 }
 
 export __bfdev_weak void *
-bfdev_memdiff(const void *addr, int c, size_t size)
+bfdev_memdiff(const void *addr, int c, bfdev_size_t size)
 {
     const char *p = addr;
 
@@ -32,5 +32,5 @@ bfdev_memdiff(const void *addr, int c, size_t size)
         size--;
     }
 
-    return NULL;
+    return BFDEV_NULL;
 }

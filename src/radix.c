@@ -26,13 +26,13 @@ radix_depth_shift(unsigned int level)
 }
 
 static __bfdev_always_inline unsigned int
-radix_depth_index(unsigned int level, uintptr_t offset)
+radix_depth_index(unsigned int level, bfdev_uintptr_t offset)
 {
     return (offset >> radix_depth_shift(level)) & RADIX_ARY_MASK;
 }
 
-static bool
-radix_parent(bfdev_radix_root_t *root, uintptr_t offset,
+static bfdev_bool
+radix_parent(bfdev_radix_root_t *root, bfdev_uintptr_t offset,
              struct radix_parent *parent)
 {
     bfdev_radix_node_t *node;
@@ -43,13 +43,13 @@ radix_parent(bfdev_radix_root_t *root, uintptr_t offset,
 
     /* Directly check capacity overflow */
     if (bfdev_ilog2(offset) > radix_depth_shift(level))
-        return false;
+        return bfdev_false;
 
     node = root->node;
     parent[root->level].node = node;
 
     if (bfdev_unlikely(!node))
-        return false;
+        return bfdev_false;
 
     while (level--) {
         index = radix_depth_index(level, offset);
@@ -57,40 +57,40 @@ radix_parent(bfdev_radix_root_t *root, uintptr_t offset,
         offset &= BFDEV_BIT_LOW_MASK(radix_depth_shift(level));
 
         if (bfdev_unlikely(!node))
-            return false;
+            return bfdev_false;
 
         parent[level].node = node;
         parent[level + 1].index = index;
     }
 
     parent[0].index = offset;
-    return true;
+    return bfdev_true;
 }
 
 export void *
-bfdev_radix_root_find(bfdev_radix_root_t *root, uintptr_t offset)
+bfdev_radix_root_find(bfdev_radix_root_t *root, bfdev_uintptr_t offset)
 {
     struct radix_parent parents[RADIX_LEVEL_MAX];
     bfdev_radix_node_t *node;
     unsigned int index;
-    bool contain;
+    bfdev_bool contain;
 
     contain = radix_parent(root, offset, parents);
     if (bfdev_unlikely(!contain))
-        return NULL;
+        return BFDEV_NULL;
 
     node = parents[0].node;
     index = parents[0].index;
 
     contain = bfdev_bit_test(node->bitmap, index);
     if (bfdev_unlikely(!contain))
-        return NULL;
+        return BFDEV_NULL;
 
     return &node->block[index];
 }
 
 static inline bfdev_radix_node_t *
-radix_extend(bfdev_radix_root_t *root, uintptr_t offset)
+radix_extend(bfdev_radix_root_t *root, bfdev_uintptr_t offset)
 {
     const bfdev_alloc_t *alloc;
     bfdev_radix_node_t *node, *successor;
@@ -106,7 +106,7 @@ radix_extend(bfdev_radix_root_t *root, uintptr_t offset)
 
         successor = bfdev_zalloc(alloc, sizeof(*successor));
         if (bfdev_unlikely(!successor))
-            return NULL;
+            return BFDEV_NULL;
 
         if (node) {
             successor->refcount++;
@@ -142,7 +142,7 @@ radix_shrink(bfdev_radix_root_t *root)
 }
 
 export void *
-bfdev_radix_root_alloc(bfdev_radix_root_t *root, uintptr_t offset)
+bfdev_radix_root_alloc(bfdev_radix_root_t *root, bfdev_uintptr_t offset)
 {
     const bfdev_alloc_t *alloc;
     bfdev_radix_node_t *node;
@@ -150,7 +150,7 @@ bfdev_radix_root_alloc(bfdev_radix_root_t *root, uintptr_t offset)
 
     node = radix_extend(root, offset);
     if (bfdev_unlikely(!node))
-        return NULL;
+        return BFDEV_NULL;
 
     alloc = root->alloc;
     for (level = root->level; level--;) {
@@ -162,7 +162,7 @@ bfdev_radix_root_alloc(bfdev_radix_root_t *root, uintptr_t offset)
         if (!*slot) {
             newn = bfdev_zalloc(alloc, sizeof(*newn));
             if (bfdev_unlikely(!newn))
-                return NULL;
+                return BFDEV_NULL;
 
             *slot = newn;
             node->refcount++;
@@ -176,13 +176,13 @@ bfdev_radix_root_alloc(bfdev_radix_root_t *root, uintptr_t offset)
 }
 
 export int
-bfdev_radix_root_free(bfdev_radix_root_t *root, uintptr_t offset)
+bfdev_radix_root_free(bfdev_radix_root_t *root, bfdev_uintptr_t offset)
 {
     struct radix_parent parents[RADIX_LEVEL_MAX];
     const bfdev_alloc_t *alloc;
     bfdev_radix_node_t *node;
     unsigned int level, index;
-    bool contain;
+    bfdev_bool contain;
 
     contain = radix_parent(root, offset, parents);
     if (bfdev_unlikely(!contain))
@@ -210,7 +210,7 @@ bfdev_radix_root_free(bfdev_radix_root_t *root, uintptr_t offset)
         parent = parents[level + 1].node;
         index = parents[level + 1].index;
 
-        parent->child[index] = NULL;
+        parent->child[index] = BFDEV_NULL;
         bfdev_free(alloc, node);
         node = parent;
     }
@@ -224,10 +224,10 @@ bfdev_radix_root_free(bfdev_radix_root_t *root, uintptr_t offset)
 
 export int
 bfdev_radix_root_charge(bfdev_radix_root_t *root,
-                        uintptr_t offset, size_t size)
+                        bfdev_uintptr_t offset, bfdev_size_t size)
 {
-    uintptr_t end;
-    bool retval;
+    bfdev_uintptr_t end;
+    bfdev_bool retval;
 
     retval = bfdev_overflow_check_add(offset, size, &end);
     if (bfdev_unlikely(retval))
@@ -270,12 +270,12 @@ bfdev_radix_root_release(bfdev_radix_root_t *root)
     radix_destroy_recurse(alloc, root->node, root->level);
 
     root->level = 0;
-    root->node = NULL;
+    root->node = BFDEV_NULL;
 }
 
 static inline bfdev_radix_node_t *
 radix_left_most(bfdev_radix_node_t *node, unsigned int level,
-                uintptr_t *offset)
+                bfdev_uintptr_t *offset)
 {
     unsigned int walk;
 
@@ -285,12 +285,12 @@ radix_left_most(bfdev_radix_node_t *node, unsigned int level,
                 continue;
 
             node = node->child[walk];
-            *offset |= (uintptr_t)walk << radix_depth_shift(level);
+            *offset |= (bfdev_uintptr_t)walk << radix_depth_shift(level);
             break;
         }
 
         if (walk == BFDEV_RADIX_ARY)
-            return NULL;
+            return BFDEV_NULL;
     }
 
     return node;
@@ -298,7 +298,7 @@ radix_left_most(bfdev_radix_node_t *node, unsigned int level,
 
 static inline bfdev_radix_node_t *
 radix_right_most(bfdev_radix_node_t *node, unsigned int level,
-                 uintptr_t *offset)
+                 bfdev_uintptr_t *offset)
 {
     unsigned int walk;
 
@@ -309,30 +309,30 @@ radix_right_most(bfdev_radix_node_t *node, unsigned int level,
                 continue;
 
             node = node->child[walk];
-            *offset |= (uintptr_t)walk << radix_depth_shift(level);
+            *offset |= (bfdev_uintptr_t)walk << radix_depth_shift(level);
             break;
         }
 
         if (walk > BFDEV_RADIX_ARY)
-            return NULL;
+            return BFDEV_NULL;
     }
 
     return node;
 }
 
 export void *
-bfdev_radix_root_first(bfdev_radix_root_t *root, uintptr_t *offsetp)
+bfdev_radix_root_first(bfdev_radix_root_t *root, bfdev_uintptr_t *offsetp)
 {
     unsigned int count, level;
     bfdev_radix_node_t *node;
-    uintptr_t offset;
+    bfdev_uintptr_t offset;
 
     *offsetp = 0;
     node = root->node;
     level = root->level;
 
     if (!node)
-        return NULL;
+        return BFDEV_NULL;
 
     offset = 0;
     node = radix_left_most(node, level, &offset);
@@ -340,7 +340,7 @@ bfdev_radix_root_first(bfdev_radix_root_t *root, uintptr_t *offsetp)
 
     count = bfdev_find_first_bit(node->bitmap, BFDEV_RADIX_BLOCK);
     if (count == BFDEV_RADIX_BLOCK)
-        return NULL;
+        return BFDEV_NULL;
 
     offset |= count;
     *offsetp = offset;
@@ -349,18 +349,18 @@ bfdev_radix_root_first(bfdev_radix_root_t *root, uintptr_t *offsetp)
 }
 
 export void *
-bfdev_radix_root_last(bfdev_radix_root_t *root, uintptr_t *offsetp)
+bfdev_radix_root_last(bfdev_radix_root_t *root, bfdev_uintptr_t *offsetp)
 {
     unsigned int count, level;
     bfdev_radix_node_t *node;
-    uintptr_t offset;
+    bfdev_uintptr_t offset;
 
     *offsetp = 0;
     node = root->node;
     level = root->level;
 
     if (!node)
-        return NULL;
+        return BFDEV_NULL;
 
     offset = 0;
     node = radix_right_most(node, level, &offset);
@@ -368,7 +368,7 @@ bfdev_radix_root_last(bfdev_radix_root_t *root, uintptr_t *offsetp)
 
     count = bfdev_find_last_bit(node->bitmap, BFDEV_RADIX_BLOCK);
     if (count == BFDEV_RADIX_BLOCK)
-        return NULL;
+        return BFDEV_NULL;
 
     offset |= count;
     *offsetp = offset;
@@ -377,16 +377,16 @@ bfdev_radix_root_last(bfdev_radix_root_t *root, uintptr_t *offsetp)
 }
 
 export void *
-bfdev_radix_root_next(bfdev_radix_root_t *root, uintptr_t *offsetp)
+bfdev_radix_root_next(bfdev_radix_root_t *root, bfdev_uintptr_t *offsetp)
 {
     struct radix_parent parents[RADIX_LEVEL_MAX];
     bfdev_radix_node_t *node;
     unsigned int count, index, level;
-    bool contain;
+    bfdev_bool contain;
 
     contain = radix_parent(root, *offsetp, parents);
     if (bfdev_unlikely(!contain))
-        return NULL;
+        return BFDEV_NULL;
 
     node = parents[0].node;
     index = parents[0].index;
@@ -394,7 +394,7 @@ bfdev_radix_root_next(bfdev_radix_root_t *root, uintptr_t *offsetp)
     /* Check for safety */
     contain = bfdev_bit_test(node->bitmap, index);
     if (bfdev_unlikely(!contain))
-        return NULL;
+        return BFDEV_NULL;
 
     count = bfdev_find_next_bit(node->bitmap, BFDEV_RADIX_BLOCK, index + 1);
     if (count < BFDEV_RADIX_BLOCK)
@@ -405,20 +405,20 @@ bfdev_radix_root_next(bfdev_radix_root_t *root, uintptr_t *offsetp)
         index = parents[level].index;
 
         count = radix_depth_shift(level - 1);
-        *offsetp &= ~((uintptr_t)RADIX_ARY_MASK << count);
+        *offsetp &= ~((bfdev_uintptr_t)RADIX_ARY_MASK << count);
 
         while (++index < BFDEV_RADIX_ARY) {
             if (!node->child[index])
                 continue;
 
-            *offsetp |= (uintptr_t)index << count;
+            *offsetp |= (bfdev_uintptr_t)index << count;
             node = node->child[index];
 
             goto downward;
         }
     }
 
-    return NULL;
+    return BFDEV_NULL;
 
 downward:
     node = radix_left_most(node, level - 1, offsetp);
@@ -426,23 +426,23 @@ downward:
     count = bfdev_find_first_bit(node->bitmap, BFDEV_RADIX_BLOCK);
 
 finish:
-    *offsetp &= ~(uintptr_t)RADIX_BLOCK_MASK;
+    *offsetp &= ~(bfdev_uintptr_t)RADIX_BLOCK_MASK;
     *offsetp |= count;
 
     return &node->block[count];
 }
 
 export void *
-bfdev_radix_root_prev(bfdev_radix_root_t *root, uintptr_t *offsetp)
+bfdev_radix_root_prev(bfdev_radix_root_t *root, bfdev_uintptr_t *offsetp)
 {
     struct radix_parent parents[RADIX_LEVEL_MAX];
     bfdev_radix_node_t *node;
     unsigned int count, index, level;
-    bool contain;
+    bfdev_bool contain;
 
     contain = radix_parent(root, *offsetp, parents);
     if (bfdev_unlikely(!contain))
-        return NULL;
+        return BFDEV_NULL;
 
     node = parents[0].node;
     index = parents[0].index;
@@ -450,7 +450,7 @@ bfdev_radix_root_prev(bfdev_radix_root_t *root, uintptr_t *offsetp)
     /* Check for safety */
     contain = bfdev_bit_test(node->bitmap, index);
     if (bfdev_unlikely(!contain))
-        return NULL;
+        return BFDEV_NULL;
 
     count = bfdev_find_prev_bit(node->bitmap, BFDEV_RADIX_BLOCK, index - 1);
     if (count < BFDEV_RADIX_BLOCK)
@@ -461,20 +461,20 @@ bfdev_radix_root_prev(bfdev_radix_root_t *root, uintptr_t *offsetp)
         index = parents[level].index;
 
         count = radix_depth_shift(level - 1);
-        *offsetp &= ~((uintptr_t)RADIX_ARY_MASK << count);
+        *offsetp &= ~((bfdev_uintptr_t)RADIX_ARY_MASK << count);
 
         while (index--) {
             if (!node->child[index])
                 continue;
 
-            *offsetp |= (uintptr_t)index << count;
+            *offsetp |= (bfdev_uintptr_t)index << count;
             node = node->child[index];
 
             goto downward;
         }
     }
 
-    return NULL;
+    return BFDEV_NULL;
 
 downward:
     node = radix_right_most(node, level - 1, offsetp);
@@ -482,7 +482,7 @@ downward:
     count = bfdev_find_last_bit(node->bitmap, BFDEV_RADIX_BLOCK);
 
 finish:
-    *offsetp &= ~(uintptr_t)RADIX_BLOCK_MASK;
+    *offsetp &= ~(bfdev_uintptr_t)RADIX_BLOCK_MASK;
     *offsetp |= count;
 
     return &node->block[count];

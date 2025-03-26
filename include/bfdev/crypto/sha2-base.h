@@ -15,14 +15,14 @@
 BFDEV_BEGIN_DECLS
 
 typedef void (*bfdev_sha2_bfn_t)
-(bfdev_sha2_ctx_t *ctx, const void *src, size_t block);
+(bfdev_sha2_ctx_t *ctx, const void *src, bfdev_size_t block);
 
 static inline void
 bfdev_sha2_base_update(bfdev_sha2_ctx_t *ctx, const void *data,
-                       size_t size, bfdev_sha2_bfn_t func)
+                       bfdev_size_t size, bfdev_sha2_bfn_t func)
 {
     unsigned int partial;
-    size_t length, blocks;
+    bfdev_size_t length, blocks;
 
     partial = ctx->count % BFDEV_SHA2_BLOCK_SIZE;
     ctx->count += size;
@@ -30,7 +30,7 @@ bfdev_sha2_base_update(bfdev_sha2_ctx_t *ctx, const void *data,
     if (bfdev_unlikely((partial + size) >= BFDEV_SHA2_BLOCK_SIZE)) {
         if (partial) {
             length = BFDEV_SHA2_BLOCK_SIZE - partial;
-            bfport_memcpy(ctx->buffer + partial, data, length);
+            bfdev_memcpy(ctx->buffer + partial, data, length);
             func(ctx, ctx->buffer, 1);
 
             data += length;
@@ -49,7 +49,7 @@ bfdev_sha2_base_update(bfdev_sha2_ctx_t *ctx, const void *data,
     }
 
     if (size)
-        bfport_memcpy(ctx->buffer + partial, data, size);
+        bfdev_memcpy(ctx->buffer + partial, data, size);
 }
 
 static inline void
@@ -65,13 +65,13 @@ bfdev_sha2_base_finalize(bfdev_sha2_ctx_t *ctx, bfdev_sha2_bfn_t func)
     ctx->buffer[partial++] = 0x80;
 
     if (offset < partial) {
-        bfport_memset(ctx->buffer + partial, 0, BFDEV_SHA2_BLOCK_SIZE - partial);
+        bfdev_memset(ctx->buffer + partial, 0, BFDEV_SHA2_BLOCK_SIZE - partial);
         func(ctx, ctx->buffer, 1);
         partial = 0;
     }
 
-    bfport_memset(ctx->buffer + partial, 0, offset - partial);
-    bfdev_unaligned_set_be64(plen, (uint64_t)ctx->count << 3);
+    bfdev_memset(ctx->buffer + partial, 0, offset - partial);
+    bfdev_unaligned_set_be64(plen, (bfdev_u64)ctx->count << 3);
     func(ctx, ctx->buffer, 1);
 }
 
@@ -87,7 +87,7 @@ bfdev_sha2_base_finish(bfdev_sha2_ctx_t *ctx, unsigned int dsize, void *buff)
 }
 
 static inline void
-bfdev_sha224_digest_init(uint32_t *digest)
+bfdev_sha224_digest_init(bfdev_u32 *digest)
 {
     digest[0] = BFDEV_SHA224_DIGEST0;
     digest[1] = BFDEV_SHA224_DIGEST1;
@@ -100,7 +100,7 @@ bfdev_sha224_digest_init(uint32_t *digest)
 }
 
 static inline void
-bfdev_sha256_digest_init(uint32_t *digest)
+bfdev_sha256_digest_init(bfdev_u32 *digest)
 {
     digest[0] = BFDEV_SHA256_DIGEST0;
     digest[1] = BFDEV_SHA256_DIGEST1;

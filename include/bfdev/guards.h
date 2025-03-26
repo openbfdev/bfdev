@@ -22,7 +22,7 @@ __bfdev_cleanup_##name(void *object)            \
 
 #define bfdev_clean_lasting(object) ({  \
     __auto_type __ptr = (object);       \
-    (object) = NULL; __ptr;             \
+    (object) = BFDEV_NULL; __ptr;       \
 })
 
 #define bfdev_clean(name) \

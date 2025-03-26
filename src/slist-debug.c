@@ -11,7 +11,7 @@
 #include <bfdev/slist.h>
 #include <export.h>
 
-export bool
+export bfdev_bool
 bfdev_slist_check_add(bfdev_slist_head_t *node, bfdev_slist_head_t *newn)
 {
     if (bfdev_unlikely(node->next == newn)) {
@@ -20,7 +20,7 @@ bfdev_slist_check_add(bfdev_slist_head_t *node, bfdev_slist_head_t *newn)
             " should not be newn (%p)\n",
             node, newn
         );
-        return false;
+        return bfdev_false;
     }
 
     if (bfdev_unlikely(node == newn)) {
@@ -29,13 +29,13 @@ bfdev_slist_check_add(bfdev_slist_head_t *node, bfdev_slist_head_t *newn)
             " newn=(%p), node=(%p)\n",
             newn, node
         );
-        return false;
+        return bfdev_false;
     }
 
-    return true;
+    return bfdev_true;
 }
 
-export bool
+export bfdev_bool
 bfdev_slist_check_del(bfdev_slist_head_t *node)
 {
     if (bfdev_unlikely(node->next == BFDEV_POISON_SLIST)) {
@@ -44,8 +44,8 @@ bfdev_slist_check_del(bfdev_slist_head_t *node)
             " should not be BFDEV_POISON_SLIST (%p)\n",
             node, BFDEV_POISON_SLIST
         );
-        return false;
+        return bfdev_false;
     }
 
-    return true;
+    return bfdev_true;
 }

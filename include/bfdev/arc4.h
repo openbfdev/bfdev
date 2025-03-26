@@ -19,18 +19,18 @@ BFDEV_BEGIN_DECLS
 typedef struct bfdev_arc4_ctx bfdev_arc4_ctx_t;
 
 struct bfdev_arc4_ctx {
-    uint8_t box[BFDEV_ARC4_KSIZE];
-    uint8_t proa;
-    uint8_t prob;
+    bfdev_u8 box[BFDEV_ARC4_KSIZE];
+    bfdev_u8 proa;
+    bfdev_u8 prob;
 };
 
 extern void
 bfdev_arc4_trans(bfdev_arc4_ctx_t *ctx, void *buff,
-                 const void *data, size_t size);
+                 const void *data, bfdev_size_t size);
 
 extern void
 bfdev_arc4_setkey(bfdev_arc4_ctx_t *ctx,
-                  const uint8_t *key, unsigned int klen);
+                  const bfdev_u8 *key, unsigned int klen);
 
 BFDEV_END_DECLS
 

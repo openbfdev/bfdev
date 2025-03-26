@@ -14,7 +14,7 @@ BFDEV_BEGIN_DECLS
 #include <bfdev/crypto/crc64-table.h>
 
 BFDEV_CRC_INLINE(
-    bfdev_crc64, uint64_t,
+    bfdev_crc64, bfdev_u64,
     bfdev_crc64_table, bfdev_cpu_to_be64
 )
 

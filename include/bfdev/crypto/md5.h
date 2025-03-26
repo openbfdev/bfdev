@@ -23,9 +23,9 @@ BFDEV_BEGIN_DECLS
 })
 
 static inline void
-bfdev_md5_transform(uint32_t *hash, const uint32_t *data)
+bfdev_md5_transform(bfdev_u32 *hash, const bfdev_u32 *data)
 {
-    uint32_t A, B, C, D;
+    bfdev_u32 A, B, C, D;
 
     A = hash[0];
     B = hash[1];

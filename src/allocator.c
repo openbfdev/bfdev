@@ -9,12 +9,12 @@
 
 BFDEV_DEFINE_ALLOC(
     bfdev_alloc_default,
-    NULL, NULL
+    BFDEV_NULL, BFDEV_NULL
 );
 
 BFDEV_DEFINE_ALLOC_OPS(
     bfdev_alloc_default_ops,
-    NULL, NULL, NULL, NULL
+    BFDEV_NULL, BFDEV_NULL, BFDEV_NULL, BFDEV_NULL
 );
 
 #define __INSIDE_ALLOCATOR__
@@ -38,13 +38,13 @@ alloc_ops(const bfdev_alloc_t *alloc, void **pdata)
 }
 
 export __bfdev_malloc void *
-bfdev_malloc(const bfdev_alloc_t *alloc, size_t size)
+bfdev_malloc(const bfdev_alloc_t *alloc, bfdev_size_t size)
 {
     const bfdev_alloc_ops_t *ops;
     void *pdata, *retval;
 
     if (bfdev_unlikely(!size))
-        return NULL;
+        return BFDEV_NULL;
 
     ops = alloc_ops(alloc, &pdata);
     if (!ops->alloc)
@@ -56,13 +56,13 @@ bfdev_malloc(const bfdev_alloc_t *alloc, size_t size)
 }
 
 export __bfdev_malloc void *
-bfdev_zalloc(const bfdev_alloc_t *alloc, size_t size)
+bfdev_zalloc(const bfdev_alloc_t *alloc, bfdev_size_t size)
 {
     const bfdev_alloc_ops_t *ops;
     void *pdata, *retval;
 
     if (bfdev_unlikely(!size))
-        return NULL;
+        return BFDEV_NULL;
 
     ops = alloc_ops(alloc, &pdata);
     if (!ops->zalloc)
@@ -74,7 +74,8 @@ bfdev_zalloc(const bfdev_alloc_t *alloc, size_t size)
 }
 
 export __bfdev_malloc void *
-bfdev_realloc(const bfdev_alloc_t *alloc, const void *block, size_t resize)
+bfdev_realloc(const bfdev_alloc_t *alloc, const void *block,
+              bfdev_size_t resize)
 {
     const bfdev_alloc_ops_t *ops;
     void *pdata, *retval;
@@ -84,7 +85,7 @@ bfdev_realloc(const bfdev_alloc_t *alloc, const void *block, size_t resize)
 
     if (bfdev_unlikely(!resize)) {
         bfdev_free(alloc, block);
-        return NULL;
+        return BFDEV_NULL;
     }
 
     ops = alloc_ops(alloc, &pdata);

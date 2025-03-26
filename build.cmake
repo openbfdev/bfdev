@@ -65,6 +65,7 @@ set(BFDEV_INCLUDE_DIRS
 include_directories(${BFDEV_INCLUDE_DIRS})
 include(${BFDEV_ARCH_PATH}/build.cmake)
 include(${BFDEV_SOURCE_PATH}/build.cmake)
+include(${BFDEV_PORT_PATH}/build.cmake)
 
 set(BFDEV_LIBRARY_HEADER
     ${BFDEV_HEADER}

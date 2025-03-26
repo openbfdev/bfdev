@@ -25,7 +25,8 @@ BFDEV_BEGIN_DECLS
  * buffer overflows.
  */
 extern __bfdev_printf(3, 0) int
-bfdev_vscnprintf(char *buf, size_t size, const char *fmt, va_list args);
+bfdev_vscnprintf(char *buf, bfdev_size_t size,
+                 const char *fmt, bfdev_va_list args);
 
 /**
  * bfdev_scnprintf - Format a string and place it in a buffer.
@@ -39,7 +40,7 @@ bfdev_vscnprintf(char *buf, size_t size, const char *fmt, va_list args);
  * buffer overflows.
  */
 extern __bfdev_printf(3, 4) int
-bfdev_scnprintf(char *buf, size_t size, const char *fmt, ...);
+bfdev_scnprintf(char *buf, bfdev_size_t size, const char *fmt, ...);
 
 BFDEV_END_DECLS
 

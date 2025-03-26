@@ -84,12 +84,12 @@ bfdev_list_sort(bfdev_list_head_t *head, bfdev_list_cmp_t cmp, void *pdata)
     if (bfdev_unlikely(node == head->prev))
         return;
 
-    head->prev->next = NULL;
-    pending = NULL;
+    head->prev->next = BFDEV_NULL;
+    pending = BFDEV_NULL;
 
     for (count = 0; node; ++count) {
         bfdev_list_head_t **tail;
-        size_t bits;
+        bfdev_size_t bits;
 
         tail = &pending;
         for (bits = count; bits & 1; bits >>= 1)
@@ -110,7 +110,7 @@ bfdev_list_sort(bfdev_list_head_t *head, bfdev_list_cmp_t cmp, void *pdata)
         pending = node;
 
         node = node->next;
-        pending->next = NULL;
+        pending->next = BFDEV_NULL;
     }
 
     node = pending;

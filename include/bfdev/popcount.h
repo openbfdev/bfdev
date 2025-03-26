@@ -17,7 +17,7 @@ BFDEV_BEGIN_DECLS
  */
 
 static __bfdev_attribute_const __bfdev_always_inline
-unsigned int bfdev_popcount8_const(uint8_t value)
+unsigned int bfdev_popcount8_const(bfdev_u8 value)
 {
     value = (value & 0x55) + ((value >> 1) & 0x55);
     value = (value & 0x33) + ((value >> 2) & 0x33);
@@ -26,7 +26,7 @@ unsigned int bfdev_popcount8_const(uint8_t value)
 }
 
 static __bfdev_attribute_const __bfdev_always_inline
-unsigned int bfdev_popcount16_const(uint16_t value)
+unsigned int bfdev_popcount16_const(bfdev_u16 value)
 {
     value = (value & 0x5555) + ((value >> 1) & 0x5555);
     value = (value & 0x3333) + ((value >> 2) & 0x3333);
@@ -36,7 +36,7 @@ unsigned int bfdev_popcount16_const(uint16_t value)
 }
 
 static __bfdev_attribute_const __bfdev_always_inline
-unsigned int bfdev_popcount32_const(uint32_t value)
+unsigned int bfdev_popcount32_const(bfdev_u32 value)
 {
     value = (value & 0x55555555UL) + ((value >>  1) & 0x55555555);
     value = (value & 0x33333333UL) + ((value >>  2) & 0x33333333);
@@ -47,7 +47,7 @@ unsigned int bfdev_popcount32_const(uint32_t value)
 }
 
 static __bfdev_attribute_const __bfdev_always_inline
-unsigned int bfdev_popcount64_const(uint64_t value)
+unsigned int bfdev_popcount64_const(bfdev_u64 value)
 {
     value = (value & 0x5555555555555555ULL) + ((value >>  1) & 0x5555555555555555ULL);
     value = (value & 0x3333333333333333ULL) + ((value >>  2) & 0x3333333333333333ULL);
@@ -59,7 +59,7 @@ unsigned int bfdev_popcount64_const(uint64_t value)
 }
 
 static __bfdev_attribute_const __bfdev_always_inline
-bool bfdev_popparity8_const(uint8_t value)
+bfdev_bool bfdev_popparity8_const(bfdev_u8 value)
 {
     value ^= value >> 4;
     value &= 0xf;
@@ -67,7 +67,7 @@ bool bfdev_popparity8_const(uint8_t value)
 }
 
 static __bfdev_attribute_const __bfdev_always_inline
-bool bfdev_popparity16_const(uint16_t value)
+bfdev_bool bfdev_popparity16_const(bfdev_u16 value)
 {
     value ^= value >> 8;
     value ^= value >> 4;
@@ -76,7 +76,7 @@ bool bfdev_popparity16_const(uint16_t value)
 }
 
 static __bfdev_attribute_const __bfdev_always_inline
-bool bfdev_popparity32_const(uint32_t value)
+bfdev_bool bfdev_popparity32_const(bfdev_u32 value)
 {
     value ^= value >> 16;
     value ^= value >> 8;
@@ -86,7 +86,7 @@ bool bfdev_popparity32_const(uint32_t value)
 }
 
 static __bfdev_attribute_const __bfdev_always_inline
-bool bfdev_popparity64_const(uint64_t value)
+bfdev_bool bfdev_popparity64_const(bfdev_u64 value)
 {
     value ^= value >> 32;
     value ^= value >> 16;
@@ -100,69 +100,69 @@ bool bfdev_popparity64_const(uint64_t value)
  * Interface for known dynamic arguments
  */
 
-extern const uint8_t
+extern const bfdev_u8
 bfdev_popcount_table[256];
 
-extern const bool
+extern const bfdev_bool
 bfdev_popparity_table[256];
 
 static inline __bfdev_attribute_const
-unsigned int bfdev_popcount8_dynamic(uint8_t value)
+unsigned int bfdev_popcount8_dynamic(bfdev_u8 value)
 {
     return bfdev_popcount_table[value];
 }
 
 static inline __bfdev_attribute_const
-unsigned int bfdev_popcount16_dynamic(uint16_t value)
+unsigned int bfdev_popcount16_dynamic(bfdev_u16 value)
 {
-    uint8_t high = value >> 8;
+    bfdev_u8 high = value >> 8;
     return bfdev_popcount8_dynamic(high) +
-           bfdev_popcount8_dynamic((uint8_t)value);
+           bfdev_popcount8_dynamic((bfdev_u8)value);
 }
 
 static inline __bfdev_attribute_const
-unsigned int bfdev_popcount32_dynamic(uint32_t value)
+unsigned int bfdev_popcount32_dynamic(bfdev_u32 value)
 {
-    uint16_t high = value >> 16;
+    bfdev_u16 high = value >> 16;
     return bfdev_popcount16_dynamic(high) +
-           bfdev_popcount16_dynamic((uint16_t)value);
+           bfdev_popcount16_dynamic((bfdev_u16)value);
 }
 
 static inline __bfdev_attribute_const
-unsigned int bfdev_popcount64_dynamic(uint64_t value)
+unsigned int bfdev_popcount64_dynamic(bfdev_u64 value)
 {
-    uint32_t high = value >> 32;
+    bfdev_u32 high = value >> 32;
     return bfdev_popcount32_dynamic(high) +
-           bfdev_popcount32_dynamic((uint32_t)value);
+           bfdev_popcount32_dynamic((bfdev_u32)value);
 }
 
 static inline __bfdev_attribute_const
-bool bfdev_popparity8_dynamic(uint8_t value)
+bfdev_bool bfdev_popparity8_dynamic(bfdev_u8 value)
 {
     return bfdev_popparity_table[value];
 }
 
 static inline __bfdev_attribute_const
-bool bfdev_popparity16_dynamic(uint16_t value)
+bfdev_bool bfdev_popparity16_dynamic(bfdev_u16 value)
 {
-    uint8_t high = value >> 8;
-    return (bfdev_popparity8_dynamic((uint8_t)value) +
+    bfdev_u8 high = value >> 8;
+    return (bfdev_popparity8_dynamic((bfdev_u8)value) +
             bfdev_popparity8_dynamic(high)) & 1;
 }
 
 static inline __bfdev_attribute_const
-bool bfdev_popparity32_dynamic(uint32_t value)
+bfdev_bool bfdev_popparity32_dynamic(bfdev_u32 value)
 {
-    uint16_t high = value >> 16;
-    return (bfdev_popparity16_dynamic((uint16_t)value) +
+    bfdev_u16 high = value >> 16;
+    return (bfdev_popparity16_dynamic((bfdev_u16)value) +
             bfdev_popparity16_dynamic(high)) & 1;
 }
 
 static inline __bfdev_attribute_const
-bool bfdev_popparity64_dynamic(uint64_t value)
+bfdev_bool bfdev_popparity64_dynamic(bfdev_u64 value)
 {
-    uint32_t high = value >> 32;
-    return (bfdev_popparity32_dynamic((uint32_t)value) +
+    bfdev_u32 high = value >> 32;
+    return (bfdev_popparity32_dynamic((bfdev_u32)value) +
             bfdev_popparity32_dynamic(high)) & 1;
 }
 
@@ -173,28 +173,28 @@ bool bfdev_popparity64_dynamic(uint64_t value)
  * Returns the number of 1-bits in x.
  */
 #define bfdev_popcount8(value) ({           \
-    uint8_t __value = (value);              \
+    bfdev_u8 __value = (value);             \
     __builtin_constant_p(__value)           \
     ? bfdev_popcount8_const(__value)        \
     : bfdev_popcount8_dynamic(__value);     \
 })
 
 #define bfdev_popcount16(value) ({          \
-    uint16_t __value = (value);             \
+    bfdev_u16 __value = (value);            \
     __builtin_constant_p(__value)           \
     ? bfdev_popcount16_const(__value)       \
     : bfdev_popcount16_dynamic(__value);    \
 })
 
 #define bfdev_popcount32(value) ({          \
-    uint32_t __value = (value);             \
+    bfdev_u32 __value = (value);            \
     __builtin_constant_p(__value)           \
     ? bfdev_popcount32_const(__value)       \
     : bfdev_popcount32_dynamic(__value);    \
 })
 
 #define bfdev_popcount64(value) ({          \
-    uint64_t __value = (value);             \
+    bfdev_u64 __value = (value);            \
     __builtin_constant_p(__value)           \
     ? bfdev_popcount64_const(__value)       \
     : bfdev_popcount64_dynamic(__value);    \
@@ -207,28 +207,28 @@ bool bfdev_popparity64_dynamic(uint64_t value)
  * Returns the parity of x, i.e. the number of 1-bits in x modulo 2.
  */
 #define bfdev_popparity8(value) ({          \
-    uint8_t __value = (value);              \
+    bfdev_u8 __value = (value);             \
     __builtin_constant_p(__value)           \
     ? bfdev_popparity8_const(__value)       \
     : bfdev_popparity8_dynamic(__value);    \
 })
 
 #define bfdev_popparity16(value) ({         \
-    uint16_t __value = (value);             \
+    bfdev_u16 __value = (value);            \
     __builtin_constant_p(__value)           \
     ? bfdev_popparity16_const(__value)      \
     : bfdev_popparity16_dynamic(__value);   \
 })
 
 #define bfdev_popparity32(value) ({         \
-    uint32_t __value = (value);             \
+    bfdev_u32 __value = (value);            \
     __builtin_constant_p(__value)           \
     ? bfdev_popparity32_const(__value)      \
     : bfdev_popparity32_dynamic(__value);   \
 })
 
 #define bfdev_popparity64(value) ({         \
-    uint64_t __value = (value);             \
+    bfdev_u64 __value = (value);            \
     __builtin_constant_p(__value)           \
     ? bfdev_popparity64_const(__value)      \
     : bfdev_popparity64_dynamic(__value);   \

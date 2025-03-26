@@ -37,7 +37,7 @@ struct bfdev_radix_node {
             unsigned int refcount;
         };
         struct { /* leaf */
-            uint8_t block[BFDEV_RADIX_BLOCK];
+            bfdev_u8 block[BFDEV_RADIX_BLOCK];
             BFDEV_DEFINE_BITMAP(bitmap, BFDEV_RADIX_BLOCK);
         };
     };
@@ -66,10 +66,10 @@ struct bfdev_radix_node {
 #define BFDEV_DEFINE_RADIX(name, type, alloc) \
     BFDEV_DECLARE_RADIX(name, type) = BFDEV_RADIX_INIT(&name, alloc)
 
-static inline uintptr_t
-bfdev_radix_offset(uintptr_t index, size_t cells)
+static inline bfdev_uintptr_t
+bfdev_radix_offset(bfdev_uintptr_t index, bfdev_size_t cells)
 {
-    size_t num;
+    bfdev_size_t num;
 
     if (bfdev_pow2_check(cells))
         return index * cells;
@@ -80,10 +80,10 @@ bfdev_radix_offset(uintptr_t index, size_t cells)
            (index % num) * cells;
 }
 
-static inline uintptr_t
-bfdev_radix_index(uintptr_t offset, size_t cells)
+static inline bfdev_uintptr_t
+bfdev_radix_index(bfdev_uintptr_t offset, bfdev_size_t cells)
 {
-    size_t num;
+    bfdev_size_t num;
 
     if (bfdev_pow2_check(cells))
         return offset / cells;
@@ -151,7 +151,7 @@ bfdev_radix_index(uintptr_t offset, size_t cells)
 
 #define bfdev_radix_first(radix, index) ({              \
     bfdev_radix_root_t *__root;                         \
-    uintptr_t __off;                                    \
+    bfdev_uintptr_t __off;                              \
     void *__retval;                                     \
     __root = &(radix)->tree;                            \
     __retval = bfdev_radix_root_first(__root, &__off);  \
@@ -161,7 +161,7 @@ bfdev_radix_index(uintptr_t offset, size_t cells)
 
 #define bfdev_radix_last(radix, index) ({               \
     bfdev_radix_root_t *__root;                         \
-    uintptr_t __off;                                    \
+    bfdev_uintptr_t __off;                              \
     void *__retval;                                     \
     __root = &(radix)->tree;                            \
     __retval = bfdev_radix_root_last(__root, &__off);   \
@@ -171,7 +171,7 @@ bfdev_radix_index(uintptr_t offset, size_t cells)
 
 #define bfdev_radix_next(radix, index) ({               \
     bfdev_radix_root_t *__root;                         \
-    uintptr_t __off;                                    \
+    bfdev_uintptr_t __off;                              \
     void *__retval;                                     \
     __root = &(radix)->tree;                            \
     __off = bfdev_radix_to_offset(radix, *(index));     \
@@ -182,7 +182,7 @@ bfdev_radix_index(uintptr_t offset, size_t cells)
 
 #define bfdev_radix_prev(radix, index) ({               \
     bfdev_radix_root_t *__root;                         \
-    uintptr_t __off;                                    \
+    bfdev_uintptr_t __off;                              \
     void *__retval;                                     \
     __root = &(radix)->tree;                            \
     __off = bfdev_radix_to_offset(radix, *(index));     \
@@ -246,31 +246,32 @@ bfdev_radix_index(uintptr_t offset, size_t cells)
          ((tval) = bfdev_radix_prev(radix, tidx))))
 
 extern void *
-bfdev_radix_root_find(bfdev_radix_root_t *root, uintptr_t offset);
+bfdev_radix_root_find(bfdev_radix_root_t *root, bfdev_uintptr_t offset);
 
 extern void *
-bfdev_radix_root_alloc(bfdev_radix_root_t *root, uintptr_t offset);
+bfdev_radix_root_alloc(bfdev_radix_root_t *root, bfdev_uintptr_t offset);
 
 extern int
-bfdev_radix_root_free(bfdev_radix_root_t *root, uintptr_t offset);
+bfdev_radix_root_free(bfdev_radix_root_t *root, bfdev_uintptr_t offset);
 
 extern int
-bfdev_radix_root_charge(bfdev_radix_root_t *root, uintptr_t offset, size_t size);
+bfdev_radix_root_charge(bfdev_radix_root_t *root, bfdev_uintptr_t offset,
+                        bfdev_size_t size);
 
 extern void
 bfdev_radix_root_release(bfdev_radix_root_t *root);
 
 extern void *
-bfdev_radix_root_first(bfdev_radix_root_t *root, uintptr_t *offsetp);
+bfdev_radix_root_first(bfdev_radix_root_t *root, bfdev_uintptr_t *offsetp);
 
 extern void *
-bfdev_radix_root_last(bfdev_radix_root_t *root, uintptr_t *offsetp);
+bfdev_radix_root_last(bfdev_radix_root_t *root, bfdev_uintptr_t *offsetp);
 
 extern void *
-bfdev_radix_root_next(bfdev_radix_root_t *root, uintptr_t *offsetp);
+bfdev_radix_root_next(bfdev_radix_root_t *root, bfdev_uintptr_t *offsetp);
 
 extern void *
-bfdev_radix_root_prev(bfdev_radix_root_t *root, uintptr_t *offsetp);
+bfdev_radix_root_prev(bfdev_radix_root_t *root, bfdev_uintptr_t *offsetp);
 
 BFDEV_END_DECLS
 

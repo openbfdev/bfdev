@@ -7,8 +7,8 @@
 #include <bfdev/crypto/crc8-inline.h>
 #include <export.h>
 
-export uint8_t
-bfdev_crc8(const void *data, size_t len, uint8_t crc)
+export bfdev_u8
+bfdev_crc8(const void *data, bfdev_size_t len, bfdev_u8 crc)
 {
     return bfdev_crc8_inline(data, len, crc);
 }

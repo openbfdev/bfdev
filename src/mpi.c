@@ -29,14 +29,14 @@ BFDEV_MPI_TYPE mpi_zero;
 static inline void
 mpa_zero(BFDEV_MPI_TYPE *dest, unsigned long length)
 {
-    bfport_memset(dest, 0, length * BFDEV_MPI_SIZE);
+    bfdev_memset(dest, 0, length * BFDEV_MPI_SIZE);
 }
 
 static inline void
 mpa_copy(BFDEV_MPI_TYPE *dest, const BFDEV_MPI_TYPE *src,
          unsigned long length)
 {
-    bfport_memcpy(dest, src, length * BFDEV_MPI_SIZE);
+    bfdev_memcpy(dest, src, length * BFDEV_MPI_SIZE);
 }
 
 static inline int
@@ -77,10 +77,10 @@ mpa_cmp(const BFDEV_MPI_TYPE *ptra, const BFDEV_MPI_TYPE *ptrb,
     return BFDEV_EQ;
 }
 
-static inline bool
+static inline bfdev_bool
 mpa_addi(BFDEV_MPI_TYPE *ptrs,
          const BFDEV_MPI_TYPE *ptra, BFDEV_MPI_TYPE vi,
-         unsigned long length, bool carry)
+         unsigned long length, bfdev_bool carry)
 {
     BFDEV_MPI_TYPE value;
 
@@ -96,10 +96,10 @@ mpa_addi(BFDEV_MPI_TYPE *ptrs,
     return carry;
 }
 
-static inline bool
+static inline bfdev_bool
 mpa_add(BFDEV_MPI_TYPE *ptrs,
         const BFDEV_MPI_TYPE *ptra, const BFDEV_MPI_TYPE *ptrb,
-        unsigned long cnta, unsigned long cntb, bool carry)
+        unsigned long cnta, unsigned long cntb, bfdev_bool carry)
 {
     BFDEV_MPI_TYPE value;
 
@@ -126,10 +126,10 @@ mpa_add(BFDEV_MPI_TYPE *ptrs,
     return carry;
 }
 
-static inline bool
+static inline bfdev_bool
 mpa_subi(BFDEV_MPI_TYPE *ptrs,
          const BFDEV_MPI_TYPE *ptra, BFDEV_MPI_TYPE vi,
-         unsigned long length, bool borrow)
+         unsigned long length, bfdev_bool borrow)
 {
     BFDEV_MPI_TYPE value;
 
@@ -146,10 +146,10 @@ mpa_subi(BFDEV_MPI_TYPE *ptrs,
     return borrow;
 }
 
-static inline bool
+static inline bfdev_bool
 mpa_sub(BFDEV_MPI_TYPE *ptrs,
         const BFDEV_MPI_TYPE *ptra, const BFDEV_MPI_TYPE *ptrb,
-        unsigned long cnta, unsigned long cntb, bool borrow)
+        unsigned long cnta, unsigned long cntb, bfdev_bool borrow)
 {
     BFDEV_MPI_TYPE value;
 
@@ -323,27 +323,27 @@ mpa_modi(const BFDEV_MPI_TYPE *ptra, BFDEV_MPI_TYPE vi,
 
     while (length--) {
         dword[0] = *ptra--;
-        bfdev_dword_udiv(NULL, dword + 1, dword, vi);
+        bfdev_dword_udiv(BFDEV_NULL, dword + 1, dword, vi);
     }
 
     return dword[1];
 }
 
-static inline bool
+static inline bfdev_bool
 mpa_divrem(BFDEV_MPI_TYPE *ptrs,
            BFDEV_MPI_TYPE *ptra, const BFDEV_MPI_TYPE *ptrb,
            unsigned long cnta, unsigned long cntb)
 {
     BFDEV_MPI_TYPE dhigh, dlow, value;
     unsigned long index;
-    bool limb, borrow;
+    bfdev_bool limb, borrow;
 
     /**
      * Argument constraints:
      * 0. @cnta >= @cntb.
      * 1. The most significant bit of the divisor must be set.
      * 2. @ptrs must either not overlap with the input operands at all, or
-     *    @ptrs + @cntb >= @ptra must hold true. (This means that it's
+     *    @ptrs + @cntb >= @ptra must hold bfdev_true. (This means that it's
      *    possible to put the quotient in the high part of NUM, right after the
      *    remainder in NUM.
      */
@@ -355,14 +355,14 @@ mpa_divrem(BFDEV_MPI_TYPE *ptrs,
     dhigh = ptrb[cntb - 1];
     dlow = ptrb[cntb - 2];
 
-    limb = false;
+    limb = bfdev_false;
     if (value >= dhigh) {
         if (value > dhigh || mpa_cmp(ptra, ptrb, cntb - 1, cntb - 1) >= 0) {
-            borrow = mpa_sub(ptra, ptra, ptrb, cntb, cntb, false);
+            borrow = mpa_sub(ptra, ptra, ptrb, cntb, cntb, bfdev_false);
             BFDEV_BUG_ON(borrow);
 
             value = ptra[cntb - 1];
-            limb = true;
+            limb = bfdev_true;
         }
     }
 
@@ -560,7 +560,7 @@ mpi_addi(bfdev_mpi_t *dest,
 {
     BFDEV_MPI_TYPE *ptrs, *ptra;
     unsigned long length;
-    bool carry;
+    bfdev_bool carry;
     int retval;
 
     /* parameter check */
@@ -575,7 +575,7 @@ mpi_addi(bfdev_mpi_t *dest,
     ptrs = mpi_val(dest);
     ptra = mpi_val(va);
 
-    carry = mpa_addi(ptrs, ptra, vi, length, false);
+    carry = mpa_addi(ptrs, ptra, vi, length, bfdev_false);
     *(ptrs + length) = carry;
     mpi_relocation(dest);
 
@@ -588,7 +588,7 @@ mpi_add(bfdev_mpi_t *dest,
 {
     BFDEV_MPI_TYPE *ptrs, *ptra, *ptrb;
     unsigned long length, cnta, cntb;
-    bool carry;
+    bfdev_bool carry;
     int retval;
 
     /* parameter check */
@@ -613,7 +613,7 @@ mpi_add(bfdev_mpi_t *dest,
     ptra = mpi_val(va);
     ptrs = mpi_val(dest);
 
-    carry = mpa_add(ptrs, ptra, ptrb, cnta, cntb, false);
+    carry = mpa_add(ptrs, ptra, ptrb, cnta, cntb, bfdev_false);
     *(ptrs + length) = carry;
     mpi_relocation(dest);
 
@@ -626,7 +626,7 @@ mpi_subi(bfdev_mpi_t *dest,
 {
     BFDEV_MPI_TYPE *ptrs, *ptra;
     unsigned long length;
-    bool borrow;
+    bfdev_bool borrow;
     int retval;
 
     /* parameter check */
@@ -640,7 +640,7 @@ mpi_subi(bfdev_mpi_t *dest,
     ptrs = mpi_val(dest);
     ptra = mpi_val(va);
 
-    borrow = mpa_subi(ptrs, ptra, vi, length, false);
+    borrow = mpa_subi(ptrs, ptra, vi, length, bfdev_false);
     BFDEV_BUG_ON(borrow);
     mpi_relocation(dest);
 
@@ -653,7 +653,7 @@ mpi_sub(bfdev_mpi_t *dest,
 {
     BFDEV_MPI_TYPE *ptrs, *ptra, *ptrb;
     unsigned long cnta, cntb;
-    bool borrow;
+    bfdev_bool borrow;
     int retval;
 
     /* parameter check */
@@ -676,7 +676,7 @@ mpi_sub(bfdev_mpi_t *dest,
     ptrs = mpi_val(dest);
     ptra = mpi_val(va);
 
-    borrow = mpa_sub(ptrs, ptra, ptrb, cnta, cntb, false);
+    borrow = mpa_sub(ptrs, ptra, ptrb, cnta, cntb, bfdev_false);
     BFDEV_BUG_ON(borrow);
     mpi_relocation(dest);
 
@@ -735,7 +735,7 @@ mpi_mul(bfdev_mpi_t *dest,
     if (cntb == 1)
         return mpi_muli(dest, va, *ptrb);
 
-    rename = NULL;
+    rename = BFDEV_NULL;
     if (dest == va && dest == vb) {
         rename = dest;
         dest = &buffer;
@@ -835,7 +835,7 @@ mpi_div(bfdev_mpi_t *quot, bfdev_mpi_t *rem,
     BFDEV_MPI_TYPE *ptrs, *ptra, *ptrb;
     unsigned long cnta, cntb, length;
     bfdev_mpi_t *rename;
-    bool limb;
+    bfdev_bool limb;
     int retval;
 
     /* divide by zero */
@@ -868,7 +868,7 @@ mpi_div(bfdev_mpi_t *quot, bfdev_mpi_t *rem,
             return retval;
     }
 
-    rename = NULL;
+    rename = BFDEV_NULL;
     if (quot == va) {
         rename = quot;
         quot = &buffer;
@@ -936,7 +936,7 @@ mpi_mod(bfdev_mpi_t *rem,
     cnta = mpi_len(va);
     ptra = mpi_val(rem);
 
-    mpa_divrem(NULL, ptra, ptrb, cnta, cntb);
+    mpa_divrem(BFDEV_NULL, ptra, ptrb, cnta, cntb);
     BFDEV_BUG_ON(mpi_resize(rem, cntb));
     mpi_relocation(rem);
 
@@ -1180,7 +1180,7 @@ bfdev_mpi_add(bfdev_mpi_t *dest,
             if (bfdev_unlikely(retval))
                 return retval;
 
-            dest->plus = true;
+            dest->plus = bfdev_true;
             break;
 
         case BFDEV_BT:
@@ -1215,7 +1215,7 @@ bfdev_mpi_addi(bfdev_mpi_t *dest,
         if (bfdev_unlikely(retval))
             return retval;
 
-        dest->plus = true;
+        dest->plus = bfdev_true;
         return -BFDEV_ENOERR;
     }
 
@@ -1226,7 +1226,7 @@ bfdev_mpi_addi(bfdev_mpi_t *dest,
             if (bfdev_unlikely(retval))
                 return retval;
 
-            dest->plus = true;
+            dest->plus = bfdev_true;
             break;
 
         case BFDEV_LT:
@@ -1235,7 +1235,7 @@ bfdev_mpi_addi(bfdev_mpi_t *dest,
             if (bfdev_unlikely(retval))
                 return retval;
 
-            dest->plus = true;
+            dest->plus = bfdev_true;
             break;
 
         case BFDEV_BT:
@@ -1243,7 +1243,7 @@ bfdev_mpi_addi(bfdev_mpi_t *dest,
             if (bfdev_unlikely(retval))
                 return retval;
 
-            dest->plus = false;
+            dest->plus = bfdev_false;
             break;
     }
 
@@ -1272,7 +1272,7 @@ bfdev_mpi_sub(bfdev_mpi_t *dest,
             if (bfdev_unlikely(retval))
                 return retval;
 
-            dest->plus = true;
+            dest->plus = bfdev_true;
             break;
 
         case BFDEV_BT:
@@ -1307,7 +1307,7 @@ bfdev_mpi_subi(bfdev_mpi_t *dest,
         if (bfdev_unlikely(retval))
             return retval;
 
-        dest->plus = false;
+        dest->plus = bfdev_false;
         return -BFDEV_ENOERR;
     }
 
@@ -1318,7 +1318,7 @@ bfdev_mpi_subi(bfdev_mpi_t *dest,
             if (bfdev_unlikely(retval))
                 return retval;
 
-            dest->plus = true;
+            dest->plus = bfdev_true;
             break;
 
         case BFDEV_LT:
@@ -1327,7 +1327,7 @@ bfdev_mpi_subi(bfdev_mpi_t *dest,
             if (bfdev_unlikely(retval))
                 return retval;
 
-            dest->plus = false;
+            dest->plus = bfdev_false;
             break;
 
         case BFDEV_BT:
@@ -1398,7 +1398,7 @@ bfdev_mpi_div(bfdev_mpi_t *quot, bfdev_mpi_t *rem,
                 return retval;
 
             quot->plus = !(va->plus ^ vb->plus);
-            rem->plus = true;
+            rem->plus = bfdev_true;
             break;
 
         case BFDEV_LT:
@@ -1415,7 +1415,7 @@ bfdev_mpi_div(bfdev_mpi_t *quot, bfdev_mpi_t *rem,
             if (bfdev_unlikely(retval))
                 return retval;
 
-            quot->plus = true;
+            quot->plus = bfdev_true;
             break;
 
         case BFDEV_BT:
@@ -1449,7 +1449,7 @@ bfdev_mpi_divi(bfdev_mpi_t *quot, bfdev_mpi_t *rem,
                 return retval;
 
             quot->plus = va->plus;
-            rem->plus = true;
+            rem->plus = bfdev_true;
             break;
 
         case BFDEV_LT:
@@ -1466,7 +1466,7 @@ bfdev_mpi_divi(bfdev_mpi_t *quot, bfdev_mpi_t *rem,
             if (bfdev_unlikely(retval))
                 return retval;
 
-            quot->plus = true;
+            quot->plus = bfdev_true;
             break;
 
         case BFDEV_BT:
@@ -1495,7 +1495,7 @@ bfdev_mpi_mod(bfdev_mpi_t *rem,
             if (bfdev_unlikely(retval))
                 return retval;
 
-            rem->plus = true;
+            rem->plus = bfdev_true;
             break;
 
         case BFDEV_LT:
@@ -1533,7 +1533,7 @@ bfdev_mpi_modi(bfdev_mpi_t *rem,
             if (bfdev_unlikely(retval))
                 return retval;
 
-            rem->plus = true;
+            rem->plus = bfdev_true;
             break;
 
         case BFDEV_LT:
@@ -1568,7 +1568,7 @@ bfdev_mpi_and(bfdev_mpi_t *dest,
     if (bfdev_unlikely(retval))
         return retval;
 
-    dest->plus = true;
+    dest->plus = bfdev_true;
 
     return -BFDEV_ENOERR;
 }
@@ -1583,7 +1583,7 @@ bfdev_mpi_or(bfdev_mpi_t *dest,
     if (bfdev_unlikely(retval))
         return retval;
 
-    dest->plus = true;
+    dest->plus = bfdev_true;
 
     return -BFDEV_ENOERR;
 }
@@ -1598,7 +1598,7 @@ bfdev_mpi_xor(bfdev_mpi_t *dest,
     if (bfdev_unlikely(retval))
         return retval;
 
-    dest->plus = true;
+    dest->plus = bfdev_true;
 
     return -BFDEV_ENOERR;
 }
@@ -1633,7 +1633,7 @@ bfdev_mpi_shri(bfdev_mpi_t *dest,
     return -BFDEV_ENOERR;
 }
 
-export bool
+export bfdev_bool
 bfdev_mpi_btesti(bfdev_mpi_t *dest, BFDEV_MPI_TYPE bit)
 {
     BFDEV_MPI_TYPE *base;
@@ -1643,7 +1643,7 @@ bfdev_mpi_btesti(bfdev_mpi_t *dest, BFDEV_MPI_TYPE bit)
     length = mpi_len(dest);
 
     if (offset >= length)
-        return false;
+        return bfdev_false;
 
     base = mpi_val(dest);
     return bfdev_bit_test(base, bit);
@@ -1695,7 +1695,7 @@ bfdev_mpi_seti(bfdev_mpi_t *dest, BFDEV_MPI_TYPE val)
     if (bfdev_unlikely(retval))
         return retval;
 
-    dest->plus = true;
+    dest->plus = bfdev_true;
 
     return -BFDEV_ENOERR;
 }
@@ -1716,7 +1716,7 @@ bfdev_mpi_set(bfdev_mpi_t *dest, const bfdev_mpi_t *src)
 
 export int
 bfdev_mpi_import(bfdev_mpi_t *var, const BFDEV_MPI_TYPE *buffer,
-                 unsigned long length, bool sign)
+                 unsigned long length, bfdev_bool sign)
 {
     int retval;
 
@@ -1730,7 +1730,7 @@ bfdev_mpi_import(bfdev_mpi_t *var, const BFDEV_MPI_TYPE *buffer,
 }
 
 export const BFDEV_MPI_TYPE *
-bfdev_mpi_data(const bfdev_mpi_t *var, bool *sign)
+bfdev_mpi_data(const bfdev_mpi_t *var, bfdev_bool *sign)
 {
     const BFDEV_MPI_TYPE *retval;
 

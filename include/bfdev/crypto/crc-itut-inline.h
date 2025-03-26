@@ -14,7 +14,7 @@ BFDEV_BEGIN_DECLS
 #include <bfdev/crypto/crc-itut-table.h>
 
 BFDEV_CRC_INLINE(
-    bfdev_crc_itut, uint16_t,
+    bfdev_crc_itut, bfdev_u16,
     bfdev_crc_itut_table, bfdev_cpu_to_be16
 )
 

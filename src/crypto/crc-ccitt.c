@@ -7,8 +7,8 @@
 #include <bfdev/crypto/crc-ccitt-inline.h>
 #include <export.h>
 
-export uint16_t
-bfdev_crc_ccitt(const void *data, size_t len, uint16_t crc)
+export bfdev_u16
+bfdev_crc_ccitt(const void *data, bfdev_size_t len, bfdev_u16 crc)
 {
     return bfdev_crc_ccitt_inline(data, len, crc);
 }

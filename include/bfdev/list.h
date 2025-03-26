@@ -41,11 +41,11 @@ bfdev_list_sort(bfdev_list_head_t *head,
                 bfdev_list_cmp_t cmp, void *pdata);
 
 #ifdef BFDEV_DEBUG_LIST
-extern bool
+extern bfdev_bool
 bfdev_list_check_add(bfdev_list_head_t *prev, bfdev_list_head_t *next,
                      bfdev_list_head_t *node);
 
-extern bool
+extern bfdev_bool
 bfdev_list_check_del(bfdev_list_head_t *node);
 #endif
 
@@ -128,7 +128,7 @@ bfdev_list_del(bfdev_list_head_t *node)
  * bfdev_list_check_empty() - check whether a list is empty.
  * @head: list head to check.
  */
-static inline bool
+static inline bfdev_bool
 bfdev_list_check_empty(const bfdev_list_head_t *head)
 {
     return head->next == head;
@@ -139,7 +139,7 @@ bfdev_list_check_empty(const bfdev_list_head_t *head)
  * @head: the head of the list
  * @list: the entry to test
  */
-static inline bool
+static inline bfdev_bool
 bfdev_list_check_head(const bfdev_list_head_t *head,
                       const bfdev_list_head_t *node)
 {
@@ -151,7 +151,7 @@ bfdev_list_check_head(const bfdev_list_head_t *head,
  * @head: the head of the list.
  * @node: the entry to test.
  */
-static inline bool
+static inline bfdev_bool
 bfdev_list_check_first(const bfdev_list_head_t *head,
                        const bfdev_list_head_t *node)
 {
@@ -163,7 +163,7 @@ bfdev_list_check_first(const bfdev_list_head_t *head,
  * @head: the head of the list.
  * @node: the entry to test.
  */
-static inline bool
+static inline bfdev_bool
 bfdev_list_check_end(const bfdev_list_head_t *head,
                      const bfdev_list_head_t *node)
 {
@@ -175,7 +175,7 @@ bfdev_list_check_end(const bfdev_list_head_t *head,
  * @head: list head to check.
  * @node: the unique node.
  */
-static inline bool
+static inline bfdev_bool
 bfdev_list_check_another(const bfdev_list_head_t *head,
                          const bfdev_list_head_t *node)
 {
@@ -393,7 +393,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
 #define bfdev_list_first_entry_or_null(ptr, type, member) ({ \
     bfdev_list_head_t *__head = (ptr); \
     bfdev_list_head_t *__pos = __head->next; \
-    __pos != __head ? bfdev_list_entry(__pos, type, member) : NULL; \
+    __pos != __head ? bfdev_list_entry(__pos, type, member) : BFDEV_NULL; \
 })
 
 /**
@@ -405,7 +405,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
 #define bfdev_list_last_entry_or_null(ptr, type, member) ({ \
     bfdev_list_head_t *__head = (ptr); \
     bfdev_list_head_t *__pos = __head->prev; \
-    __pos != __head ? bfdev_list_entry(__pos, type, member) : NULL; \
+    __pos != __head ? bfdev_list_entry(__pos, type, member) : BFDEV_NULL; \
 })
 
 /**
@@ -417,7 +417,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
 #define bfdev_list_next_entry_or_null(pos, head, member) ({ \
     typeof(*(pos)) *__pos; \
     __pos = bfdev_list_entry((pos)->member.next, typeof(*(pos)), member); \
-    bfdev_list_entry_check_head(__pos, head, member) ? NULL : __pos; \
+    bfdev_list_entry_check_head(__pos, head, member) ? BFDEV_NULL : __pos; \
 })
 
 /**
@@ -429,7 +429,7 @@ bfdev_list_splice_tail_init(bfdev_list_head_t *head, bfdev_list_head_t *list)
 #define bfdev_list_prev_entry_or_null(pos, head, member) ({ \
     typeof(*(pos)) *__pos; \
     __pos = bfdev_list_entry((pos)->member.prev, typeof(*(pos)), member); \
-    bfdev_list_entry_check_head(__pos, head, member) ? NULL : __pos; \
+    bfdev_list_entry_check_head(__pos, head, member) ? BFDEV_NULL : __pos; \
 })
 
 /**

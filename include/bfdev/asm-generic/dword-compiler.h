@@ -14,7 +14,7 @@
 BFDEV_BEGIN_DECLS
 
 #if BFDEV_BITS_PER_LONG == 32
-typedef uint64_t bfdev_dword_t;
+typedef bfdev_u64 bfdev_dword_t;
 #else
 typedef unsigned __int128 bfdev_dword_t;
 #endif

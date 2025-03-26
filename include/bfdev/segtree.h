@@ -152,14 +152,14 @@ STNAME##_insert(bfdev_rb_root_cached_t *cached, STSTRUCT *node)             \
     bfdev_rb_node_t **link;                                                 \
     STSTRUCT *parent;                                                       \
     STTYPE start, end;                                                      \
-    bool leftmost;                                                          \
+    bfdev_bool leftmost;                                                    \
                                                                             \
     link = &cached->root.node;                                              \
     start = STSTART(node);                                                  \
     end = STEND(node);                                                      \
                                                                             \
-    parent = NULL;                                                          \
-    leftmost = true;                                                        \
+    parent = BFDEV_NULL;                                                    \
+    leftmost = bfdev_true;                                                  \
                                                                             \
     while (*link) {                                                         \
         parent = bfdev_rb_entry(*link, STSTRUCT, STRB);                     \
@@ -169,12 +169,12 @@ STNAME##_insert(bfdev_rb_root_cached_t *cached, STSTRUCT *node)             \
             link = &parent->STRB.left;                                      \
         else {                                                              \
             link = &parent->STRB.right;                                     \
-            leftmost = false;                                               \
+            leftmost = bfdev_false;                                         \
         }                                                                   \
     }                                                                       \
                                                                             \
     bfdev_rb_cached_insert_node_augmented(                                  \
-        cached, parent ? &parent->STRB : NULL,                              \
+        cached, parent ? &parent->STRB : BFDEV_NULL,                        \
         link, &node->STRB, leftmost, &STNAME##_callbacks                    \
     );                                                                      \
     node->STSUBTREE = end;                                                  \
@@ -210,7 +210,7 @@ STNAME##_search(STSTRUCT *node, STTYPE start, STTYPE end)                   \
                     continue;                                               \
             }                                                               \
         }                                                                   \
-        return NULL;                                                        \
+        return BFDEV_NULL;                                                  \
     }                                                                       \
 }                                                                           \
                                                                             \
@@ -221,14 +221,14 @@ STNAME##_first(bfdev_rb_root_cached_t *cached, STTYPE start, STTYPE end)    \
                                                                             \
     node = bfdev_rb_entry_safe(cached->root.node, STSTRUCT, STRB);          \
     if (!node)                                                              \
-        return NULL;                                                        \
+        return BFDEV_NULL;                                                  \
                                                                             \
     if (node->STSUBTREE < start)                                            \
-        return NULL;                                                        \
+        return BFDEV_NULL;                                                  \
                                                                             \
     leftmost = bfdev_rb_cached_first_entry(cached, STSTRUCT, STRB);         \
     if (STSTART(leftmost) > end)                                            \
-        return NULL;                                                        \
+        return BFDEV_NULL;                                                  \
                                                                             \
     return STNAME##_search(node, start, end);                               \
 }                                                                           \
@@ -248,14 +248,14 @@ STNAME##_next(STSTRUCT *node, STTYPE start, STTYPE end)                     \
         do {                                                                \
             walk = node->STRB.parent;                                       \
             if (!walk)                                                      \
-                return NULL;                                                \
+                return BFDEV_NULL;                                          \
             prev = &node->STRB;                                             \
             node = bfdev_rb_entry(walk, STSTRUCT, STRB);                    \
             walk = node->STRB.right;                                        \
         } while (walk == prev);                                             \
                                                                             \
         if (end < STSTART(node))                                            \
-            return NULL;                                                    \
+            return BFDEV_NULL;                                              \
         else if (start <= STEND(node))                                      \
             return node;                                                    \
     }                                                                       \

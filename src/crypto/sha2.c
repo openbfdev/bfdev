@@ -10,9 +10,9 @@
 #include <export.h>
 
 static void
-sha2_transform_block(bfdev_sha2_ctx_t *ctx, const void *src, size_t blocks)
+sha2_transform_block(bfdev_sha2_ctx_t *ctx, const void *src, bfdev_size_t blocks)
 {
-    uint32_t buffer[BFDEV_SHA2_WORKSPACE_WORDS];
+    bfdev_u32 buffer[BFDEV_SHA2_WORKSPACE_WORDS];
 
     while (blocks--) {
         bfdev_sha2_transform(ctx->state, buffer, src);
@@ -21,7 +21,7 @@ sha2_transform_block(bfdev_sha2_ctx_t *ctx, const void *src, size_t blocks)
 }
 
 export void
-bfdev_sha2_update(bfdev_sha2_ctx_t *ctx, const void *data, size_t size)
+bfdev_sha2_update(bfdev_sha2_ctx_t *ctx, const void *data, bfdev_size_t size)
 {
     bfdev_sha2_base_update(ctx, data, size, sha2_transform_block);
 }

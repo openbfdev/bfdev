@@ -6,6 +6,7 @@
 #define MODULE_NAME "bfdev-glob"
 #define bfdev_log_fmt(fmt) MODULE_NAME ": " fmt
 
+#include <stdbool.h>
 #include <bfdev/log.h>
 #include <bfdev/glob.h>
 

@@ -7,7 +7,7 @@
 #include <bfdev/base32.h>
 #include <export.h>
 
-static const uint8_t
+static const bfdev_u8
 base32_encode_table[32] = {
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
     'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
@@ -15,7 +15,7 @@ base32_encode_table[32] = {
     'Y', 'Z', '2', '3', '4', '5', '6', '7',
 };
 
-static const uint8_t
+static const bfdev_u8
 base32_decode_table[256] = {
     [0 ... 255] = 0xff,
     ['A'] = 0x00, ['B'] = 0x01, ['C'] = 0x02, ['D'] = 0x03,
@@ -29,9 +29,9 @@ base32_decode_table[256] = {
 };
 
 static __bfdev_always_inline void
-base32_encode(uint8_t *buff, const uint8_t *data, size_t size)
+base32_encode(bfdev_u8 *buff, const bfdev_u8 *data, bfdev_size_t size)
 {
-    const uint8_t *prev;
+    const bfdev_u8 *prev;
     unsigned int bstate;
 
     prev = data;
@@ -114,10 +114,10 @@ base32_encode(uint8_t *buff, const uint8_t *data, size_t size)
 }
 
 static __bfdev_always_inline int
-base32_decode(uint8_t *buff, const uint8_t *data, size_t size)
+base32_decode(bfdev_u8 *buff, const bfdev_u8 *data, bfdev_size_t size)
 {
     unsigned int bstate;
-    uint8_t decode;
+    bfdev_u8 decode;
 
     bstate = 0;
     while (size--) {
@@ -172,13 +172,13 @@ base32_decode(uint8_t *buff, const uint8_t *data, size_t size)
 }
 
 export void
-bfdev_base32_encode(void *buff, const void *data, size_t size)
+bfdev_base32_encode(void *buff, const void *data, bfdev_size_t size)
 {
     base32_encode(buff, data, size);
 }
 
 export int
-bfdev_base32_decode(void *buff, const void *data, size_t size)
+bfdev_base32_decode(void *buff, const void *data, bfdev_size_t size)
 {
     return base32_decode(buff, data, size);
 }

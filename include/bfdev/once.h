@@ -13,27 +13,27 @@
 BFDEV_BEGIN_DECLS
 
 #define BFDEV_DO_ONCE_DONE(condition) ({            \
-    static bool __already;                          \
-    bool ___cond = !!(condition);                   \
-    bool __retval = false;                          \
+    static bfdev_bool __already;                    \
+    bfdev_bool ___cond = !!(condition);             \
+    bfdev_bool __retval = bfdev_false;              \
                                                     \
     if (bfdev_unlikely(___cond && !__already)) {    \
-        __already = true;                           \
-        __retval = true;                            \
+        __already = bfdev_true;                     \
+        __retval = bfdev_true;                      \
     }                                               \
                                                     \
     bfdev_unlikely(__retval);                       \
 })
 
 #define BFDEV_DO_ONCE_ON(condition, func, ...) ({   \
-    bool __cond = !!(condition);                    \
+    bfdev_bool __cond = !!(condition);              \
     if (BFDEV_DO_ONCE_DONE(__cond))                 \
         func(__VA_ARGS__);                          \
     bfdev_unlikely(__cond);                         \
 })
 
 #define BFDEV_DO_ONCE(func, ...) \
-    BFDEV_DO_ONCE_ON(true, func, ##__VA_ARGS__)
+    BFDEV_DO_ONCE_ON(bfdev_true, func, ##__VA_ARGS__)
 
 BFDEV_END_DECLS
 

@@ -76,13 +76,14 @@ bfdev_alloc_ops_init(bfdev_alloc_ops_t *ops,
 }
 
 extern __bfdev_malloc void *
-bfdev_malloc(const bfdev_alloc_t *alloc, size_t size);
+bfdev_malloc(const bfdev_alloc_t *alloc, bfdev_size_t size);
 
 extern __bfdev_malloc void *
-bfdev_zalloc(const bfdev_alloc_t *alloc, size_t size);
+bfdev_zalloc(const bfdev_alloc_t *alloc, bfdev_size_t size);
 
 extern __bfdev_malloc void *
-bfdev_realloc(const bfdev_alloc_t *alloc, const void *block, size_t resize);
+bfdev_realloc(const bfdev_alloc_t *alloc, const void *block,
+              bfdev_size_t resize);
 
 extern void
 bfdev_free(const bfdev_alloc_t *alloc, const void *block);
@@ -94,7 +95,7 @@ bfdev_free(const bfdev_alloc_t *alloc, const void *block);
  */
 static __bfdev_always_inline __bfdev_malloc void *
 bfdev_malloc_array(const bfdev_alloc_t *alloc,
-                   size_t nr, size_t size)
+                   bfdev_size_t nr, bfdev_size_t size)
 {
     return bfdev_malloc(alloc, size * nr);
 }
@@ -106,7 +107,7 @@ bfdev_malloc_array(const bfdev_alloc_t *alloc,
  */
 static __bfdev_always_inline __bfdev_malloc void *
 bfdev_zalloc_array(const bfdev_alloc_t *alloc,
-                   size_t nr, size_t size)
+                   bfdev_size_t nr, bfdev_size_t size)
 {
     return bfdev_zalloc(alloc, size * nr);
 }
@@ -119,7 +120,7 @@ bfdev_zalloc_array(const bfdev_alloc_t *alloc,
  */
 static __bfdev_always_inline __bfdev_malloc void *
 bfdev_realloc_array(const bfdev_alloc_t *alloc,
-                    void *block, size_t nr, size_t size)
+                    void *block, bfdev_size_t nr, bfdev_size_t size)
 {
     return bfdev_realloc(alloc, block, size * nr);
 }

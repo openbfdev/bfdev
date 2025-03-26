@@ -110,16 +110,16 @@ bfdev_heap_remove(bfdev_heap_root_t *root, bfdev_heap_node_t *node)
          *
          */
 
-        root->node = NULL;
-        successor = NULL;
+        root->node = BFDEV_NULL;
+        successor = BFDEV_NULL;
     } else {
         bfdev_heap_node_t *parent;
 
         parent = successor->parent;
         if (parent->left == successor)
-            parent->left = NULL;
+            parent->left = BFDEV_NULL;
         else /* parent->right == successor */
-            parent->right = NULL;
+            parent->right = BFDEV_NULL;
 
         /*
          * Case 2: node to delete is successor.
@@ -131,7 +131,7 @@ bfdev_heap_remove(bfdev_heap_root_t *root, bfdev_heap_node_t *node)
          */
 
         if (node == successor) {
-            successor = NULL;
+            successor = BFDEV_NULL;
             goto finish;
         }
 
@@ -180,7 +180,7 @@ bfdev_heap_parent(bfdev_heap_root_t *root, bfdev_heap_node_t **parentp,
 
     link = &root->node;
     if (bfdev_unlikely(!*link)) {
-        *parentp = NULL;
+        *parentp = BFDEV_NULL;
         return link;
     }
 

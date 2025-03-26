@@ -7,15 +7,15 @@
 #include <bfdev/glob.h>
 #include <export.h>
 
-export bool
+export bfdev_bool
 bfdev_glob(const char *patten, const char *string)
 {
     const char *class, *bpatten, *bstring;
     char ptch, stch, tcha, tchb;
-    bool match, inverted;
+    bfdev_bool match, inverted;
 
-    bpatten = NULL;
-    bstring = NULL;
+    bpatten = BFDEV_NULL;
+    bstring = BFDEV_NULL;
 
     for (;;) {
         ptch = *patten++;
@@ -24,18 +24,18 @@ bfdev_glob(const char *patten, const char *string)
         switch (ptch) {
             case '?':
                 if (stch == '\0')
-                    return false;
+                    return bfdev_false;
                 break;
 
             case '*':
                 if (*patten == '\0')
-                    return true;
+                    return bfdev_true;
                 bpatten = patten;
                 bstring = --string;
                 break;
 
             case '[':
-                match = false;
+                match = bfdev_false;
                 inverted = *patten == '!';
                 class = patten + inverted;
                 tcha = *class++;
@@ -67,13 +67,13 @@ bfdev_glob(const char *patten, const char *string)
             default: literal:
                 if (ptch == stch) {
                     if (ptch == '\0')
-                        return true;
+                        return bfdev_true;
                     break;
                 }
 
             backtrack:
                 if (stch == '\0' || !bpatten)
-                    return false;
+                    return bfdev_false;
 
                 patten = bpatten;
                 string = ++bstring;

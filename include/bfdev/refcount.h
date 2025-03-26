@@ -79,7 +79,7 @@ bfdev_refcnt_fetch_add(bfdev_refcnt_t *ref, bfdev_atomic_t cnt,
 #endif
 }
 
-static inline bool
+static inline bfdev_bool
 bfdev_refcnt_fetch_sub_test(bfdev_refcnt_t *ref, bfdev_atomic_t nr,
                             bfdev_atomic_t *oldp)
 {
@@ -90,7 +90,7 @@ bfdev_refcnt_fetch_sub_test(bfdev_refcnt_t *ref, bfdev_atomic_t nr,
         *oldp = prev;
 
     if (prev == nr)
-        return true;
+        return bfdev_true;
 
 #ifdef BFDEV_DEBUG_REFCNT
     if (bfdev_unlikely(!prev))
@@ -101,10 +101,10 @@ bfdev_refcnt_fetch_sub_test(bfdev_refcnt_t *ref, bfdev_atomic_t nr,
         bfdev_refcnt_report(ref, BFDEV_REFCNT_SUB_OVF);
 #endif
 
-    return false;
+    return bfdev_false;
 }
 
-static inline bool
+static inline bfdev_bool
 bfdev_refcnt_fetch_addnz_test(bfdev_refcnt_t *ref, bfdev_atomic_t nr,
                               bfdev_atomic_t *oldp)
 {
@@ -128,23 +128,23 @@ bfdev_refcnt_fetch_addnz_test(bfdev_refcnt_t *ref, bfdev_atomic_t nr,
     return !prev;
 }
 
-#define BFDEV_REFCNT_OPS(addsub, incdec, operation)                                 \
-static inline void                                                                  \
-bfdev_generic_refcnt_##addsub(bfdev_refcnt_t *ref, bfdev_atomic_t nr)               \
-{                                                                                   \
-    operation(ref, nr, NULL);                                                       \
-}                                                                                   \
-                                                                                    \
-static inline void                                                                  \
-bfdev_generic_refcnt_##incdec(bfdev_refcnt_t *ref)                                  \
-{                                                                                   \
-    operation(ref, 1, NULL);                                                        \
-}                                                                                   \
-                                                                                    \
-static inline void                                                                  \
-bfdev_generic_refcnt_fetch_##incdec(bfdev_refcnt_t *ref, bfdev_atomic_t *oldp)      \
-{                                                                                   \
-    operation(ref, 1, oldp);                                                        \
+#define BFDEV_REFCNT_OPS(addsub, incdec, operation)                             \
+static inline void                                                              \
+bfdev_generic_refcnt_##addsub(bfdev_refcnt_t *ref, bfdev_atomic_t nr)           \
+{                                                                               \
+    operation(ref, nr, BFDEV_NULL);                                             \
+}                                                                               \
+                                                                                \
+static inline void                                                              \
+bfdev_generic_refcnt_##incdec(bfdev_refcnt_t *ref)                              \
+{                                                                               \
+    operation(ref, 1, BFDEV_NULL);                                              \
+}                                                                               \
+                                                                                \
+static inline void                                                              \
+bfdev_generic_refcnt_fetch_##incdec(bfdev_refcnt_t *ref, bfdev_atomic_t *oldp)  \
+{                                                                               \
+    operation(ref, 1, oldp);                                                    \
 }
 
 #define BFDEV_REFCNT_TEST_OPS(addsub, incdec, operation)                            \
@@ -155,19 +155,19 @@ bfdev_generic_refcnt_fetch_##addsub(bfdev_refcnt_t *ref,                        
     operation(ref, nr, oldp);                                                       \
 }                                                                                   \
                                                                                     \
-static inline bool                                                                  \
+static inline bfdev_bool                                                            \
 bfdev_generic_refcnt_test_##addsub(bfdev_refcnt_t *ref, bfdev_atomic_t nr)          \
 {                                                                                   \
-    return operation(ref, nr, NULL);                                                \
+    return operation(ref, nr, BFDEV_NULL);                                          \
 }                                                                                   \
                                                                                     \
-static inline bool                                                                  \
+static inline bfdev_bool                                                            \
 bfdev_generic_refcnt_test_##incdec(bfdev_refcnt_t *ref)                             \
 {                                                                                   \
-    return operation(ref, 1, NULL);                                                 \
+    return operation(ref, 1, BFDEV_NULL);                                           \
 }                                                                                   \
                                                                                     \
-static inline bool                                                                  \
+static inline bfdev_bool                                                            \
 bfdev_generic_refcnt_fetch_test_##incdec(bfdev_refcnt_t *ref, bfdev_atomic_t *oldp) \
 {                                                                                   \
     return operation(ref, 1, oldp);                                                 \

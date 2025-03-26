@@ -6,6 +6,7 @@
 #define MODULE_NAME "ratelimit-simple"
 #define bfdev_log_fmt(fmt) MODULE_NAME ": " fmt
 
+#include <stdbool.h>
 #include <time.h>
 #include <unistd.h>
 #include <bfdev/log.h>

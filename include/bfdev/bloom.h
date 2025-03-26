@@ -36,7 +36,7 @@ struct bfdev_bloom {
  *
  * @return: object value.
  */
-extern bool
+extern bfdev_bool
 bfdev_bloom_peek(bfdev_bloom_t *bloom, void *key);
 
 /**
@@ -46,7 +46,7 @@ bfdev_bloom_peek(bfdev_bloom_t *bloom, void *key);
  *
  * @return: object value before push.
  */
-extern bool
+extern bfdev_bool
 bfdev_bloom_push(bfdev_bloom_t *bloom, void *key);
 
 /**

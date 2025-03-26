@@ -66,14 +66,14 @@ struct bfdev_ts_context {
 
     /**
      * next_block() - fetch next block of data.
-	 * @tsc: search configuration.
-	 * @tss: search state.
-	 * @consumed: number of bytes consumed by the caller.
-	 * @dest: destination buffer.
+     * @tsc: search configuration.
+     * @tss: search state.
+     * @consumed: number of bytes consumed by the caller.
+     * @dest: destination buffer.
      *
-	 * Called repeatedly until 0 is returned. Must assign the
-	 * head of the next block of data to &*dst and return the length
-	 * of the block or 0 if at the end.
+     * Called repeatedly until 0 is returned. Must assign the
+     * head of the next block of data to &*dst and return the length
+     * of the block or 0 if at the end.
      */
     unsigned int
     (*next_block)(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss,
@@ -97,32 +97,32 @@ struct bfdev_ts_algorithm {
      */
     bfdev_ts_context_t *
     (*prepare)(const bfdev_alloc_t *alloc, const void *pattern,
-               size_t len, unsigned long flags);
+               bfdev_size_t len, unsigned long flags);
 
     /**
      * destroy() - destroy algorithm specific parts of a search configuration.
-	 * @tsc: search configuration.
+     * @tsc: search configuration.
      */
     void
     (*destroy)(bfdev_ts_context_t *tsc);
 
     /**
      * find() - find the next occurrence of the pattern.
-	 * @tsc: search configuration.
+     * @tsc: search configuration.
      */
     unsigned int
     (*find)(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss);
 
     /**
      * pattern_get() - return pointer of pattern.
-	 * @tsc: search configuration.
+     * @tsc: search configuration.
      */
     const void *
     (*pattern_get)(bfdev_ts_context_t *tsc);
 
     /**
      * pattern_len() - return length of pattern.
-	 * @tsc: search configuration.
+     * @tsc: search configuration.
      */
     unsigned int
     (*pattern_len)(bfdev_ts_context_t *tsc);
@@ -140,7 +140,7 @@ BFDEV_BITFLAGS_STRUCT(
  * @tss: search state.
  *
  * Returns the position of first occurrence of the pattern or
- * UINT_MAX if no match was found.
+ * BFDEV_UINT_MAX if no match was found.
  */
 static inline unsigned int
 bfdev_textsearch_find(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss)
@@ -163,7 +163,7 @@ bfdev_textsearch_find(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss)
  * in order to reset the state.
  *
  * Returns the position of the next occurrence of the pattern or
- * UINT_MAX if not match was found.
+ * BFDEV_UINT_MAX if not match was found.
  */
 static inline unsigned int
 bfdev_textsearch_next(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss)
@@ -231,7 +231,7 @@ bfdev_textsearch_destroy(bfdev_ts_context_t *tsc)
  * Call bfdev_textsearch_next() to retrieve subsequent matches.
  *
  * Returns the position of first occurrence of the pattern or
- * %UINT_MAX if no occurrence was found.
+ * %BFDEV_UINT_MAX if no occurrence was found.
  */
 extern unsigned int
 bfdev_textsearch_linear(bfdev_ts_context_t *tsc, bfdev_ts_linear_t *linear,
@@ -247,7 +247,8 @@ bfdev_textsearch_linear(bfdev_ts_context_t *tsc, bfdev_ts_linear_t *linear,
  */
 extern bfdev_ts_context_t *
 bfdev_textsearch_create(const bfdev_alloc_t *alloc, const char *name,
-                        const void *pattern, size_t len, unsigned long flags);
+                        const void *pattern, bfdev_size_t len,
+                        unsigned long flags);
 
 /**
  * bfdev_textsearch_register() - register a textsearch module.

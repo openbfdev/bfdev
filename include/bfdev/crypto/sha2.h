@@ -13,7 +13,7 @@
 
 BFDEV_BEGIN_DECLS
 
-static const uint32_t
+static const bfdev_u32
 bfdev_sha2_k[64] = {
     0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5,
     0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
@@ -53,7 +53,7 @@ bfdev_sha2_k[64] = {
 #define BFDEV_SHA2_MAJ(x, y, z) ((x & y) | (z & (x | y)))
 
 #define BFDEV_SHA2_LOAD(c, b, d) ( \
-    b[c] = bfdev_unaligned_get_be32((uint32_t *)d + c) \
+    b[c] = bfdev_unaligned_get_be32((bfdev_u32 *)d + c) \
 )
 
 #define BFDEV_SHA2_BLEND(c, b) ( \
@@ -62,7 +62,7 @@ bfdev_sha2_k[64] = {
 )
 
 #define BFDEV_SHA2_ROUND(c, b, A, B, C, D, E, F, G, H) do {     \
-    uint32_t __tmp1, __tmp2;                                    \
+    bfdev_u32 __tmp1, __tmp2;                                    \
     __tmp1 = H + BFDEV_SHA2_E1(E) + BFDEV_SHA2_CH(E, F, G) +    \
              bfdev_sha2_k[c] + b[c];                            \
     __tmp2 = BFDEV_SHA2_E0(A) + BFDEV_SHA2_MAJ(A, B, C);        \
@@ -70,9 +70,9 @@ bfdev_sha2_k[64] = {
 } while (0)
 
 static inline void
-bfdev_sha2_transform(uint32_t *digest, uint32_t *block, const uint8_t *data)
+bfdev_sha2_transform(bfdev_u32 *digest, bfdev_u32 *block, const bfdev_u8 *data)
 {
-    uint32_t A, B, C, D, E, F, G, H;
+    bfdev_u32 A, B, C, D, E, F, G, H;
     unsigned int count;
 
     /* Load state */

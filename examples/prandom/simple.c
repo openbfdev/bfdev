@@ -6,6 +6,7 @@
 #define MODULE_NAME "prandom-simple"
 #define bfdev_log_fmt(fmt) MODULE_NAME ": " fmt
 
+#include <stdint.h>
 #include <time.h>
 #include <bfdev/log.h>
 #include <bfdev/prandom.h>

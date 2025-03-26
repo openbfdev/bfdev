@@ -39,11 +39,11 @@ kmp_pattern_len(bfdev_ts_context_t *tsc)
 static unsigned int
 kmp_find(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss)
 {
-    #define find_pattern() (icase ? toupper(text[index]) : text[index])
+    #define find_pattern() (icase ? bfdev_toupper(text[index]) : text[index])
     struct kmp_context *kctx;
     unsigned int consumed, length, index, match;
     const char *text;
-    bool icase;
+    bfdev_bool icase;
 
     kctx = ts_to_kmp(tsc);
     icase = bfdev_ts_igcase_test(tsc);
@@ -53,7 +53,7 @@ kmp_find(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss)
     for (;;) {
         length = tsc->next_block(tsc, tss, consumed, (const void **)&text);
         if (bfdev_unlikely(!length))
-            return UINT_MAX;
+            return BFDEV_UINT_MAX;
 
         for (index = 0; index < length; ++index) {
             while (match && kctx->pattern[match] != find_pattern())
@@ -92,7 +92,7 @@ kmp_compute_prefix(struct kmp_context *kctx)
 
 static bfdev_ts_context_t *
 kmp_prepare(const bfdev_alloc_t *alloc, const void *pattern,
-            size_t len, unsigned long flags)
+            bfdev_size_t len, unsigned long flags)
 {
     struct kmp_context *kctx;
     unsigned int prefix_size, index;
@@ -100,16 +100,16 @@ kmp_prepare(const bfdev_alloc_t *alloc, const void *pattern,
     prefix_size = sizeof(unsigned int) * len;
     kctx = bfdev_zalloc(alloc, sizeof(*kctx) + prefix_size + len);
     if (bfdev_unlikely(!kctx))
-        return NULL;
+        return BFDEV_NULL;
 
     kctx->tsc.flags = flags;
     kctx->pattern_len = len;
     kctx->pattern = (void *)kctx + sizeof(*kctx) + prefix_size;
 
     if (!bfdev_ts_igcase_test(&kctx->tsc))
-        bfport_memcpy(kctx->pattern, pattern, len);
+        bfdev_memcpy(kctx->pattern, pattern, len);
     else for (index = 0; index < len; ++index)
-        kctx->pattern[index] = toupper(((char *)pattern)[index]);
+        kctx->pattern[index] = bfdev_toupper(((char *)pattern)[index]);
     kmp_compute_prefix(kctx);
 
     return &kctx->tsc;

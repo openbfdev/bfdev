@@ -12,7 +12,7 @@
 #include <export.h>
 
 #ifdef BFDEV_DEBUG_ILIST
-static inline bool
+static inline bfdev_bool
 ilist_integrity_check(bfdev_list_head_t *head, bfdev_list_head_t *prev,
                       bfdev_list_head_t *next)
 {
@@ -22,7 +22,7 @@ ilist_integrity_check(bfdev_list_head_t *head, bfdev_list_head_t *prev,
             " should be next (%p), but was (%p)\n",
             head, prev, next, prev->next
         );
-        return false;
+        return bfdev_false;
     }
 
     if (bfdev_unlikely(next->prev != prev)) {
@@ -31,17 +31,17 @@ ilist_integrity_check(bfdev_list_head_t *head, bfdev_list_head_t *prev,
             " should be prev (%p), but was (%p)\n",
             head, next, prev, next->prev
         );
-        return false;
+        return bfdev_false;
     }
 
-    return true;
+    return bfdev_true;
 }
 
-static inline bool
+static inline bfdev_bool
 ilist_list_check(bfdev_list_head_t *head)
 {
     bfdev_list_head_t *prev = head, *next = head->next;
-    bool success;
+    bfdev_bool success;
 
     success = ilist_integrity_check(head, prev, next);
     while (success && next != head) {
@@ -53,10 +53,10 @@ ilist_list_check(bfdev_list_head_t *head)
     return success;
 }
 
-static inline bool
+static inline bfdev_bool
 ilist_head_check(bfdev_ilist_head_t *ihead)
 {
-    bool success;
+    bfdev_bool success;
 
     success = ilist_list_check(&ihead->node_list);
     if (success && !bfdev_ilist_head_empty(ihead))
@@ -90,7 +90,7 @@ bfdev_ilist_add(bfdev_ilist_head_t *ihead, bfdev_ilist_node_t *inode,
 
     /* Traverse to find a suitable insertion point */
     first = walk = bfdev_ilist_first(ihead);
-    prev = NULL;
+    prev = BFDEV_NULL;
 
     do {
         if (cmp(inode, walk, pdata) < 0) {
