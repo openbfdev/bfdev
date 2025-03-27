@@ -8,7 +8,7 @@
 
 /* TODO: PORTME */
 
-hidden int
+int
 bfport_vsnprintf(char *s, bfdev_size_t maxlen, const char *fmt,
                  bfdev_va_list arg)
 {

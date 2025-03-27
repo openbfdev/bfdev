@@ -3,8 +3,8 @@
 # Copyright(c) 2024 John Sanpe <sanpeqf@gmail.com>
 #
 
-include(build.cmake)
-include(testsuite.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/build.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/testsuite.cmake)
 
 add_subdirectory(array)
 add_subdirectory(bitwalk)

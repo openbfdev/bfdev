@@ -34,9 +34,9 @@ set(BFDEV_ARCH_PATH ${PROJECT_SOURCE_DIR}/arch/${BFDEV_ARCH})
 set(BFDEV_ARCH_HEADER_PATH ${BFDEV_ARCH_PATH}/include)
 set(BFDEV_CONFIGURE ${BFDEV_GENERATED_PATH}/bfdev-config.cmake)
 
-include(scripts/hostrule.cmake)
-include(scripts/packed-header.cmake)
-include(scripts/commit.cmake)
+include(${PROJECT_SOURCE_DIR}/scripts/hostrule.cmake)
+include(${PROJECT_SOURCE_DIR}/scripts/packed-header.cmake)
+include(${PROJECT_SOURCE_DIR}/scripts/commit.cmake)
 
 commit_hash(BFDEV_COMMITID)
 commit_branch(BFDEV_BRANCH)
@@ -128,6 +128,11 @@ macro(bfdev_dependencies target)
         bfdev_export
     )
 endmacro()
+
+set(CMAKE_C_FLAGS
+    "${CMAKE_C_FLAGS} \
+     ${BFDEV_C_FLAGS}"
+)
 
 add_library(bfdev_object OBJECT ${BFDEV_LIBRARY})
 bfdev_dependencies(bfdev_object)

@@ -7,6 +7,7 @@
 #define _BFDEV_ASM_GENERIC_TYPES_H_
 
 #include <bfdev/config.h>
+#include <bfdev/asm/bitsperlong.h>
 
 BFDEV_BEGIN_DECLS
 
@@ -19,20 +20,20 @@ typedef unsigned short bfdev_u16;
 typedef unsigned int bfdev_u32;
 
 #ifdef __GNUC__
-__extension__ typedef __signed__ long long bfdev_s64;
-__extension__ typedef unsigned long long bfdev_u64;
+__extension__ typedef __signed__ BFDEV_TYPE_W64 bfdev_s64;
+__extension__ typedef unsigned BFDEV_TYPE_W64 bfdev_u64;
 #else
-typedef __signed__ long long bfdev_s64;
-typedef unsigned long long bfdev_u64;
+typedef __signed__ BFDEV_TYPE_W64 bfdev_s64;
+typedef unsigned BFDEV_TYPE_W64 bfdev_u64;
 #endif
 
-typedef unsigned long bfdev_size_t;
-typedef bfdev_s64 bfdev_intmax_t;
-typedef bfdev_u64 bfdev_uintmax_t;
+typedef unsigned BFDEV_TYPE_ADDR bfdev_size_t;
+typedef unsigned BFDEV_TYPE_ADDR bfdev_uintptr_t;
+typedef __signed__ BFDEV_TYPE_ADDR bfdev_intptr_t;
+typedef __signed__ BFDEV_TYPE_ADDR bfdev_ptrdiff_t;
 
-typedef unsigned long bfdev_uintptr_t;
-typedef __signed__ long bfdev_intptr_t;
-typedef __signed__ long bfdev_ptrdiff_t;
+typedef __signed__ BFDEV_TYPE_MAX bfdev_intmax_t;
+typedef unsigned BFDEV_TYPE_MAX bfdev_uintmax_t;
 
 BFDEV_END_DECLS
 

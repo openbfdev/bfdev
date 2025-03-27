@@ -4,7 +4,7 @@
 #
 
 if(BFDEV_ASAN)
-    set(CMAKE_C_FLAGS
+    set(BFDEV_C_FLAGS
         "${CMAKE_C_FLAGS} \
          -fsanitize=address \
          -fsanitize=undefined \
@@ -13,16 +13,16 @@ if(BFDEV_ASAN)
          -fno-stack-protector"
     )
     if(NOT APPLE)
-        set(CMAKE_C_FLAGS
-            "${CMAKE_C_FLAGS} \
+        set(BFDEV_C_FLAGS
+            "${BFDEV_C_FLAGS} \
              -fsanitize=leak"
         )
     endif()
 endif()
 
 if(BFDEV_UBSAN)
-    set(CMAKE_C_FLAGS
-        "${CMAKE_C_FLAGS} \
+    set(BFDEV_C_FLAGS
+        "${BFDEV_C_FLAGS} \
          -fsanitize=alignment \
          -fsanitize=bounds \
          -fsanitize=shift \
@@ -34,8 +34,8 @@ if(BFDEV_UBSAN)
 endif()
 
 if(BFDEV_GCOV)
-    set(CMAKE_C_FLAGS
-        "${CMAKE_C_FLAGS} \
+    set(BFDEV_C_FLAGS
+        "${BFDEV_C_FLAGS} \
          -fprofile-arcs \
          -ftest-coverage"
     )

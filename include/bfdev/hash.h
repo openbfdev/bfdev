@@ -69,7 +69,7 @@ bfdev_hash64(bfdev_u64 value, unsigned int bits)
 # define BFDEV_GOLDEN_RATIO_LONG BFDEV_GOLDEN_RATIO_64
 # define bfdev_hashvl(value) bfdev_hashv64(value)
 # define bfdev_hashl(value, bits) bfdev_hash64(value, bits)
-#endif /* BFDEV_BITS_PER_LONG == 64 */
+#endif
 
 BFDEV_END_DECLS
 

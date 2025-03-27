@@ -13,7 +13,7 @@
 # include <stdio.h>
 #endif
 
-hidden int
+int
 bfport_log_write(bfdev_log_message_t *msg)
 {
     FILE *file;

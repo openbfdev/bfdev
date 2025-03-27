@@ -9,7 +9,7 @@
 
 /* TODO: PORTME */
 
-hidden int
+int
 bfport_log_write(bfdev_log_message_t *msg)
 {
     return 0;
