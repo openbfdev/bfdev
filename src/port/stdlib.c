@@ -7,7 +7,7 @@
 #include <port/stdlib.h>
 #include <export.h>
 
-extern __bfdev_noreturn void
+export __bfdev_noreturn void
 bfdev_abort(void)
 {
     bfport_abort();
