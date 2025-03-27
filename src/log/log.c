@@ -56,7 +56,7 @@ log_get_level(const char *str)
     return 0;
 }
 
-extern unsigned int
+export unsigned int
 bfdev_log_level(const char *str, const char **endptr)
 {
     unsigned int level;
