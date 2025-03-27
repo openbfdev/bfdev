@@ -29,8 +29,7 @@ if(BFDEV_UBSAN)
          -fsanitize=integer-divide-by-zero \
          -fsanitize=unreachable \
          -fsanitize=bool \
-         -fsanitize=enum \
-         -fsanitize-undefined-trap-on-error"
+         -fsanitize=enum"
     )
 endif()
 

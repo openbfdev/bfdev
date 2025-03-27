@@ -7,7 +7,6 @@
 #define _BFDEV_CTYPE_H_
 
 #include <bfdev/config.h>
-#include <bfdev/port/ctype.h>
 
 BFDEV_BEGIN_DECLS
 
@@ -258,7 +257,7 @@ bfdev_toascii(int c)
 static inline int
 bfdev_tolower(int c)
 {
-    if (isupper(c))
+    if (bfdev_isupper(c))
         return (unsigned char)c | 32;
     return (unsigned char)c;
 }
@@ -266,7 +265,7 @@ bfdev_tolower(int c)
 static inline int
 bfdev_toupper(int c)
 {
-    if (islower(c))
+    if (bfdev_islower(c))
         return (unsigned char)c & 0x5f;
     return (unsigned char)c;
 }

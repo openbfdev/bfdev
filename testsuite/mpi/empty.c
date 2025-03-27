@@ -3,6 +3,7 @@
  * Copyright(c) 2024 John Sanpe <sanpeqf@gmail.com>
  */
 
+#include <stddef.h>
 #include <bfdev/mpi.h>
 #include <testsuite.h>
 

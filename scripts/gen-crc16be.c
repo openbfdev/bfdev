@@ -5,6 +5,7 @@
 
 #define GENCRC_NAME crc16be
 #define GENCRC_TYPE uint16_t
+#define GENCRC_TYPE_NAME bfdev_u16
 #define GENCRC_BITS 16
 #define GENCRC_WIDE 4
 #define GENCRC_BELE 0

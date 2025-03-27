@@ -16,8 +16,8 @@ typedef struct bfdev_allocpool bfdev_allocpool_t;
 
 struct bfdev_allocpool {
     void *block;
-    size_t size;
-    uintptr_t last;
+    bfdev_size_t size;
+    bfdev_uintptr_t last;
     unsigned long count;
 };
 
@@ -38,7 +38,7 @@ struct bfdev_allocpool {
  * @size: mempool array size.
  */
 static inline void
-bfdev_allocpool_init(bfdev_allocpool_t *pool, void *block, size_t size)
+bfdev_allocpool_init(bfdev_allocpool_t *pool, void *block, bfdev_size_t size)
 {
     *pool = BFDEV_ALLOCPOOL_INIT(block, size);
 }
@@ -61,7 +61,8 @@ bfdev_allocpool_reset(bfdev_allocpool_t *pool)
  * @align: align to allocation.
  */
 extern __bfdev_malloc void *
-bfdev_allocpool_alloc(bfdev_allocpool_t *pool, size_t size, size_t align);
+bfdev_allocpool_alloc(bfdev_allocpool_t *pool, bfdev_size_t size,
+                      bfdev_size_t align);
 
 /**
  * bfdev_allocpool_free() - Allocation mempool free.

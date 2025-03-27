@@ -10,14 +10,14 @@
 static inline void
 matrix_zero(BFDEV_MATRIX_TYPE *var, unsigned int size)
 {
-    bfport_memset(var, 0, size * BFDEV_MATRIX_SIZE);
+    bfdev_memset(var, 0, size * BFDEV_MATRIX_SIZE);
 }
 
 static inline void
 matrix_copy(BFDEV_MATRIX_TYPE *dest, const BFDEV_MATRIX_TYPE *src,
             unsigned int size)
 {
-    bfport_memcpy(dest, src, size * BFDEV_MATRIX_SIZE);
+    bfdev_memcpy(dest, src, size * BFDEV_MATRIX_SIZE);
 }
 
 #define GENERIC_MATRIX_ADDSUB(name, operate)            \
@@ -75,7 +75,7 @@ bfdev_matrix_mul(bfdev_matrix_t *dest,
     if (va->col != vb->row)
         return -BFDEV_EINVAL;
 
-    rename = NULL;
+    rename = BFDEV_NULL;
     if (dest == va || dest == vb) {
         rename = dest;
         dest = &buffer;
@@ -203,7 +203,7 @@ bfdev_matrix_data(const bfdev_matrix_t *var,
     unsigned int offset;
 
     if (var->col < row || var->col < col)
-        return NULL;
+        return BFDEV_NULL;
 
     offset = row * col;
     data = bfdev_array_data(&var->value, offset);

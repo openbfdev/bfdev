@@ -105,7 +105,7 @@ bfdev_ilist_last(const bfdev_ilist_head_t *ihead)
  * bfdev_list_check_empty() - check whether a head is empty.
  * @ihead: list head to check.
  */
-static inline bool
+static inline bfdev_bool
 bfdev_ilist_head_empty(bfdev_ilist_head_t *ihead)
 {
     return bfdev_list_check_empty(&ihead->node_list);
@@ -115,7 +115,7 @@ bfdev_ilist_head_empty(bfdev_ilist_head_t *ihead)
  * bfdev_list_check_empty() - check whether a node index is empty.
  * @inode: list node to check.
  */
-static inline bool
+static inline bfdev_bool
 bfdev_ilist_node_empty(bfdev_ilist_node_t *inode)
 {
     return bfdev_list_check_empty(&inode->index_list);

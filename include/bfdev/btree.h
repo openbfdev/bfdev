@@ -23,11 +23,11 @@ struct bfdev_btree_layout {
     unsigned int keylen;
     unsigned int keynum;
     unsigned int ptrindex;
-    size_t nodesize;
+    bfdev_size_t nodesize;
 };
 
 struct bfdev_btree_node {
-    uintptr_t block[0];
+    bfdev_uintptr_t block[0];
 };
 
 struct bfdev_btree_root {
@@ -43,7 +43,7 @@ struct bfdev_btree_root {
 struct bfdev_btree_ops {
     void *(*alloc)(bfdev_btree_root_t *root);
     void (*free)(bfdev_btree_root_t *root, void *block);
-    long (*find)(bfdev_btree_root_t *root, uintptr_t *node, uintptr_t *key);
+    long (*find)(bfdev_btree_root_t *root, bfdev_uintptr_t *node, bfdev_uintptr_t *key);
     int (*clash)(bfdev_btree_root_t *root, void *clash, void *value);
     void *(*remove)(bfdev_btree_root_t *root, void *value);
 };
@@ -75,10 +75,12 @@ bfdev_btree_init(bfdev_btree_root_t *root, bfdev_btree_layout_t *layout,
 }
 
 extern long
-bfdev_btree_key_find(bfdev_btree_root_t *root, uintptr_t *node, uintptr_t *key);
+bfdev_btree_key_find(bfdev_btree_root_t *root, bfdev_uintptr_t *node,
+                     bfdev_uintptr_t *key);
 
 extern void
-bfdev_btree_key_copy(bfdev_btree_root_t *root, uintptr_t *dest, uintptr_t *src);
+bfdev_btree_key_copy(bfdev_btree_root_t *root, bfdev_uintptr_t *dest,
+                     bfdev_uintptr_t *src);
 
 extern void *
 bfdev_btree_alloc(bfdev_btree_root_t *root);
@@ -87,32 +89,32 @@ extern void
 bfdev_btree_free(bfdev_btree_root_t *root, void *node);
 
 extern void *
-bfdev_btree_lookup(bfdev_btree_root_t *root, uintptr_t *key);
+bfdev_btree_lookup(bfdev_btree_root_t *root, bfdev_uintptr_t *key);
 
 extern int
-bfdev_btree_update(bfdev_btree_root_t *root, uintptr_t *key, void *value);
+bfdev_btree_update(bfdev_btree_root_t *root, bfdev_uintptr_t *key, void *value);
 
 extern int
-bfdev_btree_insert(bfdev_btree_root_t *root, uintptr_t *key, void *value);
+bfdev_btree_insert(bfdev_btree_root_t *root, bfdev_uintptr_t *key, void *value);
 
 extern void *
-bfdev_btree_remove(bfdev_btree_root_t *root, uintptr_t *key);
+bfdev_btree_remove(bfdev_btree_root_t *root, bfdev_uintptr_t *key);
 
 extern void
-bfdev_btree_release(bfdev_btree_root_t *root, bfdev_release_t release,
-                    void *pdata);
+bfdev_btree_release(bfdev_btree_root_t *root,
+                    bfdev_release_t release, void *pdata);
 
 extern void *
-bfdev_btree_first(bfdev_btree_root_t *root, uintptr_t *key);
+bfdev_btree_first(bfdev_btree_root_t *root, bfdev_uintptr_t *key);
 
 extern void *
-bfdev_btree_last(bfdev_btree_root_t *root, uintptr_t *key);
+bfdev_btree_last(bfdev_btree_root_t *root, bfdev_uintptr_t *key);
 
 extern void *
-bfdev_btree_next(bfdev_btree_root_t *root, uintptr_t *key);
+bfdev_btree_next(bfdev_btree_root_t *root, bfdev_uintptr_t *key);
 
 extern void *
-bfdev_btree_prev(bfdev_btree_root_t *root, uintptr_t *key);
+bfdev_btree_prev(bfdev_btree_root_t *root, bfdev_uintptr_t *key);
 
 /**
  * bfdev_btree_for_each - iterate over a btree.

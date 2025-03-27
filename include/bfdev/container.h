@@ -19,24 +19,24 @@ BFDEV_BEGIN_DECLS
  */
 
 /* Any const qualifier of @ptr is lost. */
-#define bfdev_container_of(ptr, type, member) ({        \
-    const typeof(((type *)0)->member) *__mptr = (ptr);  \
-    (type *)((char *)__mptr - offsetof(type, member));  \
+#define bfdev_container_of(ptr, type, member) ({                \
+    const typeof(((type *)0)->member) *__mptr = (ptr);          \
+    (type *)((char *)__mptr - bfdev_offsetof(type, member));    \
 })
 
-/* If ptr is NULL, ptr is returned unchanged. */
-#define bfdev_container_of_safe(ptr, type, member) ({       \
-    typeof(ptr) __ptr = (ptr);                              \
-    __ptr ? bfdev_container_of(__ptr, type, member) : NULL; \
+/* If ptr is BFDEV_NULL, ptr is returned unchanged. */
+#define bfdev_container_of_safe(ptr, type, member) ({               \
+    typeof(ptr) __ptr = (ptr);                                      \
+    __ptr ? bfdev_container_of(__ptr, type, member) : BFDEV_NULL;   \
 })
 
 /* Preserve the const-ness of the pointer. */
-#define bfdev_container_of_const(ptr, type, member)             \
-_Generic(ptr,                                                   \
-    const typeof(*(ptr)) *:                                     \
-        ((const type *)bfdev_container_of(ptr, type, member)),  \
-    default:                                                    \
-        ((type *)bfdev_container_of(ptr, type, member))         \
+#define bfdev_container_of_const(ptr, type, member)            \
+_Generic(ptr,                                                  \
+    const typeof(*(ptr)) *:                                    \
+        ((const type *)bfdev_container_of(ptr, type, member)), \
+    default:                                                   \
+        ((type *)bfdev_container_of(ptr, type, member))        \
 )
 
 BFDEV_END_DECLS

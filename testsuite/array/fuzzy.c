@@ -3,6 +3,7 @@
  * Copyright(c) 2024 John Sanpe <sanpeqf@gmail.com>
  */
 
+#include <stdlib.h>
 #include <testsuite.h>
 
 #define TEST_CELLS 16

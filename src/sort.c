@@ -8,20 +8,20 @@
 #include <export.h>
 
 static __bfdev_noinline void
-sort_swap(size_t cells, void *cel1, void *cel2)
+sort_swap(bfdev_size_t cells, void *cel1, void *cel2)
 {
     void *buff;
 
     /* alloca hates inline */
     buff = bfdev_alloca(cells);
 
-    bfport_memcpy(buff, cel1, cells);
-    bfport_memcpy(cel1, cel2, cells);
-    bfport_memcpy(cel2, buff, cells);
+    bfdev_memcpy(buff, cel1, cells);
+    bfdev_memcpy(cel1, cel2, cells);
+    bfdev_memcpy(cel2, buff, cells);
 }
 
-static __bfdev_attribute_const __bfdev_always_inline size_t
-parent(size_t cells, unsigned int lsbit, size_t index)
+static __bfdev_attribute_const __bfdev_always_inline bfdev_size_t
+parent(bfdev_size_t cells, unsigned int lsbit, bfdev_size_t index)
 {
     index -= cells;
     index -= cells & -(index & lsbit);
@@ -29,10 +29,11 @@ parent(size_t cells, unsigned int lsbit, size_t index)
 }
 
 export int
-bfdev_sort(void *base, size_t num, size_t cells, bfdev_cmp_t cmp, void *pdata)
+bfdev_sort(void *base, bfdev_size_t num, bfdev_size_t cells,
+           bfdev_cmp_t cmp, void *pdata)
 {
-    size_t idx1, idx2, idx3, idx4;
-    size_t size, lsbit;
+    bfdev_size_t idx1, idx2, idx3, idx4;
+    bfdev_size_t size, lsbit;
 
     idx1 = (num >> 1) * cells;
     if (bfdev_unlikely(!base || !cmp || !idx1))

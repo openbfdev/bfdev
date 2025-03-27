@@ -8,13 +8,15 @@
 
 #include <bfdev/config.h>
 
-#if defined(__FreeBSD__) && defined(_KERNEL)
-# include <sys/types.h>
-#else
-# include <stdbool.h>
-#endif
-
 BFDEV_BEGIN_DECLS
+
+/* C language standard type */
+typedef _Bool bfdev_bool;
+
+enum bfdev_bool {
+    bfdev_false = 0,
+    bfdev_true = 1,
+};
 
 BFDEV_END_DECLS
 

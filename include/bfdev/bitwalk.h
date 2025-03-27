@@ -29,7 +29,7 @@ bfdev_find_first_bit(const unsigned long *addr, unsigned int bits)
     unsigned long value;
 
     if (!bfdev_const_small_nbits(bits))
-        return bfdev_comp_find_first_bit(addr, bits, 0UL, false);
+        return bfdev_comp_find_first_bit(addr, bits, 0UL, bfdev_false);
 
     value = *addr & BFDEV_BIT_LOW_MASK(bits);
     if (value == BFDEV_ULONG_MIN)
@@ -46,7 +46,7 @@ bfdev_find_last_bit(const unsigned long *addr, unsigned int bits)
     unsigned long value;
 
     if (!bfdev_const_small_nbits(bits))
-        return bfdev_comp_find_last_bit(addr, bits, 0UL, false);
+        return bfdev_comp_find_last_bit(addr, bits, 0UL, bfdev_false);
 
     value = *addr & BFDEV_BIT_LOW_MASK(bits);
     if (value == BFDEV_ULONG_MIN)
@@ -71,7 +71,7 @@ bfdev_find_first_zero(const unsigned long *addr, unsigned int bits)
     unsigned long value;
 
     if (!bfdev_const_small_nbits(bits))
-        return bfdev_comp_find_first_bit(addr, bits, ~0UL, false);
+        return bfdev_comp_find_first_bit(addr, bits, ~0UL, bfdev_false);
 
     value = *addr | BFDEV_BIT_HIGH_MASK(bits);
     if (value == BFDEV_ULONG_MAX)
@@ -88,7 +88,7 @@ bfdev_find_last_zero(const unsigned long *addr, unsigned int bits)
     unsigned long value;
 
     if (!bfdev_const_small_nbits(bits))
-        return bfdev_comp_find_last_bit(addr, bits, ~0UL, false);
+        return bfdev_comp_find_last_bit(addr, bits, ~0UL, bfdev_false);
 
     value = *addr | BFDEV_BIT_HIGH_MASK(bits);
     if (value == BFDEV_ULONG_MAX)
@@ -114,8 +114,10 @@ bfdev_find_next_bit(const unsigned long *addr,
 {
     unsigned long value;
 
-    if (!bfdev_const_small_nbits(bits))
-        return bfdev_comp_find_next_bit(addr, NULL, bits, offset, 0UL, false);
+    if (!bfdev_const_small_nbits(bits)) {
+        return bfdev_comp_find_next_bit(addr, BFDEV_NULL,
+            bits, offset, 0UL, bfdev_false);
+    }
 
     if (bfdev_unlikely(offset >= bits))
         return bits;
@@ -135,8 +137,10 @@ bfdev_find_prev_bit(const unsigned long *addr,
 {
     unsigned long value;
 
-    if (!bfdev_const_small_nbits(bits))
-        return bfdev_comp_find_prev_bit(addr, NULL, bits, offset, 0UL, false);
+    if (!bfdev_const_small_nbits(bits)) {
+        return bfdev_comp_find_prev_bit(addr, BFDEV_NULL,
+            bits, offset, 0UL, bfdev_false);
+    }
 
     if (bfdev_unlikely(offset >= bits))
         return bits;
@@ -165,8 +169,10 @@ bfdev_find_next_zero(const unsigned long *addr,
 {
     unsigned long value;
 
-    if (!bfdev_const_small_nbits(bits))
-        return bfdev_comp_find_next_bit(addr, NULL, bits, offset, ~0UL, false);
+    if (!bfdev_const_small_nbits(bits)) {
+        return bfdev_comp_find_next_bit(addr, BFDEV_NULL,
+            bits, offset, ~0UL, bfdev_false);
+    }
 
     if (bfdev_unlikely(offset >= bits))
         return bits;
@@ -186,8 +192,10 @@ bfdev_find_prev_zero(const unsigned long *addr,
 {
     unsigned long value;
 
-    if (!bfdev_const_small_nbits(bits))
-        return bfdev_comp_find_prev_bit(addr, NULL, bits, offset, ~0UL, false);
+    if (!bfdev_const_small_nbits(bits)) {
+        return bfdev_comp_find_prev_bit(addr, BFDEV_NULL,
+            bits, offset, ~0UL, bfdev_false);
+    }
 
     if (bfdev_unlikely(offset >= bits))
         return bits;
@@ -220,8 +228,10 @@ bfdev_find_next_and_bit(const unsigned long *addr1, const unsigned long *addr2,
     if (bfdev_unlikely(offset >= bits))
         return bits;
 
-    if (!bfdev_const_small_nbits(bits))
-        return bfdev_comp_find_next_bit(addr1, addr2, bits, offset, 0UL, false);
+    if (!bfdev_const_small_nbits(bits)) {
+        return bfdev_comp_find_next_bit(addr1, addr2,
+            bits, offset, 0UL, bfdev_false);
+    }
 
     value = *addr1 & *addr2 & BFDEV_BIT_RANGE(bits - 1, offset);
     if (value == BFDEV_ULONG_MIN)
@@ -238,8 +248,10 @@ bfdev_find_prev_and_bit(const unsigned long *addr1, const unsigned long *addr2,
 {
     unsigned long value;
 
-    if (!bfdev_const_small_nbits(bits))
-        return bfdev_comp_find_prev_bit(addr1, addr2, bits, offset, 0UL, false);
+    if (!bfdev_const_small_nbits(bits)) {
+        return bfdev_comp_find_prev_bit(addr1, addr2,
+            bits, offset, 0UL, bfdev_false);
+    }
 
     if (bfdev_unlikely(offset >= bits))
         return bits;

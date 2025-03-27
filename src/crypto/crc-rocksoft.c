@@ -7,8 +7,8 @@
 #include <bfdev/crypto/crc-rocksoft-inline.h>
 #include <export.h>
 
-export uint64_t
-bfdev_crc_rocksoft(const void *data, size_t len, uint64_t crc)
+export bfdev_u64
+bfdev_crc_rocksoft(const void *data, bfdev_size_t len, bfdev_u64 crc)
 {
     return bfdev_crc_rocksoft_inline(data, len, crc);
 }

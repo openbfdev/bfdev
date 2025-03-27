@@ -34,7 +34,7 @@ fsm_find_transition(const bfdev_fsm_state_t *state, bfdev_fsm_event_t *event)
     if (state->exception)
         return state->exception(event, state->data);
 
-    return NULL;
+    return BFDEV_NULL;
 }
 
 export int

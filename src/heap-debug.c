@@ -11,7 +11,7 @@
 #include <bfdev/heap.h>
 #include <export.h>
 
-export bool
+export bfdev_bool
 bfdev_heap_check_link(bfdev_heap_node_t *parent, bfdev_heap_node_t **link,
                       bfdev_heap_node_t *node)
 {
@@ -21,13 +21,13 @@ bfdev_heap_check_link(bfdev_heap_node_t *parent, bfdev_heap_node_t **link,
             " should not be node (%p)\n",
             link, node
         );
-        return false;
+        return bfdev_false;
     }
 
-    return true;
+    return bfdev_true;
 }
 
-export bool
+export bfdev_bool
 bfdev_heap_check_delete(bfdev_heap_node_t *node)
 {
     if (bfdev_unlikely(node->left == BFDEV_POISON_HPNODE1)) {
@@ -36,7 +36,7 @@ bfdev_heap_check_delete(bfdev_heap_node_t *node)
             " should not be BFDEV_POISON_HPNODE1 (%p)\n",
             node, BFDEV_POISON_HPNODE1
         );
-        return false;
+        return bfdev_false;
     }
 
     if (bfdev_unlikely(node->right == BFDEV_POISON_HPNODE2)) {
@@ -45,7 +45,7 @@ bfdev_heap_check_delete(bfdev_heap_node_t *node)
             " should not be BFDEV_POISON_HPNODE2 (%p)\n",
             node, BFDEV_POISON_HPNODE2
         );
-        return false;
+        return bfdev_false;
     }
 
     if (bfdev_unlikely(node->parent == BFDEV_POISON_HPNODE3)) {
@@ -54,8 +54,8 @@ bfdev_heap_check_delete(bfdev_heap_node_t *node)
             " should not be BFDEV_POISON_HPNODE3 (%p)\n",
             node, BFDEV_POISON_HPNODE3
         );
-        return false;
+        return bfdev_false;
     }
 
-    return true;
+    return bfdev_true;
 }

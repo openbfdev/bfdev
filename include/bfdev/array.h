@@ -33,7 +33,7 @@ struct bfdev_array {
     const bfdev_alloc_t *alloc;
     unsigned long capacity;
     unsigned long index;
-    size_t cells;
+    bfdev_size_t cells;
     void *data;
 };
 
@@ -54,7 +54,8 @@ struct bfdev_array {
  * @cells: the size per elements.
  */
 static inline void
-bfdev_array_init(bfdev_array_t *array, const bfdev_alloc_t *alloc, size_t cells)
+bfdev_array_init(bfdev_array_t *array, const bfdev_alloc_t *alloc,
+                 bfdev_size_t cells)
 {
     *array = BFDEV_ARRAY_INIT(alloc, cells);
 }
@@ -92,7 +93,7 @@ bfdev_array_index(const bfdev_array_t *array)
  * Returns the total size of elements stored in
  * the array container.
  */
-static inline size_t
+static inline bfdev_size_t
 bfdev_array_size(const bfdev_array_t *array)
 {
     return array->cells * array->index;
@@ -106,7 +107,7 @@ bfdev_array_size(const bfdev_array_t *array)
  * Return the address offset of the object indexed
  * by @index in the array.
  */
-static inline uintptr_t
+static inline bfdev_uintptr_t
 bfdev_array_offset(const bfdev_array_t *array, unsigned long index)
 {
     return array->cells * index;
@@ -124,7 +125,7 @@ static inline void *
 bfdev_array_data(const bfdev_array_t *array, unsigned long index)
 {
     if (bfdev_unlikely(index >= array->index))
-        return NULL;
+        return BFDEV_NULL;
 
     return array->data + bfdev_array_offset(array, index);
 }

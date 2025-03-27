@@ -8,9 +8,9 @@
 
 struct bm_context {
     bfdev_ts_context_t tsc;
-    uint8_t *pattern;
+    bfdev_u8 *pattern;
     unsigned int pattern_len;
-    unsigned int bad_shift[UINT8_MAX];
+    unsigned int bad_shift[BFDEV_UINT8_MAX];
     unsigned int good_shift[0];
 };
 
@@ -40,12 +40,12 @@ bm_pattern_len(bfdev_ts_context_t *tsc)
 static unsigned int
 bm_find(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss)
 {
-    #define find_pattern() (icase ? toupper(text[shift - index]) : text[shift - index])
+    #define find_pattern() (icase ? bfdev_toupper(text[shift - index]) : text[shift - index])
     struct bm_context *bctx;
     unsigned int bad_shift, good_shift, consumed;
     unsigned int length, index, shift;
-    const uint8_t *text;
-    bool icase;
+    const bfdev_u8 *text;
+    bfdev_bool icase;
 
     bctx = ts_to_bm(tsc);
     icase = bfdev_ts_igcase_test(tsc);
@@ -55,7 +55,7 @@ bm_find(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss)
     for (;;) {
         length = tsc->next_block(tsc, tss, consumed, (const void **)&text);
         if (bfdev_unlikely(!length))
-            return UINT_MAX;
+            return BFDEV_UINT_MAX;
 
         while (shift < length) {
             for (index = 0; index < bctx->pattern_len; ++index) {
@@ -77,8 +77,8 @@ bm_find(bfdev_ts_context_t *tsc, bfdev_ts_state_t *tss)
     #undef find_pattern
 }
 
-static inline bool
-subpattern(const uint8_t *pattern, int index, int j, int g)
+static inline bfdev_bool
+subpattern(const bfdev_u8 *pattern, int index, int j, int g)
 {
     int x, y;
 
@@ -87,12 +87,12 @@ subpattern(const uint8_t *pattern, int index, int j, int g)
 
     while (y && pattern[x--] == pattern[y--]) {
         if (y < 0)
-            return true;
+            return bfdev_true;
         if (!--g)
             return pattern[index - 1] != pattern[j - 1];
     }
 
-    return false;
+    return bfdev_false;
 }
 
 static inline void
@@ -100,13 +100,13 @@ bm_compute_prefix(struct bm_context *bctx)
 {
     int index, start, count;
 
-    for (index = 0; index < UINT8_MAX; ++index)
+    for (index = 0; index < BFDEV_UINT8_MAX; ++index)
         bctx->bad_shift[index] = bctx->pattern_len;
 
     for (index = 0; index < bctx->pattern_len - 1; ++index) {
         bctx->bad_shift[bctx->pattern[index]] = bctx->pattern_len - index - 1;
         if (bfdev_ts_igcase_test(&bctx->tsc)) {
-            bctx->bad_shift[tolower(bctx->pattern[index])] =
+            bctx->bad_shift[bfdev_tolower(bctx->pattern[index])] =
                 bctx->pattern_len - index - 1;
         }
     }
@@ -127,7 +127,7 @@ bm_compute_prefix(struct bm_context *bctx)
 
 static bfdev_ts_context_t *
 bm_prepare(const bfdev_alloc_t *alloc, const void *pattern,
-           size_t len, unsigned long flags)
+           bfdev_size_t len, unsigned long flags)
 {
     struct bm_context *bctx;
     unsigned int gsize, index;
@@ -135,16 +135,16 @@ bm_prepare(const bfdev_alloc_t *alloc, const void *pattern,
     gsize = sizeof(unsigned int) * len;
     bctx = bfdev_malloc(alloc, sizeof(*bctx) + gsize + len);
     if (bfdev_unlikely(!bctx))
-        return NULL;
+        return BFDEV_NULL;
 
     bctx->tsc.flags = flags;
     bctx->pattern_len = len;
     bctx->pattern = (void *)bctx + sizeof(*bctx) + gsize;
 
     if (!bfdev_ts_igcase_test(&bctx->tsc))
-        bfport_memcpy(bctx->pattern, pattern, len);
+        bfdev_memcpy(bctx->pattern, pattern, len);
     else for (index = 0; index < len; ++index)
-        bctx->pattern[index] = toupper(((char *)pattern)[index]);
+        bctx->pattern[index] = bfdev_toupper(((char *)pattern)[index]);
     bm_compute_prefix(bctx);
 
     return &bctx->tsc;

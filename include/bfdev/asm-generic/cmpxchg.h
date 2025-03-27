@@ -16,7 +16,8 @@ BFDEV_BEGIN_DECLS
 #ifndef bfdev_arch_cmpxchg
 # define bfdev_arch_cmpxchg bfdev_arch_cmpxchg
 static __bfdev_always_inline bfdev_atomic_t
-bfdev_arch_cmpxchg(bfdev_atomic_t *atomic, bfdev_atomic_t old, bfdev_atomic_t value)
+bfdev_arch_cmpxchg(bfdev_atomic_t *atomic, bfdev_atomic_t old,
+                   bfdev_atomic_t value)
 {
     return __sync_val_compare_and_swap(atomic, old, value);
 }
@@ -40,8 +41,9 @@ bfdev_arch_xchg(bfdev_atomic_t *atomic, bfdev_atomic_t value)
 
 #ifndef bfdev_arch_try_cmpxchg
 # define bfdev_arch_try_cmpxchg bfdev_arch_try_cmpxchg
-static __bfdev_always_inline bool
-bfdev_arch_try_cmpxchg(bfdev_atomic_t *atomic, bfdev_atomic_t *old, bfdev_atomic_t value)
+static __bfdev_always_inline bfdev_bool
+bfdev_arch_try_cmpxchg(bfdev_atomic_t *atomic, bfdev_atomic_t *old,
+                       bfdev_atomic_t value)
 {
     bfdev_atomic_t result, prev;
 

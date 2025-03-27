@@ -14,7 +14,7 @@ BFDEV_BEGIN_DECLS
 #include <bfdev/crypto/crc-rocksoft-table.h>
 
 BFDEV_CRC_INLINE(
-    bfdev_crc_rocksoft, uint64_t,
+    bfdev_crc_rocksoft, bfdev_u64,
     bfdev_crc_rocksoft_table, bfdev_cpu_to_le64
 )
 

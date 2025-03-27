@@ -229,9 +229,10 @@ export void
 bfdev_rb_erase_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *parent,
                          const bfdev_rb_callbacks_t *callbacks)
 {
-    bfdev_rb_node_t *sibling, *node = NULL;
+    bfdev_rb_node_t *sibling, *node;
     bfdev_rb_node_t *tmp1, *tmp2;
 
+    node = BFDEV_NULL;
     while (root && parent) {
         /*
          * Loop invariants:
@@ -379,12 +380,13 @@ export bfdev_rb_node_t *
 bfdev_rb_remove_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
                           const bfdev_rb_callbacks_t *callbacks)
 {
-    bfdev_rb_node_t *parent, *rebalance = NULL;
+    bfdev_rb_node_t *parent, *rebalance;
     bfdev_rb_node_t *child1, *child2;
 
     parent = node->parent;
     child1 = node->left;
     child2 = node->right;
+    rebalance = BFDEV_NULL;
 
     if (!child1 && !child2) {
         /*
@@ -398,7 +400,7 @@ bfdev_rb_remove_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
 
         if (node->color == BFDEV_RB_BLACK)
             rebalance = parent;
-        child_change(root, parent, node, NULL);
+        child_change(root, parent, node, BFDEV_NULL);
     } else if (!child2) {
         /*
          * Case 1: node to erase only has left child.
@@ -495,7 +497,7 @@ bfdev_rb_remove_augmented(bfdev_rb_root_t *root, bfdev_rb_node_t *node,
         parent = successor;
     }
 
-    callbacks->propagate(parent, NULL);
+    callbacks->propagate(parent, BFDEV_NULL);
     return rebalance;
 }
 
@@ -559,22 +561,22 @@ bfdev_rb_find(const bfdev_rb_root_t *root, void *key, bfdev_rb_find_t find)
             node = node->right;
     }
 
-    return NULL;
+    return BFDEV_NULL;
 }
 
 export bfdev_rb_node_t *
 bfdev_rb_find_last(bfdev_rb_root_t *root, void *key, bfdev_rb_find_t find,
                    bfdev_rb_node_t **parentp, bfdev_rb_node_t ***linkp,
-                   bool *leftmostp)
+                   bfdev_bool *leftmostp)
 {
-    bool leftmost;
+    bfdev_bool leftmost;
     long retval;
 
     *linkp = &root->node;
-    leftmost = true;
+    leftmost = bfdev_true;
 
     if (bfdev_unlikely(!**linkp)) {
-        *parentp = NULL;
+        *parentp = BFDEV_NULL;
         goto finish;
     }
 
@@ -588,7 +590,7 @@ bfdev_rb_find_last(bfdev_rb_root_t *root, void *key, bfdev_rb_find_t find,
             *linkp = &(**linkp)->left;
         else /* retval < 0 */ {
             *linkp = &(**linkp)->right;
-            leftmost = false;
+            leftmost = bfdev_false;
         }
     } while (**linkp);
 
@@ -596,37 +598,37 @@ finish:
     if (leftmostp)
         *leftmostp = leftmost;
 
-    return NULL;
+    return BFDEV_NULL;
 }
 
 export bfdev_rb_node_t **
 bfdev_rb_parent(bfdev_rb_root_t *root, bfdev_rb_node_t **parentp,
                 bfdev_rb_node_t *node, bfdev_rb_cmp_t cmp, void *pdata,
-                bool *leftmostp)
+                bfdev_bool *leftmostp)
 {
     bfdev_rb_node_t **link;
-    bool leftmost;
+    bfdev_bool leftmost;
     long retval;
 
     link = &root->node;
-    leftmost = true;
+    leftmost = bfdev_true;
 
     if (bfdev_unlikely(!*link)) {
-        *parentp = NULL;
+        *parentp = BFDEV_NULL;
         goto finish;
     }
 
     do {
         retval = cmp(node, *link, pdata);
         if (bfdev_unlikely(!retval))
-            return NULL;
+            return BFDEV_NULL;
 
         *parentp = *link;
         if (retval < 0)
             link = &(*link)->left;
         else /* retval > 0 */ {
             link = &(*link)->right;
-            leftmost = false;
+            leftmost = bfdev_false;
         }
     } while (*link);
 

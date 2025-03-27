@@ -11,10 +11,11 @@
 #include <export.h>
 
 static __bfdev_always_inline void
-ascii85_encode(uint8_t *buff, const void *data, size_t *plen, size_t size)
+ascii85_encode(bfdev_u8 *buff, const void *data, bfdev_size_t *plen,
+               bfdev_size_t size)
 {
-    uint32_t value;
-    size_t index;
+    bfdev_u32 value;
+    bfdev_size_t index;
 
     for (index = 0; size >= 4; size -= 4) {
         value = bfdev_unaligned_get_be32(data);
@@ -36,7 +37,8 @@ ascii85_encode(uint8_t *buff, const void *data, size_t *plen, size_t size)
 
     if (size) {
         value = bfdev_unaligned_get_be32(data);
-        value &= BFDEV_BIT_HIGH_MASK((BFDEV_BYTES_PER_U32 - size) * BFDEV_BITS_PER_BYTE);
+        value &= BFDEV_BIT_HIGH_MASK((BFDEV_BYTES_PER_U32 - size) *
+            BFDEV_BITS_PER_BYTE);
 
         if (!value)
             buff[index] = 'z';
@@ -56,15 +58,16 @@ ascii85_encode(uint8_t *buff, const void *data, size_t *plen, size_t size)
 }
 
 static __bfdev_always_inline int
-ascii85_decode(void *buff, const uint8_t *data, size_t *plen, size_t size)
+ascii85_decode(void *buff, const bfdev_u8 *data, bfdev_size_t *plen,
+               bfdev_size_t size)
 {
     unsigned int count;
-    uint32_t value;
-    size_t index;
+    bfdev_u32 value;
+    bfdev_size_t index;
 
     for (index = 0; size; index += 4) {
         if (*data == 'z') {
-            bfport_memset(buff + index, 0, 4);
+            bfdev_memset(buff + index, 0, 4);
             data++;
             size--;
         }
@@ -96,13 +99,15 @@ ascii85_decode(void *buff, const uint8_t *data, size_t *plen, size_t size)
 }
 
 export void
-bfdev_ascii85_encode(void *buff, const void *data, size_t *plen, size_t size)
+bfdev_ascii85_encode(void *buff, const void *data,
+                     bfdev_size_t *plen, bfdev_size_t size)
 {
     ascii85_encode(buff, data, plen, size);
 }
 
 export int
-bfdev_ascii85_decode(void *buff, const void *data, size_t *plen, size_t size)
+bfdev_ascii85_decode(void *buff, const void *data,
+                     bfdev_size_t *plen, bfdev_size_t size)
 {
     return ascii85_decode(buff, data, plen, size);
 }

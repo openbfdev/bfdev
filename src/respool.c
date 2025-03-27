@@ -18,7 +18,7 @@ bfdev_respool_find(bfdev_respool_t *pool,
             return walk;
     }
 
-    return NULL;
+    return BFDEV_NULL;
 }
 
 export void

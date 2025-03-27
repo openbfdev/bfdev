@@ -44,7 +44,7 @@ TISTATIC TISTRUCT *TINAME##_left_deep(const TISTRUCT *node)                     
             return (TISTRUCT *)node;                                            \
     }                                                                           \
                                                                                 \
-    return NULL;                                                                \
+    return BFDEV_NULL;                                                          \
 }                                                                               \
                                                                                 \
 TISTATIC TISTRUCT *TINAME##_right_deep(const TISTRUCT *node)                    \
@@ -59,7 +59,7 @@ TISTATIC TISTRUCT *TINAME##_right_deep(const TISTRUCT *node)                    
             return (TISTRUCT *)node;                                            \
     }                                                                           \
                                                                                 \
-    return NULL;                                                                \
+    return BFDEV_NULL;                                                          \
 }
 
 #define BFDEV_TITER_INORDER_DEFINE(TISTATIC, TINAME, BNAME, TIROOT, TINODE,     \
@@ -69,7 +69,7 @@ TISTATIC TISTRUCT *TINAME##_first(const TIROOT *root)                           
     TISTRUCT *node = root->TINODE;                                              \
                                                                                 \
     if (!root || !node)                                                         \
-        return NULL;                                                            \
+        return BFDEV_NULL;                                                      \
                                                                                 \
     /* Get the leftmost node */                                                 \
     node = BNAME##_left_far(node);                                              \
@@ -81,7 +81,7 @@ TISTATIC TISTRUCT *TINAME##_last(const TIROOT *root)                            
     TISTRUCT *node = root->TINODE;                                              \
                                                                                 \
     if (!root || !node)                                                         \
-        return NULL;                                                            \
+        return BFDEV_NULL;                                                      \
                                                                                 \
     /* Get the rightmost node */                                                \
     node = BNAME##_right_far(node);                                             \
@@ -93,7 +93,7 @@ TISTATIC TISTRUCT *TINAME##_prev(const TISTRUCT *node)                          
     TISTRUCT *parent;                                                           \
                                                                                 \
     if (!node)                                                                  \
-        return NULL;                                                            \
+        return BFDEV_NULL;                                                      \
                                                                                 \
     /*                                                                          \
      * If there is a left-hand node, go down                                    \
@@ -119,7 +119,7 @@ TISTATIC TISTRUCT *TINAME##_next(const TISTRUCT *node)                          
     TISTRUCT *parent;                                                           \
                                                                                 \
     if (!node)                                                                  \
-        return NULL;                                                            \
+        return BFDEV_NULL;                                                      \
                                                                                 \
     /*                                                                          \
      * If there is a right-hand node, go down                                   \
@@ -153,7 +153,7 @@ TISTATIC TISTRUCT *TINAME##_next(const TISTRUCT *node)                          
     TISTRUCT *parent;                                                           \
                                                                                 \
     if (!node)                                                                  \
-        return NULL;                                                            \
+        return BFDEV_NULL;                                                      \
                                                                                 \
     /**                                                                         \
      * If there are left and right child nodes,                                 \
@@ -173,7 +173,7 @@ TISTATIC TISTRUCT *TINAME##_next(const TISTRUCT *node)                          
            (!parent->TIRIGHT || node == parent->TIRIGHT))                       \
         node = parent;                                                          \
                                                                                 \
-    return parent ? parent->TIRIGHT : NULL;                                     \
+    return parent ? parent->TIRIGHT : BFDEV_NULL;                               \
 }
 
 #define BFDEV_TITER_POSTORDER_DEFINE(TISTATIC, TINAME, BNAME, TIROOT, TINODE,   \
@@ -183,7 +183,7 @@ TISTATIC TISTRUCT *TINAME##_first(const TIROOT *root)                           
     TISTRUCT *node = root->TINODE;                                              \
                                                                                 \
     if (!root || !node)                                                         \
-        return NULL;                                                            \
+        return BFDEV_NULL;                                                      \
                                                                                 \
     /* Get the left deepest node. */                                            \
     return BNAME##_left_deep(node);                                             \
@@ -194,7 +194,7 @@ TISTATIC TISTRUCT *TINAME##_next(const TISTRUCT *node)                          
     const TISTRUCT *parent;                                                     \
                                                                                 \
     if (!node)                                                                  \
-        return NULL;                                                            \
+        return BFDEV_NULL;                                                      \
     parent = node->TIPARENT;                                                    \
                                                                                 \
     /**                                                                         \

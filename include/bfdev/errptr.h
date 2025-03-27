@@ -20,7 +20,7 @@ BFDEV_BEGIN_DECLS
 static inline void *
 BFDEV_ERR_PTR(int error)
 {
-    return (void *)(intptr_t)error;
+    return (void *)(bfdev_intptr_t)error;
 }
 
 /**
@@ -30,7 +30,7 @@ BFDEV_ERR_PTR(int error)
 static inline int
 BFDEV_PTR_ERR(const void *ptr)
 {
-    return (int)(intptr_t)ptr;
+    return (int)(bfdev_intptr_t)ptr;
 }
 
 /**
@@ -47,17 +47,17 @@ BFDEV_PTR_INVAL(const void *ptr)
  * BFDEV_IS_ERR - Check whether pointer is error value.
  * @ptr: the pointer to check.
  */
-static inline bool
+static inline bfdev_bool
 BFDEV_IS_ERR(const void *ptr)
 {
-    return (uintptr_t)ptr >= (uintptr_t)-BFDEV_ERRNO_MAX;
+    return (bfdev_uintptr_t)ptr >= (bfdev_uintptr_t)-BFDEV_ERRNO_MAX;
 }
 
 /**
  * BFDEV_IS_INVAL - Check whether pointer is error value or null.
  * @ptr: the pointer to check.
  */
-static inline bool
+static inline bfdev_bool
 BFDEV_IS_INVAL(const void *ptr)
 {
     return bfdev_unlikely(!ptr) || BFDEV_IS_ERR(ptr);

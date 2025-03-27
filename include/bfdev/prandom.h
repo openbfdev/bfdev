@@ -24,8 +24,10 @@ BFDEV_BEGIN_DECLS
 typedef struct bfdev_prandom bfdev_prandom_t;
 
 struct bfdev_prandom {
-    uint32_t s1, s2;
-    uint32_t s3, s4;
+    bfdev_u32 s1;
+    bfdev_u32 s2;
+    bfdev_u32 s3;
+    bfdev_u32 s4;
 };
 
 #define BFDEV_PRANDOM_STATIC() { \
@@ -57,24 +59,24 @@ bfdev_prandom_init(bfdev_prandom_t *pstate)
  * @seed: arbitrary 64-bit value to use as a seed.
  */
 extern void
-bfdev_prandom_seed(bfdev_prandom_t *pstate, uint64_t seed);
+bfdev_prandom_seed(bfdev_prandom_t *pstate, bfdev_u64 seed);
 
 /**
  * bfdev_prandom_value() - seeded pseudo-random number generator.
  * @state: pointer to state structure holding seeded state.
  */
-extern uint32_t
+extern bfdev_u32
 bfdev_prandom_value(bfdev_prandom_t *pstate);
 
-static inline uint64_t
+static inline bfdev_u64
 bfdev_prandom_u64(bfdev_prandom_t *pstate)
 {
-    uint32_t high, low;
+    bfdev_u32 high, low;
 
     high = bfdev_prandom_value(pstate);
     low = bfdev_prandom_value(pstate);
 
-    return ((uint64_t)high << 32) | low;
+    return ((bfdev_u64)high << 32) | low;
 }
 
 static inline unsigned long

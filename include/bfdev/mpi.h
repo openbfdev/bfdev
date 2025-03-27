@@ -24,11 +24,11 @@ typedef struct bfdev_mpi bfdev_mpi_t;
 struct bfdev_mpi {
     const bfdev_alloc_t *alloc;
     bfdev_array_t value;
-    bool plus;
+    bfdev_bool plus;
 };
 
 #define BFDEV_MPI_STATIC(ALLOC) { \
-    .alloc = (ALLOC), .plus = true, \
+    .alloc = (ALLOC), .plus = bfdev_true, \
     .value = BFDEV_ARRAY_STATIC(ALLOC, BFDEV_MPI_SIZE), \
 }
 
@@ -50,7 +50,7 @@ bfdev_mpi_length(const bfdev_mpi_t *mpi)
     return bfdev_array_index(&mpi->value);
 }
 
-static inline size_t
+static inline bfdev_size_t
 bfdev_mpi_size(const bfdev_mpi_t *mpi)
 {
     return bfdev_array_size(&mpi->value);
@@ -122,7 +122,7 @@ extern int
 bfdev_mpi_shri(bfdev_mpi_t *dest,
                const bfdev_mpi_t *va, BFDEV_MPI_TYPE shift);
 
-extern bool
+extern bfdev_bool
 bfdev_mpi_btesti(bfdev_mpi_t *dest, BFDEV_MPI_TYPE bit);
 
 extern int
@@ -139,10 +139,10 @@ bfdev_mpi_set(bfdev_mpi_t *dest, const bfdev_mpi_t *src);
 
 extern int
 bfdev_mpi_import(bfdev_mpi_t *var, const BFDEV_MPI_TYPE *buffer,
-                 unsigned long length, bool sign);
+                 unsigned long length, bfdev_bool sign);
 
 extern const BFDEV_MPI_TYPE *
-bfdev_mpi_data(const bfdev_mpi_t *var, bool *sign);
+bfdev_mpi_data(const bfdev_mpi_t *var, bfdev_bool *sign);
 
 extern void
 bfdev_mpi_release(bfdev_mpi_t *var);

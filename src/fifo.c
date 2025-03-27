@@ -23,8 +23,8 @@
     }                                                       \
                                                             \
     llen = bfdev_min(len, size - offset);                   \
-    bfport_memcpy(copy1, copy2, llen);                      \
-    bfport_memcpy(fold1, fold2, len - llen);                \
+    bfdev_memcpy(copy1, copy2, llen);                       \
+    bfdev_memcpy(fold1, fold2, len - llen);                 \
 } while (0)
 
 static __bfdev_always_inline void
@@ -51,7 +51,7 @@ static __bfdev_always_inline unsigned long
 fifo_record_peek(bfdev_fifo_t *fifo, unsigned long recsize)
 {
     unsigned long mask, offset, length;
-    uint8_t *data;
+    bfdev_u8 *data;
 
     mask = fifo->mask;
     offset = fifo->out;
@@ -77,7 +77,7 @@ static __bfdev_always_inline void
 fifo_record_poke(bfdev_fifo_t *fifo, unsigned long len, unsigned long recsize)
 {
     unsigned long mask, offset;
-    uint8_t *data;
+    bfdev_u8 *data;
 
     mask = fifo->mask;
     offset = fifo->out;
@@ -90,13 +90,13 @@ fifo_record_poke(bfdev_fifo_t *fifo, unsigned long len, unsigned long recsize)
     }
 
     while (recsize--) {
-        data[offset & mask] = (uint8_t)len;
+        data[offset & mask] = (bfdev_u8)len;
         offset += fifo->esize;
         len >>= BFDEV_BITS_PER_U8;
     }
 }
 
-static inline bool
+static inline bfdev_bool
 fifo_empty(bfdev_fifo_t *fifo)
 {
     return fifo->in == fifo->out;
@@ -199,7 +199,7 @@ bfdev_fifo_in_record(bfdev_fifo_t *fifo, const void *buff, unsigned long len,
 
 export int
 bfdev_fifo_dynamic_alloc(bfdev_fifo_t *fifo, const bfdev_alloc_t *alloc,
-                         size_t esize, size_t size)
+                         bfdev_size_t esize, bfdev_size_t size)
 {
     size = bfdev_pow2_roundup(size);
     if (size < 2)
@@ -230,5 +230,5 @@ bfdev_fifo_dynamic_free(bfdev_fifo_t *fifo)
 
     alloc = fifo->alloc;
     bfdev_free(alloc, fifo->data);
-    fifo->data = NULL;
+    fifo->data = BFDEV_NULL;
 }

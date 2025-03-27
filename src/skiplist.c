@@ -5,6 +5,7 @@
 
 #include <base.h>
 #include <bfdev/skiplist.h>
+#include <port/stdlib.h>
 #include <export.h>
 
 static unsigned int
@@ -14,7 +15,7 @@ random_level(bfdev_skip_head_t *head)
 
     level = 1;
     while (level < head->levels) {
-        if (bfport_rand() > RAND_MAX >> 2)
+        if ((bfport_rand() & 0xffff) > 0xffff >> 2)
             break;
         level++;
     }
@@ -33,7 +34,7 @@ skipnode_find(bfdev_skip_head_t *head, bfdev_find_t find,
 
     level = head->curr;
     if (bfdev_unlikely(!level))
-        return NULL;
+        return BFDEV_NULL;
 
     list = &head->nodes[level - 1];
     end = list;
@@ -58,13 +59,13 @@ skipnode_find(bfdev_skip_head_t *head, bfdev_find_t find,
         list = end->prev;
     }
 
-    return NULL;
+    return BFDEV_NULL;
 }
 
 export bfdev_skip_node_t *
 bfdev_skiplist_find(bfdev_skip_head_t *head, bfdev_find_t find, void *pdata)
 {
-    return skipnode_find(head, find, pdata, NULL);
+    return skipnode_find(head, find, pdata, BFDEV_NULL);
 }
 
 export int
@@ -164,11 +165,11 @@ bfdev_skiplist_create(const bfdev_alloc_t *alloc, unsigned int levels)
     unsigned int count;
 
     if (bfdev_unlikely(!levels))
-        return NULL;
+        return BFDEV_NULL;
 
     head = bfdev_malloc(alloc, sizeof(*head) + sizeof(*head->nodes) * levels);
     if (bfdev_unlikely(!head))
-        return NULL;
+        return BFDEV_NULL;
 
     for (count = 0; count < levels; ++count)
         bfdev_list_head_init(&head->nodes[count]);

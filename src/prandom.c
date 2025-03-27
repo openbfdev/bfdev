@@ -7,16 +7,16 @@
 #include <bfdev/uplower.h>
 #include <export.h>
 
-static __bfdev_always_inline uint32_t
-seed_minimum(uint32_t x, uint32_t m)
+static __bfdev_always_inline bfdev_u32
+seed_minimum(bfdev_u32 x, bfdev_u32 m)
 {
     return (x < m) ? x + m : x;
 }
 
 static void
-prandom_setup(bfdev_prandom_t *pstate, uint64_t seed)
+prandom_setup(bfdev_prandom_t *pstate, bfdev_u64 seed)
 {
-    uint32_t s1, s2, s3, s4;
+    bfdev_u32 s1, s2, s3, s4;
 
     seed = bfdev_lower_32_bits((seed >> 32) ^ (seed << 10) ^ seed);
     s1 = seed_minimum(seed,   2U);
@@ -31,7 +31,7 @@ prandom_setup(bfdev_prandom_t *pstate, uint64_t seed)
 }
 
 static __bfdev_always_inline void
-prandom_value(bfdev_prandom_t *pstate, uint32_t buff[4])
+prandom_value(bfdev_prandom_t *pstate, bfdev_u32 buff[4])
 {
     buff[0] = BFDEV_TAUSWORTHE(pstate->s1,  6U, 13U, 4294967294U, 18U);
     buff[1] = BFDEV_TAUSWORTHE(pstate->s2,  2U, 27U, 4294967288U,  2U);
@@ -48,16 +48,16 @@ static __bfdev_always_inline void
 prandom_warmup(bfdev_prandom_t *pstate)
 {
     unsigned int count;
-    uint32_t buff[4];
+    bfdev_u32 buff[4];
 
     for (count = 0; count < BFDEV_PRANDOM_WARMUP; ++count)
         prandom_value(pstate, buff);
 }
 
-export uint32_t
+export bfdev_u32
 bfdev_prandom_value(bfdev_prandom_t *pstate)
 {
-    uint32_t value, buff[4];
+    bfdev_u32 value, buff[4];
 
     prandom_value(pstate, buff);
     value = buff[0] ^ buff[1] ^ buff[2] ^ buff[3];
@@ -66,7 +66,7 @@ bfdev_prandom_value(bfdev_prandom_t *pstate)
 }
 
 export void
-bfdev_prandom_seed(bfdev_prandom_t *pstate, uint64_t seed)
+bfdev_prandom_seed(bfdev_prandom_t *pstate, bfdev_u64 seed)
 {
     prandom_setup(pstate, seed);
     prandom_warmup(pstate);

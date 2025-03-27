@@ -6,6 +6,7 @@
 #include <base.h>
 #include <bfdev/log.h>
 #include <bfdev/scnprintf.h>
+#include <port/log.h>
 #include <export.h>
 
 export
@@ -13,16 +14,13 @@ BFDEV_DEFINE_LOG(
     bfdev_log_default,
     BFDEV_LEVEL_DEFAULT, BFDEV_LEVEL_DEFAULT,
     BFDEV_LOG_COLOR | BFDEV_LOG_LEVEL,
-    NULL, NULL
+    BFDEV_NULL, BFDEV_NULL
 );
 
-#define __INSIDE_LOG__
-#include <port/log.h>
-
-static size_t
-log_vscnprintf(bfdev_log_message_t *msg, const char *fmt, va_list args)
+static bfdev_size_t
+log_vscnprintf(bfdev_log_message_t *msg, const char *fmt, bfdev_va_list args)
 {
-    size_t append;
+    bfdev_size_t append;
 
     append = bfdev_vscnprintf(
         msg->buff + msg->length, BFDEV_LOG_BUFF_SIZE - msg->length,
@@ -33,15 +31,15 @@ log_vscnprintf(bfdev_log_message_t *msg, const char *fmt, va_list args)
     return append;
 }
 
-static size_t
+static bfdev_size_t
 log_scnprintf(bfdev_log_message_t *msg, const char *fmt, ...)
 {
-    size_t append;
-    va_list args;
+    bfdev_size_t append;
+    bfdev_va_list args;
 
-    va_start(args, fmt);
+    bfdev_va_start(args, fmt);
     append = log_vscnprintf(msg, fmt, args);
-    va_end(args);
+    bfdev_va_end(args);
 
     return append;
 }
@@ -103,7 +101,7 @@ log_suffix(bfdev_log_t *log, bfdev_log_message_t *msg)
 }
 
 static int
-log_emit(bfdev_log_t *log, unsigned int level, const char *fmt, va_list args)
+log_emit(bfdev_log_t *log, unsigned int level, const char *fmt, bfdev_va_list args)
 {
     char buff[BFDEV_LOG_BUFF_SIZE];
     bfdev_log_message_t msg;
@@ -138,13 +136,13 @@ log_emit(bfdev_log_t *log, unsigned int level, const char *fmt, va_list args)
     if (log->write)
         retval = log->write(&msg, log->pdata);
     else
-        retval = generic_log_write(&msg);
+        retval = bfport_log_write(&msg);
 
     return retval;
 }
 
 export int
-bfdev_vlog_core(bfdev_log_t *log, const char *fmt, va_list args)
+bfdev_vlog_core(bfdev_log_t *log, const char *fmt, bfdev_va_list args)
 {
     unsigned int level;
 
@@ -156,12 +154,12 @@ bfdev_vlog_core(bfdev_log_t *log, const char *fmt, va_list args)
 export int
 bfdev_log_core(bfdev_log_t *log, const char *fmt, ...)
 {
-    va_list para;
+    bfdev_va_list para;
     int length;
 
-    va_start(para, fmt);
+    bfdev_va_start(para, fmt);
     length = bfdev_vlog_core(log, fmt, para);
-    va_end(para);
+    bfdev_va_end(para);
 
     return length;
 }

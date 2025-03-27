@@ -48,7 +48,7 @@ struct bfdev_fsm_transition {
     const void *cond;
 
     const bfdev_fsm_state_t *next;
-    bool cross;
+    bfdev_bool cross;
     int stack;
 
     bfdev_fsm_guard_t guard;
@@ -74,12 +74,9 @@ struct bfdev_fsm_state {
  * @state: State history table, including current and previous states.
  * @error: Pointer to a state that will be entered whenever an error occurs
  *         in the state machine.
- * @stack:
- * @count:
  *
  * The previous state is stored for convenience in case the user needs to
  * keep track of previous states.
- *
  */
 struct bfdev_fsm {
     const bfdev_fsm_state_t *state[2];
@@ -156,11 +153,11 @@ bfdev_fsm_prev(const bfdev_fsm_t *fsm)
  *
  * Return true if the state machine has reached a final state.
  */
-static inline bool
+static inline bfdev_bool
 bfdev_fsm_finished(bfdev_fsm_t *fsm)
 {
     const bfdev_fsm_state_t *state;
-    bool retval;
+    bfdev_bool retval;
 
     state = bfdev_fsm_curr(fsm);
     retval = !state->tnum && !state->exception;
@@ -175,16 +172,16 @@ bfdev_fsm_finished(bfdev_fsm_t *fsm)
  *
  * Return true if the transition meeted.
  */
-static inline bool
+static inline bfdev_bool
 bfdev_fsm_cond(const bfdev_fsm_transition_t *trans, bfdev_fsm_event_t *event)
 {
     /* A transition for the given event has been found. */
     if (trans->type != event->type)
-        return false;
+        return bfdev_false;
 
     /* If transition is guarded, ensure that the condition is held. */
     if (!trans->guard)
-        return true;
+        return bfdev_true;
 
     return !trans->guard(event, trans->cond);
 }

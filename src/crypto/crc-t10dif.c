@@ -7,8 +7,8 @@
 #include <bfdev/crypto/crc-t10dif-inline.h>
 #include <export.h>
 
-export uint16_t
-bfdev_crc_t10dif(const void *data, size_t len, uint16_t crc)
+export bfdev_u16
+bfdev_crc_t10dif(const void *data, bfdev_size_t len, bfdev_u16 crc)
 {
     return bfdev_crc_t10dif_inline(data, len, crc);
 }

@@ -8,12 +8,12 @@
 #include <export.h>
 
 static __bfdev_always_inline void
-arc4_transform(bfdev_arc4_ctx_t *ctx, uint8_t *buff,
-               const uint8_t *data, size_t size)
+arc4_transform(bfdev_arc4_ctx_t *ctx, bfdev_u8 *buff,
+               const bfdev_u8 *data, bfdev_size_t size)
 {
-    uint8_t proa, prob;
-    uint8_t tx, ty, tb;
-    uint8_t vx, vy;
+    bfdev_u8 proa, prob;
+    bfdev_u8 tx, ty, tb;
+    bfdev_u8 vx, vy;
 
     proa = ctx->proa;
     prob = ctx->prob;
@@ -47,7 +47,7 @@ arc4_transform(bfdev_arc4_ctx_t *ctx, uint8_t *buff,
 
 export void
 bfdev_arc4_trans(bfdev_arc4_ctx_t *ctx, void *buff,
-                 const void *data, size_t size)
+                 const void *data, bfdev_size_t size)
 {
     if (bfdev_unlikely(!size))
         return;
@@ -57,9 +57,9 @@ bfdev_arc4_trans(bfdev_arc4_ctx_t *ctx, void *buff,
 
 export void
 bfdev_arc4_setkey(bfdev_arc4_ctx_t *ctx,
-                  const uint8_t *key, unsigned int klen)
+                  const bfdev_u8 *key, unsigned int klen)
 {
-    uint8_t value, loop;
+    bfdev_u8 value, loop;
     unsigned int count;
 
     if (bfdev_unlikely(!klen))

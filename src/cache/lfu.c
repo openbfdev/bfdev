@@ -42,7 +42,7 @@ lfu_compare(const bfdev_heap_node_t *node1,
     return bfdev_cmp(lfu1->count > lfu2->count);
 }
 
-static bool
+static bfdev_bool
 lfu_starving(bfdev_cache_head_t *head)
 {
     struct lfu_head *lfu_head;
@@ -59,8 +59,9 @@ lfu_obtain(bfdev_cache_head_t *head)
     struct lfu_node *lfu_node;
 
     lfu_head = cache_to_lfu_head(head);
-    lfu_node = bfdev_heap_entry(BFDEV_HEAP_ROOT_NODE(&lfu_head->lfu), struct lfu_node, node);
-    bfdev_heap_delete(&lfu_head->lfu, &lfu_node->node, lfu_compare, NULL);
+    lfu_node = bfdev_heap_entry(BFDEV_HEAP_ROOT_NODE(&lfu_head->lfu),
+        struct lfu_node, node);
+    bfdev_heap_delete(&lfu_head->lfu, &lfu_node->node, lfu_compare, BFDEV_NULL);
 
     return &lfu_node->cache;
 }
@@ -74,7 +75,8 @@ lfu_get(bfdev_cache_head_t *head, bfdev_cache_node_t *node)
     lfu_head = cache_to_lfu_head(head);
     lfu_node = cache_to_lfu_node(node);
 
-    bfdev_heap_delete(&lfu_head->lfu, &lfu_node->node, lfu_compare, NULL);
+    bfdev_heap_delete(&lfu_head->lfu, &lfu_node->node,
+        lfu_compare, BFDEV_NULL);
 }
 
 static void
@@ -86,7 +88,8 @@ lfu_put(bfdev_cache_head_t *head, bfdev_cache_node_t *node)
     lfu_head = cache_to_lfu_head(head);
     lfu_node = cache_to_lfu_node(node);
 
-    bfdev_heap_insert(&lfu_head->lfu, &lfu_node->node, lfu_compare, NULL);
+    bfdev_heap_insert(&lfu_head->lfu, &lfu_node->node,
+        lfu_compare, BFDEV_NULL);
 }
 
 static void
@@ -134,7 +137,7 @@ lfu_create(const bfdev_alloc_t *alloc, unsigned long size)
 
     lfu_head = bfdev_zalloc(alloc, sizeof(*lfu_head));
     if (bfdev_unlikely(!lfu_head))
-        return NULL;
+        return BFDEV_NULL;
 
     head = &lfu_head->cache;
     bfdev_heap_init(&lfu_head->lfu);
@@ -162,7 +165,7 @@ free_element:
 
 free_head:
     bfdev_free(alloc, head);
-    return NULL;
+    return BFDEV_NULL;
 }
 
 static void

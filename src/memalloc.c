@@ -12,34 +12,34 @@
 #include <bfdev/memalloc.h>
 #include <export.h>
 
-static __bfdev_always_inline bool
+static __bfdev_always_inline bfdev_bool
 pnode_get_used(bfdev_memalloc_chunk_t *node)
 {
     return node->usize & BFDEV_BIT(0);
 }
 
-static __bfdev_always_inline size_t
+static __bfdev_always_inline bfdev_size_t
 pnode_get_size(bfdev_memalloc_chunk_t *node)
 {
     return node->usize & BFDEV_BIT_HIGH_MASK(1);
 }
 
 static __bfdev_always_inline void
-pnode_set_used(bfdev_memalloc_chunk_t *node, bool used)
+pnode_set_used(bfdev_memalloc_chunk_t *node, bfdev_bool used)
 {
     node->usize &= ~BFDEV_BIT(0);
     node->usize |= used;
 }
 
 static __bfdev_always_inline void
-pnode_set_size(bfdev_memalloc_chunk_t *node, size_t size)
+pnode_set_size(bfdev_memalloc_chunk_t *node, bfdev_size_t size)
 {
     node->usize &= ~BFDEV_BIT_HIGH_MASK(1);
     node->usize |= size & BFDEV_BIT_HIGH_MASK(1);
 }
 
 static __bfdev_always_inline void
-pnode_set(bfdev_memalloc_chunk_t *node, size_t size, bool used)
+pnode_set(bfdev_memalloc_chunk_t *node, bfdev_size_t size, bfdev_bool used)
 {
     node->usize = (size & BFDEV_BIT_HIGH_MASK(1)) | used;
 }
@@ -55,7 +55,7 @@ memalloc_check(void *block)
 #ifdef BFDEV_DEBUG_MEMALLOC
     if (bfdev_unlikely(!bfdev_list_check_empty(&node->free))) {
         bfdev_log_crit("unlegal node at %p\n", block);
-        return NULL;
+        return BFDEV_NULL;
     }
 #endif
 
@@ -63,7 +63,7 @@ memalloc_check(void *block)
 }
 
 export bfdev_memalloc_chunk_t *
-bfdev_memalloc_first_fit(bfdev_memalloc_head_t *head, size_t size)
+bfdev_memalloc_first_fit(bfdev_memalloc_head_t *head, bfdev_size_t size)
 {
     bfdev_memalloc_chunk_t *node;
 
@@ -72,16 +72,16 @@ bfdev_memalloc_first_fit(bfdev_memalloc_head_t *head, size_t size)
             return node;
     }
 
-    return NULL;
+    return BFDEV_NULL;
 }
 
 export bfdev_memalloc_chunk_t *
-bfdev_memalloc_best_fit(bfdev_memalloc_head_t *head, size_t size)
+bfdev_memalloc_best_fit(bfdev_memalloc_head_t *head, bfdev_size_t size)
 {
     bfdev_memalloc_chunk_t *best, *node;
-    size_t walk, bsize;
+    bfdev_size_t walk, bsize;
 
-    best = NULL;
+    best = BFDEV_NULL;
     bsize = BFDEV_SIZE_MAX;
 
     bfdev_list_for_each_entry(node, &head->free_list, free) {
@@ -100,12 +100,12 @@ bfdev_memalloc_best_fit(bfdev_memalloc_head_t *head, size_t size)
 }
 
 export bfdev_memalloc_chunk_t *
-bfdev_memalloc_worst_fit(bfdev_memalloc_head_t *head, size_t size)
+bfdev_memalloc_worst_fit(bfdev_memalloc_head_t *head, bfdev_size_t size)
 {
     bfdev_memalloc_chunk_t *worst, *node;
-    size_t walk, bsize;
+    bfdev_size_t walk, bsize;
 
-    worst = NULL;
+    worst = BFDEV_NULL;
     bsize = BFDEV_SIZE_MIN;
 
     bfdev_list_for_each_entry(node, &head->free_list, free) {
@@ -124,19 +124,19 @@ bfdev_memalloc_worst_fit(bfdev_memalloc_head_t *head, size_t size)
 }
 
 export void *
-bfdev_memalloc_alloc(bfdev_memalloc_head_t *head, size_t size)
+bfdev_memalloc_alloc(bfdev_memalloc_head_t *head, bfdev_size_t size)
 {
     bfdev_memalloc_chunk_t *node, *free;
-    size_t nsize, bsize, fsize;
+    bfdev_size_t nsize, bsize, fsize;
 
     bfdev_align_high_adj(size, BFDEV_MEMALLOC_ALIGN);
     if (bfdev_unlikely(size > head->avail))
-        return NULL;
+        return BFDEV_NULL;
 
     /* Get the free memory block */
     node = head->find(head, size);
     if (bfdev_unlikely(!node))
-        return NULL;
+        return BFDEV_NULL;
 
     /* Adjust available size */
     nsize = pnode_get_size(node);
@@ -150,7 +150,7 @@ bfdev_memalloc_alloc(bfdev_memalloc_head_t *head, size_t size)
     free = (void *)node->data + size;
     fsize = bsize - sizeof(*free);
 
-    pnode_set(free, fsize, false);
+    pnode_set(free, fsize, bfdev_false);
     head->avail += fsize;
 
     bfdev_list_add(&node->block, &free->block);
@@ -159,24 +159,24 @@ bfdev_memalloc_alloc(bfdev_memalloc_head_t *head, size_t size)
 
 finish:
     /* Set node used */
-    pnode_set_used(node, true);
+    pnode_set_used(node, bfdev_true);
     bfdev_list_del_init(&node->free);
     return node->data;
 }
 
 export void *
-bfdev_memalloc_realloc(bfdev_memalloc_head_t *head, void *block, size_t resize)
+bfdev_memalloc_realloc(bfdev_memalloc_head_t *head, void *block, bfdev_size_t resize)
 {
     bfdev_memalloc_chunk_t *node, *expand, *free;
-    size_t origin, exsize, nsize, bsize, fsize;
+    bfdev_size_t origin, exsize, nsize, bsize, fsize;
 
     node = memalloc_check(block);
     if (bfdev_unlikely(!node))
-        return NULL;
+        return BFDEV_NULL;
 
     bfdev_align_high_adj(resize, BFDEV_MEMALLOC_ALIGN);
     if (bfdev_unlikely(resize > head->avail))
-        return NULL;
+        return BFDEV_NULL;
 
     origin = pnode_get_size(node);
     if (origin >= resize)
@@ -192,9 +192,9 @@ bfdev_memalloc_realloc(bfdev_memalloc_head_t *head, void *block, size_t resize)
 
         newblk = bfdev_memalloc_alloc(head, resize);
         if (bfdev_unlikely(!newblk))
-            return NULL;
+            return BFDEV_NULL;
 
-        bfport_memcpy(newblk, block, origin);
+        bfdev_memcpy(newblk, block, origin);
         bfdev_memalloc_free(head, block);
 
         return newblk;
@@ -219,7 +219,7 @@ bfdev_memalloc_realloc(bfdev_memalloc_head_t *head, void *block, size_t resize)
     free = (void *)expand + exsize;
     fsize = bsize - sizeof(*free);
 
-    pnode_set(free, fsize, false);
+    pnode_set(free, fsize, bfdev_false);
     head->avail += fsize;
 
     bfdev_list_add(&node->block, &free->block);
@@ -234,14 +234,14 @@ export void
 bfdev_memalloc_free(bfdev_memalloc_head_t *head, void *block)
 {
     bfdev_memalloc_chunk_t *side, *node;
-    size_t nsize, fsize;
+    bfdev_size_t nsize, fsize;
 
     node = memalloc_check(block);
     if (bfdev_unlikely(!node))
         return;
 
     /* Set node freed */
-    pnode_set_used(node, false);
+    pnode_set_used(node, bfdev_false);
     bfdev_list_add(&head->free_list, &node->free);
 
     /* Adjust available size */
@@ -275,7 +275,7 @@ bfdev_memalloc_free(bfdev_memalloc_head_t *head, void *block)
 
 export void
 bfdev_memalloc_init(bfdev_memalloc_head_t *head, bfdev_memalloc_find_t find,
-                    void *array, size_t size)
+                    void *array, bfdev_size_t size)
 {
     bfdev_memalloc_chunk_t *node;
 
@@ -284,7 +284,7 @@ bfdev_memalloc_init(bfdev_memalloc_head_t *head, bfdev_memalloc_find_t find,
     head->find = find;
 
     node = array;
-    pnode_set(node, size - sizeof(*node), false);
+    pnode_set(node, size - sizeof(*node), bfdev_false);
     head->avail = size - sizeof(*node);
 
     bfdev_list_add(&head->block_list, &node->block);

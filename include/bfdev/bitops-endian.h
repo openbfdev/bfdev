@@ -42,30 +42,30 @@ bfdev_bit_flip_le(void *addr, unsigned int bit)
 }
 
 static inline void
-bfdev_bit_change_le(void *addr, unsigned int bit, bool val)
+bfdev_bit_change_le(void *addr, unsigned int bit, bfdev_bool val)
 {
     bfdev_bit_change(addr, bit ^ BFDEV_BITOPS_LE_SWIZZLE, val);
 }
 
-static inline bool
+static inline bfdev_bool
 bfdev_bit_test_le(const void *addr, unsigned int bit)
 {
     return bfdev_bit_test(addr, bit ^ BFDEV_BITOPS_LE_SWIZZLE);
 }
 
-static inline bool
+static inline bfdev_bool
 bfdev_bit_test_clr_le(void *addr, unsigned int bit)
 {
     return bfdev_bit_test_clr(addr, bit ^ BFDEV_BITOPS_LE_SWIZZLE);
 }
 
-static inline bool
+static inline bfdev_bool
 bfdev_bit_test_set_le(void *addr, unsigned int bit)
 {
     return bfdev_bit_test_set(addr, bit ^ BFDEV_BITOPS_LE_SWIZZLE);
 }
 
-static inline bool
+static inline bfdev_bool
 bfdev_bit_test_flip_le(void *addr, unsigned int bit)
 {
     return bfdev_bit_test_flip(addr, bit ^ BFDEV_BITOPS_LE_SWIZZLE);
@@ -90,37 +90,37 @@ bfdev_bit_atomic_flip_le(void *addr, unsigned int bit)
 }
 
 static inline void
-bfdev_bit_atomic_change_le(void *addr, unsigned int bit, bool val)
+bfdev_bit_atomic_change_le(void *addr, unsigned int bit, bfdev_bool val)
 {
     bfdev_bit_atomic_change(addr, bit ^ BFDEV_BITOPS_LE_SWIZZLE, val);
 }
 
-static inline bool
+static inline bfdev_bool
 bfdev_bit_atomic_test_le(const void *addr, unsigned int bit)
 {
     return bfdev_bit_atomic_test(addr, bit ^ BFDEV_BITOPS_LE_SWIZZLE);
 }
 
-static inline bool
+static inline bfdev_bool
 bfdev_bit_atomic_test_clr_le(void *addr, unsigned int bit)
 {
     return bfdev_bit_atomic_test_clr(addr, bit ^ BFDEV_BITOPS_LE_SWIZZLE);
 }
 
-static inline bool
+static inline bfdev_bool
 bfdev_bit_atomic_test_set_le(void *addr, unsigned int bit)
 {
     return bfdev_bit_atomic_test_set(addr, bit ^ BFDEV_BITOPS_LE_SWIZZLE);
 }
 
-static inline bool
+static inline bfdev_bool
 bfdev_bit_atomic_test_flip_le(void *addr, unsigned int bit)
 {
     return bfdev_bit_atomic_test_flip(addr, bit ^ BFDEV_BITOPS_LE_SWIZZLE);
 }
 
-static inline bool
-bfdev_bit_atomic_test_change_le(void *addr, unsigned int bit, bool val)
+static inline bfdev_bool
+bfdev_bit_atomic_test_change_le(void *addr, unsigned int bit, bfdev_bool val)
 {
     return bfdev_bit_atomic_test_change(addr, bit ^ BFDEV_BITOPS_LE_SWIZZLE, val);
 }
@@ -144,37 +144,37 @@ bfdev_bit_flip_be(void *addr, unsigned int bit)
 }
 
 static inline void
-bfdev_bit_change_be(void *addr, unsigned int bit, bool val)
+bfdev_bit_change_be(void *addr, unsigned int bit, bfdev_bool val)
 {
     bfdev_bit_change(addr, bit ^ BFDEV_BITOPS_BE_SWIZZLE, val);
 }
 
-static inline bool
+static inline bfdev_bool
 bfdev_bit_test_be(const void *addr, unsigned int bit)
 {
     return bfdev_bit_test(addr, bit ^ BFDEV_BITOPS_BE_SWIZZLE);
 }
 
-static inline bool
+static inline bfdev_bool
 bfdev_bit_test_clr_be(void *addr, unsigned int bit)
 {
     return bfdev_bit_test_clr(addr, bit ^ BFDEV_BITOPS_BE_SWIZZLE);
 }
 
-static inline bool
+static inline bfdev_bool
 bfdev_bit_test_set_be(void *addr, unsigned int bit)
 {
     return bfdev_bit_test_set(addr, bit ^ BFDEV_BITOPS_BE_SWIZZLE);
 }
 
-static inline bool
+static inline bfdev_bool
 bfdev_bit_test_flip_be(void *addr, unsigned int bit)
 {
     return bfdev_bit_test_flip(addr, bit ^ BFDEV_BITOPS_BE_SWIZZLE);
 }
 
-static inline bool
-bfdev_bit_test_change_be(void *addr, unsigned int bit, bool val)
+static inline bfdev_bool
+bfdev_bit_test_change_be(void *addr, unsigned int bit, bfdev_bool val)
 {
     return bfdev_bit_test_change(addr, bit ^ BFDEV_BITOPS_BE_SWIZZLE, val);
 }
@@ -198,37 +198,37 @@ bfdev_bit_atomic_flip_be(void *addr, unsigned int bit)
 }
 
 static inline void
-bfdev_bit_atomic_change_be(void *addr, unsigned int bit, bool val)
+bfdev_bit_atomic_change_be(void *addr, unsigned int bit, bfdev_bool val)
 {
     bfdev_bit_atomic_change(addr, bit ^ BFDEV_BITOPS_BE_SWIZZLE, val);
 }
 
-static inline bool
+static inline bfdev_bool
 bfdev_bit_atomic_test_be(const void *addr, unsigned int bit)
 {
     return bfdev_bit_atomic_test(addr, bit ^ BFDEV_BITOPS_BE_SWIZZLE);
 }
 
-static inline bool
+static inline bfdev_bool
 bfdev_bit_atomic_test_clr_be(void *addr, unsigned int bit)
 {
     return bfdev_bit_atomic_test_clr(addr, bit ^ BFDEV_BITOPS_BE_SWIZZLE);
 }
 
-static inline bool
+static inline bfdev_bool
 bfdev_bit_atomic_test_set_be(void *addr, unsigned int bit)
 {
     return bfdev_bit_atomic_test_set(addr, bit ^ BFDEV_BITOPS_BE_SWIZZLE);
 }
 
-static inline bool
+static inline bfdev_bool
 bfdev_bit_atomic_test_flip_be(void *addr, unsigned int bit)
 {
     return bfdev_bit_atomic_test_flip(addr, bit ^ BFDEV_BITOPS_BE_SWIZZLE);
 }
 
-static inline bool
-bfdev_bit_atomic_test_change_be(void *addr, unsigned int bit, bool val)
+static inline bfdev_bool
+bfdev_bit_atomic_test_change_be(void *addr, unsigned int bit, bfdev_bool val)
 {
     return bfdev_bit_atomic_test_change(addr, bit ^ BFDEV_BITOPS_BE_SWIZZLE, val);
 }

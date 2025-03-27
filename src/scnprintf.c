@@ -5,10 +5,12 @@
 
 #include <base.h>
 #include <bfdev/scnprintf.h>
+#include <port/stdio.h>
 #include <export.h>
 
 export int
-bfdev_vscnprintf(char *buf, size_t size, const char *fmt, va_list args)
+bfdev_vscnprintf(char *buf, bfdev_size_t size,
+                 const char *fmt, bfdev_va_list args)
 {
     int len;
 
@@ -23,14 +25,14 @@ bfdev_vscnprintf(char *buf, size_t size, const char *fmt, va_list args)
 }
 
 export int
-bfdev_scnprintf(char *buf, size_t size, const char *fmt, ...)
+bfdev_scnprintf(char *buf, bfdev_size_t size, const char *fmt, ...)
 {
-    va_list args;
+    bfdev_va_list args;
     int len;
 
-    va_start(args, fmt);
+    bfdev_va_start(args, fmt);
     len = bfdev_vscnprintf(buf, size, fmt, args);
-    va_end(args);
+    bfdev_va_end(args);
 
     return len;
 }

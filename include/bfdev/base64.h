@@ -17,8 +17,8 @@ BFDEV_BEGIN_DECLS
  * bfdev_base64_encode_length() - base64 encode buffer length.
  * @size: length to encode.
  */
-static inline size_t
-bfdev_base64_encode_length(size_t size)
+static inline bfdev_size_t
+bfdev_base64_encode_length(bfdev_size_t size)
 {
     return BFDEV_DIV_ROUND_UP(size, 3) * 4;
 }
@@ -27,8 +27,8 @@ bfdev_base64_encode_length(size_t size)
  * bfdev_base64_decode_length() - base64 decoder buffer length.
  * @size: length to decode.
  */
-static inline size_t
-bfdev_base64_decode_length(size_t size)
+static inline bfdev_size_t
+bfdev_base64_decode_length(bfdev_size_t size)
 {
     return BFDEV_DIV_ROUND_UP(size, 4) * 3;
 }
@@ -40,7 +40,7 @@ bfdev_base64_decode_length(size_t size)
  * @size: length of @data.
  */
 extern void
-bfdev_base64_encode(void *buff, const void *data, size_t size);
+bfdev_base64_encode(void *buff, const void *data, bfdev_size_t size);
 
 /**
  * bfdev_base64_decode() - base64 decoder.
@@ -49,7 +49,7 @@ bfdev_base64_encode(void *buff, const void *data, size_t size);
  * @size: length of @data.
  */
 extern int
-bfdev_base64_decode(void *buff, const void *data, size_t size);
+bfdev_base64_decode(void *buff, const void *data, bfdev_size_t size);
 
 BFDEV_END_DECLS
 

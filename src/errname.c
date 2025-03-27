@@ -136,7 +136,7 @@ errname_search(const void *key, void *pdata)
     int value;
 
     entry = key;
-    value = (intptr_t)pdata;
+    value = (bfdev_intptr_t)pdata;
 
     if (entry->errnum == value)
         return BFDEV_EQ;
@@ -154,7 +154,7 @@ bfdev_errname_find(int error)
 
     entry = bfdev_bsearch(
         bfdev_errname_table, BFDEV_ARRAY_SIZE(bfdev_errname_table) - 1,
-        sizeof(*entry), errname_search, (void *)(intptr_t)(error)
+        sizeof(*entry), errname_search, (void *)(bfdev_intptr_t)(error)
     );
 
     return entry;
@@ -168,7 +168,7 @@ bfdev_errname(int error, const char **infop)
 
     entry = bfdev_errname_find(error);
     if (bfdev_unlikely(!entry))
-        return NULL;
+        return BFDEV_NULL;
 
     if (infop)
         *infop = entry->info;

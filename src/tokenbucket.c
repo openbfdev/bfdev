@@ -8,13 +8,13 @@
 #include <bfdev/time.h>
 #include <export.h>
 
-export bool
+export bfdev_bool
 bfdev_tokenbucket(bfdev_tokenbucket_t *limit, bfdev_time_t current)
 {
     unsigned int generate;
 
     if (!limit->interval)
-        return true;
+        return bfdev_true;
 
     if (bfdev_unlikely(!limit->last)) {
         limit->current = limit->capacity;
@@ -28,11 +28,11 @@ bfdev_tokenbucket(bfdev_tokenbucket_t *limit, bfdev_time_t current)
 
     if (bfdev_unlikely(!limit->current)) {
         limit->missed++;
-        return false;
+        return bfdev_false;
     }
 
     limit->current--;
     limit->passed++;
 
-    return true;
+    return bfdev_true;
 }

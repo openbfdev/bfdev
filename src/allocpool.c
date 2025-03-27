@@ -8,20 +8,21 @@
 #include <export.h>
 
 export __bfdev_malloc void *
-bfdev_allocpool_alloc(bfdev_allocpool_t *pool, size_t size, size_t align)
+bfdev_allocpool_alloc(bfdev_allocpool_t *pool, bfdev_size_t size,
+                      bfdev_size_t align)
 {
-    uintptr_t offset;
+    bfdev_uintptr_t offset;
     void *retval;
 
     if (bfdev_unlikely(!size))
-        return NULL;
+        return BFDEV_NULL;
 
     align = bfdev_align_high(align ?: 1, sizeof(retval));
     retval = bfdev_align_ptr_high(pool->block + pool->last, align);
     offset = (retval - pool->block) + size;
 
     if (bfdev_unlikely(offset > pool->size))
-        return NULL;
+        return BFDEV_NULL;
 
     pool->last = offset;
     pool->count++;

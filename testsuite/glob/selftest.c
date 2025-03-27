@@ -6,6 +6,8 @@
 #define MODULE_NAME "bitwalk-selftest"
 #define bfdev_log_fmt(fmt) MODULE_NAME ":" fmt
 
+#include <stddef.h>
+#include <stdbool.h>
 #include <bfdev/glob.h>
 #include <bfdev/macro.h>
 #include <bfdev/log.h>

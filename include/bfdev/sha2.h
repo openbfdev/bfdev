@@ -41,13 +41,13 @@ BFDEV_BEGIN_DECLS
 typedef struct bfdev_sha2_ctx bfdev_sha2_ctx_t;
 
 struct bfdev_sha2_ctx {
-    uint32_t state[BFDEV_SHA256_DIGEST_WORDS];
-    uint8_t buffer[BFDEV_SHA2_BLOCK_SIZE];
+    bfdev_u32 state[BFDEV_SHA256_DIGEST_WORDS];
+    bfdev_u8 buffer[BFDEV_SHA2_BLOCK_SIZE];
     unsigned long count;
 };
 
 extern void
-bfdev_sha2_update(bfdev_sha2_ctx_t *ctx, const void *data, size_t size);
+bfdev_sha2_update(bfdev_sha2_ctx_t *ctx, const void *data, bfdev_size_t size);
 
 extern void
 bfdev_sha224_finish(bfdev_sha2_ctx_t *ctx, void *hash);

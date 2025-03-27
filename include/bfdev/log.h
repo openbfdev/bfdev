@@ -50,7 +50,7 @@ struct bfdev_log {
 struct bfdev_log_message {
     unsigned int level;
     char *buff;
-    size_t length;
+    bfdev_size_t length;
 };
 
 #define BFDEV_LOG_STATIC(HEAD, DEFAULT, RECORD, FLAGS, WRITE, PDATA) { \
@@ -90,7 +90,7 @@ extern unsigned int
 bfdev_log_level(const char *str, const char **endptr);
 
 extern __bfdev_printf(2, 0) int
-bfdev_vlog_core(bfdev_log_t *log, const char *fmt, va_list args);
+bfdev_vlog_core(bfdev_log_t *log, const char *fmt, bfdev_va_list args);
 
 extern __bfdev_printf(2, 3) int
 bfdev_log_core(bfdev_log_t *log, const char *fmt, ...);
@@ -113,7 +113,7 @@ bfdev_log_core(bfdev_log_t *log, const char *fmt, ...);
 #endif
 
 #ifndef bfdev_log_conf
-# define bfdev_log_conf NULL
+# define bfdev_log_conf BFDEV_NULL
 #endif
 
 #define bfdev_vlog(fmt, args) \

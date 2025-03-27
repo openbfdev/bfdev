@@ -8,13 +8,19 @@
 
 #include <bfdev/config.h>
 
-#if defined(__FreeBSD__) && defined(_KERNEL)
-# include <sys/stddef.h>
-#else
-# include <stddef.h>
+BFDEV_BEGIN_DECLS
+
+#ifndef BFDEV_NULL
+# define BFDEV_NULL ((void *)0)
 #endif
 
-BFDEV_BEGIN_DECLS
+#if __GNUC__ > 3
+#define bfdev_offsetof(type, member) \
+    __builtin_offsetof(type, member)
+#else
+#define bfdev_offsetof(type, member) \
+    ((unsigned long)((char *)&(((type *)0)->member) - (char *)0))
+#endif
 
 BFDEV_END_DECLS
 

@@ -11,23 +11,23 @@
 
 BFDEV_BEGIN_DECLS
 
-extern bool
+extern bfdev_bool
 bfdev_bitmap_comp_equal(const unsigned long *src1, const unsigned long *src2,
                         unsigned int bits);
 
-extern bool
+extern bfdev_bool
 bfdev_bitmap_comp_or_equal(const unsigned long *src1, const unsigned long *src2,
                            const unsigned long *src3, unsigned int bits);
 
-extern bool
+extern bfdev_bool
 bfdev_bitmap_comp_intersects(const unsigned long *src1, const unsigned long *src2,
                              unsigned int bits);
 
-extern bool
+extern bfdev_bool
 bfdev_bitmap_comp_and(unsigned long *dest, const unsigned long *src1,
                       const unsigned long *src2, unsigned int bits);
 
-extern bool
+extern bfdev_bool
 bfdev_bitmap_comp_andnot(unsigned long *dest, const unsigned long *src1,
                          const unsigned long *src2, unsigned int bits);
 

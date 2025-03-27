@@ -7,15 +7,15 @@
 #define _BFDEV_BUG_H_
 
 #include <bfdev/config.h>
-#include <bfdev/stdlib.h>
 #include <bfdev/log.h>
+#include <bfdev/stdlib.h>
 
 BFDEV_BEGIN_DECLS
 
 #ifndef BFDEV_BUG_MSG
 # define BFDEV_BUG_MSG(msg...) do {     \
     bfdev_log_alert(msg);               \
-    abort();                            \
+    bfdev_abort();                      \
 } while (0)
 #endif
 
@@ -43,7 +43,7 @@ BFDEV_WARN_MSG(                                         \
 
 #ifndef BFDEV_BUG_ON
 # define BFDEV_BUG_ON(condition) ({     \
-    bool __cond = !!(condition);        \
+    bfdev_bool __cond = !!(condition);        \
     if (bfdev_unlikely(__cond))         \
         BFDEV_BUG();                    \
     bfdev_unlikely(__cond);             \
@@ -52,7 +52,7 @@ BFDEV_WARN_MSG(                                         \
 
 #ifndef BFDEV_WARN_ON
 # define BFDEV_WARN_ON(condition) ({    \
-    bool __cond = !!(condition);        \
+    bfdev_bool __cond = !!(condition);        \
     if (bfdev_unlikely(__cond))         \
         BFDEV_WARN();                   \
     bfdev_unlikely(__cond);             \

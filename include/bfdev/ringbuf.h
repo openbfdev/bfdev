@@ -85,7 +85,7 @@ struct bfdev_ringbuf {
 #define BFDEV_RINGBUF_DYNAMIC_INIT(ptr)                     \
 (typeof(*(ptr))) {                                          \
     .ringbuf = {                                            \
-        .in = 0, .out = 0, .mask = 0, .data = NULL,         \
+        .in = 0, .out = 0, .mask = 0, .data = BFDEV_NULL,   \
         .esize = sizeof(*(ptr)->buff),                      \
     },                                                      \
 }
@@ -452,7 +452,7 @@ bfdev_ringbuf_in_record(bfdev_ringbuf_t *ringbuf, const void *buff, unsigned lon
 
 extern int
 bfdev_ringbuf_dynamic_alloc(bfdev_ringbuf_t *ringbuf, const bfdev_alloc_t *alloc,
-                            size_t esize, size_t size);
+                            bfdev_size_t esize, bfdev_size_t size);
 
 extern void
 bfdev_ringbuf_dynamic_free(bfdev_ringbuf_t *ringbuf);

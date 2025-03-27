@@ -18,27 +18,27 @@ cache_algorithm_find(const char *name)
     bfdev_cache_algo_t *walk;
 
     bfdev_list_for_each_entry(walk, &cache_algorithms, list) {
-        if (!bfport_strcmp(walk->name, name))
+        if (!bfdev_strcmp(walk->name, name))
             return walk;
     }
 
-    return NULL;
+    return BFDEV_NULL;
 }
 
-static bool
+static bfdev_bool
 cache_algorithm_exist(bfdev_cache_algo_t *algo)
 {
     bfdev_cache_algo_t *walk;
 
     bfdev_list_for_each_entry(walk, &cache_algorithms, list) {
         if (walk == algo)
-            return true;
+            return bfdev_true;
     }
 
-    return false;
+    return bfdev_false;
 }
 
-static __bfdev_always_inline bool
+static __bfdev_always_inline bfdev_bool
 cache_starving(bfdev_cache_head_t *head)
 {
     return bfdev_list_check_empty(&head->freed) && head->algo->starving(head);
@@ -56,7 +56,7 @@ cache_hash(bfdev_cache_head_t *head, const void *tag)
     return hash;
 }
 
-static __bfdev_always_inline bool
+static __bfdev_always_inline bfdev_bool
 cache_find(bfdev_cache_head_t *head, bfdev_cache_node_t *node, const char *tag)
 {
     const bfdev_cache_ops_t *ops;
@@ -70,7 +70,7 @@ cache_find(bfdev_cache_head_t *head, bfdev_cache_node_t *node, const char *tag)
 
 /* Find in changing, using or algos */
 static bfdev_cache_node_t *
-cache_lookup(bfdev_cache_head_t *head, const char *tag, bool change)
+cache_lookup(bfdev_cache_head_t *head, const char *tag, bfdev_bool change)
 {
     bfdev_cache_node_t *walk;
     unsigned long hash, index;
@@ -88,7 +88,7 @@ cache_lookup(bfdev_cache_head_t *head, const char *tag, bool change)
         break;
     }
 
-    return NULL;
+    return BFDEV_NULL;
 }
 
 /* Insert to from */
@@ -135,7 +135,7 @@ cache_obtain(bfdev_cache_head_t *head, const char *tag)
 export bfdev_cache_node_t *
 bfdev_cache_find(bfdev_cache_head_t *head, const void *tag)
 {
-    return cache_lookup(head, tag, false);
+    return cache_lookup(head, tag, bfdev_false);
 }
 
 export bfdev_cache_node_t *
@@ -146,16 +146,16 @@ bfdev_cache_obtain(bfdev_cache_head_t *head, const void *tag, unsigned long flag
 
     if (bfdev_unlikely(bfdev_cache_starving_test(head))) {
         head->starve++;
-        return NULL;
+        return BFDEV_NULL;
     }
 
-    node = cache_lookup(head, tag, true);
+    node = cache_lookup(head, tag, bfdev_true);
     if (bfdev_likely(node)) {
         head->hits++;
 
         if (node->status == BFDEV_CACHE_PENDING) {
             if (!bfdev_cache_uncommitted_test(&flags))
-                return NULL;
+                return BFDEV_NULL;
 
             node->refcnt++;
             return node;
@@ -179,16 +179,16 @@ bfdev_cache_obtain(bfdev_cache_head_t *head, const void *tag, unsigned long flag
 
     head->misses++;
     if (!bfdev_cache_change_test(&flags))
-        return NULL;
+        return BFDEV_NULL;
 
     bfdev_cache_dirty_set(head);
     if (bfdev_unlikely(cache_starving(head))) {
         bfdev_cache_starving_set(head);
-        return NULL;
+        return BFDEV_NULL;
     }
 
     if (bfdev_unlikely(head->pending >= head->maxpend))
-        return NULL;
+        return BFDEV_NULL;
 
     node = cache_obtain(head, tag);
     BFDEV_BUG_ON(!node);
@@ -292,7 +292,7 @@ bfdev_cache_reset(bfdev_cache_head_t *head)
     bfdev_list_head_init(&head->changing);
 
     head->algo->reset(head);
-    bfport_memset(head->taghash, 0, sizeof(*head->taghash) * head->size);
+    bfdev_memset(head->taghash, 0, sizeof(*head->taghash) * head->size);
 
     for (count = 0; count < head->size; ++count) {
         node = head->nodes[count];
@@ -310,19 +310,19 @@ bfdev_cache_create(const char *name, const bfdev_alloc_t *alloc,
     unsigned long count;
 
     if (!ops->hash || !ops->find)
-        return NULL;
+        return BFDEV_NULL;
 
     size = bfdev_pow2_roundup(size);
     if (bfdev_unlikely(size < 2))
-        return NULL;
+        return BFDEV_NULL;
 
     algo = cache_algorithm_find(name);
     if (bfdev_unlikely(!algo))
-        return NULL;
+        return BFDEV_NULL;
 
     head = algo->create(alloc, size);
     if (bfdev_unlikely(!head))
-        return NULL;
+        return BFDEV_NULL;
 
     head->algo = algo;
     head->alloc = alloc;
@@ -335,7 +335,7 @@ bfdev_cache_create(const char *name, const bfdev_alloc_t *alloc,
     head->taghash = bfdev_zalloc_array(alloc, size, sizeof(*head->taghash));
     if (bfdev_unlikely(!head->taghash)) {
         algo->destroy(head);
-        return NULL;
+        return BFDEV_NULL;
     }
 
     bfdev_list_head_init(&head->using);

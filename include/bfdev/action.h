@@ -64,7 +64,7 @@ bfdev_action_update(bfdev_action_t *action, const void *data)
 static inline void
 bfdev_action_clear(bfdev_action_t *action)
 {
-    action->func = NULL;
+    action->func = BFDEV_NULL;
 }
 
 /**

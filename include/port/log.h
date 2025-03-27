@@ -8,24 +8,9 @@
 
 #include <base.h>
 #include <bfdev/log.h>
+#include <port/stdio.h>
 
-#ifndef __INSIDE_LOG__
-# error "please don't include this file directly"
-#endif
-
-static inline int
-generic_log_write(bfdev_log_message_t *msg)
-{
-    bfport_file *file;
-
-    if (msg->level > BFDEV_LEVEL_WARNING)
-        file = bfport_stdout;
-    else {
-        file = bfport_stderr;
-        bfport_fflush(bfport_stdout);
-    }
-
-    return bfport_fwrite(msg->buff, msg->length, 1, file);
-}
+extern int
+bfport_log_write(bfdev_log_message_t *msg);
 
 #endif /* _LOCAL_PORT_LOG_H_ */

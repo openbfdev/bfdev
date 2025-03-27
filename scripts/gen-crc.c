@@ -18,6 +18,8 @@
 
 #define NAME_STRING __stringify(GENCRC_NAME)
 #define TYPE_STRING __stringify(GENCRC_TYPE)
+#define TYPE_NAME_STRING __stringify(GENCRC_TYPE_NAME)
+
 #define BITS_STRING __stringify(GENCRC_BITS)
 #define WIDE_STRING __stringify(GENCRC_WIDE)
 
@@ -86,11 +88,12 @@ table_dump(unsigned int rows, const char *trans,
                 printf("\n\t\t");
 
             if (trans) {
-                printf("(__bfdev_force " TYPE_STRING ")(%s((" TYPE_STRING ")0x%"
-                       WIDE_STRING "." WIDE_STRING "llxULL)), ", trans,
+                printf("(__bfdev_force " TYPE_NAME_STRING ")(%s(("
+                       TYPE_NAME_STRING ")0x%" WIDE_STRING "."
+                       WIDE_STRING "llxULL)), ", trans,
                        (unsigned long long)table[index][count]);
             } else {
-                printf("(" TYPE_STRING ")0x%" WIDE_STRING
+                printf("(" TYPE_NAME_STRING ")0x%" WIDE_STRING
                        "." WIDE_STRING "llxULL, ",
                        (unsigned long long)table[index][count]);
             }
@@ -144,7 +147,7 @@ main(int argc, char *argv[])
         " * byteorder = %s-endian\n"
         " */\n"
         "\n"
-        "static const " TYPE_STRING "\n"
+        "static const " TYPE_NAME_STRING "\n"
         "%s[%d][%d] = {\n",
         name, (unsigned long long)poly,
         GENCRC_BELE ? "little" : "big",

@@ -9,11 +9,11 @@
 #include <bfdev/overflow.h>
 #include <export.h>
 
-static inline size_t
+static inline bfdev_size_t
 array_reqsize(bfdev_array_t *array, unsigned long count)
 {
     unsigned long request;
-    size_t size;
+    bfdev_size_t size;
 
     request = bfdev_max(BFDEV_ARRAY_MSIZE, count);
     size = bfdev_pow2_roundup(request * array->cells);
@@ -22,7 +22,7 @@ array_reqsize(bfdev_array_t *array, unsigned long count)
 }
 
 static inline int
-array_resize(bfdev_array_t *array, size_t size)
+array_resize(bfdev_array_t *array, bfdev_size_t size)
 {
     const bfdev_alloc_t *alloc;
     void *data;
@@ -41,7 +41,7 @@ array_resize(bfdev_array_t *array, size_t size)
 static inline int
 array_apply(bfdev_array_t *array, unsigned long count)
 {
-    size_t reqsize;
+    bfdev_size_t reqsize;
 
     if (count <= array->capacity)
         return -BFDEV_ENOERR;
@@ -56,12 +56,12 @@ static inline void *
 array_peek(const bfdev_array_t *array, unsigned long num, unsigned long *idxp)
 {
     unsigned long index;
-    uintptr_t offset;
-    bool overflow;
+    bfdev_uintptr_t offset;
+    bfdev_bool overflow;
 
     overflow = bfdev_overflow_check_sub(array->index, num, &index);
     if (bfdev_unlikely(overflow))
-        return NULL;
+        return BFDEV_NULL;
 
     offset = bfdev_array_offset(array, index);
     if (idxp)
@@ -74,17 +74,17 @@ export void *
 bfdev_array_push(bfdev_array_t *array, unsigned long num)
 {
     unsigned long index, count;
-    uintptr_t offset;
-    bool overflow;
+    bfdev_uintptr_t offset;
+    bfdev_bool overflow;
     int retval;
 
     overflow = bfdev_overflow_check_add(array->index, num, &count);
     if (bfdev_unlikely(overflow))
-        return NULL;
+        return BFDEV_NULL;
 
     retval = array_apply(array, count);
     if (bfdev_unlikely(retval))
-        return NULL;
+        return BFDEV_NULL;
 
     index = array->index;
     array->index = count;
@@ -102,13 +102,13 @@ bfdev_array_pop(bfdev_array_t *array, unsigned long num)
 export void *
 bfdev_array_peek(const bfdev_array_t *array, unsigned long num)
 {
-    return array_peek(array, num, NULL);
+    return array_peek(array, num, BFDEV_NULL);
 }
 
 export int
 bfdev_array_append(bfdev_array_t *array, const void *data, unsigned long num)
 {
-    size_t size;
+    bfdev_size_t size;
     void *buff;
 
     buff = bfdev_array_push(array, num);
@@ -116,7 +116,7 @@ bfdev_array_append(bfdev_array_t *array, const void *data, unsigned long num)
         return -BFDEV_ENOMEM;
 
     size = bfdev_array_offset(array, num);
-    bfport_memcpy(buff, data, size);
+    bfdev_memcpy(buff, data, size);
 
     return -BFDEV_ENOERR;
 }
@@ -139,7 +139,7 @@ export int
 bfdev_array_reserve(bfdev_array_t *array, unsigned long num)
 {
     unsigned long count;
-    bool overflow;
+    bfdev_bool overflow;
 
     overflow = bfdev_overflow_check_add(array->index, num, &count);
     if (bfdev_unlikely(overflow))
@@ -158,5 +158,5 @@ bfdev_array_release(bfdev_array_t *array)
 
     alloc = array->alloc;
     bfdev_free(alloc, array->data);
-    array->data = NULL;
+    array->data = BFDEV_NULL;
 }

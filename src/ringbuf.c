@@ -23,8 +23,8 @@
     }                                                           \
                                                                 \
     llen = bfdev_min(len, size - offset);                       \
-    bfport_memcpy(copy1, copy2, llen);                          \
-    bfport_memcpy(fold1, fold2, len - llen);                    \
+    bfdev_memcpy(copy1, copy2, llen);                           \
+    bfdev_memcpy(fold1, fold2, len - llen);                     \
 } while (0)
 
 static __bfdev_always_inline void
@@ -51,7 +51,7 @@ static __bfdev_always_inline unsigned long
 ringbuf_record_peek(bfdev_ringbuf_t *ringbuf, unsigned long recsize)
 {
     unsigned long mask, offset, length;
-    uint8_t *data;
+    bfdev_u8 *data;
 
     mask = ringbuf->mask;
     offset = ringbuf->out;
@@ -74,10 +74,11 @@ ringbuf_record_peek(bfdev_ringbuf_t *ringbuf, unsigned long recsize)
 }
 
 static __bfdev_always_inline void
-ringbuf_record_poke(bfdev_ringbuf_t *ringbuf, unsigned long len, unsigned long recsize)
+ringbuf_record_poke(bfdev_ringbuf_t *ringbuf, unsigned long len,
+                    unsigned long recsize)
 {
     unsigned long mask, offset;
-    uint8_t *data;
+    bfdev_u8 *data;
 
     mask = ringbuf->mask;
     offset = ringbuf->out;
@@ -90,13 +91,13 @@ ringbuf_record_poke(bfdev_ringbuf_t *ringbuf, unsigned long len, unsigned long r
     }
 
     while (recsize--) {
-        data[offset & mask] = (uint8_t)len;
+        data[offset & mask] = (bfdev_u8)len;
         offset += ringbuf->esize;
         len >>= BFDEV_BITS_PER_U8;
     }
 }
 
-static inline bool
+static inline bfdev_bool
 ringbuf_empty(bfdev_ringbuf_t *ringbuf)
 {
     return ringbuf->in == ringbuf->out;
@@ -224,7 +225,7 @@ bfdev_ringbuf_in_record(bfdev_ringbuf_t *ringbuf, const void *buff, unsigned lon
 
 export int
 bfdev_ringbuf_dynamic_alloc(bfdev_ringbuf_t *ringbuf, const bfdev_alloc_t *alloc,
-                            size_t esize, size_t size)
+                            bfdev_size_t esize, bfdev_size_t size)
 {
     size = bfdev_pow2_roundup(size);
     if (size < 2)
@@ -255,5 +256,5 @@ bfdev_ringbuf_dynamic_free(bfdev_ringbuf_t *ringbuf)
 
     alloc = ringbuf->alloc;
     bfdev_free(alloc, ringbuf->data);
-    ringbuf->data = NULL;
+    ringbuf->data = BFDEV_NULL;
 }

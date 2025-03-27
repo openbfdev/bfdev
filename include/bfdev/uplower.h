@@ -16,7 +16,7 @@ BFDEV_BEGIN_DECLS
  * @val: the value we're accessing.
  */
 #define bfdev_upper_16_bits(val) ( \
-    (uint16_t)((val) >> 16) \
+    (bfdev_u16)((val) >> 16) \
 )
 
 /**
@@ -24,7 +24,7 @@ BFDEV_BEGIN_DECLS
  * @val: the value we're accessing.
  */
 #define bfdev_lower_16_bits(val) ( \
-    (uint16_t)((val) & 0xffff) \
+    (bfdev_u16)((val) & 0xffff) \
 )
 
 /**
@@ -32,7 +32,7 @@ BFDEV_BEGIN_DECLS
  * @val: the value we're accessing.
  */
 #define bfdev_upper_32_bits(val) ( \
-    (uint32_t)(((val) >> 16) >> 16) \
+    (bfdev_u32)(((val) >> 16) >> 16) \
 )
 
 /**
@@ -40,7 +40,7 @@ BFDEV_BEGIN_DECLS
  * @val: the value we're accessing.
  */
 #define bfdev_lower_32_bits(val) ( \
-    (uint32_t)((val) & 0xffffffff) \
+    (bfdev_u32)((val) & 0xffffffff) \
 )
 
 BFDEV_END_DECLS

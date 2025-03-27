@@ -12,13 +12,13 @@
 static inline void
 md5_transform_block(bfdev_md5_ctx_t *ctx)
 {
-	bfdev_le32_to_cpu_array(ctx->block, (bfdev_le32 *)ctx->block,
+    bfdev_le32_to_cpu_array(ctx->block, (bfdev_le32 *)ctx->block,
                             sizeof(ctx->block) / BFDEV_BYTES_PER_U32);
-	bfdev_md5_transform(ctx->digest, ctx->block);
+    bfdev_md5_transform(ctx->digest, ctx->block);
 }
 
 export void
-bfdev_md5_update(bfdev_md5_ctx_t *ctx, const char *data, size_t size)
+bfdev_md5_update(bfdev_md5_ctx_t *ctx, const char *data, bfdev_size_t size)
 {
     bfdev_md5_base_update(ctx, data, size, md5_transform_block);
 }

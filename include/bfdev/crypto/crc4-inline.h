@@ -14,7 +14,7 @@
 
 BFDEV_BEGIN_DECLS
 
-static const uint8_t
+static const bfdev_u8
 bfdev_crc4_table[16] = {
     0x00, 0x07, 0x0e, 0x09,
     0x0b, 0x0c, 0x05, 0x02,
@@ -22,8 +22,8 @@ bfdev_crc4_table[16] = {
     0x0a, 0x0d, 0x04, 0x03,
 };
 
-static inline uint8_t
-bfdev_crc4_byte(uint8_t crc, const uint8_t data)
+static inline bfdev_u8
+bfdev_crc4_byte(bfdev_u8 crc, const bfdev_u8 data)
 {
     unsigned int index;
 
@@ -36,11 +36,11 @@ bfdev_crc4_byte(uint8_t crc, const uint8_t data)
     return crc;
 }
 
-static inline uint8_t
-bfdev_crc4_inline(const uint8_t *src, size_t bits, uint8_t crc)
+static inline bfdev_u8
+bfdev_crc4_inline(const bfdev_u8 *src, bfdev_size_t bits, bfdev_u8 crc)
 {
     unsigned int count;
-    uint8_t value;
+    bfdev_u8 value;
 
     for (; bits >= 32; bits -= 32) {
         crc = bfdev_crc4_byte(crc, *src++);

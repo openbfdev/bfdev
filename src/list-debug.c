@@ -11,7 +11,7 @@
 #include <bfdev/list.h>
 #include <export.h>
 
-export bool
+export bfdev_bool
 bfdev_list_check_add(bfdev_list_head_t *prev, bfdev_list_head_t *next,
                      bfdev_list_head_t *newn)
 {
@@ -21,7 +21,7 @@ bfdev_list_check_add(bfdev_list_head_t *prev, bfdev_list_head_t *next,
             " should be next (%p), but was (%p)\n",
             prev, next, prev->next
         );
-        return false;
+        return bfdev_false;
     }
 
     if (bfdev_unlikely(next->prev != prev)) {
@@ -30,7 +30,7 @@ bfdev_list_check_add(bfdev_list_head_t *prev, bfdev_list_head_t *next,
             " should be prev (%p), but was (%p)\n",
             next, prev, next->prev
         );
-        return false;
+        return bfdev_false;
     }
 
     if (bfdev_unlikely(newn == prev || newn == next)) {
@@ -39,13 +39,13 @@ bfdev_list_check_add(bfdev_list_head_t *prev, bfdev_list_head_t *next,
             " newn=(%p), prev=(%p), next=(%p)\n",
             newn, prev, next
         );
-        return false;
+        return bfdev_false;
     }
 
-    return true;
+    return bfdev_true;
 }
 
-export bool
+export bfdev_bool
 bfdev_list_check_del(bfdev_list_head_t *node)
 {
     if (bfdev_unlikely(node->next == BFDEV_POISON_LIST1)) {
@@ -54,7 +54,7 @@ bfdev_list_check_del(bfdev_list_head_t *node)
             " should not be BFDEV_POISON_LIST1 (%p)\n",
             node, BFDEV_POISON_LIST1
         );
-        return false;
+        return bfdev_false;
     }
 
     if (bfdev_unlikely(node->prev == BFDEV_POISON_LIST2)) {
@@ -63,8 +63,8 @@ bfdev_list_check_del(bfdev_list_head_t *node)
             " should not be BFDEV_POISON_LIST2 (%p)\n",
             node, BFDEV_POISON_LIST2
         );
-        return false;
+        return bfdev_false;
     }
 
-    return true;
+    return bfdev_true;
 }

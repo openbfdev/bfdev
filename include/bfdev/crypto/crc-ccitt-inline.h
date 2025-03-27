@@ -14,7 +14,7 @@ BFDEV_BEGIN_DECLS
 #include <bfdev/crypto/crc-ccitt-table.h>
 
 BFDEV_CRC_INLINE(
-    bfdev_crc_ccitt, uint16_t,
+    bfdev_crc_ccitt, bfdev_u16,
     bfdev_crc_ccitt_table, bfdev_cpu_to_le16
 )
 

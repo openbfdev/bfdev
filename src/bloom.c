@@ -20,33 +20,33 @@ bloom_index(bfdev_bloom_t *bloom, unsigned int func, void *key)
     return index;
 }
 
-export bool
+export bfdev_bool
 bfdev_bloom_peek(bfdev_bloom_t *bloom, void *key)
 {
     unsigned int index, func;
-    bool retval;
+    bfdev_bool retval;
 
-    retval = true;
+    retval = bfdev_true;
     for (func = 0; func < bloom->funcs; ++func) {
         index = bloom_index(bloom, func, key);
         if (!bfdev_bit_test(bloom->bitmap, index))
-            retval = false;
+            retval = bfdev_false;
     }
 
     return retval;
 }
 
-export bool
+export bfdev_bool
 bfdev_bloom_push(bfdev_bloom_t *bloom, void *key)
 {
     unsigned int index, func;
-    bool retval;
+    bfdev_bool retval;
 
-    retval = true;
+    retval = bfdev_true;
     for (func = 0; func < bloom->funcs; ++func) {
         index = bloom_index(bloom, func, key);
         if (!bfdev_bit_test_set(bloom->bitmap, index))
-            retval = false;
+            retval = bfdev_false;
     }
 
     return retval;
@@ -55,10 +55,10 @@ bfdev_bloom_push(bfdev_bloom_t *bloom, void *key)
 export void
 bfdev_bloom_flush(bfdev_bloom_t *bloom)
 {
-    size_t size;
+    bfdev_size_t size;
 
     size = BFDEV_BITS_WORD(bloom->capacity);
-    bfport_memset(bloom->bitmap, 0, size);
+    bfdev_memset(bloom->bitmap, 0, size);
 }
 
 export bfdev_bloom_t *
@@ -66,14 +66,14 @@ bfdev_bloom_create(const bfdev_alloc_t *alloc, unsigned int capacity,
                    bfdev_bloom_hash_t hash, unsigned int funcs, void *pdata)
 {
     bfdev_bloom_t *bloom;
-    size_t size;
+    bfdev_size_t size;
 
     bfdev_align_high_adj(capacity, BFDEV_BITS_PER_LONG);
     size = BFDEV_BITS_DIV_LONG(capacity);
 
     bloom = bfdev_zalloc(alloc, sizeof(*bloom) + sizeof(*bloom->bitmap) * size);
     if (bfdev_unlikely(!bloom))
-        return NULL;
+        return BFDEV_NULL;
 
     bloom->capacity = capacity;
     bloom->alloc = alloc;

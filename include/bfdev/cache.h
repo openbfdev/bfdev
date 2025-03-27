@@ -92,7 +92,7 @@ struct bfdev_cache_algo {
     bfdev_list_head_t list;
     const char *name;
 
-    bool (*starving)(bfdev_cache_head_t *head);
+    bfdev_bool (*starving)(bfdev_cache_head_t *head);
     bfdev_cache_node_t *(*obtain)(bfdev_cache_head_t *head);
     void (*get)(bfdev_cache_head_t *head, bfdev_cache_node_t *node);
     void (*put)(bfdev_cache_head_t *head, bfdev_cache_node_t *node);

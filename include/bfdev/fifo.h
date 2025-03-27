@@ -85,7 +85,8 @@ struct bfdev_fifo {
 #define BFDEV_FIFO_DYNAMIC_INIT(ptr)                    \
 (typeof(*(ptr))) {                                      \
     .fifo = {                                           \
-        .in = 0, .out = 0, .mask = 0, .data = NULL,     \
+        .in = 0, .out = 0, .mask = 0,                   \
+        .data = BFDEV_NULL,                             \
         .esize = sizeof(*(ptr)->buff),                  \
     },                                                  \
 }
@@ -452,7 +453,7 @@ bfdev_fifo_in_record(bfdev_fifo_t *fifo, const void *buff, unsigned long len,
 
 extern int
 bfdev_fifo_dynamic_alloc(bfdev_fifo_t *fifo, const bfdev_alloc_t *alloc,
-                         size_t esize, size_t size);
+                         bfdev_size_t esize, bfdev_size_t size);
 
 extern void
 bfdev_fifo_dynamic_free(bfdev_fifo_t *fifo);

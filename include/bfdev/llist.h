@@ -21,7 +21,7 @@ BFDEV_BEGIN_DECLS
  *
  * Return whether list is empty before adding.
  */
-extern bool
+extern bfdev_bool
 bfdev_llist_split(bfdev_slist_head_t *head, bfdev_slist_head_t *node,
                   bfdev_slist_head_t *end);
 
@@ -39,7 +39,7 @@ bfdev_llist_del(bfdev_slist_head_t *head);
  *
  * Return whether list is empty before adding.
  */
-static inline bool
+static inline bfdev_bool
 bfdev_llist_add(bfdev_slist_head_t *head, bfdev_slist_head_t *node)
 {
     return bfdev_llist_split(head, node, node);
@@ -52,7 +52,8 @@ bfdev_llist_add(bfdev_slist_head_t *head, bfdev_slist_head_t *node)
 static inline bfdev_slist_head_t *
 bfdev_llist_destroy(bfdev_slist_head_t *head)
 {
-    return (void *)bfdev_xchg((bfdev_atomic_t *)&head->next, (bfdev_atomic_t)NULL);
+    return (void *)bfdev_xchg((bfdev_atomic_t *)&head->next,
+        (bfdev_atomic_t)BFDEV_NULL);
 }
 
 BFDEV_END_DECLS

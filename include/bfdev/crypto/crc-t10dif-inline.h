@@ -14,7 +14,7 @@ BFDEV_BEGIN_DECLS
 #include <bfdev/crypto/crc-t10dif-table.h>
 
 BFDEV_CRC_INLINE(
-    bfdev_crc_t10dif, uint16_t,
+    bfdev_crc_t10dif, bfdev_u16,
     bfdev_crc_t10dif_table, bfdev_cpu_to_be16
 )
 

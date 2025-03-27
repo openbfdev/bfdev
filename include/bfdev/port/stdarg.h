@@ -8,13 +8,13 @@
 
 #include <bfdev/config.h>
 
-#if defined(__FreeBSD__) && defined(_KERNEL)
-# include <machine/stdarg.h>
-#else
-# include <stdarg.h>
-#endif
-
 BFDEV_BEGIN_DECLS
+
+typedef __builtin_va_list bfdev_va_list;
+#define bfdev_va_start(v, l) __builtin_va_start(v, l)
+#define bfdev_va_arg(v, l) __builtin_va_arg(v, l)
+#define bfdev_va_end(v) __builtin_va_end(v)
+#define bfdev_va_copy(d, s) __builtin_va_copy(d, s)
 
 BFDEV_END_DECLS
 

@@ -5,6 +5,7 @@
 
 #define GENCRC_NAME crc32be
 #define GENCRC_TYPE uint32_t
+#define GENCRC_TYPE_NAME bfdev_u32
 #define GENCRC_BITS 32
 #define GENCRC_WIDE 8
 #define GENCRC_BELE 0

@@ -101,7 +101,7 @@ bfdev_ilog2_dynamic(unsigned long value)
  * @value: dynamic 64-bit value to log base 2.
  */
 static inline __bfdev_attribute_const unsigned int
-bfdev_ilog2_64_dynamic(uint64_t value)
+bfdev_ilog2_64_dynamic(bfdev_u64 value)
 {
     if (value < 2)
         return 0;
@@ -139,7 +139,7 @@ bfdev_pow2_rounddown_dynamic(unsigned long value)
  * bfdev_pow2_check - check if a value is a power of two.
  * @value: the value to check.
  */
-static inline bool
+static inline bfdev_bool
 bfdev_pow2_check(unsigned long value)
 {
     return value != 0 && ((value & (value - 1)) == 0);

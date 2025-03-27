@@ -7,7 +7,7 @@
 #include <bfdev/llist.h>
 #include <export.h>
 
-export bool
+export bfdev_bool
 bfdev_llist_split(bfdev_slist_head_t *head, bfdev_slist_head_t *node,
                   bfdev_slist_head_t *end)
 {
@@ -32,7 +32,7 @@ bfdev_llist_del(bfdev_slist_head_t *head)
     entry = BFDEV_READ_ONCE(head->next);
     do {
         if (!entry)
-            return NULL;
+            return BFDEV_NULL;
         next = BFDEV_READ_ONCE(entry->next);
     } while (!bfdev_try_cmpxchg(
         (bfdev_atomic_t *)&head->next, (bfdev_atomic_t *)&entry,

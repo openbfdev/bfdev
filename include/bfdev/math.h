@@ -80,14 +80,14 @@ BFDEV_BEGIN_DECLS
  * @var2: the second argument.
  */
 #define bfdev_abs_diff(var1, var2) ({   \
-	typeof(var1) __var1, __var2;        \
+    typeof(var1) __var1, __var2;        \
                                         \
     __var1 = (typeof(var1))(var1);      \
     __var2 = (typeof(var1))(var2);      \
                                         \
-	__var1 > __var2                     \
+    __var1 > __var2                     \
         ? (__var1 - __var2)             \
-        : (__var2 - __var1);	        \
+        : (__var2 - __var1);            \
 })
 
 /**

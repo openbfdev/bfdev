@@ -29,7 +29,7 @@ BFDEV_BEGIN_DECLS
  * @align: check alignment size.
  */
 #define bfdev_align_ptr_check(ptr, align) ( \
-    bfdev_align_check((uintptr_t)(ptr), align) \
+    bfdev_align_check((bfdev_uintptr_t)(ptr), align) \
 )
 
 /**
@@ -57,7 +57,7 @@ BFDEV_BEGIN_DECLS
  * @align: alignment size.
  */
 #define bfdev_align_ptr_low(ptr, align) ({ \
-    (typeof(ptr))bfdev_align_low((uintptr_t)(ptr), align); \
+    (typeof(ptr))bfdev_align_low((bfdev_uintptr_t)(ptr), align); \
 })
 
 /**
@@ -66,7 +66,7 @@ BFDEV_BEGIN_DECLS
  * @align: alignment size.
  */
 #define bfdev_align_ptr_high(ptr, align) ({ \
-    (typeof(ptr))bfdev_align_high((uintptr_t)(ptr), align); \
+    (typeof(ptr))bfdev_align_high((bfdev_uintptr_t)(ptr), align); \
 })
 
 #define bfdev_align_low_adj(value, align) ({ \

@@ -49,7 +49,7 @@ bfdev_respool_init(bfdev_respool_t *pool)
     *pool = BFDEV_RESPOOL_INIT(pool);
 }
 
-static inline bool
+static inline bfdev_bool
 bfdev_respool_check_empty(bfdev_respool_t *pool)
 {
     return bfdev_list_check_empty(&pool->nodes);

@@ -8,10 +8,10 @@
 #include <bfdev/unaligned.h>
 #include <export.h>
 
-static __bfdev_always_inline uint32_t
-jhash(const uint8_t *data, size_t length, uint32_t initval)
+static __bfdev_always_inline bfdev_u32
+jhash(const bfdev_u8 *data, bfdev_size_t length, bfdev_u32 initval)
 {
-    uint32_t a, b, c;
+    bfdev_u32 a, b, c;
 
     /* Set up the internal state */
     a = BFDEV_JHASH_INITVAL + length + initval;
@@ -26,18 +26,18 @@ jhash(const uint8_t *data, size_t length, uint32_t initval)
 
     /* Last block: affect all 32 bits of (c) */
     switch (length) {
-        case 12: c += (uint32_t)data[11] << 24; bfdev_fallthrough;
-        case 11: c += (uint32_t)data[10] << 16; bfdev_fallthrough;
-        case 10: c += (uint32_t)data[ 9] <<  8; bfdev_fallthrough;
-        case  9: c += (uint32_t)data[ 8] <<  0; bfdev_fallthrough;
-        case  8: b += (uint32_t)data[ 7] << 24; bfdev_fallthrough;
-        case  7: b += (uint32_t)data[ 6] << 16; bfdev_fallthrough;
-        case  6: b += (uint32_t)data[ 5] <<  8; bfdev_fallthrough;
-        case  5: b += (uint32_t)data[ 4] <<  0; bfdev_fallthrough;
-        case  4: a += (uint32_t)data[ 3] << 24; bfdev_fallthrough;
-        case  3: a += (uint32_t)data[ 2] << 16; bfdev_fallthrough;
-        case  2: a += (uint32_t)data[ 1] <<  8; bfdev_fallthrough;
-        case  1: a += (uint32_t)data[ 0] <<  0;
+        case 12: c += (bfdev_u32)data[11] << 24; bfdev_fallthrough;
+        case 11: c += (bfdev_u32)data[10] << 16; bfdev_fallthrough;
+        case 10: c += (bfdev_u32)data[ 9] <<  8; bfdev_fallthrough;
+        case  9: c += (bfdev_u32)data[ 8] <<  0; bfdev_fallthrough;
+        case  8: b += (bfdev_u32)data[ 7] << 24; bfdev_fallthrough;
+        case  7: b += (bfdev_u32)data[ 6] << 16; bfdev_fallthrough;
+        case  6: b += (bfdev_u32)data[ 5] <<  8; bfdev_fallthrough;
+        case  5: b += (bfdev_u32)data[ 4] <<  0; bfdev_fallthrough;
+        case  4: a += (bfdev_u32)data[ 3] << 24; bfdev_fallthrough;
+        case  3: a += (bfdev_u32)data[ 2] << 16; bfdev_fallthrough;
+        case  2: a += (bfdev_u32)data[ 1] <<  8; bfdev_fallthrough;
+        case  1: a += (bfdev_u32)data[ 0] <<  0;
             bfdev_jhash_final(a, b, c);
             break;
 
@@ -49,8 +49,8 @@ jhash(const uint8_t *data, size_t length, uint32_t initval)
     return c;
 }
 
-export uint32_t
-bfdev_jhash(const void *data, size_t length, uint32_t initval)
+export bfdev_u32
+bfdev_jhash(const void *data, bfdev_size_t length, bfdev_u32 initval)
 {
     return jhash(data, length, initval);
 }

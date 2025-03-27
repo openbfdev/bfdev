@@ -9,12 +9,12 @@
 
 export unsigned int
 bfdev_levenshtein_len(const bfdev_alloc_t *alloc,
-    const char *str1, const char *str2, size_t len1, size_t len2,
+    const char *str1, const char *str2, bfdev_size_t len1, bfdev_size_t len2,
     unsigned int s, unsigned int w, unsigned int a, unsigned int d)
 {
     unsigned int *row1, *row2, *row3;
     unsigned int distance, *cache;
-    size_t index1, index2;
+    bfdev_size_t index1, index2;
 
     if (bfdev_unlikely(!len1))
         return len2 * a;
@@ -24,7 +24,7 @@ bfdev_levenshtein_len(const bfdev_alloc_t *alloc,
 
     cache = bfdev_malloc(alloc, BFDEV_BYTES_PER_INT * (len1 + 1) * 3);
     if (bfdev_unlikely(!cache))
-        return UINT_MAX;
+        return BFDEV_UINT_MAX;
 
     row1 = cache;
     row2 = row1 + (len1 + 1);
@@ -69,10 +69,10 @@ bfdev_levenshtein(const bfdev_alloc_t *alloc,
     const char *str1, const char *str2,
     unsigned int s, unsigned int w, unsigned int a, unsigned int d)
 {
-    size_t len1, len2;
+    bfdev_size_t len1, len2;
 
-    len1 = bfport_strlen(str1);
-    len2 = bfport_strlen(str2);
+    len1 = bfdev_strlen(str1);
+    len2 = bfdev_strlen(str2);
 
     return bfdev_levenshtein_len(alloc, str1, str2, len1, len2, s, w, a, d);
 }

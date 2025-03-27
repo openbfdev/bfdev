@@ -19,19 +19,19 @@ typedef struct bfdev_memalloc_head bfdev_memalloc_head_t;
 typedef struct bfdev_memalloc_chunk bfdev_memalloc_chunk_t;
 
 typedef bfdev_memalloc_chunk_t *
-(*bfdev_memalloc_find_t)(bfdev_memalloc_head_t *head, size_t size);
+(*bfdev_memalloc_find_t)(bfdev_memalloc_head_t *head, bfdev_size_t size);
 
 struct bfdev_memalloc_head {
     bfdev_list_head_t block_list;
     bfdev_list_head_t free_list;
     bfdev_memalloc_find_t find;
-    size_t avail;
+    bfdev_size_t avail;
 };
 
 struct bfdev_memalloc_chunk {
     bfdev_list_head_t block;
     bfdev_list_head_t free;
-    size_t usize;
+    bfdev_size_t usize;
     char data[0];
 };
 
@@ -41,7 +41,7 @@ struct bfdev_memalloc_chunk {
  * @size: size to get.
  */
 extern bfdev_memalloc_chunk_t *
-bfdev_memalloc_first_fit(bfdev_memalloc_head_t *head, size_t size);
+bfdev_memalloc_first_fit(bfdev_memalloc_head_t *head, bfdev_size_t size);
 
 /**
  * bfdev_memalloc_best_fit() - best qualified node.
@@ -49,7 +49,7 @@ bfdev_memalloc_first_fit(bfdev_memalloc_head_t *head, size_t size);
  * @size: size to get.
  */
 extern bfdev_memalloc_chunk_t *
-bfdev_memalloc_best_fit(bfdev_memalloc_head_t *head, size_t size);
+bfdev_memalloc_best_fit(bfdev_memalloc_head_t *head, bfdev_size_t size);
 
 /**
  * bfdev_memalloc_worst_fit() - worst qualified node.
@@ -57,7 +57,7 @@ bfdev_memalloc_best_fit(bfdev_memalloc_head_t *head, size_t size);
  * @size: size to get.
  */
 extern bfdev_memalloc_chunk_t *
-bfdev_memalloc_worst_fit(bfdev_memalloc_head_t *head, size_t size);
+bfdev_memalloc_worst_fit(bfdev_memalloc_head_t *head, bfdev_size_t size);
 
 /**
  * bfdev_memalloc_alloc() - memory allocator allocation.
@@ -65,7 +65,7 @@ bfdev_memalloc_worst_fit(bfdev_memalloc_head_t *head, size_t size);
  * @size: size to allocation.
  */
 extern void __bfdev_malloc *
-bfdev_memalloc_alloc(bfdev_memalloc_head_t *head, size_t size);
+bfdev_memalloc_alloc(bfdev_memalloc_head_t *head, bfdev_size_t size);
 
 /**
  * bfdev_memalloc_free() - memory allocator release.
@@ -82,7 +82,8 @@ bfdev_memalloc_free(bfdev_memalloc_head_t *head, void *block);
  * @resize: size to realloc.
  */
 extern void __bfdev_malloc *
-bfdev_memalloc_realloc(bfdev_memalloc_head_t *head, void *block, size_t resize);
+bfdev_memalloc_realloc(bfdev_memalloc_head_t *head,
+                       void *block, bfdev_size_t resize);
 
 /**
  * bfdev_memalloc_init() - memory allocator setup.
@@ -93,7 +94,7 @@ bfdev_memalloc_realloc(bfdev_memalloc_head_t *head, void *block, size_t resize);
  */
 extern void
 bfdev_memalloc_init(bfdev_memalloc_head_t *head, bfdev_memalloc_find_t find,
-                    void *memory, size_t size);
+                    void *memory, bfdev_size_t size);
 
 BFDEV_END_DECLS
 

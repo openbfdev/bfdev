@@ -11,35 +11,35 @@
 
 BFDEV_BEGIN_DECLS
 
-extern uint8_t
-bfdev_crc4(const void *data, size_t bits, uint8_t crc);
+extern bfdev_u8
+bfdev_crc4(const void *data, bfdev_size_t bits, bfdev_u8 crc);
 
-extern uint8_t
-bfdev_crc7(const void *data, size_t len, uint8_t crc);
+extern bfdev_u8
+bfdev_crc7(const void *data, bfdev_size_t len, bfdev_u8 crc);
 
-extern uint8_t
-bfdev_crc8(const void *data, size_t len, uint8_t crc);
+extern bfdev_u8
+bfdev_crc8(const void *data, bfdev_size_t len, bfdev_u8 crc);
 
-extern uint16_t
-bfdev_crc16(const void *data, size_t len, uint16_t crc);
+extern bfdev_u16
+bfdev_crc16(const void *data, bfdev_size_t len, bfdev_u16 crc);
 
-extern uint32_t
-bfdev_crc32(const void *data, size_t len, uint32_t crc);
+extern bfdev_u32
+bfdev_crc32(const void *data, bfdev_size_t len, bfdev_u32 crc);
 
-extern uint64_t
-bfdev_crc64(const void *data, size_t len, uint64_t crc);
+extern bfdev_u64
+bfdev_crc64(const void *data, bfdev_size_t len, bfdev_u64 crc);
 
-extern uint16_t
-bfdev_crc_ccitt(const void *data, size_t len, uint16_t crc);
+extern bfdev_u16
+bfdev_crc_ccitt(const void *data, bfdev_size_t len, bfdev_u16 crc);
 
-extern uint16_t
-bfdev_crc_itut(const void *data, size_t len, uint16_t crc);
+extern bfdev_u16
+bfdev_crc_itut(const void *data, bfdev_size_t len, bfdev_u16 crc);
 
-extern uint16_t
-bfdev_crc_t10dif(const void *data, size_t len, uint16_t crc);
+extern bfdev_u16
+bfdev_crc_t10dif(const void *data, bfdev_size_t len, bfdev_u16 crc);
 
-extern uint64_t
-bfdev_crc_rocksoft(const void *data, size_t len, uint64_t crc);
+extern bfdev_u64
+bfdev_crc_rocksoft(const void *data, bfdev_size_t len, bfdev_u64 crc);
 
 BFDEV_END_DECLS
 
