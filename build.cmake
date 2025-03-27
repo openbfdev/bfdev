@@ -24,6 +24,7 @@ if(BFDEV_STRICT)
     )
 endif()
 
+include(scripts/check.cmake)
 include(scripts/sanitize.cmake)
 include(scripts/asm-generic.cmake)
 

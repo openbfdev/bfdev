@@ -8,7 +8,9 @@ cmake_minimum_required(VERSION 3.12)
 project(bfdev VERSION 1.0.6 LANGUAGES C)
 
 include(GNUInstallDirs)
-include(CheckIncludeFiles)
+include(CheckIncludeFile)
+include(CheckSymbolExists)
+include(CheckTypeSize)
 
 set(BFDEV_NAME sirius)
 set(BFDEV_VERSION ${PROJECT_VERSION})
