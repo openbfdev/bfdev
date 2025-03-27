@@ -5,10 +5,15 @@
 
 #include <port/stdio.h>
 #include <port/log.h>
-#include <stdio.h>
 #include <export.h>
 
-export int
+#if defined(__FreeBSD__) && defined(_KERNEL)
+# include <sys/systm.h>
+#else
+# include <stdio.h>
+#endif
+
+hidden int
 bfport_log_write(bfdev_log_message_t *msg)
 {
     FILE *file;

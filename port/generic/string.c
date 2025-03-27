@@ -6,7 +6,7 @@
 #include <port/string.h>
 #include <export.h>
 
-export void *
+hidden void *
 bfport_memcpy(void *dest, const void *src, bfdev_size_t n)
 {
     const unsigned char *nsrc;
@@ -21,7 +21,7 @@ bfport_memcpy(void *dest, const void *src, bfdev_size_t n)
     return dest;
 }
 
-export void *
+hidden void *
 bfport_memset(void *s, int c, bfdev_size_t n)
 {
     unsigned char *xs;
@@ -33,7 +33,7 @@ bfport_memset(void *s, int c, bfdev_size_t n)
     return s;
 }
 
-export int
+hidden int
 bfport_memcmp(const void *s1, const void *s2, bfdev_size_t n)
 {
     const unsigned char *su1, *su2;
@@ -48,7 +48,7 @@ bfport_memcmp(const void *s1, const void *s2, bfdev_size_t n)
     return res;
 }
 
-export int
+hidden int
 bfport_strcmp(const char *s1, const char *s2)
 {
     int cp;
@@ -62,7 +62,7 @@ bfport_strcmp(const char *s1, const char *s2)
     return cp;
 }
 
-export char *
+hidden char *
 bfport_strchr(const char *s, int c)
 {
     for (; *s != (char)c; ++s) {
@@ -73,7 +73,7 @@ bfport_strchr(const char *s, int c)
     return (char *)s;
 }
 
-export bfdev_size_t
+hidden bfdev_size_t
 bfport_strspn(const char *s, const char *accept)
 {
     const unsigned char *p, *a;
@@ -93,7 +93,7 @@ bfport_strspn(const char *s, const char *accept)
     return count;
 }
 
-export bfdev_size_t
+hidden bfdev_size_t
 bfport_strcspn(const char *s, const char *reject)
 {
     const unsigned char *p, *r;
@@ -111,7 +111,7 @@ bfport_strcspn(const char *s, const char *reject)
     return count;
 }
 
-export char *
+hidden char *
 bfport_strcpy(char *dest, const char *src)
 {
     unsigned char *tmp;
@@ -123,7 +123,7 @@ bfport_strcpy(char *dest, const char *src)
     return dest;
 }
 
-export char *
+hidden char *
 bfport_strncpy(char *dest, const char *src, bfdev_size_t n)
 {
     unsigned char *tmp;
@@ -136,7 +136,7 @@ bfport_strncpy(char *dest, const char *src, bfdev_size_t n)
     return dest;
 }
 
-export bfdev_size_t
+hidden bfdev_size_t
 bfport_strlen(const char *s)
 {
     const unsigned char *len;
@@ -148,7 +148,7 @@ bfport_strlen(const char *s)
     return (char *)len - s;
 }
 
-export bfdev_size_t
+hidden bfdev_size_t
 bfport_strnlen(const char *s, bfdev_size_t len)
 {
     const unsigned char *sc;

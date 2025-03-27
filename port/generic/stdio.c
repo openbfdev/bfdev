@@ -4,12 +4,11 @@
  */
 
 #include <port/stdio.h>
-#include <port/stdio.h>
 #include <export.h>
 
 /* TODO: PORTME */
 
-export int
+hidden int
 bfport_vsnprintf(char *s, bfdev_size_t maxlen, const char *fmt,
                  bfdev_va_list arg)
 {
