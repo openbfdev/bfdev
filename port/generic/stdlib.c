@@ -8,37 +8,37 @@
 
 /* TODO: PORTME */
 
-hidden __bfdev_malloc void *
+__bfdev_malloc void *
 bfport_malloc(bfdev_size_t size)
 {
     return BFDEV_NULL;
 }
 
-hidden __bfdev_malloc void *
+__bfdev_malloc void *
 bfport_calloc(bfdev_size_t nmemb, bfdev_size_t size)
 {
     return BFDEV_NULL;
 }
 
-hidden __bfdev_malloc void *
+__bfdev_malloc void *
 bfport_realloc(void *ptr, bfdev_size_t size)
 {
     return BFDEV_NULL;
 }
 
-hidden void
+void
 bfport_free(void *ptr)
 {
     return;
 }
 
-hidden int
+int
 bfport_rand(void)
 {
     return 0;
 }
 
-hidden __bfdev_noreturn void
+__bfdev_noreturn void
 bfport_abort(void)
 {
     for (;;);

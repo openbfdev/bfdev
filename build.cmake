@@ -3,46 +3,37 @@
 # Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
 #
 
-add_compile_options(
-    -std=gnu11
-    -Wall
-    -Wextra
-    -Wno-override-init
-    -Wno-unused-parameter
-    -Wno-sign-compare
-    -Wno-pointer-sign
-    -Wno-null-pointer-arithmetic
-    -Wmissing-prototypes
-    -Wmissing-declarations
-    -fvisibility=hidden
+set(CMAKE_C_FLAGS
+    "${CMAKE_C_FLAGS} \
+     -std=gnu11 \
+     -Wall \
+     -Wextra \
+     -Wno-override-init \
+     -Wno-unused-parameter \
+     -Wno-sign-compare \
+     -Wno-pointer-sign \
+     -Wno-null-pointer-arithmetic \
+     -Wmissing-prototypes \
+     -Wmissing-declarations \
+     -fvisibility=hidden "
 )
 
-if(BFDEV_STRICT)
+if(CMAKE_C_FLAGS)
     set(CMAKE_C_FLAGS
         "${CMAKE_C_FLAGS} \
          -Werror"
     )
 endif()
 
-include(scripts/check.cmake)
-include(scripts/sanitize.cmake)
-include(scripts/asm-generic.cmake)
+include(${PROJECT_SOURCE_DIR}/scripts/check.cmake)
+include(${PROJECT_SOURCE_DIR}/scripts/asm-generic.cmake)
+include(${PROJECT_SOURCE_DIR}/scripts/sanitize.cmake)
 
 asm_generic(
     bfdev/asm-generic/
     ${BFDEV_GENERATED_PATH}/bfdev/asm
     ${BFDEV_ARCH_HEADER_PATH}/bfdev/asm
     ${BFDEV_HEADER_PATH}/bfdev/asm-generic
-)
-
-configure_file(
-    ${BFDEV_MODULE_PATH}/config.h.in
-    ${BFDEV_GENERATED_PATH}/bfdev/config.h
-)
-
-configure_file(
-    ${BFDEV_MODULE_PATH}/bfdev-config.cmake.in
-    ${BFDEV_CONFIGURE}
 )
 
 file(GLOB_RECURSE BFDEV_HEADER
@@ -64,9 +55,21 @@ set(BFDEV_INCLUDE_DIRS
 )
 
 include_directories(${BFDEV_INCLUDE_DIRS})
+include(${PROJECT_SOURCE_DIR}/scripts/platform.cmake)
+include(${BFDEV_PORT_PATH}/build.cmake)
+
 include(${BFDEV_ARCH_PATH}/build.cmake)
 include(${BFDEV_SOURCE_PATH}/build.cmake)
-include(${BFDEV_PORT_PATH}/build.cmake)
+
+configure_file(
+    ${BFDEV_MODULE_PATH}/config.h.in
+    ${BFDEV_GENERATED_PATH}/bfdev/config.h
+)
+
+configure_file(
+    ${BFDEV_MODULE_PATH}/bfdev-config.cmake.in
+    ${BFDEV_CONFIGURE}
+)
 
 set(BFDEV_LIBRARY_HEADER
     ${BFDEV_HEADER}

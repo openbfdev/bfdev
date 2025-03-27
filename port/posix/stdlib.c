@@ -12,37 +12,37 @@
 # include <stdlib.h>
 #endif
 
-hidden __bfdev_malloc void *
+__bfdev_malloc void *
 bfport_malloc(bfdev_size_t size)
 {
     return malloc(size);
 }
 
-hidden __bfdev_malloc void *
+__bfdev_malloc void *
 bfport_calloc(bfdev_size_t nmemb, bfdev_size_t size)
 {
     return calloc(nmemb, size);
 }
 
-hidden __bfdev_malloc void *
+__bfdev_malloc void *
 bfport_realloc(void *ptr, bfdev_size_t size)
 {
     return realloc(ptr, size);
 }
 
-hidden void
+void
 bfport_free(void *ptr)
 {
     free(ptr);
 }
 
-hidden int
+int
 bfport_rand(void)
 {
     return rand();
 }
 
-hidden __bfdev_noreturn void
+__bfdev_noreturn void
 bfport_abort(void)
 {
     abort();
