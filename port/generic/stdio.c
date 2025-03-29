@@ -8,7 +8,7 @@
 
 /* TODO: PORTME */
 
-int
+__bfdev_weak int
 bfport_vsnprintf(char *s, bfdev_size_t maxlen, const char *fmt,
                  bfdev_va_list arg)
 {

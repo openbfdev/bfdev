@@ -9,7 +9,7 @@
 
 /* TODO: PORTME */
 
-int
+__bfdev_weak int
 bfport_log_write(bfdev_log_message_t *msg)
 {
     return 0;
