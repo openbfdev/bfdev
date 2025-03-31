@@ -26,11 +26,11 @@ macro(print_type output name)
     endif()
 endmacro()
 
-if(CMAKE_SYSTEM_NAME MATCHES "Linux|Darwin|GNU")
+if(CMAKE_SYSTEM_NAME MATCHES "Linux|Android|Darwin|GNU")
     set(BFDEV_PORT_TYPE "posix")
 endif()
 
-if(CMAKE_SYSTEM_NAME MATCHES "MSYS|CYGWIN")
+if(CMAKE_SYSTEM_NAME MATCHES "Windows|MSYS|CYGWIN")
     set(BFDEV_PORT_TYPE "posix")
 endif()
 
