@@ -28,8 +28,10 @@ bfdev_find_first_bit(const unsigned long *addr, unsigned int bits)
 {
     unsigned long value;
 
-    if (!bfdev_const_small_nbits(bits))
-        return bfdev_comp_find_first_bit(addr, bits, 0UL, bfdev_false);
+    if (!bfdev_const_small_nbits(bits)) {
+        return bfdev_comp_find_first_bit(addr, bits,
+            BFDEV_ULONG_MIN, bfdev_false);
+    }
 
     value = *addr & BFDEV_BIT_LOW_MASK(bits);
     if (value == BFDEV_ULONG_MIN)
@@ -45,8 +47,10 @@ bfdev_find_last_bit(const unsigned long *addr, unsigned int bits)
 {
     unsigned long value;
 
-    if (!bfdev_const_small_nbits(bits))
-        return bfdev_comp_find_last_bit(addr, bits, 0UL, bfdev_false);
+    if (!bfdev_const_small_nbits(bits)) {
+        return bfdev_comp_find_last_bit(addr, bits,
+            BFDEV_ULONG_MIN, bfdev_false);
+    }
 
     value = *addr & BFDEV_BIT_LOW_MASK(bits);
     if (value == BFDEV_ULONG_MIN)
@@ -70,8 +74,10 @@ bfdev_find_first_zero(const unsigned long *addr, unsigned int bits)
 {
     unsigned long value;
 
-    if (!bfdev_const_small_nbits(bits))
-        return bfdev_comp_find_first_bit(addr, bits, ~0UL, bfdev_false);
+    if (!bfdev_const_small_nbits(bits)) {
+        return bfdev_comp_find_first_bit(addr, bits,
+            BFDEV_ULONG_MAX, bfdev_false);
+    }
 
     value = *addr | BFDEV_BIT_HIGH_MASK(bits);
     if (value == BFDEV_ULONG_MAX)
@@ -87,8 +93,10 @@ bfdev_find_last_zero(const unsigned long *addr, unsigned int bits)
 {
     unsigned long value;
 
-    if (!bfdev_const_small_nbits(bits))
-        return bfdev_comp_find_last_bit(addr, bits, ~0UL, bfdev_false);
+    if (!bfdev_const_small_nbits(bits)) {
+        return bfdev_comp_find_last_bit(addr, bits,
+            BFDEV_ULONG_MAX, bfdev_false);
+    }
 
     value = *addr | BFDEV_BIT_HIGH_MASK(bits);
     if (value == BFDEV_ULONG_MAX)
@@ -116,7 +124,7 @@ bfdev_find_next_bit(const unsigned long *addr,
 
     if (!bfdev_const_small_nbits(bits)) {
         return bfdev_comp_find_next_bit(addr, BFDEV_NULL,
-            bits, offset, 0UL, bfdev_false);
+            bits, offset, BFDEV_ULONG_MIN, bfdev_false);
     }
 
     if (bfdev_unlikely(offset >= bits))
@@ -139,7 +147,7 @@ bfdev_find_prev_bit(const unsigned long *addr,
 
     if (!bfdev_const_small_nbits(bits)) {
         return bfdev_comp_find_prev_bit(addr, BFDEV_NULL,
-            bits, offset, 0UL, bfdev_false);
+            bits, offset, BFDEV_ULONG_MIN, bfdev_false);
     }
 
     if (bfdev_unlikely(offset >= bits))
@@ -154,7 +162,7 @@ bfdev_find_prev_bit(const unsigned long *addr,
 #endif
 
 /**
- * bfdev_find_next_bit() - find next zero in a region.
+ * bfdev_find_next_zero() - find next zero in a region.
  * @block: the block to find.
  * @bits: number of bits in the block.
  * @offset: the bitnumber to start searching at.
@@ -171,7 +179,7 @@ bfdev_find_next_zero(const unsigned long *addr,
 
     if (!bfdev_const_small_nbits(bits)) {
         return bfdev_comp_find_next_bit(addr, BFDEV_NULL,
-            bits, offset, ~0UL, bfdev_false);
+            bits, offset, BFDEV_ULONG_MAX, bfdev_false);
     }
 
     if (bfdev_unlikely(offset >= bits))
@@ -194,7 +202,7 @@ bfdev_find_prev_zero(const unsigned long *addr,
 
     if (!bfdev_const_small_nbits(bits)) {
         return bfdev_comp_find_prev_bit(addr, BFDEV_NULL,
-            bits, offset, ~0UL, bfdev_false);
+            bits, offset, BFDEV_ULONG_MAX, bfdev_false);
     }
 
     if (bfdev_unlikely(offset >= bits))
@@ -230,7 +238,7 @@ bfdev_find_next_and_bit(const unsigned long *addr1, const unsigned long *addr2,
 
     if (!bfdev_const_small_nbits(bits)) {
         return bfdev_comp_find_next_bit(addr1, addr2,
-            bits, offset, 0UL, bfdev_false);
+            bits, offset, BFDEV_ULONG_MIN, bfdev_false);
     }
 
     value = *addr1 & *addr2 & BFDEV_BIT_RANGE(bits - 1, offset);
@@ -250,7 +258,7 @@ bfdev_find_prev_and_bit(const unsigned long *addr1, const unsigned long *addr2,
 
     if (!bfdev_const_small_nbits(bits)) {
         return bfdev_comp_find_prev_bit(addr1, addr2,
-            bits, offset, 0UL, bfdev_false);
+            bits, offset, BFDEV_ULONG_MIN, bfdev_false);
     }
 
     if (bfdev_unlikely(offset >= bits))

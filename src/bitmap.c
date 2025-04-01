@@ -343,17 +343,15 @@ bfdev_bitmap_comp_clr(unsigned long *bitmap, unsigned int start,
 export unsigned long *
 bfdev_bitmap_alloc(const bfdev_alloc_t *alloc, unsigned int bits)
 {
-    return bfdev_malloc_array(
-        alloc, BFDEV_BITS_TO_LONG(bits), sizeof(unsigned long)
-    );
+    return bfdev_malloc_array(alloc, BFDEV_BITS_TO_LONG(bits),
+        BFDEV_BYTES_PER_LONG);
 }
 
 export unsigned long *
 bfdev_bitmap_zalloc(const bfdev_alloc_t *alloc, unsigned int bits)
 {
-    return bfdev_zalloc_array(
-        alloc, BFDEV_BITS_TO_LONG(bits), sizeof(unsigned long)
-    );
+    return bfdev_zalloc_array(alloc, BFDEV_BITS_TO_LONG(bits),
+        BFDEV_BYTES_PER_LONG);
 }
 
 export void
