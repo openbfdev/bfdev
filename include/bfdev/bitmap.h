@@ -36,6 +36,9 @@ BFDEV_BEGIN_DECLS
     bfdev_align_check(bits, BFDEV_BITMAP_ALIGN) \
 )
 
+#define bfdev_bitmap_size(nbits) \
+    BFDEV_BITS_DIV_U8(bfdev_align_high(nbits, BFDEV_BITS_PER_LONG))
+
 static __bfdev_always_inline bfdev_bool
 bfdev_bitmap_empty(const unsigned long *src, unsigned int bits)
 {
@@ -45,7 +48,7 @@ bfdev_bitmap_empty(const unsigned long *src, unsigned int bits)
     if (!bfdev_bitmap_const_aligned(bits))
         return bfdev_find_first_bit(src, bits) >= bits;
 
-    return !bfdev_memdiff(src, BFDEV_UINT8_MIN, bits / BFDEV_BITS_PER_BYTE);
+    return !bfdev_memdiff(src, BFDEV_UINT8_MIN, BFDEV_BITS_DIV_U8(bits));
 }
 
 static __bfdev_always_inline bfdev_bool
@@ -57,7 +60,7 @@ bfdev_bitmap_full(const unsigned long *src, unsigned int bits)
     if (!bfdev_bitmap_const_aligned(bits))
         return bfdev_find_first_zero(src, bits) >= bits;
 
-    return !bfdev_memdiff(src, BFDEV_UINT8_MAX, bits / BFDEV_BITS_PER_BYTE);
+    return !bfdev_memdiff(src, BFDEV_UINT8_MAX, BFDEV_BITS_DIV_U8(bits));
 }
 
 static __bfdev_always_inline bfdev_bool
@@ -70,7 +73,7 @@ bfdev_bitmap_equal(const unsigned long *src1, const unsigned long *src2,
     if (!bfdev_bitmap_const_aligned(bits))
         return bfdev_bitmap_comp_equal(src1, src2, bits);
 
-    return bfdev_memcmp(src1, src2, bits / BFDEV_BITS_PER_BYTE);
+    return bfdev_memcmp(src1, src2, BFDEV_BITS_DIV_U8(bits));
 }
 
 static __bfdev_always_inline bfdev_bool
@@ -202,8 +205,8 @@ bfdev_bitmap_set(unsigned long *bitmap, unsigned int start, unsigned int bits)
         !bfdev_bitmap_const_aligned(bits))
         return bfdev_bitmap_comp_set(bitmap, start, bits);
 
-    offset = start / BFDEV_BITS_PER_BYTE;
-    size = bits / BFDEV_BITS_PER_BYTE;
+    offset = BFDEV_BITS_DIV_U8(start);
+    size = BFDEV_BITS_DIV_U8(bits);
 
     bfdev_memset((char *)bitmap + offset, 0xff, size);
 }
@@ -220,8 +223,8 @@ bfdev_bitmap_clr(unsigned long *bitmap, unsigned int start, unsigned int bits)
         !bfdev_bitmap_const_aligned(bits))
         return bfdev_bitmap_comp_clr(bitmap, start, bits);
 
-    offset = start / BFDEV_BITS_PER_BYTE;
-    size = bits / BFDEV_BITS_PER_BYTE;
+    offset = BFDEV_BITS_DIV_U8(start);
+    size = BFDEV_BITS_DIV_U8(bits);
 
     bfdev_memset((char *)bitmap + offset, 0, size);
 }
@@ -236,7 +239,7 @@ bfdev_bitmap_zero(unsigned long *bitmap, unsigned int bits)
         return;
     }
 
-    length = BFDEV_BITS_TO_U8(bits);
+    length = bfdev_bitmap_size(bits);
     bfdev_memset(bitmap, 0, length);
 }
 
@@ -250,7 +253,7 @@ bfdev_bitmap_fill(unsigned long *bitmap, unsigned int bits)
         return;
     }
 
-    length = BFDEV_BITS_TO_U8(bits);
+    length = bfdev_bitmap_size(bits);
     bfdev_memset(bitmap, BFDEV_UINT8_MAX, length);
 }
 
@@ -264,7 +267,7 @@ bfdev_bitmap_copy(unsigned long *dest, unsigned long *src, unsigned int bits)
         return;
     }
 
-    length = BFDEV_BITS_TO_U8(bits);
+    length = bfdev_bitmap_size(bits);
     bfdev_memcpy(dest, src, length);
 }
 
