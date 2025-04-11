@@ -28,6 +28,8 @@ typedef unsigned BFDEV_TYPE_W64 bfdev_u64;
 #endif
 
 typedef unsigned BFDEV_TYPE_ADDR bfdev_size_t;
+typedef __signed__ BFDEV_TYPE_ADDR bfdev_ssize_t;
+
 typedef unsigned BFDEV_TYPE_ADDR bfdev_uintptr_t;
 typedef __signed__ BFDEV_TYPE_ADDR bfdev_intptr_t;
 typedef __signed__ BFDEV_TYPE_ADDR bfdev_ptrdiff_t;
