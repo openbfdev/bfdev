@@ -29,8 +29,11 @@
 - base64: Base64 binary-to-text encoding
 - bsearch: Array binary search
 - crc: Cyclic redundancy check
-- hash: Golden ratio Hash
+- hash: Golden ratio hash
+- md5: MD5 message-digest algorithm
 - prandom: Pseudo random generator
+- sha1: Secure hash algorithm 1
+- sha2: Secure hash algorithm 2 (sha224 / sha256)
 - stringhash: String hash functions
 
 ## Bit Operation
@@ -74,6 +77,11 @@
 - minmax: Maximum and minimum value
 - uplower: High and low bytes
 - mpi: Multi precision integer
+
+## Rate limiting
+
+- ratelimit: Fixed Window Counter Rate Limiter
+- tokenbucket: Token Bucket Rate Limiter
 
 ## Cache
 
