@@ -4,6 +4,7 @@
  */
 
 #include <base.h>
+#include "log.h"
 #include <bfdev/log.h>
 #include <bfdev/scnprintf.h>
 #include <port/log.h>
@@ -17,35 +18,44 @@ BFDEV_DEFINE_LOG(
     BFDEV_NULL, BFDEV_NULL
 );
 
-static bfdev_size_t
-log_vscnprintf(bfdev_log_message_t *msg, const char *fmt, bfdev_va_list args)
+export int
+bfdev_msg_vappend(bfdev_log_message_t *msg, const char *fmt, bfdev_va_list args)
 {
-    bfdev_size_t append;
+    int append;
 
-    append = bfdev_vscnprintf(
-        msg->buff + msg->length, BFDEV_LOG_BUFF_SIZE - msg->length,
-        fmt, args
-    );
+    append = bfdev_vscnprintf(msg->buff + msg->length,
+        BFDEV_LOG_BUFF_SIZE - msg->length, fmt, args);
+    if (bfdev_unlikely(append < 0))
+        return -BFDEV_EINVAL;
     msg->length += append;
 
-    return append;
+    return -BFDEV_ENOERR;
 }
 
-static bfdev_size_t
-log_scnprintf(bfdev_log_message_t *msg, const char *fmt, ...)
+export int
+bfdev_msg_append(bfdev_log_message_t *msg, const char *fmt, ...)
 {
-    bfdev_size_t append;
     bfdev_va_list args;
+    int retval;
 
     bfdev_va_start(args, fmt);
-    append = log_vscnprintf(msg, fmt, args);
+    retval = bfdev_msg_vappend(msg, fmt, args);
     bfdev_va_end(args);
 
-    return append;
+    return retval;
 }
 
-#include "color.c"
-#include "level.c"
+static long
+log_chain_priority_cmp(const bfdev_ilist_node_t *node1,
+                       const bfdev_ilist_node_t *node2, void *pdata)
+{
+    int prio1, prio2;
+
+    prio1 = bfdev_container_of(node1, bfdev_log_chain_t, list)->priority;
+    prio2 = bfdev_container_of(node2, bfdev_log_chain_t, list)->priority;
+
+    return bfdev_cmp(prio1 > prio2);
+}
 
 static inline char
 log_get_level(const char *str)
@@ -84,10 +94,37 @@ bfdev_log_level(const char *str, const char **endptr)
 }
 
 static int
+log_call_hooks(bfdev_log_t *log, bfdev_ilist_head_t *chain,
+               bfdev_log_message_t *msg)
+{
+    bfdev_log_chain_t *node, *tmp;
+    int retval;
+
+    bfdev_ilist_for_each_entry_safe(node, tmp, chain, list) {
+        retval = node->func(msg, log->pdata);
+        if (retval < 0)
+            return retval;
+    }
+
+    return -BFDEV_ENOERR;
+}
+
+static int
 log_prefix(bfdev_log_t *log, bfdev_log_message_t *msg)
 {
-    log_level(log, msg);
-    log_color_prefix(log, msg);
+    int retval;
+
+    retval = log_call_hooks(log, &log->prefix_hooks, msg);
+    if (bfdev_unlikely(retval))
+        return retval;
+
+    retval = log_level_prefix(log, msg);
+    if (bfdev_unlikely(retval))
+        return retval;
+
+    retval = log_color_prefix(log, msg);
+    if (bfdev_unlikely(retval))
+        return retval;
 
     return -BFDEV_ENOERR;
 }
@@ -95,7 +132,15 @@ log_prefix(bfdev_log_t *log, bfdev_log_message_t *msg)
 static int
 log_suffix(bfdev_log_t *log, bfdev_log_message_t *msg)
 {
-    log_color_suffix(log, msg);
+    int retval;
+
+    retval = log_color_suffix(log, msg);
+    if (bfdev_unlikely(retval))
+        return retval;
+
+    retval = log_call_hooks(log, &log->suffix_hooks, msg);
+    if (bfdev_unlikely(retval))
+        return retval;
 
     return -BFDEV_ENOERR;
 }
@@ -114,7 +159,7 @@ log_emit(bfdev_log_t *log, unsigned int level, const char *fmt, bfdev_va_list ar
         level = log->default_level;
 
     if (level > log->record_level)
-        return 0;
+        return -BFDEV_ENOERR;
 
     msg.level = level;
     msg.buff = buff;
@@ -124,10 +169,9 @@ log_emit(bfdev_log_t *log, unsigned int level, const char *fmt, bfdev_va_list ar
     if (bfdev_unlikely(retval))
         return retval;
 
-    msg.length += bfdev_vscnprintf(
-        buff + msg.length, BFDEV_LOG_BUFF_SIZE - msg.length,
-        fmt, args
-    );
+    retval = bfdev_msg_vappend(&msg, fmt, args);
+    if (bfdev_unlikely(retval))
+        return retval;
 
     retval = log_suffix(log, &msg);
     if (bfdev_unlikely(retval))
@@ -138,7 +182,10 @@ log_emit(bfdev_log_t *log, unsigned int level, const char *fmt, bfdev_va_list ar
     else
         retval = bfport_log_write(&msg);
 
-    return retval;
+    if (bfdev_unlikely(retval < 0))
+        return -BFDEV_EIO;
+
+    return -BFDEV_ENOERR;
 }
 
 export int
@@ -162,4 +209,28 @@ bfdev_log_core(bfdev_log_t *log, const char *fmt, ...)
     bfdev_va_end(para);
 
     return length;
+}
+
+export int
+bfdev_log_hook_register(bfdev_log_t *log, bfdev_log_chain_t *hook)
+{
+    bfdev_ilist_head_t *chain;
+
+    if (bfdev_unlikely(!hook->func))
+        return -BFDEV_EINVAL;
+
+    chain = hook->priority <= 0 ? &log->prefix_hooks : &log->suffix_hooks;
+    bfdev_ilist_node_init(&hook->list);
+    bfdev_ilist_add(chain, &hook->list, log_chain_priority_cmp, BFDEV_NULL);
+
+    return -BFDEV_ENOERR;
+}
+
+export void
+bfdev_log_hook_unregister(bfdev_log_t *log, bfdev_log_chain_t *hook)
+{
+    bfdev_ilist_head_t *chain;
+
+    chain = hook->priority <= 0 ? &log->prefix_hooks : &log->suffix_hooks;
+    bfdev_ilist_del(chain, &hook->list);
 }

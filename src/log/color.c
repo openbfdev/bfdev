@@ -3,6 +3,11 @@
  * Copyright(c) 2024 John Sanpe <sanpeqf@gmail.com>
  */
 
+#include <base.h>
+#include "log.h"
+#include <bfdev/log.h>
+#include <export.h>
+
 #define COLOR_BLACK     0
 #define COLOR_RED       1
 #define COLOR_GREEN     2
@@ -29,20 +34,20 @@ level_color[] = {
     [BFDEV_LEVEL_DEFAULT] = COLOR_FG(COLOR_DEFAULT),
 };
 
-static void
+int
 log_color_prefix(bfdev_log_t *log, bfdev_log_message_t *msg)
 {
     if (!bfdev_log_color_test(log))
-        return;
+        return -BFDEV_ENOERR;
 
-    log_scnprintf(msg, "\e[%dm", level_color[msg->level]);
+    return bfdev_msg_append(msg, "\e[%dm", level_color[msg->level]);
 }
 
-static void
+int
 log_color_suffix(bfdev_log_t *log, bfdev_log_message_t *msg)
 {
     if (!bfdev_log_color_test(log))
-        return;
+        return -BFDEV_ENOERR;
 
-    log_scnprintf(msg, "\e[0m");
+    return bfdev_msg_append(msg, "\e[0m");
 }
