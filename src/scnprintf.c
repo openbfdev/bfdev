@@ -18,6 +18,9 @@ bfdev_vscnprintf(char *buf, bfdev_size_t size,
         return 0;
 
     len = bfport_vsnprintf(buf, size, fmt, args);
+    if (bfdev_unlikely(len < 0))
+        return -BFDEV_EINVAL;
+
     if (bfdev_likely(len < size))
         return len;
 
