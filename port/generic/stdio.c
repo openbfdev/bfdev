@@ -3,6 +3,7 @@
  * Copyright(c) 2025 John Sanpe <sanpeqf@gmail.com>
  */
 
+#include <bfdev/xprintf.h>
 #include <port/stdio.h>
 #include <export.h>
 
@@ -12,5 +13,5 @@ __bfdev_weak int
 bfport_vsnprintf(char *s, bfdev_size_t maxlen, const char *fmt,
                  bfdev_va_list arg)
 {
-    return 0;
+    return bfdev_xnprintf(s, maxlen, fmt, arg);
 }
