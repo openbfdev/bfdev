@@ -3,6 +3,11 @@
  * Copyright(c) 2024 John Sanpe <sanpeqf@gmail.com>
  */
 
+#include <base.h>
+#include "log.h"
+#include <bfdev/log.h>
+#include <export.h>
+
 static const char * const
 level_name[] = {
     [BFDEV_LEVEL_EMERG  ] = "emerg",
@@ -16,11 +21,11 @@ level_name[] = {
     [BFDEV_LEVEL_DEFAULT] = "default",
 };
 
-static void
-log_level(bfdev_log_t *log, bfdev_log_message_t *msg)
+int
+log_level_prefix(bfdev_log_t *log, bfdev_log_message_t *msg)
 {
     if (!bfdev_log_level_test(log))
-        return;
+        return -BFDEV_ENOERR;
 
-    log_scnprintf(msg, "[%s] ", level_name[msg->level]);
+    return bfdev_msg_append(msg, "[%s] ", level_name[msg->level]);
 }

@@ -10,6 +10,8 @@
 #include <bfdev/types.h>
 #include <bfdev/stddef.h>
 #include <bfdev/stdarg.h>
+#include <bfdev/errno.h>
+#include <bfdev/ilist.h>
 #include <bfdev/level.h>
 #include <bfdev/bits.h>
 #include <bfdev/bitflags.h>
@@ -25,7 +27,11 @@ BFDEV_BEGIN_DECLS
 #endif
 
 typedef struct bfdev_log bfdev_log_t;
+typedef struct bfdev_log_chain bfdev_log_chain_t;
 typedef struct bfdev_log_message bfdev_log_message_t;
+
+typedef int (*bfdev_log_hook_t)
+(bfdev_log_message_t *msg, void *pdata);
 
 typedef int (*bfdev_log_write_t)
 (bfdev_log_message_t *msg, void *pdata);
@@ -38,10 +44,19 @@ enum bfdev_log_flags {
     BFDEV_LOG_LEVEL = BFDEV_BIT(__BFDEV_LOG_LEVEL),
 };
 
+struct bfdev_log_chain {
+    bfdev_ilist_node_t list;
+    bfdev_log_hook_t func;
+    int priority;
+};
+
 struct bfdev_log {
     unsigned int default_level;
     unsigned int record_level;
     unsigned long flags;
+
+    bfdev_ilist_head_t prefix_hooks;
+    bfdev_ilist_head_t suffix_hooks;
 
     bfdev_log_write_t write;
     void *pdata;
@@ -49,11 +64,13 @@ struct bfdev_log {
 
 struct bfdev_log_message {
     unsigned int level;
-    char *buff;
     bfdev_size_t length;
+    char *buff;
 };
 
 #define BFDEV_LOG_STATIC(HEAD, DEFAULT, RECORD, FLAGS, WRITE, PDATA) { \
+    .prefix_hooks = BFDEV_ILIST_HEAD_STATIC(&(HEAD)->prefix_hooks), \
+    .suffix_hooks = BFDEV_ILIST_HEAD_STATIC(&(HEAD)->suffix_hooks), \
     .default_level = (DEFAULT), .record_level = (RECORD), \
     .flags = (FLAGS), .write = (WRITE), .pdata = (PDATA), \
 }
@@ -94,6 +111,18 @@ bfdev_vlog_core(bfdev_log_t *log, const char *fmt, bfdev_va_list args);
 
 extern __bfdev_printf(2, 3) int
 bfdev_log_core(bfdev_log_t *log, const char *fmt, ...);
+
+extern __bfdev_printf(2, 0) int
+bfdev_msg_vappend(bfdev_log_message_t *msg, const char *fmt, bfdev_va_list args);
+
+extern __bfdev_printf(2, 3) int
+bfdev_msg_append(bfdev_log_message_t *msg, const char *fmt, ...);
+
+extern int
+bfdev_log_hook_register(bfdev_log_t *log, bfdev_log_chain_t *hook);
+
+extern void
+bfdev_log_hook_unregister(bfdev_log_t *log, bfdev_log_chain_t *hook);
 
 /**
  * bfdev_log_fmt - used by the bfdev_log_*() macros to generate the bfdev_log format string
