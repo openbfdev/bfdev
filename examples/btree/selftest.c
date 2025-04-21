@@ -9,6 +9,7 @@
 #include <time.h>
 #include <string.h>
 #include <bfdev/btree.h>
+#include <bfdev/template/btree.h>
 #include <bfdev/list.h>
 
 #define TEST_LOOP 100

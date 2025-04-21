@@ -60,6 +60,7 @@ include(${BFDEV_PORT_PATH}/build.cmake)
 
 include(${BFDEV_ARCH_PATH}/build.cmake)
 include(${BFDEV_SOURCE_PATH}/build.cmake)
+include(${BFDEV_TEMPLATE_PATH}/build.cmake)
 
 configure_file(
     ${BFDEV_MODULE_PATH}/config.h.in

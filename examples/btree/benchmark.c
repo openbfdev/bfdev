@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <bfdev/log.h>
 #include <bfdev/btree.h>
+#include <bfdev/template/btree.h>
 #include "../time.h"
 
 #define BTREE_DEBUG 0
