@@ -10,25 +10,29 @@
 
 #define TEST_LOOP 100
 #define TEST_SIZE 64
-BFDEV_DEFINE_ARRAY(test_array, NULL, TEST_SIZE);
 
 int
 main(int argc, const char *argv[])
 {
+    BFDEV_DEFINE_ARRAY(array, NULL, TEST_SIZE);
     unsigned int count;
-    void *array;
+
+    bfdev_array_append(&array, 0, 0);
 
     for (count = 0; count < TEST_LOOP; ++count) {
         unsigned int num;
+        void *buff;
 
         num = rand() % TEST_SIZE;
-        array = bfdev_array_push(&test_array, num);
-        memset(array, 0, TEST_SIZE * num);
+        buff = bfdev_array_push(&array, num);
+        if (!buff)
+            return 1;
 
-        printf("array bfdev_array_push test: %02u: %u\n",
-                count, num);
+        memset(buff, 0, TEST_SIZE * num);
+        printf("array bfdev_array_push test: %02u: %u\n", count, num);
     }
 
-    bfdev_array_release(&test_array);
+    bfdev_array_release(&array);
+
     return 0;
 }

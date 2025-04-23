@@ -122,6 +122,34 @@ bfdev_array_append(bfdev_array_t *array, const void *data, unsigned long num)
 }
 
 export int
+bfdev_array_remove(bfdev_array_t *array, unsigned long index, unsigned long num)
+{
+    unsigned long cut;
+    void *start, *end;
+    bfdev_size_t behind;
+    bfdev_bool overflow;
+
+    if (bfdev_unlikely(index >= array->index))
+        return -BFDEV_EFBIG;
+
+    overflow = bfdev_overflow_check_add(index, num, &cut);
+    if (bfdev_unlikely(overflow))
+        return -BFDEV_EOVERFLOW;
+
+    if (bfdev_unlikely(cut > array->index))
+        return -BFDEV_EFBIG;
+
+    start = array->data + bfdev_array_offset(array, index);
+    end = array->data + bfdev_array_offset(array, cut);
+    behind = bfdev_array_offset(array, array->index - cut);
+
+    bfdev_memmove(start, end, behind);
+    array->index -= num;
+
+    return -BFDEV_ENOERR;
+}
+
+export int
 bfdev_array_resize(bfdev_array_t *array, unsigned long num)
 {
     int retval;
