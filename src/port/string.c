@@ -14,6 +14,12 @@ bfdev_memcpy(void *dest, const void *src, bfdev_size_t n)
 }
 
 export void *
+bfdev_memmove(void *dest, const void *src, bfdev_size_t n)
+{
+    return bfport_memmove(dest, src, n);
+}
+
+export void *
 bfdev_memset(void *s, int c, bfdev_size_t n)
 {
     return bfport_memset(s, c, n);

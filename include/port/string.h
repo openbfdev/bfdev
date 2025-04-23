@@ -15,6 +15,9 @@ extern void *
 bfport_memcpy(void *dest, const void *src, bfdev_size_t n);
 
 extern void *
+bfport_memmove(void *dest, const void *src, bfdev_size_t n);
+
+extern void *
 bfport_memset(void *s, int c, bfdev_size_t n);
 
 extern int
