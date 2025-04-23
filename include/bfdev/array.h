@@ -12,6 +12,7 @@
 #include <bfdev/stddef.h>
 #include <bfdev/string.h>
 #include <bfdev/allocator.h>
+#include <bfdev/guards.h>
 
 BFDEV_BEGIN_DECLS
 
@@ -206,6 +207,32 @@ bfdev_array_reserve(bfdev_array_t *array, unsigned long num);
  */
 extern void
 bfdev_array_release(bfdev_array_t *array);
+
+static inline bfdev_array_t *
+bfdev_array_create(const bfdev_alloc_t *alloc, bfdev_size_t cells)
+{
+    bfdev_array_t *obj;
+
+    obj = bfdev_malloc(alloc, sizeof(*obj));
+    if (bfdev_unlikely(!obj))
+        return BFDEV_NULL;
+    bfdev_array_init(obj, alloc, cells);
+
+    return obj;
+}
+
+static inline void
+bfdev_array_destroy(bfdev_array_t *obj)
+{
+    bfdev_array_release(obj);
+    bfdev_free(obj->alloc, obj);
+}
+
+BFDEV_DEFINE_CLASS(bfdev_array, bfdev_array_t *,
+    bfdev_array_create(alloc, cells),
+    bfdev_array_destroy(_T),
+    const bfdev_alloc_t *alloc, bfdev_size_t cells
+)
 
 BFDEV_END_DECLS
 
