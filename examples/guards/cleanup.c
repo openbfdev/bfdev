@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <bfdev/guards.h>
 
-BFDEV_CLEAN_TEMPLATE(malloc, void *,
+BFDEV_DEFINE_CLEAN(malloc, void *,
     if (_T) {
         printf("cleanup %p\n", _T);
         free(_T);
@@ -15,19 +15,19 @@ BFDEV_CLEAN_TEMPLATE(malloc, void *,
 )
 
 static void
-test_gc_cleanup(void)
+test_clean_gc(void)
 {
-    bfdev_clean(malloc) void *block;
+    BFDEV_CLEAN(malloc) void *block;
     block = malloc(8);
     (void)block;
 }
 
 static void *
-test_gc_lasting(void)
+test_clean_keep(void)
 {
-    bfdev_clean(malloc) void *block;
+    BFDEV_CLEAN(malloc) void *block;
     block = malloc(8);
-    bfdev_clean_return(block);
+    bfdev_return(block);
 }
 
 int
@@ -35,8 +35,8 @@ main(int argc, const char *argv[])
 {
     void *block;
 
-    test_gc_cleanup();
-    block = test_gc_lasting();
+    test_clean_gc();
+    block = test_clean_keep();
     free(block);
 
     return 0;

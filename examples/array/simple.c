@@ -14,25 +14,21 @@
 int
 main(int argc, const char *argv[])
 {
-    BFDEV_DEFINE_ARRAY(array, NULL, TEST_SIZE);
+    BFDEV_CLASS(bfdev_array, array)(NULL, TEST_SIZE);
     unsigned int count;
-
-    bfdev_array_append(&array, 0, 0);
 
     for (count = 0; count < TEST_LOOP; ++count) {
         unsigned int num;
         void *buff;
 
         num = rand() % TEST_SIZE;
-        buff = bfdev_array_push(&array, num);
+        buff = bfdev_array_push(array, num);
         if (!buff)
             return 1;
 
         memset(buff, 0, TEST_SIZE * num);
         printf("array bfdev_array_push test: %02u: %u\n", count, num);
     }
-
-    bfdev_array_release(&array);
 
     return 0;
 }
