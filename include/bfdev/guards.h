@@ -12,7 +12,18 @@
 
 BFDEV_BEGIN_DECLS
 
-#define BFDEV_CLEAN_TEMPLATE(name, type, free)  \
+/**
+ * Guards:
+ *
+ * The "goto error" pattern is notorious for introducing subtle resource
+ * leaks. It is tedious and error prone to add new resource acquisition
+ * constraints into code paths that already have several unwind
+ * conditions. The "cleanup" helpers enable the compiler to help with
+ * this tedium and can aid in maintaining LIFO (last in first out)
+ * unwind ordering to avoid unintentional leaks.
+ */
+
+#define BFDEV_DEFINE_CLEAN(name, type, free)    \
 static inline void                              \
 __bfdev_cleanup_##name(void *object)            \
 {                                               \
@@ -20,16 +31,36 @@ __bfdev_cleanup_##name(void *object)            \
     free;                                       \
 }
 
-#define bfdev_clean_lasting(object) ({  \
-    __auto_type __ptr = (object);       \
-    (object) = BFDEV_NULL; __ptr;       \
-})
-
-#define bfdev_clean(name) \
+#define BFDEV_CLEAN(name) \
     __bfdev_cleanup(__bfdev_cleanup_##name)
 
-#define bfdev_clean_return(object) \
-    return bfdev_clean_lasting(object)
+#define BFDEV_DEFINE_CLASS(name, type, ctor, dtor, args...) \
+typedef type __bfdev_class_##name##_t;                      \
+static inline type                                          \
+__bfdev_class_##name##_constructor(args)                    \
+{                                                           \
+    type __tmp = ctor;                                      \
+    return __tmp;                                           \
+}                                                           \
+static inline void                                          \
+__bfdev_class_##name##_destructor(type *p)                  \
+{                                                           \
+    type _T = *p;                                           \
+    dtor;                                                   \
+}
+
+#define BFDEV_CLASS(name, var) \
+    __bfdev_class_##name##_t var \
+        __bfdev_cleanup(__bfdev_class_##name##_destructor) = \
+        __bfdev_class_##name##_constructor
+
+#define bfdev_lasting(object) ({    \
+    __auto_type __ptr = (object);   \
+    (object) = BFDEV_NULL; __ptr;   \
+})
+
+#define bfdev_return(object) \
+    return bfdev_lasting(object)
 
 BFDEV_END_DECLS
 
