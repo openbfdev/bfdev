@@ -22,6 +22,33 @@ bfport_memcpy(void *dest, const void *src, bfdev_size_t n)
 }
 
 __bfdev_weak void *
+bfport_memmove(void *dest, const void *src, bfdev_size_t n)
+{
+    char *tmp;
+    const char *s;
+
+    if (dest <= src) {
+        tmp = dest;
+        s = src;
+
+        while (n--)
+            *tmp++ = *s++;
+
+        return dest;
+    }
+
+    tmp = dest;
+    tmp += n;
+    s = src;
+    s += n;
+
+    while (n--)
+        *--tmp = *--s;
+
+    return dest;
+}
+
+__bfdev_weak void *
 bfport_memset(void *s, int c, bfdev_size_t n)
 {
     unsigned char *xs;
@@ -41,7 +68,8 @@ bfport_memcmp(const void *s1, const void *s2, bfdev_size_t n)
 
     res = 0;
     for (su1 = s1, su2 = s2; 0 < n; ++su1, ++su2, n--) {
-        if ((res = *su1 - *su2) != 0)
+        res = *su1 - *su2;
+        if (res != 0)
             break;
     }
 
@@ -117,8 +145,7 @@ bfport_strcpy(char *dest, const char *src)
     unsigned char *tmp;
 
     tmp = dest;
-    while ((*tmp++ = *src++) != '\0')
-        ;
+    while ((*tmp++ = *src++) != '\0');
 
     return dest;
 }
