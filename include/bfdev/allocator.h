@@ -10,6 +10,8 @@
 #include <bfdev/config.h>
 #include <bfdev/types.h>
 #include <bfdev/stddef.h>
+#include <bfdev/guards.h>
+#include <bfdev/errptr.h>
 
 BFDEV_BEGIN_DECLS
 
@@ -124,6 +126,11 @@ bfdev_realloc_array(const bfdev_alloc_t *alloc,
 {
     return bfdev_realloc(alloc, block, size * nr);
 }
+
+BFDEV_DEFINE_CLEAN(bfdev_free, void *,
+    if (!BFDEV_IS_INVAL(_T))
+        bfdev_free(BFDEV_NULL, _T);
+)
 
 BFDEV_END_DECLS
 
