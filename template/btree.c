@@ -4,13 +4,17 @@
  */
 
 #include <base.h>
-#include <bfdev/btree.h>
+#include <bfdev/template/btree.h>
 #include <export.h>
 
 #define BLOCK_SIZE 128
 #define NODE_SIZE (BLOCK_SIZE - sizeof(bfdev_btree_node_t))
-#define UINTPTR_PER_U32 BFDEV_DIV_ROUND_UP(BFDEV_BYTES_PER_U32, BFDEV_BYTES_PER_UINTPTR)
-#define UINTPTR_PER_U64 BFDEV_DIV_ROUND_UP(BFDEV_BYTES_PER_U64, BFDEV_BYTES_PER_UINTPTR)
+
+#define UINTPTR_PER_U32 \
+    BFDEV_DIV_ROUND_UP(BFDEV_BYTES_PER_U32, BFDEV_BYTES_PER_UINTPTR)
+
+#define UINTPTR_PER_U64 \
+    BFDEV_DIV_ROUND_UP(BFDEV_BYTES_PER_U64, BFDEV_BYTES_PER_UINTPTR)
 
 export bfdev_btree_layout_t
 bfdev_btree_layout32 = {

@@ -25,6 +25,7 @@ set(BFDEV_ARCH generic)
 set(BFDEV_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 set(BFDEV_HEADER_PATH ${PROJECT_SOURCE_DIR}/include)
 set(BFDEV_SOURCE_PATH ${PROJECT_SOURCE_DIR}/src)
+set(BFDEV_TEMPLATE_PATH ${PROJECT_SOURCE_DIR}/template)
 set(BFDEV_PORT_PATH ${PROJECT_SOURCE_DIR}/port)
 set(BFDEV_DOCUMENT_PATH ${PROJECT_SOURCE_DIR}/docs)
 set(BFDEV_GENERATED_PATH ${PROJECT_BINARY_DIR}/generated)
@@ -84,10 +85,18 @@ include(${PROJECT_SOURCE_DIR}/build.cmake)
 add_subdirectory(${PROJECT_SOURCE_DIR}/scripts)
 
 packed_header(
+    bfdev/template/
+    _BFDEV_TEMPLATE_H_
+    ${BFDEV_GENERATED_PATH}/bfdev/template.h
+    ${BFDEV_HEADER_PATH}/bfdev/template
+)
+
+packed_header(
     bfdev/
     _BFDEV_H_
     ${BFDEV_GENERATED_PATH}/bfdev.h
     ${BFDEV_HEADER_PATH}/bfdev
+    ${BFDEV_GENERATED_PATH}/bfdev
 )
 
 add_custom_target(

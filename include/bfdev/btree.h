@@ -58,15 +58,6 @@ struct bfdev_btree_ops {
 #define BFDEV_BTREE_ROOT(name, layout, ops, pdata) \
     bfdev_btree_root_t name = BFDEV_BTREE_INIT(layout, ops, pdata)
 
-extern bfdev_btree_layout_t
-bfdev_btree_layout32;
-
-extern bfdev_btree_layout_t
-bfdev_btree_layout64;
-
-extern bfdev_btree_layout_t
-bfdev_btree_layoutptr;
-
 static inline void
 bfdev_btree_init(bfdev_btree_root_t *root, bfdev_btree_layout_t *layout,
                  bfdev_btree_ops_t *ops, void *pdata)
@@ -74,19 +65,9 @@ bfdev_btree_init(bfdev_btree_root_t *root, bfdev_btree_layout_t *layout,
     *root = BFDEV_BTREE_INIT(layout, ops, pdata);
 }
 
-extern long
-bfdev_btree_key_find(bfdev_btree_root_t *root, bfdev_uintptr_t *node,
-                     bfdev_uintptr_t *key);
-
 extern void
 bfdev_btree_key_copy(bfdev_btree_root_t *root, bfdev_uintptr_t *dest,
                      bfdev_uintptr_t *src);
-
-extern void *
-bfdev_btree_alloc(bfdev_btree_root_t *root);
-
-extern void
-bfdev_btree_free(bfdev_btree_root_t *root, void *node);
 
 extern void *
 bfdev_btree_lookup(bfdev_btree_root_t *root, bfdev_uintptr_t *key);

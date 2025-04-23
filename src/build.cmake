@@ -16,7 +16,6 @@ set(BFDEV_SOURCE
     ${CMAKE_CURRENT_LIST_DIR}/bloom.c
     ${CMAKE_CURRENT_LIST_DIR}/bsearch.c
     ${CMAKE_CURRENT_LIST_DIR}/btree.c
-    ${CMAKE_CURRENT_LIST_DIR}/btree-utils.c
     ${CMAKE_CURRENT_LIST_DIR}/dword.c
     ${CMAKE_CURRENT_LIST_DIR}/callback.c
     ${CMAKE_CURRENT_LIST_DIR}/errname.c

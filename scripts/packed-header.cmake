@@ -3,9 +3,7 @@
 # Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
 #
 
-function(packed_header prefix name genfile source)
-    file(GLOB srclist ${source}/*.h)
-
+function(packed_header prefix name genfile)
     file(REMOVE ${genfile})
     file(WRITE ${genfile}
         "/*\n"
@@ -18,13 +16,16 @@ function(packed_header prefix name genfile source)
         "\n"
     )
 
-    foreach(srcpath ${srclist})
-        string(REGEX REPLACE ".+/(.+)" "\\1" filename ${srcpath})
-        message(STATUS "Packing header: " ${prefix} ${filename})
+    foreach(source ${ARGN})
+        file(GLOB srclist ${source}/*.h)
+        foreach(srcpath ${srclist})
+            string(REGEX REPLACE ".+/(.+)" "\\1" filename ${srcpath})
+            message(STATUS "Packing header: " ${prefix} ${filename})
 
-        file(APPEND ${genfile}
-            "#include <" ${prefix} ${filename} ">\n"
-        )
+            file(APPEND ${genfile}
+                "#include <" ${prefix} ${filename} ">\n"
+            )
+        endforeach()
     endforeach()
 
     file(APPEND ${genfile}
