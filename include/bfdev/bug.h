@@ -43,7 +43,7 @@ BFDEV_WARN_MSG(                                         \
 
 #ifndef BFDEV_BUG_ON
 # define BFDEV_BUG_ON(condition) ({     \
-    bfdev_bool __cond = !!(condition);        \
+    bfdev_bool __cond = !!(condition);  \
     if (bfdev_unlikely(__cond))         \
         BFDEV_BUG();                    \
     bfdev_unlikely(__cond);             \
@@ -52,7 +52,7 @@ BFDEV_WARN_MSG(                                         \
 
 #ifndef BFDEV_WARN_ON
 # define BFDEV_WARN_ON(condition) ({    \
-    bfdev_bool __cond = !!(condition);        \
+    bfdev_bool __cond = !!(condition);  \
     if (bfdev_unlikely(__cond))         \
         BFDEV_WARN();                   \
     bfdev_unlikely(__cond);             \

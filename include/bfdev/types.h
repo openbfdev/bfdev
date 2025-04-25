@@ -52,6 +52,9 @@ typedef int bfdev_state_t;
 typedef bfdev_intptr_t bfdev_atomic_t;
 typedef bfdev_u64 bfdev_time_t;
 
+#define BFDEV_OK 0
+#define BFDEV_ERROR -1
+
 #define BFDEV_EQ 0
 #define BFDEV_BT 1
 #define BFDEV_LT -1
