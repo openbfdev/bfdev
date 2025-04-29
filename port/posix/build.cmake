@@ -35,6 +35,7 @@ check_symbol_and_exit("stdlib.h" "abort")
 
 # string
 check_symbol_and_exit("string.h" "memcpy")
+check_symbol_and_exit("string.h" "memmove")
 check_symbol_and_exit("string.h" "memset")
 check_symbol_and_exit("string.h" "memcmp")
 check_symbol_and_exit("string.h" "strcmp")

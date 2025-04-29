@@ -1,0 +1,54 @@
+name: build default on generic arm gcc
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 */2 * * *'
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    name: Test on ${{matrix.os}}
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        os: [ubuntu-22.04]
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: install dependencies
+        run: |
+          sudo apt update
+          sudo apt install cmake make \
+            gcc gcc-arm-none-eabi
+
+      - name: configure cmake
+        run: |
+          cmake -B ${{github.workspace}}/build \
+                -D CMAKE_INSTALL_PREFIX=${{github.workspace}}/build/install \
+                -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
+                -D CMAKE_C_COMPILER=arm-none-eabi-gcc \
+                -D CMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY \
+                -D CMAKE_SYSTEM_NAME=Generic \
+                -D HOST_C_COMPILER=gcc \
+                -D BFDEV_STRICT=ON \
+                -D BFDEV_BUILD_SHARED=OFF
+
+      - name: make
+        run: |
+          cmake --build ${{github.workspace}}/build \
+                --config ${{env.BUILD_TYPE}}
+
+      - name: install
+        run: |
+          cmake --build ${{github.workspace}}/build \
+                --config ${{env.BUILD_TYPE}} -- install
