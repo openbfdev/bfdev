@@ -38,6 +38,15 @@ BFDEV_BEGIN_DECLS
 #define bfdev_is_signed(type) (((type)(-1)) < (type)1)
 #define bfdev_is_unsigned(type) (!bfdev_is_signed(type))
 
+#define bfdev_type_half_max(type) \
+    ((type)1 << (8 * sizeof(type) - 1 - bfdev_is_signed(type)))
+
+#define bfdev_type_max(type) \
+    ((type)((bfdev_type_half_max(type) - 1) + bfdev_type_half_max(type)))
+
+#define bfdev_type_min(type) \
+    (((type)((type)-bfdev_type_max(type) - (type)1)))
+
 /* Not-quite-unique ID. */
 #ifndef __BFDEV_UNIQUE_ID
 # define __BFDEV_UNIQUE_ID(prefix) __BFDEV_PASTE(__BFDEV_PASTE(__UNIQUE_ID_, prefix), __LINE__)
