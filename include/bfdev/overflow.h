@@ -9,6 +9,7 @@
 #include <bfdev/config.h>
 #include <bfdev/types.h>
 #include <bfdev/stddef.h>
+#include <bfdev/limits.h>
 
 BFDEV_BEGIN_DECLS
 
@@ -18,7 +19,7 @@ BFDEV_BEGIN_DECLS
  * @b: second addend.
  * @d: pointer to store sum.
  *
- * Returns 0 on success.
+ * Returns true on wrap-around, false otherwise.
  */
 #define bfdev_overflow_check_add(a, b, d)       \
 bfdev_overflow_check(({                         \
@@ -36,7 +37,7 @@ bfdev_overflow_check(({                         \
  * @b: subtrahend; value to subtract from @a.
  * @d: pointer to store difference.
  *
- * Returns 0 on success.
+ * Returns true on wrap-around, false otherwise.
  */
 #define bfdev_overflow_check_sub(a, b, d)       \
 bfdev_overflow_check(({                         \
@@ -54,7 +55,7 @@ bfdev_overflow_check(({                         \
  * @b: second factor.
  * @d: pointer to store product.
  *
- * Returns 0 on success.
+ * Returns true on wrap-around, false otherwise.
  */
 #define bfdev_overflow_check_mul(a, b, d)       \
 bfdev_overflow_check(({                         \
@@ -71,7 +72,7 @@ bfdev_overflow_check(({                         \
     type __b = (type)(b);                       \
     type __d;                                   \
     bfdev_overflow_check_add(__a, __b, &__d)    \
-    ? (type)~0ULL : __d;                        \
+    ? bfdev_type_max(type) : __d;               \
 })
 
 #define bfdev_overflow_sub_type(type, a, b) ({  \
@@ -79,7 +80,7 @@ bfdev_overflow_check(({                         \
     type __b = (type)(b);                       \
     type __d;                                   \
     bfdev_overflow_check_sub(__a, __b, &__d)    \
-    ? (type)~0ULL : __d;                        \
+    ? bfdev_type_min(type) : __d;               \
 })
 
 #define bfdev_overflow_mul_type(type, a, b) ({  \
@@ -87,7 +88,7 @@ bfdev_overflow_check(({                         \
     type __b = (type)(b);                       \
     type __d;                                   \
     bfdev_overflow_check_mul(__a, __b, &__d)    \
-    ? (type)~0ULL : __d;                        \
+    ? bfdev_type_max(type) : __d;               \
 })
 
 static inline __bfdev_must_check bfdev_bool
@@ -101,7 +102,8 @@ bfdev_overflow_check(bfdev_bool overflow)
  * @a: first addend.
  * @b: second addend.
  *
- * Returns (type)~0ULL on failed.
+ * Returns: calculate @a + @b, any overflow causing the
+ * return value to be bfdev_type_max(type).
  */
 #define bfdev_overflow_add(a, b) \
     bfdev_overflow_add_type(typeof(a), a, b)
@@ -111,7 +113,8 @@ bfdev_overflow_check(bfdev_bool overflow)
  * @a: minuend; value to subtract from.
  * @b: subtrahend; value to subtract from @a.
  *
- * Returns (type)~0ULL on failed.
+ * Returns: calculate @a - @b, any overflow causing the
+ * return value to be bfdev_type_min(type).
  */
 #define bfdev_overflow_sub(a, b) \
     bfdev_overflow_sub_type(typeof(a), a, b)
@@ -121,7 +124,8 @@ bfdev_overflow_check(bfdev_bool overflow)
  * @a: first factor.
  * @b: second factor.
  *
- * Returns (type)~0ULL on failed.
+ * Returns: calculate @a * @b, any overflow causing the
+ * return value to be bfdev_type_max(type).
  */
 #define bfdev_overflow_mul(a, b) \
     bfdev_overflow_mul_type(typeof(a), a, b)
