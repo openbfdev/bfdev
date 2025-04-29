@@ -55,7 +55,11 @@ option(BFDEV_DEVEL "Enable development mode" OFF)
 option(BFDEV_STRICT "Enable strict compilation" OFF)
 option(BFDEV_EXAMPLES "Build examples" OFF)
 option(BFDEV_TESTSUITE "Build testsuite" OFF)
-option(BFDEV_DOCS "Install Documentation" OFF)
+
+option(BFDEV_BUILD_STATIC "Build Static Library" ON)
+option(BFDEV_BUILD_SHARED "Build Shared Library" ON)
+option(BFDEV_INSTALL_HEADERS "Install Headers" ON)
+option(BFDEV_INSTALL_DOCS "Install Documentation" OFF)
 
 option(BFDEV_ASAN "Enable Address Sanitizer" OFF)
 option(BFDEV_UBSAN "Enable Undefined Behaviour Sanitizer" OFF)
@@ -75,7 +79,7 @@ if(BFDEV_DEVEL)
     set(BFDEV_STRICT ON)
     set(BFDEV_EXAMPLES ON)
     set(BFDEV_TESTSUITE ON)
-    set(BFDEV_DOCS ON)
+    set(BFDEV_INSTALL_DOCS ON)
     set(BFDEV_ASAN ON)
     set(BFDEV_UBSAN ON)
     set(BFDEV_GCOV ON)
@@ -158,43 +162,59 @@ if(BFDEV_TESTSUITE)
 endif()
 
 if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
-    add_library(bfdev_static STATIC ${BFDEV_LIBRARY})
-    add_library(bfdev_shared SHARED ${BFDEV_LIBRARY})
+    if(BFDEV_BUILD_STATIC)
+        add_library(bfdev_static STATIC ${BFDEV_LIBRARY})
+        bfdev_dependencies(bfdev_static)
 
-    bfdev_dependencies(bfdev_static)
-    bfdev_dependencies(bfdev_shared)
+        set_target_properties(bfdev_static
+            PROPERTIES
+            OUTPUT_NAME ${PROJECT_NAME}
+            LINKER_LANGUAGE C
+        )
 
-    set_target_properties(bfdev_static
-        PROPERTIES
-        OUTPUT_NAME ${PROJECT_NAME}
-        LINKER_LANGUAGE C
-    )
+        install(TARGETS
+            bfdev_static
+            DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        )
+    endif()
 
-    set_target_properties(bfdev_shared
-        PROPERTIES
-        OUTPUT_NAME ${PROJECT_NAME}
-        VERSION ${PROJECT_VERSION}
-        SOVERSION ${PROJECT_VERSION_MAJOR}
-        LINKER_LANGUAGE C
-        MACOSX_RPATH ON
-    )
+    if(BFDEV_BUILD_SHARED)
+        add_library(bfdev_shared SHARED ${BFDEV_LIBRARY})
+        bfdev_dependencies(bfdev_shared)
 
-    install(FILES
-        ${BFDEV_CONFIGURE}
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/bfdev
-    )
+        set_target_properties(bfdev_shared
+            PROPERTIES
+            OUTPUT_NAME ${PROJECT_NAME}
+            VERSION ${PROJECT_VERSION}
+            SOVERSION ${PROJECT_VERSION_MAJOR}
+            LINKER_LANGUAGE C
+            MACOSX_RPATH ON
+        )
 
-    install(FILES
-        ${BFDEV_EXPORT_PATH}/bfdev.h
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-    )
+        install(TARGETS
+            bfdev_shared
+            DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        )
+    endif()
 
-    install(DIRECTORY
-        ${BFDEV_EXPORT_PATH}/bfdev
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-    )
+    if(BFDEV_INSTALL_HEADERS)
+        install(FILES
+            ${BFDEV_CONFIGURE}
+            DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/bfdev
+        )
 
-    if(BFDEV_DOCS)
+        install(FILES
+            ${BFDEV_EXPORT_PATH}/bfdev.h
+            DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        )
+
+        install(DIRECTORY
+            ${BFDEV_EXPORT_PATH}/bfdev
+            DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        )
+    endif()
+
+    if(BFDEV_INSTALL_DOCS)
         install(FILES
             ${PROJECT_SOURCE_DIR}/README.md
             ${PROJECT_SOURCE_DIR}/AUTHORS
@@ -208,10 +228,4 @@ if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
             DESTINATION ${CMAKE_INSTALL_DOCDIR}
         )
     endif()
-
-    install(TARGETS
-        bfdev_static bfdev_shared
-        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    )
 endif()
