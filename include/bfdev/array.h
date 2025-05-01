@@ -24,8 +24,8 @@ BFDEV_BEGIN_DECLS
  * is typically useful when buffering I/O or processing data.
  */
 
-#ifndef BFDEV_ARRAY_MSIZE
-# define BFDEV_ARRAY_MSIZE 32
+#ifndef BFDEV_ARRAY_MINSIZE
+# define BFDEV_ARRAY_MINSIZE 32
 #endif
 
 typedef struct bfdev_array bfdev_array_t;
@@ -197,17 +197,6 @@ bfdev_array_pop(bfdev_array_t *array, unsigned long num);
 
 extern void *
 bfdev_array_peek(const bfdev_array_t *array, unsigned long num);
-
-/**
- * bfdev_array_append() - append elements into the array.
- * @array: the array object.
- * @data: the elements to append.
- * @num: the number of element to append.
- *
- * Return 0 on success or a negative error code on failure.
- */
-extern int
-bfdev_array_append(bfdev_array_t *array, const void *data, unsigned long num);
 
 /**
  * bfdev_array_remove() - remove elements from the array.
