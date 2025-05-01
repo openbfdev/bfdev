@@ -26,11 +26,11 @@ struct bfdev_buff {
 #define BFDEV_BUFF_INIT(len, data) \
     (bfdev_buff_t) BFDEV_BUFF_STATIC(len, data)
 
-#define BFDEV_DFEINF_BUFF(name, len, data) \
+#define BFDEV_DEFINE_BUFF(name, len, data) \
     bfdev_buff_t name = BFDEV_BUFF_INIT(len, data)
 
 #define BFDEV_DEFINE_STRING(name, str) \
-    BFDEV_DFEINF_BUFF(name, sizeof(str) - 1, str)
+    BFDEV_DEFINE_BUFF(name, sizeof(str) - 1, str)
 
 static inline void
 bfdev_buff_init(bfdev_buff_t *buff, bfdev_size_t len, void *data)
