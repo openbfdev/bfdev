@@ -15,7 +15,7 @@ array_reqsize(bfdev_array_t *array, unsigned long count)
     unsigned long request;
     bfdev_size_t size;
 
-    request = bfdev_max(BFDEV_ARRAY_MSIZE, count);
+    request = bfdev_max(BFDEV_ARRAY_MINSIZE, count);
     size = bfdev_pow2_roundup(request * array->cells);
 
     return size;
@@ -104,23 +104,6 @@ bfdev_array_peek(const bfdev_array_t *array, unsigned long num)
 {
     return array_peek(array, num, BFDEV_NULL);
 }
-
-export int
-bfdev_array_append(bfdev_array_t *array, const void *data, unsigned long num)
-{
-    bfdev_size_t size;
-    void *buff;
-
-    buff = bfdev_array_push(array, num);
-    if (bfdev_unlikely(!buff))
-        return -BFDEV_ENOMEM;
-
-    size = bfdev_array_offset(array, num);
-    bfdev_memcpy(buff, data, size);
-
-    return -BFDEV_ENOERR;
-}
-
 export int
 bfdev_array_remove(bfdev_array_t *array, unsigned long index, unsigned long num)
 {

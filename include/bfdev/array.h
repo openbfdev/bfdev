@@ -24,8 +24,8 @@ BFDEV_BEGIN_DECLS
  * is typically useful when buffering I/O or processing data.
  */
 
-#ifndef BFDEV_ARRAY_MSIZE
-# define BFDEV_ARRAY_MSIZE 32
+#ifndef BFDEV_ARRAY_MINSIZE
+# define BFDEV_ARRAY_MINSIZE 32
 #endif
 
 typedef struct bfdev_array bfdev_array_t;
@@ -34,6 +34,7 @@ struct bfdev_array {
     const bfdev_alloc_t *alloc;
     unsigned long capacity;
     unsigned long index;
+    unsigned long seek;
     bfdev_size_t cells;
     void *data;
 };
@@ -87,17 +88,10 @@ bfdev_array_index(const bfdev_array_t *array)
     return array->index;
 }
 
-/**
- * bfdev_array_size() - get total size in array.
- * @array: the array object.
- *
- * Returns the total size of elements stored in
- * the array container.
- */
-static inline bfdev_size_t
-bfdev_array_size(const bfdev_array_t *array)
+static inline unsigned long
+bfdev_array_tell(const bfdev_array_t *array)
 {
-    return array->cells * array->index;
+    return array->seek;
 }
 
 /**
@@ -115,6 +109,32 @@ bfdev_array_offset(const bfdev_array_t *array, unsigned long index)
 }
 
 /**
+ * bfdev_array_size() - get total size in array.
+ * @array: the array object.
+ *
+ * Returns the total size of elements stored in
+ * the array container.
+ */
+static inline bfdev_size_t
+bfdev_array_size(const bfdev_array_t *array)
+{
+    return bfdev_array_offset(array, array->index);
+}
+
+/**
+ * bfdev_array_remain() - get remain size in array.
+ * @array: the array object.
+ *
+ * Returns the remain size of elements stored in
+ * the array container.
+ */
+static inline bfdev_size_t
+bfdev_array_remain(const bfdev_array_t *array)
+{
+    return bfdev_array_offset(array, array->index - array->seek);
+}
+
+/**
  * bfdev_array_data() - get elements pointer in array.
  * @array: the array object.
  * @index: elements index.
@@ -125,10 +145,36 @@ bfdev_array_offset(const bfdev_array_t *array, unsigned long index)
 static inline void *
 bfdev_array_data(const bfdev_array_t *array, unsigned long index)
 {
-    if (bfdev_unlikely(index >= array->index))
+    void *data;
+
+    if (bfdev_unlikely(array->seek + index >= array->index))
         return BFDEV_NULL;
 
-    return array->data + bfdev_array_offset(array, index);
+    data = array->data + bfdev_array_offset(array, array->seek);
+    data += bfdev_array_offset(array, index);
+
+    return data;
+}
+
+/**
+ * bfdev_array_seek() - seek elements in the array.
+ * @array: the array object.
+ * @seek: the number of element to seek.
+ *
+ * Set the current position of the array to @seek.
+ * The next call to bfdev_array_data() will start
+ * from this position.
+ *
+ * Return 0 on success or a negative error code on failure.
+ */
+static inline int
+bfdev_array_seek(bfdev_array_t *array, unsigned long seek)
+{
+    if (bfdev_unlikely(seek > array->index))
+        return -BFDEV_EOVERFLOW;
+    array->seek = seek;
+
+    return -BFDEV_ENOERR;
 }
 
 /**
@@ -151,17 +197,6 @@ bfdev_array_pop(bfdev_array_t *array, unsigned long num);
 
 extern void *
 bfdev_array_peek(const bfdev_array_t *array, unsigned long num);
-
-/**
- * bfdev_array_append() - append elements into the array.
- * @array: the array object.
- * @data: the elements to append.
- * @num: the number of element to append.
- *
- * Return 0 on success or a negative error code on failure.
- */
-extern int
-bfdev_array_append(bfdev_array_t *array, const void *data, unsigned long num);
 
 /**
  * bfdev_array_remove() - remove elements from the array.
