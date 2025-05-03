@@ -70,6 +70,34 @@ array_peek(const bfdev_array_t *array, unsigned long num, unsigned long *idxp)
     return array->data + offset;
 }
 
+static inline void *
+array_consume(bfdev_array_t *array, unsigned long num, bfdev_bool extend)
+{
+    unsigned long end;
+    bfdev_bool overflow;
+    void *data;
+    int retval;
+
+    overflow = bfdev_overflow_check_add(array->seek, num, &end);
+    if (bfdev_unlikely(overflow))
+        return BFDEV_NULL;
+
+    if (end > array->index) {
+        if (bfdev_unlikely(!extend))
+            return BFDEV_NULL;
+
+        retval = array_apply(array, end);
+        if (bfdev_unlikely(retval))
+            return BFDEV_NULL;
+        array->index = end;
+    }
+
+    data = array->data + bfdev_array_offset(array, array->seek);
+    array->seek = end;
+
+    return data;
+}
+
 export void *
 bfdev_array_push(bfdev_array_t *array, unsigned long num)
 {
@@ -121,25 +149,41 @@ bfdev_array_data(const bfdev_array_t *array, unsigned long index)
     return array->data + bfdev_array_offset(array, actual);
 }
 
+export const void *
+bfdev_array_read(bfdev_array_t *array, unsigned long num)
+{
+    return array_consume(array, num, bfdev_false);
+}
+
+export void *
+bfdev_array_write(bfdev_array_t *array, unsigned long num)
+{
+    return array_consume(array, num, bfdev_true);
+}
+
 export int
 bfdev_array_remove(bfdev_array_t *array, unsigned long index, unsigned long num)
 {
-    unsigned long cut;
+    unsigned long actual, cut;
     void *start, *end;
     bfdev_size_t behind;
     bfdev_bool overflow;
 
-    if (bfdev_unlikely(index >= array->index))
+    overflow = bfdev_overflow_check_add(array->seek, index, &actual);
+    if (bfdev_unlikely(overflow))
+        return -BFDEV_EOVERFLOW;
+
+    if (bfdev_unlikely(actual >= array->index))
         return -BFDEV_EFBIG;
 
-    overflow = bfdev_overflow_check_add(index, num, &cut);
+    overflow = bfdev_overflow_check_add(actual, num, &cut);
     if (bfdev_unlikely(overflow))
         return -BFDEV_EOVERFLOW;
 
     if (bfdev_unlikely(cut > array->index))
         return -BFDEV_EFBIG;
 
-    start = array->data + bfdev_array_offset(array, index);
+    start = array->data + bfdev_array_offset(array, actual);
     end = array->data + bfdev_array_offset(array, cut);
     behind = bfdev_array_offset(array, array->index - cut);
 

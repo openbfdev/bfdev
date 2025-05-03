@@ -88,6 +88,12 @@ bfdev_array_index(const bfdev_array_t *array)
     return array->index;
 }
 
+/**
+ * bfdev_array_tell() - get current position in array.
+ * @array: the array object.
+ *
+ * Returns the current seek position of the array.
+ */
 static inline unsigned long
 bfdev_array_tell(const bfdev_array_t *array)
 {
@@ -131,6 +137,9 @@ bfdev_array_size(const bfdev_array_t *array)
 static inline bfdev_size_t
 bfdev_array_remain(const bfdev_array_t *array)
 {
+    if (array->index <= array->seek)
+        return 0;
+
     return bfdev_array_offset(array, array->index - array->seek);
 }
 
@@ -142,17 +151,11 @@ bfdev_array_remain(const bfdev_array_t *array)
  * Set the current position of the array to @seek.
  * The next call to bfdev_array_data() will start
  * from this position.
- *
- * Return 0 on success or a negative error code on failure.
  */
-static inline int
+static inline void
 bfdev_array_seek(bfdev_array_t *array, unsigned long seek)
 {
-    if (bfdev_unlikely(seek > array->index))
-        return -BFDEV_EOVERFLOW;
     array->seek = seek;
-
-    return -BFDEV_ENOERR;
 }
 
 /**
@@ -160,7 +163,7 @@ bfdev_array_seek(bfdev_array_t *array, unsigned long seek)
  * @array: the array object.
  * @num: the number of element to push.
  *
- * Creates a number of new elements on the array and
+ * Creates a number of new elements at the end of array and
  * returns a pointer to the first of these elements.
  *
  * this may cause a re-allocation of the array depending on
@@ -186,6 +189,29 @@ bfdev_array_peek(const bfdev_array_t *array, unsigned long num);
  */
 extern void *
 bfdev_array_data(const bfdev_array_t *array, unsigned long index);
+
+/**
+ * bfdev_array_read() - read elements from the array.
+ * @array: the array object.
+ * @num: the number of element to read.
+ *
+ * Retrieves a block of @num elements starting from the current seek position
+ * in the array and returns a pointer to the first element.
+ */
+extern const void *
+bfdev_array_read(bfdev_array_t *array, unsigned long num);
+
+/**
+ * bfdev_array_write() - write elements to the array.
+ * @array: the array object.
+ * @num: the number of element to write.
+ *
+ * Reserves space for @num elements starting from the current seek position,
+ * allocating memory if necessary, and returns a pointer to the first element.
+ * The caller is responsible for writing the data to the return memory.
+ */
+extern void *
+bfdev_array_write(bfdev_array_t *array, unsigned long num);
 
 /**
  * bfdev_array_remove() - remove elements from the array.
@@ -235,21 +261,21 @@ bfdev_array_release(bfdev_array_t *array);
 static inline bfdev_array_t *
 bfdev_array_create(const bfdev_alloc_t *alloc, bfdev_size_t cells)
 {
-    bfdev_array_t *obj;
+    bfdev_array_t *array;
 
-    obj = bfdev_malloc(alloc, sizeof(*obj));
-    if (bfdev_unlikely(!obj))
+    array = bfdev_malloc(alloc, sizeof(*array));
+    if (bfdev_unlikely(!array))
         return BFDEV_NULL;
-    bfdev_array_init(obj, alloc, cells);
+    bfdev_array_init(array, alloc, cells);
 
-    return obj;
+    return array;
 }
 
 static inline void
-bfdev_array_destroy(bfdev_array_t *obj)
+bfdev_array_destroy(bfdev_array_t *array)
 {
-    bfdev_array_release(obj);
-    bfdev_free(obj->alloc, obj);
+    bfdev_array_release(array);
+    bfdev_free(array->alloc, array);
 }
 
 BFDEV_DEFINE_CLASS(bfdev_array, bfdev_array_t *,
