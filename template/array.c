@@ -9,22 +9,6 @@
 #include <export.h>
 
 export int
-bfdev_array_append(bfdev_array_t *array, const void *data, unsigned long num)
-{
-    bfdev_size_t size;
-    void *buff;
-
-    buff = bfdev_array_push(array, num);
-    if (bfdev_unlikely(!buff))
-        return -BFDEV_ENOMEM;
-
-    size = bfdev_array_offset(array, num);
-    bfdev_memcpy(buff, data, size);
-
-    return -BFDEV_ENOERR;
-}
-
-export int
 bfdev_array_append_array(bfdev_array_t *array, const bfdev_array_t *append)
 {
     int retval;

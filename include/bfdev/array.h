@@ -214,6 +214,17 @@ extern void *
 bfdev_array_write(bfdev_array_t *array, unsigned long num);
 
 /**
+ * bfdev_array_append() - append elements into the array.
+ * @array: the array object.
+ * @data: the elements to append.
+ * @num: the number of element to append.
+ *
+ * Return 0 on success or a negative error code on failure.
+ */
+extern int
+bfdev_array_append(bfdev_array_t *array, const void *data, unsigned long num);
+
+/**
  * bfdev_array_remove() - remove elements from the array.
  * @array: the array object.
  * @index: the index of the first elements to remove.

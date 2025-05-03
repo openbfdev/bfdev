@@ -162,6 +162,22 @@ bfdev_array_write(bfdev_array_t *array, unsigned long num)
 }
 
 export int
+bfdev_array_append(bfdev_array_t *array, const void *data, unsigned long num)
+{
+    bfdev_size_t size;
+    void *buff;
+
+    buff = bfdev_array_push(array, num);
+    if (bfdev_unlikely(!buff))
+        return -BFDEV_ENOMEM;
+
+    size = bfdev_array_offset(array, num);
+    bfdev_memcpy(buff, data, size);
+
+    return -BFDEV_ENOERR;
+}
+
+export int
 bfdev_array_remove(bfdev_array_t *array, unsigned long index, unsigned long num)
 {
     unsigned long actual, cut;
