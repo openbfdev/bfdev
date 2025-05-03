@@ -104,6 +104,23 @@ bfdev_array_peek(const bfdev_array_t *array, unsigned long num)
 {
     return array_peek(array, num, BFDEV_NULL);
 }
+
+export void *
+bfdev_array_data(const bfdev_array_t *array, unsigned long index)
+{
+    unsigned long actual;
+    bfdev_bool overflow;
+
+    overflow = bfdev_overflow_check_add(array->seek, index, &actual);
+    if (bfdev_unlikely(overflow))
+        return BFDEV_NULL;
+
+    if (bfdev_unlikely(actual >= array->index))
+        return BFDEV_NULL;
+
+    return array->data + bfdev_array_offset(array, actual);
+}
+
 export int
 bfdev_array_remove(bfdev_array_t *array, unsigned long index, unsigned long num)
 {

@@ -135,28 +135,6 @@ bfdev_array_remain(const bfdev_array_t *array)
 }
 
 /**
- * bfdev_array_data() - get elements pointer in array.
- * @array: the array object.
- * @index: elements index.
- *
- * Return the offset value of the object indexed
- * by @index in the array.
- */
-static inline void *
-bfdev_array_data(const bfdev_array_t *array, unsigned long index)
-{
-    void *data;
-
-    if (bfdev_unlikely(array->seek + index >= array->index))
-        return BFDEV_NULL;
-
-    data = array->data + bfdev_array_offset(array, array->seek);
-    data += bfdev_array_offset(array, index);
-
-    return data;
-}
-
-/**
  * bfdev_array_seek() - seek elements in the array.
  * @array: the array object.
  * @seek: the number of element to seek.
@@ -197,6 +175,17 @@ bfdev_array_pop(bfdev_array_t *array, unsigned long num);
 
 extern void *
 bfdev_array_peek(const bfdev_array_t *array, unsigned long num);
+
+/**
+ * bfdev_array_data() - get elements pointer in array.
+ * @array: the array object.
+ * @index: elements index.
+ *
+ * Return the offset value of the object indexed
+ * by @index in the array.
+ */
+extern void *
+bfdev_array_data(const bfdev_array_t *array, unsigned long index);
 
 /**
  * bfdev_array_remove() - remove elements from the array.
