@@ -225,6 +225,19 @@ bfdev_array_splice(bfdev_array_t *array, unsigned long index,
 }
 
 export int
+bfdev_array_reserve(bfdev_array_t *array, unsigned long num)
+{
+    unsigned long count;
+    bfdev_bool overflow;
+
+    overflow = bfdev_overflow_check_add(array->index, num, &count);
+    if (bfdev_unlikely(overflow))
+        return -BFDEV_EOVERFLOW;
+
+    return array_apply(array, count);
+}
+
+export int
 bfdev_array_resize(bfdev_array_t *array, unsigned long num)
 {
     int retval;
@@ -238,26 +251,13 @@ bfdev_array_resize(bfdev_array_t *array, unsigned long num)
     return -BFDEV_ENOERR;
 }
 
-export int
-bfdev_array_reserve(bfdev_array_t *array, unsigned long num)
-{
-    unsigned long count;
-    bfdev_bool overflow;
-
-    overflow = bfdev_overflow_check_add(array->index, num, &count);
-    if (bfdev_unlikely(overflow))
-        return -BFDEV_EOVERFLOW;
-
-    return array_apply(array, count);
-}
-
 export void
 bfdev_array_release(bfdev_array_t *array)
 {
     const bfdev_alloc_t *alloc;
 
+    bfdev_array_reset(array);
     array->capacity = 0;
-    array->index = 0;
 
     alloc = array->alloc;
     bfdev_free(alloc, array->data);

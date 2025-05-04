@@ -66,13 +66,14 @@ bfdev_array_init(bfdev_array_t *array, const bfdev_alloc_t *alloc,
  * bfdev_array_reset() - reset array.
  * @array: the array object.
  *
- * Reset the length of the stored data to zero and also
- * free the internal memory buffer
+ * Reset the length of the stored data to zero and
+ * also reset the current seek position.
  */
 static inline void
 bfdev_array_reset(bfdev_array_t *array)
 {
     array->index = 0;
+    array->seek = 0;
 }
 
 /**
@@ -240,16 +241,6 @@ bfdev_array_splice(bfdev_array_t *array, unsigned long index,
                    unsigned long delnum, unsigned long newnum);
 
 /**
- * bfdev_array_resize() - directly set the number of elements in array.
- * @array: the array object.
- * @num: the number required resize.
- *
- * Return 0 on success or a negative error code on failure.
- */
-extern int
-bfdev_array_resize(bfdev_array_t *array, unsigned long num);
-
-/**
  * bfdev_array_reserve() - reserve array buffer.
  * @array: the array object.
  * @num: the minimum required free space.
@@ -262,6 +253,16 @@ bfdev_array_resize(bfdev_array_t *array, unsigned long num);
  */
 extern int
 bfdev_array_reserve(bfdev_array_t *array, unsigned long num);
+
+/**
+ * bfdev_array_resize() - directly set the number of elements in array.
+ * @array: the array object.
+ * @num: the number required resize.
+ *
+ * Return 0 on success or a negative error code on failure.
+ */
+extern int
+bfdev_array_resize(bfdev_array_t *array, unsigned long num);
 
 /**
  * bfdev_array_release() - release array.
