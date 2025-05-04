@@ -225,15 +225,19 @@ extern int
 bfdev_array_append(bfdev_array_t *array, const void *data, unsigned long num);
 
 /**
- * bfdev_array_remove() - remove elements from the array.
+ * bfdev_array_splice() - splice elements in the array.
  * @array: the array object.
- * @index: the index of the first elements to remove.
- * @num: the number of element to remove.
+ * @index: the index to splice.
+ * @delnum: the number of element to delete.
+ * @newnum: the number of element to insert.
  *
- * Return 0 on success or a negative error code on failure.
+ * Used to change the contents of an array by removing or replacing existing
+ * elements and/or adding new elements, and returns a pointer to the
+ * first element of the newly inserted elements.
  */
-extern int
-bfdev_array_remove(bfdev_array_t *array, unsigned long index, unsigned long num);
+extern void *
+bfdev_array_splice(bfdev_array_t *array, unsigned long index,
+                   unsigned long delnum, unsigned long newnum);
 
 /**
  * bfdev_array_resize() - directly set the number of elements in array.

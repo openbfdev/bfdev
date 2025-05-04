@@ -177,36 +177,51 @@ bfdev_array_append(bfdev_array_t *array, const void *data, unsigned long num)
     return -BFDEV_ENOERR;
 }
 
-export int
-bfdev_array_remove(bfdev_array_t *array, unsigned long index, unsigned long num)
+export void *
+bfdev_array_splice(bfdev_array_t *array, unsigned long index,
+                   unsigned long delnum, unsigned long newnum)
 {
-    unsigned long actual, cut;
+    unsigned long actual, delcut, newcut, count;
     void *start, *end;
     bfdev_size_t behind;
     bfdev_bool overflow;
+    int retval;
 
     overflow = bfdev_overflow_check_add(array->seek, index, &actual);
     if (bfdev_unlikely(overflow))
-        return -BFDEV_EOVERFLOW;
+        return BFDEV_NULL;
 
     if (bfdev_unlikely(actual >= array->index))
-        return -BFDEV_EFBIG;
+        return BFDEV_NULL;
 
-    overflow = bfdev_overflow_check_add(actual, num, &cut);
+    overflow = bfdev_overflow_check_add(actual, delnum, &delcut);
     if (bfdev_unlikely(overflow))
-        return -BFDEV_EOVERFLOW;
+        return BFDEV_NULL;
 
-    if (bfdev_unlikely(cut > array->index))
-        return -BFDEV_EFBIG;
+    if (bfdev_unlikely(delcut > array->index))
+        return BFDEV_NULL;
 
-    start = array->data + bfdev_array_offset(array, actual);
-    end = array->data + bfdev_array_offset(array, cut);
-    behind = bfdev_array_offset(array, array->index - cut);
+    overflow = bfdev_overflow_check_add(actual, newnum, &newcut);
+    if (bfdev_unlikely(overflow))
+        return BFDEV_NULL;
 
-    bfdev_memmove(start, end, behind);
-    array->index -= num;
+    overflow = bfdev_overflow_check_add(array->index, newnum, &count) ||
+               bfdev_overflow_check_sub(count, delnum, &count);
+    if (bfdev_unlikely(overflow))
+        return BFDEV_NULL;
 
-    return -BFDEV_ENOERR;
+    behind = bfdev_array_offset(array, array->index - delcut);
+    array->index = count;
+
+    retval = array_apply(array, count);
+    if (bfdev_unlikely(retval))
+        return BFDEV_NULL;
+
+    start = array->data + bfdev_array_offset(array, delcut);
+    end = array->data + bfdev_array_offset(array, newcut);
+    bfdev_memmove(end, start, behind);
+
+    return array->data + bfdev_array_offset(array, actual);
 }
 
 export int
