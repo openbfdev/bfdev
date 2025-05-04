@@ -42,6 +42,17 @@ bfdev_array_append_buff(bfdev_array_t *array, bfdev_buff_t *append);
 extern int
 bfdev_array_append_cstr(bfdev_array_t *array, const char *append);
 
+
+/**
+ * bfdev_array_append_char() - append char into the array.
+ * @array: the array object.
+ * @append: the char to append.
+ *
+ * Return 0 on success or a negative error code on failure.
+ */
+extern int
+bfdev_array_append_char(bfdev_array_t *array, char append);
+
 BFDEV_END_DECLS
 
 #endif /* _BFDEV_TEMPLATE_ARRAY_H_ */

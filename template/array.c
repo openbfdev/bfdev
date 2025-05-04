@@ -52,3 +52,18 @@ bfdev_array_append_cstr(bfdev_array_t *array, const char *append)
 
     return -BFDEV_ENOERR;
 }
+
+export int
+bfdev_array_append_char(bfdev_array_t *array, char append)
+{
+    int retval;
+
+    if (array->cells != sizeof(append))
+        return -BFDEV_EPROTO;
+
+    retval = bfdev_array_append(array, &append, 1);
+    if (bfdev_unlikely(retval))
+        return retval;
+
+    return -BFDEV_ENOERR;
+}
