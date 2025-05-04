@@ -1,2 +1,5 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
-/array-simple
+/array-simple-append
+/array-simple-splice
+/array-simple-stack
+/array-simple-write

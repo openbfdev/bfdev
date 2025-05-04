@@ -2,8 +2,10 @@
 CMakeFiles/
 Testing/
 generated/
+export/
 CMakeCache.txt
 CTestTestfile.cmake
 cmake_install.cmake
 Makefile
+bfdev-*
 libbfdev.*
