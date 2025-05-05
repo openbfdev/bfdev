@@ -159,7 +159,7 @@ union vxprintf_arg {
 };
 
 static const char
-vxprintf_xdigits[16] = {
+vxprintf_xdigits[] = {
     "0123456789ABCDEF"
 };
 
