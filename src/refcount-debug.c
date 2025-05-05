@@ -48,7 +48,7 @@ bfdev_refcnt_report(bfdev_refcnt_t *ref, bfdev_refcnt_saturation_t type)
             break;
 
         default:
-            bfdev_log_err("(%p) unknow error\n", ref);
+            bfdev_log_err("(%p) unknown error\n", ref);
             return;
     }
 }

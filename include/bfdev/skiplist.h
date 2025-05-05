@@ -67,6 +67,7 @@ bfdev_skiplist_delete(bfdev_skip_head_t *head, bfdev_find_t find, void *pdata);
 extern void
 bfdev_skiplist_reset(bfdev_skip_head_t *head,
                      bfdev_release_t release, void *pdata);
+
 /**
  * bfdev_skiplist_create - create a skiplist header.
  * @alloc: the allocator for this skiplist.

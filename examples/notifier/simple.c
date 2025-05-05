@@ -11,7 +11,7 @@
 #include <bfdev/notifier.h>
 
 static
-BFDEV_DEFINE_NOTIFIER(notifer);
+BFDEV_DEFINE_NOTIFIER(notifier);
 
 static bfdev_notifier_ret_t
 func(void *arg, void *pdata)
@@ -30,7 +30,7 @@ main(int argc, const char *argv[])
     node[0].entry = func;
     node[0].pdata = "priority=3";
 
-    retval = bfdev_notifier_register(&notifer, &node[0]);
+    retval = bfdev_notifier_register(&notifier, &node[0]);
     if (retval)
         return retval;
 
@@ -38,7 +38,7 @@ main(int argc, const char *argv[])
     node[1].entry = func;
     node[1].pdata = "priority=2";
 
-    retval = bfdev_notifier_register(&notifer, &node[1]);
+    retval = bfdev_notifier_register(&notifier, &node[1]);
     if (retval)
         return retval;
 
@@ -46,9 +46,9 @@ main(int argc, const char *argv[])
     node[2].entry = func;
     node[2].pdata = "priority=1";
 
-    retval = bfdev_notifier_register(&notifer, &node[2]);
+    retval = bfdev_notifier_register(&notifier, &node[2]);
     if (retval)
         return retval;
 
-    return bfdev_notifier_call(&notifer, "helloworld", -1, NULL);
+    return bfdev_notifier_call(&notifier, "helloworld", -1, NULL);
 }

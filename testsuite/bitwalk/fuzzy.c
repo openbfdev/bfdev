@@ -326,7 +326,6 @@ TESTSUITE(
     return bitwalk_zero(TEST_SMALL_SIZE, TEST_SMALL_LOOP);
 }
 
-
 TESTSUITE(
     "bitwalk:zero_large", NULL, NULL,
     "bitwalk zero large test"

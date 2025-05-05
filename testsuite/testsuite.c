@@ -27,7 +27,7 @@ options[] = {
     {"version", no_argument, 0, 'v'},
     {"help", no_argument, 0, 'h'},
     {"count", required_argument, 0, 'c'},
-    {"slient", required_argument, 0, 's'},
+    {"silent", required_argument, 0, 's'},
     { }, /* NULL */
 };
 
@@ -187,7 +187,7 @@ usage(void)
 
     bfdev_log_err("Mandatory arguments to long options are mandatory for short options too.\n");
     bfdev_log_err("  -c, --count=NUM    number of repetitions for each test\n");
-    bfdev_log_err("  -s, --slient       do not print debugging information\n");
+    bfdev_log_err("  -s, --silent       do not print debugging information\n");
     bfdev_log_err("\n");
 
     align = 0;

@@ -13,7 +13,7 @@
 BFDEV_BEGIN_DECLS
 
 extern bfdev_bool
-bfdev_glob(const char *patten, const char *string);
+bfdev_glob(const char *pattern, const char *string);
 
 BFDEV_END_DECLS
 
