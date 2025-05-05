@@ -8,7 +8,7 @@
 #include <export.h>
 
 export bfdev_bool
-bfdev_glob(const char *patten, const char *string)
+bfdev_glob(const char *pattern, const char *string)
 {
     const char *class, *bpatten, *bstring;
     char ptch, stch, tcha, tchb;
@@ -18,7 +18,7 @@ bfdev_glob(const char *patten, const char *string)
     bstring = BFDEV_NULL;
 
     for (;;) {
-        ptch = *patten++;
+        ptch = *pattern++;
         stch = *string++;
 
         switch (ptch) {
@@ -28,16 +28,16 @@ bfdev_glob(const char *patten, const char *string)
                 break;
 
             case '*':
-                if (*patten == '\0')
+                if (*pattern == '\0')
                     return bfdev_true;
-                bpatten = patten;
+                bpatten = pattern;
                 bstring = --string;
                 break;
 
             case '[':
                 match = bfdev_false;
-                inverted = *patten == '!';
-                class = patten + inverted;
+                inverted = *pattern == '!';
+                class = pattern + inverted;
                 tcha = *class++;
 
                 do {
@@ -57,11 +57,11 @@ bfdev_glob(const char *patten, const char *string)
                 if (match == inverted)
                     goto backtrack;
 
-                patten = class;
+                pattern = class;
                 break;
 
             case '\\':
-                ptch = *patten++;
+                ptch = *pattern++;
                 bfdev_fallthrough;
 
             default: literal:
@@ -75,7 +75,7 @@ bfdev_glob(const char *patten, const char *string)
                 if (stch == '\0' || !bpatten)
                     return bfdev_false;
 
-                patten = bpatten;
+                pattern = bpatten;
                 string = ++bstring;
                 break;
         }

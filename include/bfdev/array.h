@@ -138,7 +138,7 @@ bfdev_array_size(const bfdev_array_t *array)
 static inline bfdev_size_t
 bfdev_array_remain(const bfdev_array_t *array)
 {
-    if (array->index <= array->seek)
+    if (bfdev_unlikely(array->index <= array->seek))
         return 0;
 
     return bfdev_array_offset(array, array->index - array->seek);
@@ -246,7 +246,7 @@ bfdev_array_splice(bfdev_array_t *array, unsigned long index,
  * @num: the minimum required free space.
  *
  * Ensure that the buffer has space allocated for at least
- * @num bytes. If the current buffer is too small, it will
+ * @num elements. If the current buffer is too small, it will
  * be reallocated, possibly to a larger size than requested.
  *
  * Return 0 on success or a negative error code on failure.

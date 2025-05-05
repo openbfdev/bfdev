@@ -14,17 +14,17 @@ int
 main(int argc, const char *argv[])
 {
     unsigned int count;
-    const char *patten;
+    const char *pattern;
     bool result;
 
     if (argc < 2) {
-        bfdev_log_alert("Usage: %s patten string ...\n", argv[0]);
+        bfdev_log_alert("Usage: %s pattern string ...\n", argv[0]);
         return 1;
     }
 
-    patten = argv[1];
+    pattern = argv[1];
     for (count = 2; count < argc; ++count) {
-        result = bfdev_glob(patten, argv[count]);
+        result = bfdev_glob(pattern, argv[count]);
         bfdev_log_info("matching %s: %s\n", argv[count], result ? "yes" : "no");
     }
 
