@@ -10,6 +10,7 @@
 #include <bfdev/macro.h>
 #include <bfdev/errno.h>
 #include <bfdev/allocator.h>
+#include <bfdev/barrier.h>
 
 BFDEV_BEGIN_DECLS
 
@@ -318,6 +319,7 @@ struct bfdev_fifo {
             ((typeof(__tmp->data)) __fifo->data) :          \
             (__tmp->buff))                                  \
             [__fifo->out & __tmp->fifo.mask];               \
+            bfdev_smp_wmb();                                \
         }                                                   \
     }                                                       \
     __retval;                                               \
@@ -345,6 +347,7 @@ struct bfdev_fifo {
             ((typeof(__tmp->data)) __fifo->data) :          \
             (__tmp->buff))                                  \
             [__fifo->out & __tmp->fifo.mask];               \
+            bfdev_smp_wmb();                                \
             ++__fifo->out;                                  \
         }                                                   \
     }                                                       \
@@ -373,6 +376,7 @@ struct bfdev_fifo {
             (__tmp->buff))                                  \
             [__fifo->in & __tmp->fifo.mask] =               \
             *(typeof(__tmp->data)) &__tvalue;               \
+            bfdev_smp_wmb();                                \
             ++__fifo->in;                                   \
         }                                                   \
     }                                                       \
