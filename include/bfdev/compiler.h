@@ -28,6 +28,9 @@ BFDEV_BEGIN_DECLS
 
 #ifndef bfdev_barrier
 # define bfdev_barrier() __bfdev_barrier(:)
+#endif
+
+#ifndef bfdev_barrier_data
 # define bfdev_barrier_data(ptr) __bfdev_barrier(:"r"(ptr))
 #endif
 
