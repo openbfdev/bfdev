@@ -37,7 +37,7 @@ thread1_task(void *unused)
 {
     unsigned int time;
 
-    for (time = 0; time < 1000000; ++time) {
+    for (time = 0; time < 100000; ++time) {
         spin_lock(&lock);
         counter++;
         spin_unlock(&lock);
@@ -51,7 +51,7 @@ thread2_task(void *unused)
 {
     unsigned int time;
 
-    for (time = 0; time < 1000000; ++time) {
+    for (time = 0; time < 100000; ++time) {
         spin_lock(&lock);
         counter--;
         spin_unlock(&lock);

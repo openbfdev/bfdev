@@ -4,7 +4,7 @@
 #
 
 add_executable(atomic-spinlock spinlock.c)
-target_link_libraries(atomic-spinlock bfdev)
+target_link_libraries(atomic-spinlock bfdev pthread)
 add_test(atomic-spinlock atomic-spinlock)
 
 if(${CMAKE_PROJECT_NAME} STREQUAL "bfdev")
