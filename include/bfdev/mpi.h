@@ -39,7 +39,7 @@ struct bfdev_mpi {
     bfdev_mpi_t name = BFDEV_MPI_INIT(alloc)
 
 static inline void
-bfdev_mpi_init(bfdev_mpi_t *mpi, bfdev_alloc_t *alloc)
+bfdev_mpi_init(bfdev_mpi_t *mpi, const bfdev_alloc_t *alloc)
 {
     *mpi = BFDEV_MPI_INIT(alloc);
 }
@@ -146,6 +146,32 @@ bfdev_mpi_data(const bfdev_mpi_t *var, bfdev_bool *sign);
 
 extern void
 bfdev_mpi_release(bfdev_mpi_t *var);
+
+static inline bfdev_mpi_t *
+bfdev_mpi_create(const bfdev_alloc_t *alloc)
+{
+    bfdev_mpi_t *var;
+
+    var = bfdev_malloc(alloc, sizeof(*var));
+    if (bfdev_unlikely(!var))
+        return BFDEV_NULL;
+    bfdev_mpi_init(var, alloc);
+
+    return var;
+}
+
+static inline void
+bfdev_mpi_destroy(bfdev_mpi_t *var)
+{
+    bfdev_mpi_release(var);
+    bfdev_free(var->alloc, var);
+}
+
+BFDEV_DEFINE_CLASS(bfdev_mpi, bfdev_mpi_t *,
+    bfdev_mpi_create(alloc),
+    bfdev_mpi_destroy(_T),
+    const bfdev_alloc_t *alloc
+)
 
 BFDEV_END_DECLS
 
