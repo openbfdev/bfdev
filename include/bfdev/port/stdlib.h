@@ -10,6 +10,9 @@
 
 BFDEV_BEGIN_DECLS
 
+extern int
+bfdev_rand(void);
+
 extern __bfdev_noreturn void
 bfdev_abort(void);
 
