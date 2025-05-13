@@ -13,9 +13,9 @@
 #include <bfdev/log.h>
 #include <bfdev/errno.h>
 #include <bfdev/memalloc.h>
+#include <bfdev/knuth.h>
 #include <bfdev/size.h>
 #include <testsuite.h>
-#include <randpool.h>
 
 #define POOL_SIZE BFDEV_SZ_32MiB
 #define TEST_SIZE BFDEV_SZ_16MiB
@@ -25,70 +25,48 @@ static int
 test_memalloc(bfdev_memalloc_head_t *pool)
 {
     bfdev_memalloc_chunk_t *node;
-    void *result, *data;
+    void *result[TEST_LOOP];
     unsigned int count;
     size_t size;
     int retval;
 
-    DEFINE_RANDPOOL(rpool1);
-    DEFINE_RANDPOOL(rpool2);
     retval = -BFDEV_ENOERR;
-
     srand(time(NULL));
+
     for (count = 0; count < TEST_LOOP; ++count) {
         size = (unsigned int)rand() % (TEST_SIZE / TEST_LOOP);
-        result = bfdev_memalloc_alloc(pool, size);
-        if (!result) {
-            retval = BFDEV_ENOMEM;
-            goto failed;
-        }
-
-        retval = randpool_put(&rpool1, result);
-        if (retval)
-            goto failed;
-
-        memset(result, 0, size);
+        result[count] = bfdev_memalloc_alloc(pool, size);
+        if (!result[count])
+            return -BFDEV_ENOMEM;
+        memset(result[count], 0, size);
     }
 
+    bfdev_knuth(result, TEST_LOOP, sizeof(*result));
     for (count = 0; count < TEST_LOOP; ++count) {
-        data = randpool_get(&rpool1);
         size = (unsigned int)rand() % (TEST_SIZE / TEST_LOOP);
-        result = bfdev_memalloc_realloc(pool, data, size);
-        if (!result) {
-            retval = BFDEV_ENOMEM;
-            goto failed;
-        }
-
-        retval = randpool_put(&rpool2, result);
-        if (retval)
-            goto failed;
-
-        memset(result, 0, size);
+        result[count] = bfdev_memalloc_realloc(pool, result[count], size);
+        if (!result[count])
+            return -BFDEV_ENOMEM;
+        memset(result[count], 0, size);
     }
 
-    for (count = 0; count < TEST_LOOP; ++count) {
-        data = randpool_get(&rpool2);
-        bfdev_memalloc_free(pool, data);
-    }
+    bfdev_knuth(result, TEST_LOOP, sizeof(*result));
+    for (count = 0; count < TEST_LOOP; ++count)
+        bfdev_memalloc_free(pool, result[count]);
 
     node = bfdev_list_first_entry(&pool->block_list, bfdev_memalloc_chunk_t, block);
     if (node->usize != POOL_SIZE - sizeof(bfdev_memalloc_chunk_t)) {
         bfdev_log_err("free node size leak %#lx -> %#lx\n", (unsigned long)POOL_SIZE -
                       sizeof(bfdev_memalloc_chunk_t), (unsigned long)node->usize);
-        retval = -BFDEV_EFAULT;
-        goto failed;
+        return -BFDEV_EFAULT;
     }
 
     if (pool->avail != POOL_SIZE - sizeof(bfdev_memalloc_chunk_t)) {
         bfdev_log_err("total available leak %#lx -> %#lx\n", (unsigned long)POOL_SIZE -
                       sizeof(bfdev_memalloc_chunk_t), (unsigned long)pool->avail);
-        retval = -BFDEV_EFAULT;
-        goto failed;
+        return -BFDEV_EFAULT;
     }
 
-failed:
-    randpool_release(&rpool1, NULL, NULL);
-    randpool_release(&rpool2, NULL, NULL);
     return retval;
 }
 
