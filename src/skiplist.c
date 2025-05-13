@@ -4,8 +4,8 @@
  */
 
 #include <base.h>
+#include <bfdev/stdlib.h>
 #include <bfdev/skiplist.h>
-#include <port/stdlib.h>
 #include <export.h>
 
 static unsigned int
@@ -15,7 +15,7 @@ random_level(bfdev_skip_head_t *head)
 
     level = 1;
     while (level < head->levels) {
-        if ((bfport_rand() & 0xffff) > 0xffff >> 2)
+        if ((bfdev_rand() & 0xffff) > 0xffff >> 2)
             break;
         level++;
     }
