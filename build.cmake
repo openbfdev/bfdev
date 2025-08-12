@@ -18,7 +18,7 @@ set(CMAKE_C_FLAGS
      -fvisibility=hidden "
 )
 
-if(CMAKE_C_FLAGS)
+if(BFDEV_STRICT)
     set(CMAKE_C_FLAGS
         "${CMAKE_C_FLAGS} \
          -Werror"
