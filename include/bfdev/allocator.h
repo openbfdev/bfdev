@@ -132,6 +132,18 @@ BFDEV_DEFINE_CLEAN(bfdev_free, void *,
         bfdev_free(BFDEV_NULL, _T);
 )
 
+BFDEV_DEFINE_CLASS(bfdev_malloc, void *,
+    bfdev_malloc(BFDEV_NULL, size),
+    bfdev_free(BFDEV_NULL, _T),
+    bfdev_size_t size
+)
+
+BFDEV_DEFINE_CLASS(bfdev_zalloc, void *,
+    bfdev_zalloc(BFDEV_NULL, size),
+    bfdev_free(BFDEV_NULL, _T),
+    bfdev_size_t size
+)
+
 BFDEV_END_DECLS
 
 #endif /* _BFDEV_ALLOCATOR_H_ */
