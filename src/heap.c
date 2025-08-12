@@ -6,6 +6,7 @@
 #include <bfdev/heap.h>
 #include <bfdev/bitops.h>
 #include <bfdev/titer.h>
+#include <bfdev/bug.h>
 #include <export.h>
 
 static __bfdev_always_inline void
@@ -179,12 +180,14 @@ bfdev_heap_parent(bfdev_heap_root_t *root, bfdev_heap_node_t **parentp,
     unsigned int depth;
 
     link = &root->node;
-    if (bfdev_unlikely(!*link)) {
-        *parentp = BFDEV_NULL;
+    *parentp = BFDEV_NULL;
+
+    if (bfdev_unlikely(!*link))
         return link;
-    }
 
     depth = bfdev_flsuf(root->count + 1);
+    BFDEV_BUG_ON(!depth);
+
     while (depth--) {
         *parentp = *link;
         if ((root->count + 1) & BFDEV_BIT(depth))
