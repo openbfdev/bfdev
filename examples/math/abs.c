@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: LGPL-3.0-or-later */
 /*
- * Copyright(c) 2024 John Sanpe <sanpeqf@gmail.com>
+ * Copyright(c) 2024 Zhenlin Wang <sanpeqf@gmail.com>
  */
 
 #define MODULE_NAME "math-abs"
