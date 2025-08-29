@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 #
 # Copyright(c) 2023 ffashion <helloworldffashion@gmail.com>
-# Copyright(c) 2023 John Sanpe <sanpeqf@gmail.com>
+# Copyright(c) 2023 Zhenlin Wang <sanpeqf@gmail.com>
 #
 
 cmake_minimum_required(VERSION 3.12)
@@ -26,6 +26,7 @@ set(BFDEV_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 set(BFDEV_HEADER_PATH ${PROJECT_SOURCE_DIR}/include)
 set(BFDEV_SOURCE_PATH ${PROJECT_SOURCE_DIR}/src)
 set(BFDEV_TEMPLATE_PATH ${PROJECT_SOURCE_DIR}/template)
+set(BFDEV_MODULES_PATH ${PROJECT_SOURCE_DIR}/modules)
 set(BFDEV_PORT_PATH ${PROJECT_SOURCE_DIR}/port)
 set(BFDEV_DOCUMENT_PATH ${PROJECT_SOURCE_DIR}/docs)
 set(BFDEV_GENERATED_PATH ${PROJECT_BINARY_DIR}/generated)
@@ -38,6 +39,7 @@ set(BFDEV_CONFIGURE ${BFDEV_GENERATED_PATH}/bfdev-config.cmake)
 include(${PROJECT_SOURCE_DIR}/scripts/hostrule.cmake)
 include(${PROJECT_SOURCE_DIR}/scripts/packed-header.cmake)
 include(${PROJECT_SOURCE_DIR}/scripts/commit.cmake)
+include(${PROJECT_SOURCE_DIR}/scripts/platform.cmake)
 
 commit_hash(BFDEV_COMMITID)
 commit_branch(BFDEV_BRANCH)
@@ -56,6 +58,8 @@ option(BFDEV_STRICT "Enable strict compilation" OFF)
 option(BFDEV_EXAMPLES "Build examples" OFF)
 option(BFDEV_TESTSUITE "Build testsuite" OFF)
 
+option(BFDEV_TEMPLATE "Build Template Library" ON)
+option(BFDEV_MODULES "Build Modules Library" ON)
 option(BFDEV_BUILD_STATIC "Build Static Library" ON)
 option(BFDEV_BUILD_SHARED "Build Shared Library" ON)
 option(BFDEV_INSTALL_HEADERS "Install Headers" ON)
@@ -85,15 +89,49 @@ if(BFDEV_DEVEL)
     set(BFDEV_GCOV ON)
 endif()
 
+if(NOT BFDEV_PORT_TYPE STREQUAL "posix")
+    set(BFDEV_MODULES OFF)
+    set(BFDEV_EXAMPLES OFF)
+    set(BFDEV_TESTSUITE OFF)
+endif()
+
+if(BFDEV_EXAMPLES OR BFDEV_TESTSUITE)
+    set(BFDEV_TEMPLATE ON)
+    set(BFDEV_MODULES ON)
+endif()
+
 include(${PROJECT_SOURCE_DIR}/build.cmake)
 add_subdirectory(${PROJECT_SOURCE_DIR}/scripts)
 
-packed_header(
-    bfdev/template/
-    _BFDEV_TEMPLATE_H_
-    ${BFDEV_GENERATED_PATH}/bfdev/template.h
-    ${BFDEV_HEADER_PATH}/bfdev/template
-)
+if(BFDEV_TEMPLATE)
+    packed_header(
+        bfdev/template/
+        _BFDEV_TEMPLATE_H_
+        ${BFDEV_GENERATED_PATH}/bfdev/template.h
+        ${BFDEV_HEADER_PATH}/bfdev/template
+    )
+else()
+    set(BFDEV_EXPORT_EXTRA
+        ${BFDEV_EXPORT_EXTRA}
+        COMMAND ${CMAKE_COMMAND} -E rm -rf
+            ${BFDEV_EXPORT_PATH}/bfdev/template
+    )
+endif()
+
+if(BFDEV_MODULES)
+    packed_header(
+        bfdev/modules/
+        _BFDEV_MODULES_H_
+        ${BFDEV_GENERATED_PATH}/bfdev/modules.h
+        ${BFDEV_HEADER_PATH}/bfdev/modules
+    )
+else()
+    set(BFDEV_EXPORT_EXTRA
+        ${BFDEV_EXPORT_EXTRA}
+        COMMAND ${CMAKE_COMMAND} -E rm -rf
+            ${BFDEV_EXPORT_PATH}/bfdev/modules
+    )
+endif()
 
 packed_header(
     bfdev/
@@ -116,6 +154,7 @@ add_custom_target(
         ${BFDEV_ARCH_HEADER_PATH}/bfdev
         ${BFDEV_GENERATED_PATH}/bfdev
         ${BFDEV_EXPORT_PATH}/bfdev
+    ${BFDEV_EXPORT_EXTRA}
 )
 
 set_property(

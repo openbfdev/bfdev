@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: LGPL-3.0-or-later */
 /*
- * Copyright(c) 2025 John Sanpe <sanpeqf@gmail.com>
+ * Copyright(c) 2025 Zhenlin Wang <sanpeqf@gmail.com>
  */
 
 #ifndef _BFDEV_BARRIER_H_
