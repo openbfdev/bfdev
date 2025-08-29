@@ -55,12 +55,17 @@ set(BFDEV_INCLUDE_DIRS
 )
 
 include_directories(${BFDEV_INCLUDE_DIRS})
-include(${PROJECT_SOURCE_DIR}/scripts/platform.cmake)
 include(${BFDEV_PORT_PATH}/build.cmake)
-
 include(${BFDEV_ARCH_PATH}/build.cmake)
 include(${BFDEV_SOURCE_PATH}/build.cmake)
-include(${BFDEV_TEMPLATE_PATH}/build.cmake)
+
+if(BFDEV_TEMPLATE)
+    include(${BFDEV_TEMPLATE_PATH}/build.cmake)
+endif()
+
+if(BFDEV_MODULES)
+    include(${BFDEV_MODULES_PATH}/build.cmake)
+endif()
 
 configure_file(
     ${BFDEV_MODULE_PATH}/config.h.in
