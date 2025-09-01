@@ -37,17 +37,12 @@ level_color[] = {
 int
 log_color_prefix(bfdev_log_t *log, bfdev_log_message_t *msg)
 {
-    if (!bfdev_log_color_test(log))
-        return -BFDEV_ENOERR;
-
+    BFDEV_BUG_ON(msg->level > BFDEV_ARRAY_SIZE(level_color));
     return bfdev_msg_append(msg, "\e[%dm", level_color[msg->level]);
 }
 
 int
 log_color_suffix(bfdev_log_t *log, bfdev_log_message_t *msg)
 {
-    if (!bfdev_log_color_test(log))
-        return -BFDEV_ENOERR;
-
     return bfdev_msg_append(msg, "\e[0m");
 }

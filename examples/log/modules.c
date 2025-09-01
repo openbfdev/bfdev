@@ -13,11 +13,14 @@
 int
 main(int argc, const char *argv[])
 {
+    BFDEV_DEFINE_LOG_CHAIN(log_localtime, bfdev_log_chain_localtime, -300, NULL);
+    BFDEV_DEFINE_LOG_CHAIN(log_hostname, bfdev_log_chain_hostname, -200, NULL);
+    BFDEV_DEFINE_LOG_CHAIN(log_pid, bfdev_log_chain_pid, -100, NULL);
     unsigned int count;
 
-    bfdev_log_localtime_enable(&bfdev_log_default);
-    bfdev_log_hostname_enable(&bfdev_log_default);
-    bfdev_log_pid_enable(&bfdev_log_default);
+    bfdev_log_chain_register(&bfdev_log_default, &log_localtime);
+    bfdev_log_chain_register(&bfdev_log_default, &log_hostname);
+    bfdev_log_chain_register(&bfdev_log_default, &log_pid);
 
     for (count = 0; count < 3; ++count) {
         bfdev_log_info("Hello World!\n");

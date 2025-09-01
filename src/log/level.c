@@ -24,8 +24,6 @@ level_name[] = {
 int
 log_level_prefix(bfdev_log_t *log, bfdev_log_message_t *msg)
 {
-    if (!bfdev_log_level_test(log))
-        return -BFDEV_ENOERR;
-
+    BFDEV_BUG_ON(msg->level > BFDEV_ARRAY_SIZE(level_name));
     return bfdev_msg_append(msg, "[%s] ", level_name[msg->level]);
 }

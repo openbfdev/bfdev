@@ -34,7 +34,7 @@ typedef int (*bfdev_log_hook_t)
 (bfdev_log_message_t *msg, void *pdata);
 
 typedef int (*bfdev_log_write_t)
-(bfdev_log_message_t *msg, void *pdata);
+(bfdev_log_message_t *msg);
 
 enum bfdev_log_flags {
     __BFDEV_LOG_COLOR = 0,
@@ -48,6 +48,7 @@ struct bfdev_log_chain {
     bfdev_ilist_node_t list;
     bfdev_log_hook_t func;
     int priority;
+    void *pdata;
 };
 
 struct bfdev_log {
@@ -55,22 +56,23 @@ struct bfdev_log {
     unsigned int record_level;
     unsigned long flags;
 
-    bfdev_ilist_head_t prefix_hooks;
-    bfdev_ilist_head_t suffix_hooks;
+    bfdev_ilist_head_t prefix_chain;
+    bfdev_ilist_head_t suffix_chain;
 
     bfdev_log_write_t write;
     void *pdata;
 };
 
 struct bfdev_log_message {
+    bfdev_log_t *log;
     unsigned int level;
     bfdev_size_t length;
     char *buff;
 };
 
 #define BFDEV_LOG_STATIC(HEAD, DEFAULT, RECORD, FLAGS, WRITE, PDATA) { \
-    .prefix_hooks = BFDEV_ILIST_HEAD_STATIC(&(HEAD)->prefix_hooks), \
-    .suffix_hooks = BFDEV_ILIST_HEAD_STATIC(&(HEAD)->suffix_hooks), \
+    .prefix_chain = BFDEV_ILIST_HEAD_STATIC(&(HEAD)->prefix_chain), \
+    .suffix_chain = BFDEV_ILIST_HEAD_STATIC(&(HEAD)->suffix_chain), \
     .default_level = (DEFAULT), .record_level = (RECORD), \
     .flags = (FLAGS), .write = (WRITE), .pdata = (PDATA), \
 }
@@ -80,6 +82,16 @@ struct bfdev_log_message {
 
 #define BFDEV_DEFINE_LOG(name, default, record, flags, write, pdata) \
     bfdev_log_t name = BFDEV_LOG_INIT(&name, default, record, flags, write, pdata)
+
+#define BFDEV_LOG_CHAIN_STATIC(FUNC, PRIORITY, PDATA) { \
+    .func = (FUNC), .priority = (PRIORITY), .pdata = (PDATA), \
+}
+
+#define BFDEV_LOG_CHAIN_INIT(func, priority, pdata) \
+    (bfdev_log_chain_t) BFDEV_LOG_CHAIN_STATIC(func, priority, pdata)
+
+#define BFDEV_DEFINE_LOG_CHAIN(name, func, priority, pdata) \
+    bfdev_log_chain_t name = BFDEV_LOG_CHAIN_INIT(func, priority, pdata)
 
 BFDEV_BITFLAGS_STRUCT(
     bfdev_log_color,
@@ -103,6 +115,13 @@ bfdev_log_init(bfdev_log_t *log, unsigned int def, unsigned int record,
     *log = BFDEV_LOG_INIT(log, def, record, flags, write, pdata);
 }
 
+static inline void
+bfdev_log_chain_init(bfdev_log_chain_t *chain, bfdev_log_hook_t func,
+                     int priority, void *pdata)
+{
+    *chain = BFDEV_LOG_CHAIN_INIT(func, priority, pdata);
+}
+
 extern unsigned int
 bfdev_log_level(const char *str, const char **endptr);
 
@@ -119,10 +138,10 @@ extern __bfdev_printf(2, 3) int
 bfdev_msg_append(bfdev_log_message_t *msg, const char *fmt, ...);
 
 extern int
-bfdev_log_hook_register(bfdev_log_t *log, bfdev_log_chain_t *hook);
+bfdev_log_chain_register(bfdev_log_t *log, bfdev_log_chain_t *hook);
 
 extern void
-bfdev_log_hook_unregister(bfdev_log_t *log, bfdev_log_chain_t *hook);
+bfdev_log_chain_unregister(bfdev_log_t *log, bfdev_log_chain_t *hook);
 
 /**
  * bfdev_log_fmt - used by the bfdev_log_*() macros to generate the bfdev_log format string
