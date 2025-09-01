@@ -93,15 +93,20 @@ bfdev_log_level(const char *str, const char **endptr)
     return level;
 }
 
+static bfdev_ilist_head_t *
+log_priority_chain(bfdev_log_t *log, int priority)
+{
+    return priority <= 0 ? &log->prefix_chain : &log->suffix_chain;
+}
+
 static int
-log_call_hooks(bfdev_log_t *log, bfdev_ilist_head_t *chain,
-               bfdev_log_message_t *msg)
+log_call_chain(bfdev_log_message_t *msg, bfdev_ilist_head_t *chain)
 {
     bfdev_log_chain_t *node, *tmp;
     int retval;
 
     bfdev_ilist_for_each_entry_safe(node, tmp, chain, list) {
-        retval = node->func(msg, log->pdata);
+        retval = node->func(msg, node->pdata);
         if (retval < 0)
             return retval;
     }
@@ -110,19 +115,55 @@ log_call_hooks(bfdev_log_t *log, bfdev_ilist_head_t *chain,
 }
 
 static int
-log_prefix(bfdev_log_t *log, bfdev_log_message_t *msg)
+log_prefix_fixed(bfdev_log_message_t *msg)
 {
+    bfdev_log_t *log;
     int retval;
 
-    retval = log_call_hooks(log, &log->prefix_hooks, msg);
+    log = msg->log;
+    if (bfdev_log_level_test(log)) {
+        retval = log_level_prefix(log, msg);
+        if (bfdev_unlikely(retval))
+            return retval;
+    }
+
+    if (bfdev_log_color_test(log)) {
+        retval = log_color_prefix(log, msg);
+        if (bfdev_unlikely(retval))
+            return retval;
+    }
+
+    return -BFDEV_ENOERR;
+}
+
+static int
+log_suffix_fixed(bfdev_log_message_t *msg)
+{
+    bfdev_log_t *log;
+    int retval;
+
+    log = msg->log;
+    if (bfdev_log_color_test(log)) {
+        retval = log_color_suffix(log, msg);
+        if (bfdev_unlikely(retval))
+            return retval;
+    }
+
+    return -BFDEV_ENOERR;
+}
+
+static int
+log_prefix(bfdev_log_message_t *msg)
+{
+    bfdev_log_t *log;
+    int retval;
+
+    log = msg->log;
+    retval = log_call_chain(msg, &log->prefix_chain);
     if (bfdev_unlikely(retval))
         return retval;
 
-    retval = log_level_prefix(log, msg);
-    if (bfdev_unlikely(retval))
-        return retval;
-
-    retval = log_color_prefix(log, msg);
+    retval = log_prefix_fixed(msg);
     if (bfdev_unlikely(retval))
         return retval;
 
@@ -130,19 +171,33 @@ log_prefix(bfdev_log_t *log, bfdev_log_message_t *msg)
 }
 
 static int
-log_suffix(bfdev_log_t *log, bfdev_log_message_t *msg)
+log_suffix(bfdev_log_message_t *msg)
 {
+    bfdev_log_t *log;
     int retval;
 
-    retval = log_color_suffix(log, msg);
+    log = msg->log;
+    retval = log_suffix_fixed(msg);
     if (bfdev_unlikely(retval))
         return retval;
 
-    retval = log_call_hooks(log, &log->suffix_hooks, msg);
+    retval = log_call_chain(msg, &log->suffix_chain);
     if (bfdev_unlikely(retval))
         return retval;
 
     return -BFDEV_ENOERR;
+}
+
+static int
+log_write(bfdev_log_message_t *msg)
+{
+    bfdev_log_t *log;
+
+    log = msg->log;
+    if (log->write)
+        return log->write(msg);
+
+    return bfport_log_write(msg);
 }
 
 static int
@@ -161,11 +216,12 @@ log_emit(bfdev_log_t *log, unsigned int level, const char *fmt, bfdev_va_list ar
     if (level > log->record_level)
         return -BFDEV_ENOERR;
 
+    msg.log = log;
     msg.level = level;
     msg.buff = buff;
     msg.length = 0;
 
-    retval = log_prefix(log, &msg);
+    retval = log_prefix(&msg);
     if (bfdev_unlikely(retval))
         return retval;
 
@@ -173,15 +229,11 @@ log_emit(bfdev_log_t *log, unsigned int level, const char *fmt, bfdev_va_list ar
     if (bfdev_unlikely(retval))
         return retval;
 
-    retval = log_suffix(log, &msg);
+    retval = log_suffix(&msg);
     if (bfdev_unlikely(retval))
         return retval;
 
-    if (log->write)
-        retval = log->write(&msg, log->pdata);
-    else
-        retval = bfport_log_write(&msg);
-
+    retval = log_write(&msg);
     if (bfdev_unlikely(retval < 0))
         return -BFDEV_EIO;
 
@@ -212,14 +264,14 @@ bfdev_log_core(bfdev_log_t *log, const char *fmt, ...)
 }
 
 export int
-bfdev_log_hook_register(bfdev_log_t *log, bfdev_log_chain_t *hook)
+bfdev_log_chain_register(bfdev_log_t *log, bfdev_log_chain_t *hook)
 {
     bfdev_ilist_head_t *chain;
 
     if (bfdev_unlikely(!hook->func))
         return -BFDEV_EINVAL;
 
-    chain = hook->priority <= 0 ? &log->prefix_hooks : &log->suffix_hooks;
+    chain = log_priority_chain(log, hook->priority);
     bfdev_ilist_node_init(&hook->list);
     bfdev_ilist_add(chain, &hook->list, log_chain_priority_cmp, BFDEV_NULL);
 
@@ -227,10 +279,10 @@ bfdev_log_hook_register(bfdev_log_t *log, bfdev_log_chain_t *hook)
 }
 
 export void
-bfdev_log_hook_unregister(bfdev_log_t *log, bfdev_log_chain_t *hook)
+bfdev_log_chain_unregister(bfdev_log_t *log, bfdev_log_chain_t *hook)
 {
     bfdev_ilist_head_t *chain;
 
-    chain = hook->priority <= 0 ? &log->prefix_hooks : &log->suffix_hooks;
+    chain = log_priority_chain(log, hook->priority);
     bfdev_ilist_del(chain, &hook->list);
 }

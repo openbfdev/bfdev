@@ -11,32 +11,17 @@
 
 BFDEV_BEGIN_DECLS
 
-extern bfdev_log_chain_t
-bfdev_log_chain_hostname;
-
-extern bfdev_log_chain_t
-bfdev_log_chain_localtime;
-
-extern bfdev_log_chain_t
-bfdev_log_chain_pid;
+extern int
+bfdev_log_chain_hostname(bfdev_log_message_t *msg, void *pdata);
 
 extern int
-bfdev_log_localtime_enable(bfdev_log_t *log);
-
-extern void
-bfdev_log_localtime_disable(bfdev_log_t *log);
+bfdev_log_chain_localtime(bfdev_log_message_t *msg, void *pdata);
 
 extern int
-bfdev_log_hostname_enable(bfdev_log_t *log);
-
-extern void
-bfdev_log_hostname_disable(bfdev_log_t *log);
+bfdev_log_chain_pid(bfdev_log_message_t *msg, void *pdata);
 
 extern int
-bfdev_log_pid_enable(bfdev_log_t *log);
-
-extern void
-bfdev_log_pid_disable(bfdev_log_t *log);
+bfdev_log_write_syslog(bfdev_log_message_t *msg, void *pdata);
 
 BFDEV_END_DECLS
 
