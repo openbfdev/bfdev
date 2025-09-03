@@ -21,7 +21,7 @@ syslog_level[] = {
 };
 
 export int
-bfdev_log_write_syslog(bfdev_log_message_t *msg, void *pdata)
+bfdev_log_write_syslog(bfdev_log_message_t *msg)
 {
     int level, priority;
 
