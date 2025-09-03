@@ -28,7 +28,7 @@ jobs:
       - name: install dependencies
         run: |
           brew update
-          brew install cmake make ccache
+          brew install make ccache
 
       - name: configure cmake
         run: |
