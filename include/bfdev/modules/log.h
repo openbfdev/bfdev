@@ -21,7 +21,7 @@ extern int
 bfdev_log_chain_pid(bfdev_log_message_t *msg, void *pdata);
 
 extern int
-bfdev_log_write_syslog(bfdev_log_message_t *msg, void *pdata);
+bfdev_log_write_syslog(bfdev_log_message_t *msg);
 
 BFDEV_END_DECLS
 
