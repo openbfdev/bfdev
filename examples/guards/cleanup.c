@@ -27,7 +27,7 @@ test_clean_keep(void)
 {
     BFDEV_CLEAN(malloc) void *block;
     block = malloc(8);
-    bfdev_return(block);
+    return bfdev_taken(block);
 }
 
 int
