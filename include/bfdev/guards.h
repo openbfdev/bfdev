@@ -54,13 +54,11 @@ __bfdev_class_##name##_destructor(type *p)                  \
         __bfdev_cleanup(__bfdev_class_##name##_destructor) = \
         __bfdev_class_##name##_constructor
 
-#define bfdev_lasting(object) ({    \
+#define bfdev_taken(object) ({      \
     __auto_type __ptr = (object);   \
-    (object) = BFDEV_NULL; __ptr;   \
+    (object) = BFDEV_NULL;          \
+    __ptr;                          \
 })
-
-#define bfdev_return(object) \
-    return bfdev_lasting(object)
 
 BFDEV_END_DECLS
 
