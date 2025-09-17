@@ -127,21 +127,59 @@ bfdev_realloc_array(const bfdev_alloc_t *alloc,
     return bfdev_realloc(alloc, block, size * nr);
 }
 
+static inline void *
+bfdev_malloc_with_class(const bfdev_alloc_t *alloc, bfdev_size_t size)
+{
+    const bfdev_alloc_t **palloc;
+
+    palloc = bfdev_malloc(BFDEV_NULL, sizeof(*palloc) + size);
+    if (bfdev_unlikely(!palloc))
+        return BFDEV_NULL;
+    *palloc = alloc;
+
+    return (void *)(palloc + 1);
+}
+
+static inline void *
+bfdev_zalloc_with_class(const bfdev_alloc_t *alloc, bfdev_size_t size)
+{
+    const bfdev_alloc_t **palloc;
+
+    palloc = bfdev_zalloc(BFDEV_NULL, sizeof(*palloc) + size);
+    if (bfdev_unlikely(!palloc))
+        return BFDEV_NULL;
+    *palloc = alloc;
+
+    return (void *)(palloc + 1);
+}
+
+static inline void
+bfdev_free_with_class(void *block)
+{
+    const bfdev_alloc_t **palloc;
+
+    if (bfdev_unlikely(!block))
+        return;
+
+    palloc = (const bfdev_alloc_t **)block - 1;
+    bfdev_free(*palloc, palloc);
+}
+
 BFDEV_DEFINE_CLEAN(bfdev_free, void *,
     if (!BFDEV_IS_INVAL(_T))
         bfdev_free(BFDEV_NULL, _T);
 )
 
 BFDEV_DEFINE_CLASS(bfdev_malloc, void *,
-    bfdev_malloc(BFDEV_NULL, size),
-    bfdev_free(BFDEV_NULL, _T),
-    bfdev_size_t size
+    bfdev_malloc_with_class(alloc, size),
+    bfdev_free_with_class(_T),
+    const bfdev_alloc_t *alloc, bfdev_size_t size
 )
 
 BFDEV_DEFINE_CLASS(bfdev_zalloc, void *,
-    bfdev_zalloc(BFDEV_NULL, size),
-    bfdev_free(BFDEV_NULL, _T),
-    bfdev_size_t size
+    bfdev_zalloc_with_class(alloc, size),
+    bfdev_free_with_class(_T),
+    const bfdev_alloc_t *alloc, bfdev_size_t size
 )
 
 BFDEV_END_DECLS

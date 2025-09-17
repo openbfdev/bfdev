@@ -25,7 +25,7 @@ test_cleanup(void)
 static int
 test_class_malloc(void)
 {
-    BFDEV_CLASS(bfdev_malloc, ptr)(TEST_SIZE);
+    BFDEV_CLASS(bfdev_malloc, ptr)(NULL, TEST_SIZE);
 
     if (!ptr)
         return 1;
@@ -37,7 +37,7 @@ test_class_malloc(void)
 static int
 test_class_zalloc(void)
 {
-    BFDEV_CLASS(bfdev_zalloc, ptr)(TEST_SIZE);
+    BFDEV_CLASS(bfdev_zalloc, ptr)(NULL, TEST_SIZE);
 
     if (!ptr)
         return 1;
