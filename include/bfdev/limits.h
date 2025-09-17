@@ -81,7 +81,7 @@ BFDEV_BEGIN_DECLS
 
 /* Minimum of unsigned pointer types */
 #define BFDEV_UINTPTR_MIN   ((bfdev_uintptr_t)0UL)
-#define BFDEV_UINTMAX_MIN   ((uintmax_t)0ULL)
+#define BFDEV_UINTMAX_MIN   ((bfdev_uintmax_t)0ULL)
 #define BFDEV_SIZE_MIN      ((bfdev_size_t)0UL)
 
 /* Maximum of signed pointer types */
