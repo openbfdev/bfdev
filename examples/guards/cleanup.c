@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <bfdev/guards.h>
 
 BFDEV_DEFINE_CLEAN(malloc, void *,
@@ -15,7 +16,7 @@ BFDEV_DEFINE_CLEAN(malloc, void *,
 )
 
 static void
-test_clean_gc(void)
+test_malloc_gc(void)
 {
     BFDEV_CLEAN(malloc) void *block;
     block = malloc(8);
@@ -23,11 +24,11 @@ test_clean_gc(void)
 }
 
 static void *
-test_clean_keep(void)
+test_malloc_keep(void)
 {
     BFDEV_CLEAN(malloc) void *block;
     block = malloc(8);
-    return bfdev_taken(block);
+    return bfdev_taken_ptr(block);
 }
 
 int
@@ -35,8 +36,8 @@ main(int argc, const char *argv[])
 {
     void *block;
 
-    test_clean_gc();
-    block = test_clean_keep();
+    test_malloc_gc();
+    block = test_malloc_keep();
     free(block);
 
     return 0;
